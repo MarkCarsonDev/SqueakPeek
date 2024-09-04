@@ -1,0 +1,35 @@
+.footer {
+    background: linear-gradient(90deg, rgb(214, 112, 112) 0%, rgb(26, 23, 23) 100%);
+    display: grid;
+    height: 200px;
+    z-index: 999;
+}
+
+.footercontainer {
+    display: flex;
+    align-items: center;
+    height: 100px;
+    width: 100%;
+    bottom: 0px;
+
+}
+
+/* .socials {
+
+
+}
+
+.socialmenu{
+
+
+}
+
+.social-items{
+
+
+}
+
+.social-links{
+
+
+} */

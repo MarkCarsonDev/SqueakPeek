@@ -1,0 +1,20 @@
+.bodycontainer{
+  background-image: url('./images/officebackground.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.bodytext {
+  font-size: 3rem;
+  text-align: center;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+}
