@@ -1,8 +1,9 @@
-import {makeAuto}
+import { makeAutoObservable } from "mobx";
 class Counter {
   count: number;
   constructor() {
     this.count = 0;
+    makeAutoObservable(this);
   }
 
   incrementCounter() {
@@ -13,3 +14,4 @@ class Counter {
     this.count -= 1;
   }
 }
+export const counter = new Counter();
