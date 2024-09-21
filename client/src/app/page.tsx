@@ -1,8 +1,4 @@
-"use client";
-import { CounterText } from "@/components/CounterText";
-import { observer } from "mobx-react";
-const Home = observer(() => {
+import { CounterText } from "@/ui/CounterText";
+export default function Home() {
   return <CounterText />;
-});
-
-export default Home;
+}
