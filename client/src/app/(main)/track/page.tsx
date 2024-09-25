@@ -1,5 +1,6 @@
+import { Typography } from "@mui/material"
 export default function Page(){
     return(
-        <h1>Track</h1>
+        <Typography variant="h2">Track</Typography>
     )
 }
