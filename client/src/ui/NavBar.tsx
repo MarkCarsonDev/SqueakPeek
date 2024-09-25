@@ -26,7 +26,7 @@ export function NavBar() {
   ];
 
   return (
-    <div
+    <header
       style={{
         display: "flex",
         backgroundColor: "white",
@@ -38,6 +38,6 @@ export function NavBar() {
           <Typography variant="body1">{link.name}</Typography>
         </Link>
       ))}
-    </div>
+    </header>
   );
 }
