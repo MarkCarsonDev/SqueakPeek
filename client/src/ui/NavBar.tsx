@@ -31,6 +31,7 @@ export function NavBar() {
         display: "flex",
         backgroundColor: "white",
         height: 70,
+        borderBottom: "#E0E4F2 solid 5px"
       }}
     >
       {links.map((link) => (
