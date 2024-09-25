@@ -1,3 +1,4 @@
+"use client"
 import Landingnavbar from "@/ui/Landingnavbar";
 import Landingpage from "@/ui/Landingpage"
 

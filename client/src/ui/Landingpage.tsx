@@ -1,3 +1,4 @@
+
 import "./home.css";
 import Image from "next/image";
 import TextCarousel from "./lpTextCarousel";
@@ -29,7 +30,7 @@ function Home(){
 
             <div className="sec2-container">
                 <Image className="sec2-image"
-                    src="/rat_3.png"
+                    src="/rat_2.png"
                     width={600}
                     height={300}
                     alt="Two rats speaking"
@@ -61,7 +62,7 @@ function Home(){
 
             <div className="sec4-container">
                 <Image className="sec4-image"
-                    src="/rat_2.png"
+                    src="/rat_3.png"
                     width={400}
                     height={400}
                     alt="Rat looking at star"

@@ -17,10 +17,10 @@ export default function Landingnavbar(){
                 
                 <div className="logo">
                     <Image
-                        src="/ratlogo.png"
+                        src="/rat_1.png"
                         height={100}
                         width={100}
-                        alt="RAT logo"
+                        alt="Squeakpeek Logo"
                         />
                 </div>SqueakPeek
             </Link>
