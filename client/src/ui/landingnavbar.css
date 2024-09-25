@@ -1,0 +1,64 @@
+.navbar {
+    background: rgb(255, 255, 255);
+    height: 80px;
+    width: 100%;
+    display: grid;
+    z-index: 999;
+    position: sticky;
+    top: 0px;
+    border-bottom: 5px solid #E0E4F2;
+}
+
+.navbar-container{
+    height: 80px;
+    width: 100%;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+
+.name-logo{
+    font: 3rem "Droid Sans";
+    color: #3C435C;
+    position: absolute;
+    left: 2%;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.logo{
+    background-image: "/ratlogo.png";
+    height: 100px;
+    width: 100px;
+}
+
+.nav-menu{
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 3%;
+    height: 70px;
+    width: 500px;
+    font: 1.2rem "Droid Sans";
+  
+}
+
+.nav-links{
+    display: flex;
+    grid-template-columns: repeat(2, auto);
+    grid-gap: 30px;
+    list-style: none;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    right: 5%;
+
+}
+
+.nav-item{
+    color: #3C435C;
+    text-decoration: none;
+}
+

@@ -1,4 +1,12 @@
-import { CounterText } from "@/ui/CounterText";
+import Landingnavbar from "@/ui/Landingnavbar";
+import Landingpage from "@/ui/Landingpage"
+
+
 export default function Home() {
-  return <CounterText />;
+  return (
+    <div>
+    <Landingnavbar />
+    <Landingpage />
+    </div>
+  );
 }

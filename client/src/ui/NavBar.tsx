@@ -1,44 +1,53 @@
-import { Typography } from "@mui/material";
 import Link from "next/link";
+import Image from "next/image";
 
-interface ILinks {
-  name: string;
-  href: string;
-}
 export function NavBar() {
-  const links: ILinks[] = [
-    {
-      name: "Explore",
-      href: "/explore",
-    },
-    {
-      name: "Message",
-      href: "/message",
-    },
-    {
-      name: "Track",
-      href: "/track",
-    },
-    {
-      name: "Profile",
-      href: "/profile",
-    },
-  ];
+  
 
   return (
-    <header
-      style={{
-        display: "flex",
-        backgroundColor: "white",
-        height: 70,
-        borderBottom: "#E0E4F2 solid 5px"
-      }}
-    >
-      {links.map((link) => (
-        <Link key={link.name} href={link.href}>
-          <Typography variant="body1">{link.name}</Typography>
-        </Link>
-      ))}
-    </header>
+    <nav className="navbar">
+        <div className="navbar-container">
+            <Link href='/' className="name-logo">
+                
+                <div className="logo">
+                    <Image
+                        src="/ratlogo.png"
+                        height={100}
+                        width={100}
+                        alt="RAT logo"
+                        />
+                </div>SqueakPeek
+            </Link>
+            <div className="nav-menu">
+                <ul className="nav-links">
+                    <li className="nav-list">
+                        <Link href='/explore' className="nav-item">
+                            Explore
+                        </Link>
+                    </li>
+
+                    <li className="nav-list">
+                        <Link href="/message" className="nav-item">
+                            Message
+                        </Link>
+                    </li>
+
+                    <li className="nav-list">
+                        <Link href="/track" className="nav-item">
+                            Tracking
+                        </Link>
+                    </li>
+
+                    <li className="nav-list">
+                        <Link href="/profile" className="nav-item">
+                            Profile
+                        </Link>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+    
   );
 }
