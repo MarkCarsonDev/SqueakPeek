@@ -27,6 +27,7 @@ export default function RootLayout({
       <body
         style={{
           backgroundColor: "#F6F8FF",
+          margin: 0, // flushes components into the screen
         }}
         className={inter.variable}
       >
