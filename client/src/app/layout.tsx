@@ -3,7 +3,6 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
 import { customTheme } from "@/theme/theme";
 import { Inter } from "next/font/google";
-import { NavBar } from "@/ui/NavBar";
 
 export const metadata: Metadata = {
   title: "Create Next App",
