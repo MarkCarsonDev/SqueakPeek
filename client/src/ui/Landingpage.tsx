@@ -1,7 +1,8 @@
 
-import "./styling/home.css";
+import "./styling/Landingpage.css";
 import Image from "next/image";
 import TextCarousel from "./lpTextCarousel";
+import { Typography } from "@mui/material";
 
 
 
@@ -10,18 +11,23 @@ function Home(){
         <div>
             <div className="sec1-container">
                 <div className="sec1-box">
+                    <div className="sec1-text-wheel">
                         <TextCarousel />
-                    <div className="sec1-logo-box">
+                    </div>
+                    <div className="sec1-logo-box"> 
                         <Image className="sec1-main-logo"
                             src="/rat_1.png"
                             width={300}
                             height={300}
                             alt="SqueakPeek Logo"
                         />
-                        <h1 className="sec1-logo-text">
+                        <Typography variant="h2">
+                            SqueakPeek
+                        </Typography>
+                        <Typography className="sec1-logo-text" variant="h4">
                             Job hunting is hard,
                             we’re here to help.
-                        </h1>
+                        </Typography>
 
                     </div>
 
@@ -35,13 +41,16 @@ function Home(){
                     height={300}
                     alt="Two rats speaking"
                 />
-                <h1 className="sec2-text-header">
-                    Talk to other applicants
-                </h1>
-                <p className="sec2-text-body">
-                    Engage with company thread to ask questions and support fellow applicants.
-                </p>
 
+                <div className="sec2-text-box">
+                    <Typography variant="h3">
+                        Talk to other applicants
+                    </Typography>
+
+                    <Typography variant="body1">
+                        Engage with company thread to ask questions and support fellow applicants
+                    </Typography>
+                </div>
             </div>
 
             <div className="sec3-container">
@@ -51,12 +60,15 @@ function Home(){
                     height={400}
                     alt="Rat looking up"
                 />
-                <h1 className="sec3-text-header">
-                    Track your applications
-                </h1>
-                <p className="sec3-text-body">
-                    Streamline your job search with ease using our tracking board.
-                </p>
+                <div className="sec3-text-box">
+                    <Typography variant="h3">
+                        Track your applications
+                    </Typography>
+
+                    <Typography variant="body1">
+                    Streamline your job search with ease using our tracking board
+                    </Typography>
+                </div>
 
             </div>
 
@@ -67,12 +79,15 @@ function Home(){
                     height={400}
                     alt="Rat looking at star"
                 />
-                <h1 className="sec4-text-header">
-                    Talk to other applicants
-                </h1>
-                <p className="sec4-text-body">
-                    Engage with company thread to ask questions and support fellow applicants.
-                </p>
+                <div className="sec4-text-box">
+                    <Typography variant="h3">
+                        Gain Insight
+                    </Typography>
+
+                    <Typography variant="body1">
+                        View helpful stats about job openings with a single glance.
+                    </Typography>
+                </div>
 
             </div>
 

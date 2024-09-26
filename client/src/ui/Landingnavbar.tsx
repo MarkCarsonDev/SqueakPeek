@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image"
 import Link from "next/link"
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import "./styling/landingnavbar.css"
 
 export default function Landingnavbar(){
@@ -12,28 +12,33 @@ export default function Landingnavbar(){
             <Link href='/' className="name-logo">
                 
                 <div className="logo">
-                    <Image
+                    <Image className="logo-image"
                         src="/rat_1.png"
                         height={100}
                         width={100}
                         alt="Squeakpeek Logo"
                         />
-                </div>SqueakPeek
+                </div>
+                <Typography variant="h4">
+                    SqueakPeek
+                </Typography> 
             </Link>
             <div className="nav-menu">
                 <ul className="nav-links">
                     <li className="nav-list">
                         <Link href='/log In' className="nav-item">
+                        <Typography>
                             Log In
+                        </Typography>   
                         </Link>
                     </li>
 
                     <li className="nav-list">
-                        <Link href="/signup" className="nav-item">
-                            <Button variant="contained" href="/signup" size="large">
-                            Get Started
+                            <Button className="nav-item" variant="contained" href="/signup" size="large">
+                            <Typography>
+                                Get Started
+                            </Typography>
                             </Button>
-                        </Link>
                     </li>
                 </ul>
 

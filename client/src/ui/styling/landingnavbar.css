@@ -62,3 +62,9 @@
     text-decoration: none;
 }
 
+.logo-image{
+    position: relative;
+    bottom: 10%;
+    right: 15%;
+}
+

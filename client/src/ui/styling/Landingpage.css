@@ -1,0 +1,114 @@
+.sec1-container{
+    display: flex;
+    background-color: #F6F8FF;
+    width: 100%;
+    height: 800px;
+    justify-content: center;
+    align-items: center;
+}
+
+.sec1-box{
+    display: grid;
+    width: 90%;
+    height: 700px;
+    background-color: white;
+    border: #E0E4F2;
+    border: 10px solid #E0E4F2;
+    border-radius: 20px; 
+    align-items: center;
+    box-shadow: rgb(109, 109, 109) 0px 0px 10px;
+}
+
+.sec1-logo-box{
+    display: grid;
+    width: 400px;
+    height: 500px;
+    position: absolute;
+    right: 17%;
+    bottom: 20%;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.sec1-text-wheel{
+    position: relative;
+    top: 10%;
+    right: 20%;
+    height: 200px;
+    width: 700px;
+    justify-self: center;
+}
+
+.sec1-main-logo{
+    justify-self: center;
+
+}
+
+.sec1-logo-text{
+    justify-self: center;
+}
+
+
+
+.sec2-container{
+    display: flex;
+    background-color: white;
+    width: 100%;
+    height: 700px;
+    justify-content: center;
+    align-items: center;
+}
+
+.sec2-text-box{
+    position: absolute;
+    right: 12%;
+    text-align: center;
+}
+
+.sec2-image{
+    position: absolute;
+    left: 12%;
+}
+
+.sec3-container{
+    display: flex;
+    background-color: #F6F8FF;
+    width: 100%;
+    height: 700px;
+    justify-content: center;
+    align-items: center;
+}
+
+.sec3-text-box{
+    position: absolute;
+    left: 12%;
+    text-align: center;
+}
+
+.sec3-image{
+    position: relative;
+    left: 20%;
+    bottom: 5%;
+}
+
+.sec4-container{
+    display: flex;
+    background-color: white;
+    width: 100%;
+    height: 700px;
+    justify-content: center;
+    align-items: center;
+}
+
+.sec4-text-box{
+    position: absolute;
+    right: 12%;
+    text-align: center;
+}
+
+.sec4-image{
+    position: relative;
+    right: 20%;
+    bottom: 8%;
+}

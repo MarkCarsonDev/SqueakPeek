@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Typography, Box } from '@mui/material';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import './styling/lpTextCarousel.css';
+import { red } from '@mui/material/colors';
 
 const textItems = [
   "How many other people are applying?",
@@ -20,29 +21,33 @@ const TextCarousel = () => {
       setCurrentIndex((prevIndex) =>
         prevIndex === textItems.length - 1 ? 0 : prevIndex + 1
       );
-    }, 3000); // Change text every 3 seconds
+    }, 4000); // Change text every 3 seconds
 
     return () => clearInterval(intervalId); // Clean up on component unmount
   }, []);
 
   return (
-    <div>
+    <Box
+    >
       <TransitionGroup>
         <CSSTransition
           key={currentIndex}
           timeout={500}
           classNames="fade"
         >
-            
           <Typography
             variant="h4"
-            align="justify"
+            align="center"
+            sx={{
+              position: 'absolute',
+            }}
           >
             {textItems[currentIndex]}
           </Typography>
         </CSSTransition>
+        
       </TransitionGroup>
-      </div>
+    </Box>
   );
 };
 
