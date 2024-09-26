@@ -1,8 +1,8 @@
 "use client";
-import Image from "next/image"
-import Link from "next/link"
-import Button from "./button"
-import "./landingnavbar.css"
+import Image from "next/image";
+import Link from "next/link";
+import Button from "./button";
+import "./styling/landingnavbar.css";
 
 export default function Landingnavbar(){
 

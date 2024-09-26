@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import "./PageFooter.css";
+import "./styling/PageFooter.css";
 
 const PageFooter = () => {
     return (

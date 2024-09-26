@@ -1,5 +1,5 @@
 
-import "./home.css";
+import "./styling/home.css";
 import Image from "next/image";
 import TextCarousel from "./lpTextCarousel";
 
