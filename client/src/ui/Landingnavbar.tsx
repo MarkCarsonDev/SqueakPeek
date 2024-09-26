@@ -6,10 +6,6 @@ import "./styling/landingnavbar.css"
 
 export default function Landingnavbar(){
 
-    const handleClick = () => {
-
-    }
-
     return(
     <nav className="navbar">
         <div className="navbar-container">
