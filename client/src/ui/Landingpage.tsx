@@ -3,6 +3,7 @@ import "./styling/Landingpage.css";
 import Image from "next/image";
 import TextCarousel from "./lpTextCarousel";
 import { Typography } from "@mui/material";
+import Link from '@mui/material/Link';
 
 
 
@@ -30,7 +31,13 @@ function Home(){
                         </Typography>
 
                     </div>
-
+                    <div className="sec1-Link">
+                    <Link href="https://www.example.com" target="_blank" rel="noopener noreferrer">
+                        <Typography variant="h5">
+                            Get Started
+                        </Typography>
+                    </Link>
+                    </div>
                 </div>
             </div>
 

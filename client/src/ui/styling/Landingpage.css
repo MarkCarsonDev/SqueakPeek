@@ -33,7 +33,7 @@
 
 .sec1-text-wheel{
     position: relative;
-    top: 10%;
+    top: 50%;
     right: 20%;
     height: 200px;
     width: 700px;
@@ -47,6 +47,12 @@
 
 .sec1-logo-text{
     justify-self: center;
+}
+
+.sec1-Link{
+    justify-self: center;
+    position: relative;
+    top: 20%;
 }
 
 
