@@ -32,7 +32,7 @@ function Home(){
 
                     </div>
                     <div className="sec1-Link">
-                    <Link href="https://www.example.com" target="_blank" rel="noopener noreferrer">
+                    <Link href="/signup">
                         <Typography variant="h5">
                             Get Started
                         </Typography>

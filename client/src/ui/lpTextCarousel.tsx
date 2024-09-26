@@ -21,9 +21,9 @@ const TextCarousel = () => {
       setCurrentIndex((prevIndex) =>
         prevIndex === textItems.length - 1 ? 0 : prevIndex + 1
       );
-    }, 4000); // Change text every 3 seconds
+    }, 4000); 
 
-    return () => clearInterval(intervalId); // Clean up on component unmount
+    return () => clearInterval(intervalId);
   }, []);
 
   return (

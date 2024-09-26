@@ -3,6 +3,8 @@ import Image from "next/image"
 import Link from "next/link"
 import { Button, Typography } from "@mui/material";
 import "./styling/landingnavbar.css"
+import { customTheme } from "@/theme/theme";
+import {ThemeProvider} from "@mui/material";
 
 export default function Landingnavbar(){
 
@@ -26,7 +28,7 @@ export default function Landingnavbar(){
             <div className="nav-menu">
                 <ul className="nav-links">
                     <li className="nav-list">
-                        <Link href='/log In' className="nav-item">
+                        <Link href='/log In' className="nav-item" color="secondary">
                         <Typography>
                             Log In
                         </Typography>   
@@ -34,11 +36,26 @@ export default function Landingnavbar(){
                     </li>
 
                     <li className="nav-list">
-                            <Button className="nav-item" variant="contained" href="/signup" size="large">
-                            <Typography>
-                                Get Started
-                            </Typography>
-                            </Button>
+                        
+                            <ThemeProvider theme={customTheme}>
+                                <Button className="nav-item" variant="contained" href="/signup" 
+                                    sx={{
+                                    backgroundColor: '#496FFF',
+                                    borderRadius: '8px',
+                                    padding: '10px 60px',
+                                    fontSize: '18px',
+                                    '&:hover': {
+                                        backgroundColor: '#3C435C', 
+                                        transform: 'scale(1.05)',
+                                    },
+                                    }}>
+
+                                    <Typography>
+                                        Get Started
+                                    </Typography>
+
+                                </Button>
+                            </ThemeProvider>
                     </li>
                 </ul>
 
