@@ -1,0 +1,66 @@
+.footer {
+    background-color: #f4f4f4;
+    /* Light gray background */
+    color: #000;
+    /* Black text color */
+    padding: 5px 5px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: flex-end;
+    /* Evenly space out sections */
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.footer-column {
+    margin: 0 20px;
+    min-width: 200px;
+    /* Prevents columns from shrinking too much */
+    margin-bottom: 20px;
+}
+
+.footer-column h4 {
+    font-size: 1.25rem;
+    /* Slightly larger font for headings */
+    margin-bottom: 12px;
+    font-weight: bold;
+}
+
+.footer-column ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.footer-column li {
+    margin-bottom: 8px;
+}
+
+.footer-column a {
+    color: #000;
+    text-decoration: none;
+    font-size: 1rem; /* Standard font size */
+}
+
+.footer-column a:hover {
+    text-decoration: underline;
+}
+
+.footer-bottom {
+    font-size: 0.875rem;
+    /* Slightly smaller font size for copyright */
+    color: #555;
+    /* Lighter text color */
+    margin-top: 20px;
+}
+
+@media (max-width: 600px) {
+    .footer-container {
+        flex-direction: column;
+        /* Stack columns vertically on small screens */
+        align-items: flex-start;
+    }
+}
