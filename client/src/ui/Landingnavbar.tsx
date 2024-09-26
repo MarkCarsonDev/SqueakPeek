@@ -1,8 +1,8 @@
 "use client";
 import Image from "next/image"
 import Link from "next/link"
-import Button from "./button"
-import "./landingnavbar.css"
+import { Button } from "@mui/material";
+import "./styling/landingnavbar.css"
 
 export default function Landingnavbar(){
 
@@ -33,8 +33,10 @@ export default function Landingnavbar(){
                     </li>
 
                     <li className="nav-list">
-                        <Link href="/threads" className="nav-item">
-                            <Button text="Get Started" onClick={handleClick} />
+                        <Link href="/signup" className="nav-item">
+                            <Button variant="contained" href="/signup" size="large">
+                            Get Started
+                            </Button>
                         </Link>
                     </li>
                 </ul>
