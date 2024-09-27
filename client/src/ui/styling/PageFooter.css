@@ -49,6 +49,7 @@
     /* Adjust this value to position manually */
     transform: translateY(-50%);
     /* Center vertically */
+    margin: 0 48px;
 }
 
 /* Center section */
@@ -148,5 +149,6 @@
     .footer-links {
         justify-content: center;
         /* Center links on small screens */
+        /* margin: 0 38px; */
     }
 }
