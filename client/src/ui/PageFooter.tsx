@@ -20,7 +20,7 @@ const PageFooter = () => {
                 {/* Center Section */}
                 <div className="footer-section center">
                     <div className="footer-divider"></div>
-                    <h4 className="footer-logo"><Typography>SqueekPeek</Typography></h4>
+                    <Typography className="footer-logo" variant="h4">SqueekPeek</Typography>
                     <div className="footer-divider"></div>
                 </div>
 
@@ -45,7 +45,7 @@ const PageFooter = () => {
 
             {/* Copyright Section */}
             <div className="footer-bottom">
-                <p>© 2024 SQUEAKPEEK</p>
+                <Typography>© 2024 SQUEAKPEEK</Typography>
             </div>
         </footer>
     );
