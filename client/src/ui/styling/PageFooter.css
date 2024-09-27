@@ -1,66 +1,132 @@
+/* PageFooter.css */
+
 .footer {
-    background-color: #f4f4f4;
-    /* Light gray background */
+    background-color: #f9f9fc;
+    /* Light grayish background */
     color: #000;
     /* Black text color */
-    padding: 5px 5px;
+    padding: 20px 40px;
     text-align: center;
     font-family: Arial, sans-serif;
 }
 
 .footer-container {
     display: flex;
-    justify-content: flex-end;
-    /* Evenly space out sections */
-    flex-wrap: wrap;
-    margin-bottom: 20px;
+    justify-content: space-between;
+    /* Distribute space between elements */
+    align-items: center;
+    /* Vertically center elements */
+    flex-wrap: nowrap;
+    /* Prevent wrapping */
+    margin-bottom: 10px;
 }
 
-.footer-column {
-    margin: 0 20px;
-    min-width: 200px;
-    /* Prevents columns from shrinking too much */
-    margin-bottom: 20px;
+.footer-section {
+    display: flex;
+    align-items: center;
+    /* Align items vertically */
 }
 
-.footer-column h4 {
-    font-size: 1.25rem;
-    /* Slightly larger font for headings */
-    margin-bottom: 12px;
+.footer-heading {
+    margin: 0 40px;
+    /* Space between the left section links */
     font-weight: bold;
+    font-size: 1rem;
 }
 
-.footer-column ul {
-    list-style-type: none;
-    padding: 0;
+.footer-links {
+    display: flex;
+    /* Align links in a row */
+    flex-wrap: wrap;
+    /* Wrap links on smaller screens */
 }
 
-.footer-column li {
-    margin-bottom: 8px;
-}
-
-.footer-column a {
+.footer-link {
+    margin: 0 10px;
+    /* Space between links */
     color: #000;
     text-decoration: none;
-    font-size: 1rem; /* Standard font size */
 }
 
-.footer-column a:hover {
+.footer-link:hover {
     text-decoration: underline;
+}
+
+.footer-center {
+    display: flex;
+    align-items: center;
+    /* Center align items vertically */
+    justify-content: center;
+    /* Center align horizontally */
+    flex-grow: 1;
+    /* Ensure center section stays centered */
+    min-width: 200px;
+    /* Minimum width to prevent logo from shrinking */
+    margin: 0 40px;
+    /* Space to align it in the middle */
+}
+
+.footer-divider {
+    height: 1px;
+    width: 50px;
+    background-color: #ccc;
+    /* Light gray for divider */
+    margin: 0 20px;
+    /* Spacing around the divider */
+}
+
+.footer-logo {
+    font-weight: bold;
+    font-size: 1.25rem;
+    text-align: center;
+    /* Ensure text is centered */
+}
+
+.footer-icons {
+    display: flex;
+    align-items: center;
+}
+
+.footer-icons img {
+    width: 24px;
+    margin: 0 8px;
+    /* Space between icons */
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.footer-icons img:hover {
+    opacity: 1;
+    /* Highlight icons on hover */
 }
 
 .footer-bottom {
     font-size: 0.875rem;
-    /* Slightly smaller font size for copyright */
+    /* Slightly smaller font size */
     color: #555;
     /* Lighter text color */
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
     .footer-container {
         flex-direction: column;
-        /* Stack columns vertically on small screens */
-        align-items: flex-start;
+        /* Stack sections vertically on small screens */
+        align-items: center;
+    }
+
+    .footer-divider {
+        display: none;
+        /* Hide dividers on small screens */
+    }
+
+    .footer-section {
+        margin-bottom: 10px;
+        /* Add space between sections */
+    }
+
+    .footer-links {
+        justify-content: center;
+        /* Center links on small screens */
     }
 }
