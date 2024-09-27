@@ -26,10 +26,18 @@ const PageFooter = () => {
                 {/* Right Section */}
                 <div className="footer-section right">
                     <div className="footer-icons">
-                        <Image src="/x-logo/X-logo-black.png" alt="X" width={24} height={24} />
-                        <Image src="/Instagram-logo/Instagram_Glyph_Black.svg" alt="Instagram" width={24} height={24} />
-                        <Image src="/linkedin-icon.svg" alt="LinkedIn" width={24} height={24} />
-                        <Image src="/Meta-logo/Meta.png" alt="Meta" width={24} height={24} />
+                        <Link href="#">
+                            <Image src="/x-logo/X-logo-black.png" alt="X" width={24} height={24} />
+                        </Link>
+                        <Link href="#">
+                            <Image src="/Instagram-logo/Instagram_Glyph_Black.svg" alt="Instagram" width={24} height={24} />
+                        </Link>
+                        <Link href="#">
+                            <Image src="/Twitter-logo/Twitter_Logo_WhiteOnImage.svg" alt="Twitter" width={24} height={24} />
+                        </Link>
+                        <Link href="#">
+                            <Image src="/Meta-logo/Meta.png" alt="Meta" width={24} height={24} />
+                        </Link>
                     </div>
                 </div>
             </div>
