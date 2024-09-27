@@ -8,41 +8,31 @@
     padding: 20px 40px;
     text-align: center;
     font-family: Arial, sans-serif;
+    position: relative;
+    /* To contain absolute positioned elements */
 }
 
 .footer-container {
-    display: flex;
-    justify-content: space-between;
-    /* Distribute space between elements */
-    align-items: center;
-    /* Vertically center elements */
-    flex-wrap: nowrap;
-    /* Prevent wrapping */
-    margin-bottom: 10px;
+    position: relative;
+    /* Relative positioning to anchor absolute positioned sections */
+    width: 100%;
+    height: 80px;
+    /* Set a fixed height for better control */
 }
 
 .footer-section {
-    display: flex;
-    align-items: center;
-    /* Align items vertically */
-}
-
-.footer-heading {
-    margin: 0 40px;
-    /* Space between the left section links */
-    font-weight: bold;
-    font-size: 1rem;
+    position: absolute;
+    /* Absolute positioning for manual placement */
 }
 
 .footer-links {
     display: flex;
-    /* Align links in a row */
-    flex-wrap: wrap;
-    /* Wrap links on smaller screens */
+    flex-wrap: nowrap;
+    /* Do not wrap links */
 }
 
 .footer-link {
-    margin: 0 10px;
+    margin: 0 20px;
     /* Space between links */
     color: #000;
     text-decoration: none;
@@ -52,18 +42,38 @@
     text-decoration: underline;
 }
 
-.footer-center {
-    display: flex;
-    align-items: center;
-    /* Center align items vertically */
-    justify-content: center;
-    /* Center align horizontally */
-    flex-grow: 1;
-    /* Ensure center section stays centered */
-    min-width: 200px;
-    /* Minimum width to prevent logo from shrinking */
-    margin: 0 40px;
-    /* Space to align it in the middle */
+/* Position the left section manually */
+.footer-section.left {
+    top: 50%;
+    left: 40px;
+    /* Adjust this value to position manually */
+    transform: translateY(-50%);
+    /* Center vertically */
+}
+
+/* Center section */
+.footer-section.center {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* Center both horizontally and vertically */
+    display: flex; /* Add flex to center section */
+    justify-content: center; /* Center align horizontally */
+    align-items: center; /* Center align vertically */
+}
+
+.footer-content {
+    display: flex; /* Flexbox for horizontal alignment */
+    align-items: center; /* Vertically center items */
+}
+
+/* Right section */
+.footer-section.right {
+    top: 50%;
+    right: 100px;
+    /* Adjust this value to position manually */
+    transform: translateY(-50%);
+    /* Center vertically */
 }
 
 .footer-divider {
@@ -89,7 +99,7 @@
 
 .footer-icons img {
     width: 24px;
-    margin: 0 8px;
+    margin: 0 28px;
     /* Space between icons */
     opacity: 0.7;
     transition: opacity 0.3s ease;
@@ -106,23 +116,33 @@
     color: #555;
     /* Lighter text color */
     margin-top: 10px;
+    position: relative;
+    z-index: 10;
 }
 
 @media (max-width: 768px) {
     .footer-container {
-        flex-direction: column;
-        /* Stack sections vertically on small screens */
-        align-items: center;
+        height: auto;
+        /* Adjust for smaller screens */
+    }
+
+    .footer-section {
+        position: relative;
+        /* Revert to relative positioning */
+        margin: 10px 0;
+        /* Add spacing between sections */
+        text-align: center;
+        /* Center align text */
+        transform: none;
+        /* Remove transform properties */
+        top: auto;
+        left: auto;
+        right: auto;
     }
 
     .footer-divider {
         display: none;
         /* Hide dividers on small screens */
-    }
-
-    .footer-section {
-        margin-bottom: 10px;
-        /* Add space between sections */
     }
 
     .footer-links {
