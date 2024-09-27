@@ -34,10 +34,10 @@ const PageFooter = () => {
                             <Image src="/Instagram-logo/Instagram_Glyph_Black.svg" alt="Instagram" width={24} height={24} />
                         </Link>
                         <Link href="#">
-                            <Image src="/Twitter-logo/Twitter_Logo_WhiteOnImage.svg" alt="Twitter" width={24} height={24} />
+                            <Image src="/Twitter-logo/Twitter_Logo_WhiteOnImage.svg" alt="LinkedIn" width={24} height={24} />
                         </Link>
                         <Link href="#">
-                            <Image src="/Meta-logo/Meta.png" alt="Meta" width={24} height={24} />
+                            <Image className="meta-logo" src="/Meta-logo/Meta.png" alt="Meta" width={24} height={24} />
                         </Link>
                     </div>
                 </div>
