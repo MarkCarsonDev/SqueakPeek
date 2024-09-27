@@ -27,6 +27,15 @@ export default function Landingnavbar(){
             </Link>
             <div className="nav-menu">
                 <ul className="nav-links">
+
+                    <li className="nav-list">
+                        <Link href='/aboutus' className="nav-item" color="secondary">
+                        <Typography>
+                            About Us
+                        </Typography>   
+                        </Link>
+                    </li>
+
                     <li className="nav-list">
                         <Link href='/log In' className="nav-item" color="secondary">
                         <Typography>
