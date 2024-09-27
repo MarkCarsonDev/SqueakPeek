@@ -2,6 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import "./styling/PageFooter.css";
+import { Typography } from "@mui/material";
 
 const PageFooter = () => {
     return (
@@ -10,16 +11,16 @@ const PageFooter = () => {
                 {/* Left Section */}
                 <div className="footer-section left">
                     <div className="footer-links">
-                        <Link href="#" className="footer-link">Explore</Link>
-                        <Link href="#" className="footer-link">About Us</Link>
-                        <Link href="#" className="footer-link">Contact</Link>
+                        <Link href="#" className="footer-link"><Typography>Explore</Typography></Link>
+                        <Link href="#" className="footer-link"><Typography>About Us</Typography></Link>
+                        <Link href="#" className="footer-link"><Typography>Contact</Typography></Link>
                     </div>
                 </div>
 
                 {/* Center Section */}
                 <div className="footer-section center">
                     <div className="footer-divider"></div>
-                    <h4 className="footer-logo">SqueakPeek</h4>
+                    <h4 className="footer-logo"><Typography>SqueekPeek</Typography></h4>
                     <div className="footer-divider"></div>
                 </div>
 
