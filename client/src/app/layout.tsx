@@ -3,6 +3,7 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
 import { customTheme } from "@/theme/theme";
 import { Inter } from "next/font/google";
+import { PageFooter } from "@/ui/PageFooter";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -32,7 +33,12 @@ export default function RootLayout({
         className={inter.variable}
       >
         <AppRouterCacheProvider>
-          <ThemeProvider theme={customTheme}>{children}</ThemeProvider>
+          <ThemeProvider theme={customTheme}>
+
+            {children}
+            <PageFooter />
+            
+          </ThemeProvider>
         </AppRouterCacheProvider>
       </body>
     </html>

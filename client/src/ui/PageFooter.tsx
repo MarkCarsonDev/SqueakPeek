@@ -4,7 +4,7 @@ import Image from "next/image";
 import "./styling/PageFooter.css";
 import { Typography } from "@mui/material";
 
-const PageFooter = () => {
+export const PageFooter = () => {
     return (
         <footer className="footer">
             <div className="footer-container">
@@ -49,4 +49,3 @@ const PageFooter = () => {
     );
 };
 
-export default PageFooter;

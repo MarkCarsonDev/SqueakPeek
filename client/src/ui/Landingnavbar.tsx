@@ -2,11 +2,11 @@
 import Image from "next/image"
 import Link from "next/link"
 import { Button, Typography } from "@mui/material";
-import "./styling/landingnavbar.css"
+import "@/ui/styling/LandingNavbar.css"
 import { customTheme } from "@/theme/theme";
 import {ThemeProvider} from "@mui/material";
 
-export default function Landingnavbar(){
+export function LandingNavbar(){
 
     return(
     <nav className="navbar">
@@ -53,13 +53,14 @@ export default function Landingnavbar(){
                                     borderRadius: '8px',
                                     padding: '10px 60px',
                                     fontSize: '18px',
+                                    
                                     '&:hover': {
                                         backgroundColor: '#3C435C', 
                                         transform: 'scale(1.05)',
                                     },
                                     }}>
 
-                                    <Typography>
+                                    <Typography sx={{ color: "#FFFFFF" }}>
                                         Get Started
                                     </Typography>
 

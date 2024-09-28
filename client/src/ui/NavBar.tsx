@@ -7,8 +7,8 @@ export function NavBar() {
   return (
     <nav className="navbar">
         <div className="navbar-container">
+
             <Link href='/' className="name-logo">
-                
                 <div className="logo">
                     <Image
                         src="/ratlogo.png"
@@ -18,6 +18,7 @@ export function NavBar() {
                         />
                 </div>SqueakPeek
             </Link>
+
             <div className="nav-menu">
                 <ul className="nav-links">
                     <li className="nav-list">

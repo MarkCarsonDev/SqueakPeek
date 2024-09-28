@@ -2,8 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Typography, Box } from '@mui/material';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import './styling/lpTextCarousel.css';
-import { red } from '@mui/material/colors';
+import "@/ui/styling/TextCarousel.css";
 
 const textItems = [
   "How many other people are applying?",
@@ -13,7 +12,7 @@ const textItems = [
   "Are there skills I should highlight?"
 ];
 
-const TextCarousel = () => {
+export const TextCarousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
@@ -51,4 +50,3 @@ const TextCarousel = () => {
   );
 };
 
-export default TextCarousel;
