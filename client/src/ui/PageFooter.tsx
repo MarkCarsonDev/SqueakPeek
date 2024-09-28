@@ -37,16 +37,14 @@ const PageFooter = () => {
                             <Image src="/Twitter-logo/Twitter_Logo_WhiteOnImage.svg" alt="LinkedIn" width={24} height={24} />
                         </Link>
                         <Link href="#">
-                            <Image className="meta-logo" src="/Meta-logo/Meta.png" alt="Meta" width={24} height={24} />
+                            <Image className="meta-logo" src="/Meta-logo/Meta.svg" alt="Meta" width={24} height={24} />
                         </Link>
                     </div>
                 </div>
             </div>
 
             {/* Copyright Section */}
-            <div className="footer-bottom">
-                <Typography>© 2024 SQUEAKPEEK</Typography>
-            </div>
+            <Typography className="footer-bottom">© 2024 SQUEAKPEEK</Typography>
         </footer>
     );
 };
