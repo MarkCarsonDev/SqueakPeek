@@ -1,39 +1,21 @@
-/* PageFooter.css */
-
+/* General Footer Styles */
 .footer {
-    background-color: #f9f9fc;
-    /* Light grayish background */
-    color: #000;
-    /* Black text color */
+    background-color: #f9f9fc; /* Light grayish background */
     padding: 20px 40px;
-    text-align: center;
-    font-family: Arial, sans-serif;
-    position: relative;
-    /* To contain absolute positioned elements */
+    display: flex;
+    justify-content: space-between; /* Space out the sections */
+    align-items: center; /* Vertically center the content */
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
 }
 
-.footer-container {
-    position: relative;
-    /* Relative positioning to anchor absolute positioned sections */
-    width: 100%;
-    height: 80px;
-    /* Set a fixed height for better control */
-}
-
-.footer-section {
-    position: absolute;
-    /* Absolute positioning for manual placement */
-}
-
+/* Footer Links Section */
 .footer-links {
     display: flex;
     flex-wrap: nowrap;
-    /* Do not wrap links */
 }
 
 .footer-link {
-    margin: 0 20px;
-    /* Space between links */
+    margin: 0 20px; /* Space between links */
     color: #000;
     text-decoration: none;
 }
@@ -42,57 +24,26 @@
     text-decoration: underline;
 }
 
-/* Position the left section manually */
-.footer-section.left {
-    top: 50%;
-    left: 40px;
-    /* Adjust this value to position manually */
-    transform: translateY(-50%);
-    /* Center vertically */
-    margin: 0 48px;
-}
-
-/* Center section */
-.footer-section.center {
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    /* Center both horizontally and vertically */
-    display: flex; /* Add flex to center section */
-    justify-content: center; /* Center align horizontally */
-    align-items: center; /* Center align vertically */
-}
-
-.footer-content {
-    display: flex; /* Flexbox for horizontal alignment */
-    align-items: center; /* Vertically center items */
-}
-
-/* Right section */
-.footer-section.right {
-    top: 50%;
-    right: 100px;
-    /* Adjust this value to position manually */
-    transform: translateY(-50%);
-    /* Center vertically */
+/* Center Section */
+.footer-center {
+    display: flex;
+    align-items: center;
 }
 
 .footer-divider {
     height: 1px;
     width: 50px;
-    background-color: #ccc;
-    /* Light gray for divider */
-    margin: 0 20px;
-    /* Spacing around the divider */
+    background-color: #ccc; /* Light gray for divider */
+    margin: 0 20px; /* Spacing around the divider */
 }
 
 .footer-logo {
     font-weight: bold;
     font-size: 1.25rem;
     text-align: center;
-    /* Ensure text is centered */
 }
 
+/* Right Section - Icons */
 .footer-icons {
     display: flex;
     align-items: center;
@@ -100,60 +51,20 @@
 
 .footer-icons img {
     width: 24px;
-    margin: 0 28px;
-    /* Space between icons */
+    margin: 0 12px; /* Space between icons */
     opacity: 0.7;
     transition: opacity 0.3s ease;
 }
 
 .footer-icons img:hover {
-    opacity: 1;
-    /* Highlight icons on hover */
+    opacity: 1; /* Highlight icons on hover */
 }
 
+/* Bottom Section */
 .footer-bottom {
-    font-size: 0.875rem;
-    /* Slightly smaller font size */
-    color: #555;
-    /* Lighter text color */
+    font-size: 0.875rem; /* Slightly smaller font size */
+    color: #555; /* Lighter text color */
+    width: 100%; /* Take full width */
+    text-align: center; /* Center align text */
     margin-top: 10px;
-    position: relative;
-    z-index: 10;
-}
-
-@media (max-width: 768px) {
-    .footer-container {
-        height: auto;
-        /* Adjust for smaller screens */
-    }
-
-    .footer-section {
-        position: relative;
-        /* Revert to relative positioning */
-        margin: 10px 0;
-        /* Add spacing between sections */
-        text-align: center;
-        /* Center align text */
-        transform: none;
-        /* Remove transform properties */
-        top: auto;
-        left: auto;
-        right: auto;
-    }
-
-    .footer-divider {
-        display: none;
-        /* Hide dividers on small screens */
-    }
-
-    .footer-links {
-        justify-content: center;
-        /* Center links on small screens */
-        /* margin: 0 38px; */
-    }
-}
-
-.meta-logo {
-    width: 600px;
-    height: 60px;
 }
