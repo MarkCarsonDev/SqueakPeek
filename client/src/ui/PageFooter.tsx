@@ -6,41 +6,41 @@ import { Typography } from "@mui/material";
 
 const PageFooter = () => {
     return (
-        <footer className="footer">
-            <div className="footer-container">
-                {/* Left Section */}
-                <div className="footer-section left">
-                    <div className="footer-links">
-                        <Link href="#" className="footer-link"><Typography>Explore</Typography></Link>
-                        <Link href="#" className="footer-link"><Typography>About Us</Typography></Link>
-                        <Link href="#" className="footer-link"><Typography>Contact</Typography></Link>
-                    </div>
-                </div>
+        <footer className="footer container">
+            {/* Left Section */}
+            <div className="footer-links">
+                <Link href="#" className="footer-link">
+                    <Typography>Explore</Typography>
+                </Link>
+                <Link href="#" className="footer-link">
+                    <Typography>About Us</Typography>
+                </Link>
+                <Link href="#" className="footer-link">
+                    <Typography>Contact</Typography>
+                </Link>
+            </div>
 
-                {/* Center Section */}
-                <div className="footer-section center">
-                    <div className="footer-divider"></div>
-                    <Typography className="footer-logo" variant="h4">SqueekPeek</Typography>
-                    <div className="footer-divider"></div>
-                </div>
+            {/* Center Section */}
+            <div className="footer-center">
+                <div className="footer-divider"></div>
+                <Typography className="footer-logo" variant="h4">SqueakPeek</Typography>
+                <div className="footer-divider"></div>
+            </div>
 
-                {/* Right Section */}
-                <div className="footer-section right">
-                    <div className="footer-icons">
-                        <Link href="#">
-                            <Image src="/x-logo/X-logo-black.png" alt="X" width={24} height={24} />
-                        </Link>
-                        <Link href="#">
-                            <Image src="/Instagram-logo/Instagram_Glyph_Black.svg" alt="Instagram" width={24} height={24} />
-                        </Link>
-                        <Link href="#">
-                            <Image src="/Twitter-logo/Twitter_Logo_WhiteOnImage.svg" alt="LinkedIn" width={24} height={24} />
-                        </Link>
-                        <Link href="#">
-                            <Image className="meta-logo" src="/Meta-logo/Meta.svg" alt="Meta" width={24} height={24} />
-                        </Link>
-                    </div>
-                </div>
+            {/* Right Section */}
+            <div className="footer-icons">
+                <Link href="#">
+                    <Image src="/x-logo/X-logo-black.png" alt="X" width={24} height={24} />
+                </Link>
+                <Link href="#">
+                    <Image src="/Instagram-logo/Instagram_Glyph_Black.svg" alt="Instagram" width={24} height={24} />
+                </Link>
+                <Link href="#">
+                    <Image src="/Twitter-logo/Twitter_Logo_WhiteOnImage.svg" alt="Twitter" width={24} height={24} />
+                </Link>
+                <Link href="#">
+                    <Image className="meta-logo" src="/Meta-logo/Meta.svg" alt="Meta" width={24} height={24} />
+                </Link>
             </div>
 
             {/* Copyright Section */}
