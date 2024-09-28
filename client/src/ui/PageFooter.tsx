@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import "./styling/PageFooter.css";
+import "@/ui/styling/PageFooter.css";
 import { Typography } from "@mui/material";
 
 export const PageFooter = () => {
