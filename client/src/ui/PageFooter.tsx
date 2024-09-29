@@ -23,7 +23,7 @@ export const PageFooter = () => {
             {/* Center Section */}
             <div className="footer-center">
                 <Divider className="footer-divider" />
-                <Typography className="footer-logo" variant="h4">SqueakPeek</Typography>
+                <Typography className="footer-logo" variant="h4"> SqueakPeek</Typography>
                 <Divider className="footer-divider" />
             </div>
 
@@ -36,10 +36,10 @@ export const PageFooter = () => {
                     <Image src="/Instagram-logo/Instagram_Glyph_Black.svg" alt="Instagram" width={24} height={24} />
                 </Link>
                 <Link href="#">
-                    <Image src="/Twitter-logo/Twitter_Logo_WhiteOnImage.svg" alt="Twitter" width={24} height={24} />
+                    <Image src="/LinkedIn-logo/In-Black.png" alt="Twitter" width={24} height={24}  />
                 </Link>
                 <Link href="#">
-                    <Image className="meta-logo" src="/Meta-logo/Meta.svg" alt="Meta" width={24} height={24} />
+                    <Image className="meta-logo" src="/Meta-logo/Meta-logo.png" alt="Meta" width={24} height={24} />
                 </Link>
             </div>
 

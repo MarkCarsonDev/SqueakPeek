@@ -3,8 +3,8 @@
     background-color: #f9f9fc; /* Light grayish background */
     padding: 20px 40px;
     display: flex;
-    justify-content: space-between; /* Space out the sections */
-    align-items: center; /* Vertically center the content */
+    justify-content: space-evenly; 
+    /* align-items: center;  */
     flex-wrap: wrap; /* Allow wrapping on smaller screens */
 }
 
@@ -28,6 +28,8 @@
 .footer-center {
     display: flex; /* Align items horizontally */
     align-items: center; /* Center vertically */
+    text-align: center;
+    right: 15px;
 }
 
 .footer-divider {
@@ -67,5 +69,7 @@
     color: #555; /* Lighter text color */
     width: 100%; /* Take full width */
     text-align: center; /* Center align text */
+
     margin-top: 10px;
+    /* left: -10px; */
 }
