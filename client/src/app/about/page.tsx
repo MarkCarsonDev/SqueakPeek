@@ -6,19 +6,26 @@ export default function Page() {
       className="border"
       style={{
         borderRadius: "15px",
+        padding: "15px",
       }}
     >
-      <Typography className="bottom-pad" variant="h4">
+      <Typography
+        className="bottom-pad"
+        variant="h3"
+        sx={{
+          fontSize: 45,
+        }}
+      >
         At SqueakPeek, we understand how challenging the job search process can
         be.
       </Typography>
 
-      <Typography className="bottom-pad" variant="h6">
+      <Typography className="bottom-pad" variant="h5">
         From submitting applications to waiting for interviews, the journey
         often feels like navigating a black box. As a couple of college
         students, we knew it all too well.
       </Typography>
-      <Typography className="bottom-pad" variant="h6">
+      <Typography className="bottom-pad" variant="h5">
         That’s why, in 2024, we began SqueakPeek to allow you to connect with
         other job applicants, share experiences, and track your progress every
         step of the way. Through message threads, you can communicate about
@@ -26,7 +33,7 @@ export default function Page() {
         move forward in your career.
       </Typography>
       <Typography
-        variant="h5"
+        variant="h4"
         sx={{
           fontWeight: "bold",
         }}
