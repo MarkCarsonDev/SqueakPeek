@@ -5,47 +5,70 @@ import "./styling/PageFooter.css";
 import { Typography, Divider } from "@mui/material";
 
 export const PageFooter = () => {
-    return (
-        <footer className="footer container">
-            {/* Left Section */}
-            <div className="footer-links">
-                <Link href="#" className="footer-link">
-                    <Typography>Explore</Typography>
-                </Link>
-                <Link href="#" className="footer-link">
-                    <Typography>About Us</Typography>
-                </Link>
-                <Link href="#" className="footer-link">
-                    <Typography>Contact</Typography>
-                </Link>
-            </div>
+  return (
+    <footer className="footer container">
+      {/* Left Section */}
+      <div className="footer-links">
+        <Link href="#" className="footer-link">
+          <Typography>Explore</Typography>
+        </Link>
+        <Link href="#" className="footer-link">
+          <Typography>About Us</Typography>
+        </Link>
+        <Link href="#" className="footer-link">
+          <Typography>Contact</Typography>
+        </Link>
+      </div>
 
-            {/* Center Section */}
-            <div className="footer-center">
-                <Divider className="footer-divider" />
-                <Typography className="footer-logo" variant="h4"> SqueakPeek</Typography>
-                <Divider className="footer-divider" />
-            </div>
+      {/* Center Section */}
+      <div className="footer-center">
+        <Divider className="footer-divider" />
+        <Typography className="footer-logo" variant="h4">
+          {" "}
+          SqueakPeek
+        </Typography>
+        <Divider className="footer-divider" />
+      </div>
 
-            {/* Right Section */}
-            <div className="footer-icons">
-                <Link href="#">
-                    <Image src="/x-logo/X-logo-black.png" alt="X" width={24} height={24} />
-                </Link>
-                <Link href="#">
-                    <Image src="/Instagram-logo/Instagram_Glyph_Black.svg" alt="Instagram" width={24} height={24} />
-                </Link>
-                <Link href="#">
-                    <Image src="/LinkedIn-logo/In-Black.png" alt="Twitter" width={24} height={24}  />
-                </Link>
-                <Link href="#">
-                    <Image className="meta-logo" src="/Meta-logo/Meta-logo.png" alt="Meta" width={24} height={24} />
-                </Link>
-            </div>
+      {/* Right Section */}
+      <div className="footer-icons">
+        <Link href="#">
+          <Image
+            src="/x-logo/X-logo-black.png"
+            alt="X"
+            width={24}
+            height={24}
+          />
+        </Link>
+        <Link href="#">
+          <Image
+            src="/Instagram-logo/Instagram_Glyph_Black.svg"
+            alt="Instagram"
+            width={24}
+            height={24}
+          />
+        </Link>
+        <Link href="#">
+          <Image
+            src="/LinkedIn-logo/In-Black.png"
+            alt="Twitter"
+            width={24}
+            height={24}
+          />
+        </Link>
+        <Link href="#">
+          <Image
+            className="meta-logo"
+            src="/Meta-logo/Meta-logo.png"
+            alt="Meta"
+            width={24}
+            height={24}
+          />
+        </Link>
+      </div>
 
-            {/* Copyright Section */}
-            <Typography className="footer-bottom">© 2024 SQUEAKPEEK</Typography>
-        </footer>
-    );
+      {/* Copyright Section */}
+      <Typography className="footer-bottom">© 2024 SQUEAKPEEK</Typography>
+    </footer>
+  );
 };
-

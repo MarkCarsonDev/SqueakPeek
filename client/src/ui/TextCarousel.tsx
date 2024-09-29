@@ -1,7 +1,7 @@
-"use client"
-import React, { useState, useEffect } from 'react';
-import { Typography, Box } from '@mui/material';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
+"use client";
+import React, { useState, useEffect } from "react";
+import { Typography, Box } from "@mui/material";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 import "@/ui/styling/TextCarousel.css";
 
 const textItems = [
@@ -9,7 +9,7 @@ const textItems = [
   "Is this job really entry-level?",
   "How long is the interview process?",
   "What kind of questions do they ask?",
-  "Are there skills I should highlight?"
+  "Are there skills I should highlight?",
 ];
 
 export const TextCarousel = () => {
@@ -20,33 +20,26 @@ export const TextCarousel = () => {
       setCurrentIndex((prevIndex) =>
         prevIndex === textItems.length - 1 ? 0 : prevIndex + 1
       );
-    }, 4000); 
+    }, 4000);
 
     return () => clearInterval(intervalId);
   }, []);
 
   return (
-    <Box
-    >
+    <Box>
       <TransitionGroup>
-        <CSSTransition
-          key={currentIndex}
-          timeout={500}
-          classNames="fade"
-        >
+        <CSSTransition key={currentIndex} timeout={500} classNames="fade">
           <Typography
             variant="h4"
             align="center"
             sx={{
-              position: 'absolute',
+              position: "absolute",
             }}
           >
             {textItems[currentIndex]}
           </Typography>
         </CSSTransition>
-        
       </TransitionGroup>
     </Box>
   );
 };
-

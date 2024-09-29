@@ -15,7 +15,7 @@ export default function Home() {
       <div className="sec1-container">
         <div className="sec1-box">
           <div className="sec1-text-wheel">
-            <TextCarousel/>
+            <TextCarousel />
           </div>
           <div className="sec1-logo-box">
             <Image
