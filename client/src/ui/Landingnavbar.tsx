@@ -15,7 +15,7 @@ export function LandingNavbar(){
                 
                 <div className="logo">
                     <Image className="logo-image"
-                        src="/rat_1.png"
+                        src="/LandingPage-images/rat_1.png"
                         height={100}
                         width={100}
                         alt="Squeakpeek Logo"

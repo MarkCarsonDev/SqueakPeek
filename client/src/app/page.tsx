@@ -21,7 +21,7 @@ export default function Home() {
                 </div>
                 <div className="sec1-logo-box"> 
                     <Image className="sec1-main-logo"
-                        src="/rat_1.png"
+                        src="/LandingPage-images/rat_1.png"
                         width={300}
                         height={300}
                         alt="SqueakPeek Logo"
@@ -48,7 +48,7 @@ export default function Home() {
         {/*Section 2 Block*/}
         <div className="sec2-container">
             <Image className="sec2-image"
-                src="/rat_2.png"
+                src="/LandingPage-images/rat_2.png"
                 width={600}
                 height={300}
                 alt="Two rats speaking"
@@ -68,7 +68,7 @@ export default function Home() {
         {/*Section 3 Block*/}
         <div className="sec3-container">
             <Image className="sec3-image"
-                src="/rat_1.png"
+                src="/LandingPage-images/rat_1.png"
                 width={400}
                 height={400}
                 alt="Rat looking up"
@@ -87,7 +87,7 @@ export default function Home() {
         {/*Section 4 Block*/}
         <div className="sec4-container">
             <Image className="sec4-image"
-                src="/rat_3.png"
+                src="/LandingPage-images/rat_3.png"
                 width={400}
                 height={400}
                 alt="Rat looking at star"
