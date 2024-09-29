@@ -2,7 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import "./styling/PageFooter.css";
-import { Typography } from "@mui/material";
+import { Typography, Divider } from "@mui/material";
 
 export const PageFooter = () => {
     return (
