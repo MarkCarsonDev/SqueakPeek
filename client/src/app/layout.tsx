@@ -17,6 +17,11 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
+/**
+ * This layout file affects ALL FILES in the project
+ * Theme for the Typography MUI component is set here
+ * Backround color, and to flush components into pages is set here
+ */
 export default function RootLayout({
   children,
 }: Readonly<{
