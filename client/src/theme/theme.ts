@@ -14,22 +14,4 @@ export const customTheme = createTheme({
       color: "#3C435C",
     },
   },
-  components: {
-    MuiContainer: {
-      styleOverrides: {
-        root: {
-          variants: [
-            {
-              // `dashed` is an example value, it can be any name.
-              props: { variant: "dashed" },
-              style: {
-                textTransform: "none",
-                border: `2px dashed black`,
-              },
-            },
-          ],
-        },
-      },
-    },
-  },
 });

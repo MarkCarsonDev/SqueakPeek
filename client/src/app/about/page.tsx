@@ -1,8 +1,9 @@
-import { Container, Typography } from "@mui/material/";
+import { Typography } from "@mui/material/";
+
 export default function Page() {
   return (
-    <Container variant="dashed">
+    <div className="border">
       <Typography>About Us</Typography>
-    </Container>
+    </div>
   );
 }
