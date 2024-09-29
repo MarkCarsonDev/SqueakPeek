@@ -15,7 +15,7 @@
 }
 
 .footer-link {
-    margin: 0 20px; /* Space between links */
+    margin: 0 40px; /* Space between links */
     color: #000;
     text-decoration: none;
 }
@@ -26,21 +26,22 @@
 
 /* Center Section */
 .footer-center {
-    display: flex;
-    align-items: center;
+    display: flex; /* Align items horizontally */
+    align-items: center; /* Center vertically */
 }
 
 .footer-divider {
-    height: 1px;
-    width: 50px;
+    flex-grow: 1; /* Allow the divider to grow */
     background-color: #ccc; /* Light gray for divider */
-    margin: 0 20px; /* Spacing around the divider */
+    width: 20px;
+    height: 1px; /* Fixed height for horizontal line */
+    margin: 0 20px; /* Space around the divider */
 }
 
 .footer-logo {
     font-weight: bold;
     font-size: 1.25rem;
-    text-align: center;
+    text-align: center; /* Ensure text is centered */
 }
 
 /* Right Section - Icons */
@@ -51,7 +52,7 @@
 
 .footer-icons img {
     width: 24px;
-    margin: 0 12px; /* Space between icons */
+    margin: 0 40px; /* Space between icons */
     opacity: 0.7;
     transition: opacity 0.3s ease;
 }
