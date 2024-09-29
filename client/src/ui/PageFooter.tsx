@@ -1,8 +1,8 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import "@/ui/styling/PageFooter.css";
-import { Typography } from "@mui/material";
+import "./styling/PageFooter.css";
+import { Typography, Divider } from "@mui/material";
 
 export const PageFooter = () => {
     return (
@@ -22,9 +22,9 @@ export const PageFooter = () => {
 
             {/* Center Section */}
             <div className="footer-center">
-                <div className="footer-divider"></div>
+                <Divider className="footer-divider" />
                 <Typography className="footer-logo" variant="h4">SqueakPeek</Typography>
-                <div className="footer-divider"></div>
+                <Divider className="footer-divider" />
             </div>
 
             {/* Right Section */}
