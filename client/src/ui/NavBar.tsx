@@ -42,4 +42,4 @@ export function NavBar() {
       </div>
     </nav>
   );
-}
+};
