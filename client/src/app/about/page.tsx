@@ -1,4 +1,4 @@
-import { Typography, Container } from "@mui/material/";
+import { Typography } from "@mui/material/";
 import "./styles.modules.css";
 import Link from "next/link";
 export default function Page() {
