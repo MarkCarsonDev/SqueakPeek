@@ -6,6 +6,8 @@ import "@/ui/styling/LandingNavbar.css";
 import { customTheme } from "@/theme/theme";
 import { ThemeProvider } from "@mui/material";
 
+/*hello*/
+
 export function LandingNavbar() {
   return (
     <nav className="navbar">
