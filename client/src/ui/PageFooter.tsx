@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import { Typography, Divider, Button, Box } from "@mui/material";
+import { Typography, Divider, Button } from "@mui/material";
 
 /*
 This Page Footer will be responsible for rendering the footer of all pages in the project
