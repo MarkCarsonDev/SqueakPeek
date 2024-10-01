@@ -1,33 +1,33 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import { Typography, Divider } from "@mui/material";
+import { Typography, Divider, Button } from "@mui/material";
 
 /*
-This Page Footer will be responisble for rendering the footer of all pages in the project
+This Page Footer will be responsible for rendering the footer of all pages in the project
 Except for the Login Page and Sign Up Page
 */
 
-const images =[
+const images = [
   {
     src: "/x-logo/X-logo-black.png",
     alt: "X",
-    route: "#"
+    route: "#",
   },
   {
     src: "/Instagram-logo/Instagram_Glyph_Black.svg",
     alt: "Instagram",
-    route: '#'
+    route: "#",
   },
   {
     src: "/LinkedIn-logo/In-Black.png",
     alt: "LinkedIn",
-    route: '#'
+    route: "#",
   },
   {
     src: "/Meta-logo/Meta-logo.png",
     alt: "Meta",
-    route: '#'
+    route: "#",
   },
 ];
 
@@ -37,9 +37,10 @@ export const PageFooter = () => {
       style={{
         backgroundColor: "#f6f8ff",
         padding: "20px 40px",
-        display: "flex",
-        justifyContent: "space-evenly",
-        flexWrap: "wrap",
+        display: "grid",
+        gridTemplateColumns: "1fr auto 1fr", // Grid layout for equal distribution
+        alignItems: "center", // Align vertically
+        gridTemplateRows: "auto auto", // Two rows, one for main content, one for copyright
       }}
     >
       {/* Left Section */}
@@ -49,43 +50,37 @@ export const PageFooter = () => {
           flexWrap: "nowrap",
         }}
       >
-        <Link
-          href="#"
-          style={{ margin: "0 40px", color: "#000", textDecoration: "none" }}
-        >
-          <Typography>Explore</Typography>
-        </Link>
-        <Link
-          href="#"
-          style={{ margin: "0 40px", color: "#000", textDecoration: "none" }}
-        >
-          <Typography>About Us</Typography>
-        </Link>
-        <Link
-          href="#"
-          style={{ margin: "0 40px", color: "#000", textDecoration: "none" }}
-        >
-          <Typography>Contact</Typography>
-        </Link>
+        {["Explore", "About Us", "Contact"].map((text, index) => (
+          <Link
+            key={index}
+            href="#"
+            style={{
+              margin: "0 40px",
+              color: "#000",
+              textDecoration: "none",
+            }}
+          >
+            <Typography>{text}</Typography>
+          </Link>
+        ))}
       </div>
 
-      {/* Center Section */}
+      {/* Center Section (Dividers and Title in Row) */}
       <div
         style={{
           display: "flex",
           alignItems: "center",
-          textAlign: "center",
-          position: "relative",
-          right: "15px",
+          justifyContent: "center",
+          gridColumn: "2 / 3", // Center column
+          width: "100%",
         }}
       >
         <Divider
           style={{
-            flexGrow: 1,
-            backgroundColor: "#ccc",
-            width: "20px",
-            height: "1px",
-            margin: "0 20px",
+            width: "100px", // Fixed width for the divider
+            height: "1px",  // Make sure the divider height is set correctly
+            backgroundColor: "#ccc", // Divider color
+            marginRight: "20px", // Space between divider and title
           }}
         />
         <Typography
@@ -100,11 +95,10 @@ export const PageFooter = () => {
         </Typography>
         <Divider
           style={{
-            flexGrow: 1,
-            backgroundColor: "#ccc",
-            width: "20px",
-            height: "1px",
-            margin: "0 20px",
+            width: "100px", // Fixed width for the divider
+            height: "1px",  // Make sure the divider height is set correctly
+            backgroundColor: "#ccc", // Divider color
+            marginLeft: "20px", // Space between title and divider
           }}
         />
       </div>
@@ -113,34 +107,35 @@ export const PageFooter = () => {
       <div
         style={{
           display: "flex",
-          alignItems: "center",
+          justifyContent: "flex-end",
+          gap: "100px", // Space between icons
         }}
       >
         {images.map((image, index) => (
-          <Link key = {index} href={image.route}>
-          <Image
-            src={image.src}
-            alt={image.alt}
-            width={24}
-            height={24}
-            style={{
-              margin: "0 40px",
-              opacity: 0.7,
-              transition: "opacity 0.3s ease",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
-            onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.7")}
-          />
-        </Link>
+          <Link key={index} href={image.route}>
+            <Button
+              sx={{
+                minWidth: "auto", // Remove the default button minWidth
+                padding: 0, // Remove padding
+                opacity: 0.7,
+                transition: "opacity 0.3s ease",
+                "&:hover": {
+                  opacity: 1,
+                },
+              }}
+            >
+              <Image src={image.src} alt={image.alt} width={24} height={24} />
+            </Button>
+          </Link>
         ))}
       </div>
 
       {/* Copyright Section */}
       <Typography
         style={{
+          gridColumn: "2 / 3", // Center the copyright text below the title
           fontSize: "0.875rem",
           color: "#555",
-          width: "100%",
           textAlign: "center",
           marginTop: "10px",
         }}
