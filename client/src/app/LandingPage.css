@@ -1,0 +1,55 @@
+.sec1-container{
+    display: flex;
+    width: 100%;
+    height: 800px;
+    justify-content: center;
+    align-items: center;
+}
+
+.sec1-box{
+    display: grid;
+    width: 90%;
+    height: 700px;
+    background-color: white;
+    border: #E0E4F2;
+    border: 10px solid #E0E4F2;
+    border-radius: 20px; 
+    align-items: center;
+    box-shadow: rgb(109, 109, 109) 0px 0px 10px;
+}
+
+.sec1-logo-box{
+    display: grid;
+    width: 400px;
+    height: 500px;
+    position: absolute;
+    right: 17%;
+    bottom: 25%;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.sec1-text-wheel{
+    position: relative;
+    top: 50%;
+    right: 20%;
+    height: 200px;
+    width: 700px;
+    justify-self: center;
+}
+
+.sec1-main-logo{
+    justify-self: center;
+
+}
+
+.sec1-logo-text{
+    justify-self: center;
+}
+
+.sec1-Link{
+    justify-self: center;
+    position: relative;
+    top: 20%;
+}

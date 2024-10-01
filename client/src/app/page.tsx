@@ -1,4 +1,44 @@
-import { CounterText } from "@/ui/CounterText";
+"use client";
+import { LandingNavbar } from "@/ui/LandingNavbar";
+import "@/ui/styling/LandingPage.css";
+import Image from "next/image";
+import { TextCarousel } from "@/ui/TextCarousel";
+import { Typography } from "@mui/material";
+import Link from "@mui/material/Link";
+
 export default function Home() {
-  return <CounterText />;
+  return (
+    <div>
+      <LandingNavbar />
+
+      {/*Section 1 Block*/}
+      <div className="sec1-container">
+        <div className="sec1-box">
+          <div className="sec1-text-wheel">
+            <TextCarousel />
+          </div>
+          <div className="sec1-logo-box">
+            <Image
+              className="sec1-main-logo"
+              src="/LandingPage-images/rat_1.png"
+              width={300}
+              height={300}
+              alt="SqueakPeek Logo"
+            />
+            <Typography variant="h2">SqueakPeek</Typography>
+            <Typography className="sec1-logo-text" variant="h4">
+              Job hunting is hard, we’re here to help.
+            </Typography>
+          </div>
+          <div className="sec1-Link">
+            <Link href="/signup">
+              <Typography variant="h5" sx={{ color: "#496FFF" }}>
+                Get Started
+              </Typography>
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
