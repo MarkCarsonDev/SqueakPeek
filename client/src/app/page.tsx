@@ -75,6 +75,23 @@ export default function Home() {
           </Typography>
         </div>
       </div>
+      {/*Section 4 Block*/}
+      <div className="sec4-container">
+        <Image
+          className="sec4-image"
+          src="/LandingPage-images/rat_3.png"
+          width={400}
+          height={400}
+          alt="Rat looking at star"
+        />
+        <div className="sec4-text-box">
+          <Typography variant="h3">Gain Insight</Typography>
+
+          <Typography variant="body1">
+            View helpful stats about job openings with a single glance.
+          </Typography>
+        </div>
+      </div>
     </div>
   );
 }
