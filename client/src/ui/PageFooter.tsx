@@ -31,6 +31,13 @@ const images = [
   },
 ];
 
+// Array for the left section with both text and route
+const footerLinks = [
+  { text: "Explore", route: "/explore" },
+  { text: "About Us", route: "/about" },
+  { text: "Contact", route: "/contact" },
+];
+
 export const PageFooter = () => {
   return (
     <footer
@@ -50,17 +57,17 @@ export const PageFooter = () => {
           flexWrap: "nowrap",
         }}
       >
-        {["Explore", "About Us", "Contact"].map((text, index) => (
+        {footerLinks.map((link, index) => (
           <Link
             key={index}
-            href="#"
+            href={link.route}
             style={{
               margin: "0 40px",
               color: "#000",
               textDecoration: "none",
             }}
           >
-            <Typography>{text}</Typography>
+            <Typography>{link.text}</Typography>
           </Link>
         ))}
       </div>
@@ -78,7 +85,7 @@ export const PageFooter = () => {
         <Divider
           style={{
             width: "100px", // Fixed width for the divider
-            height: "1px",  // Make sure the divider height is set correctly
+            height: "1px", // Make sure the divider height is set correctly
             backgroundColor: "#ccc", // Divider color
             marginRight: "20px", // Space between divider and title
           }}
@@ -96,7 +103,7 @@ export const PageFooter = () => {
         <Divider
           style={{
             width: "100px", // Fixed width for the divider
-            height: "1px",  // Make sure the divider height is set correctly
+            height: "1px", // Make sure the divider height is set correctly
             backgroundColor: "#ccc", // Divider color
             marginLeft: "20px", // Space between title and divider
           }}
@@ -116,12 +123,19 @@ export const PageFooter = () => {
             <Button
               sx={{
                 minWidth: "auto", // Remove the default button minWidth
-                padding: 0, // Remove padding
-                opacity: 0.7,
-                transition: "opacity 0.3s ease",
+                padding: 0, // Remove padding around the icon
+                backgroundColor: "transparent", // Remove any background color
+                boxShadow: "none", // Remove default button shadow
                 "&:hover": {
-                  opacity: 1,
+                  backgroundColor: "transparent", // Ensure no background on hover
+                  opacity: 1, // Smooth opacity transition on hover
                 },
+                "&:focus": {
+                  outline: "none", // Remove focus outline
+                  boxShadow: "none", // Remove focus box shadow
+                },
+                opacity: 0.7,
+                transition: "opacity 0.3s ease", // Smooth transition for opacity
               }}
             >
               <Image src={image.src} alt={image.alt} width={24} height={24} />
