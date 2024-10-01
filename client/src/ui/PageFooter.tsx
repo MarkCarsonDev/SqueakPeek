@@ -8,11 +8,34 @@ This Page Footer will be responisble for rendering the footer of all pages in th
 Except for the Login Page and Sign Up Page
 */
 
+const images =[
+  {
+    src: "/x-logo/X-logo-black.png",
+    alt: "X",
+    route: "#"
+  },
+  {
+    src: "/Instagram-logo/Instagram_Glyph_Black.svg",
+    alt: "Instagram",
+    route: '#'
+  },
+  {
+    src: "/LinkedIn-logo/In-Black.png",
+    alt: "LinkedIn",
+    route: '#'
+  },
+  {
+    src: "/Meta-logo/Meta-logo.png",
+    alt: "Meta",
+    route: '#'
+  },
+];
+
 export const PageFooter = () => {
   return (
     <footer
       style={{
-        backgroundColor: "#f9f9fc",
+        backgroundColor: "#f6f8ff",
         padding: "20px 40px",
         display: "flex",
         justifyContent: "space-evenly",
@@ -93,10 +116,11 @@ export const PageFooter = () => {
           alignItems: "center",
         }}
       >
-        <Link href="#">
+        {images.map((image, index) => (
+          <Link key = {index} href={image.route}>
           <Image
-            src="/x-logo/X-logo-black.png"
-            alt="X"
+            src={image.src}
+            alt={image.alt}
             width={24}
             height={24}
             style={{
@@ -108,51 +132,7 @@ export const PageFooter = () => {
             onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.7")}
           />
         </Link>
-        <Link href="#">
-          <Image
-            src="/Instagram-logo/Instagram_Glyph_Black.svg"
-            alt="Instagram"
-            width={24}
-            height={24}
-            style={{
-              margin: "0 40px",
-              opacity: 0.7,
-              transition: "opacity 0.3s ease",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
-            onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.7")}
-          />
-        </Link>
-        <Link href="#">
-          <Image
-            src="/LinkedIn-logo/In-Black.png"
-            alt="LinkedIn"
-            width={24}
-            height={24}
-            style={{
-              margin: "0 40px",
-              opacity: 0.7,
-              transition: "opacity 0.3s ease",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
-            onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.7")}
-          />
-        </Link>
-        <Link href="#">
-          <Image
-            src="/Meta-logo/Meta-logo.png"
-            alt="Meta"
-            width={24}
-            height={24}
-            style={{
-              margin: "0 40px",
-              opacity: 0.7,
-              transition: "opacity 0.3s ease",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
-            onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.7")}
-          />
-        </Link>
+        ))}
       </div>
 
       {/* Copyright Section */}
