@@ -9,11 +9,12 @@ import { ThemeProvider } from "@mui/material";
 /*
  * This Landing Navbar will be responsible for rendering the Navbar of the Landing Page
  */
+
 export function LandingNavbar() {
   return (
     <nav
       style={{
-        background: "rgb(255, 255, 255)",
+        background: "#FFFFFF",
         height: "80px",
         width: "100%",
         display: "grid",
