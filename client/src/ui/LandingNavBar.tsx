@@ -14,11 +14,11 @@ export function LandingNavbar() {
   return (
     <nav
       style={{
-        background: "#FFFFFF",
+        background: "white",
         height: "80px",
         width: "100%",
         display: "grid",
-        zIndex: 999,
+        zIndex: 1,
         position: "sticky",
         top: 0,
         borderBottom: "5px solid #E0E4F2",
@@ -95,7 +95,7 @@ export function LandingNavbar() {
           >
             <li>
               <Link
-                href="/aboutus"
+                href="/about"
                 style={{
                   color: "#3C435C",
                   textDecoration: "none",
