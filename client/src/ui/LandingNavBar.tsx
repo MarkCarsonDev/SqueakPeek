@@ -16,10 +16,9 @@ export function LandingNavbar() {
         background: "white",
         height: "80px",
         width: "100%",
-        display: "grid",
+        display: "flex",
         zIndex: 1,
         position: "sticky",
-        top: 0,
         borderBottom: "5px solid #E0E4F2",
       }}
     >
@@ -28,17 +27,17 @@ export function LandingNavbar() {
           height: "80px",
           width: "100%",
           display: "flex",
-          justifyContent: "flex-start",
           alignItems: "center",
+          justifyContent: "center"
         }}
       >
         <Link
           href="/"
           style={{
-            outline: "solid red",
+            height: "80px",
             color: "#3C435C",
-            position: "absolute",
-            left: "2%",
+            position: "relative",
+            right: "28%",
             display: "flex",
             alignItems: "center",
             textDecoration: "none",
@@ -48,7 +47,6 @@ export function LandingNavbar() {
             style={{
               height: "100px",
               width: "100px",
-              backgroundImage: "url(/ratlogo.png)",
             }}
           >
             <Image
@@ -70,12 +68,10 @@ export function LandingNavbar() {
           style={{
             alignItems: "center",
             justifyContent: "center",
-            position: "absolute",
-            right: "3%",
-            height: "70px",
+            position: "relative",
+            left: "28%",
+            height: "80px",
             width: "500px",
-            fontSize: "1.2rem",
-            fontFamily: "'Droid Sans', sans-serif",
           }}
         >
           <ul
@@ -87,8 +83,6 @@ export function LandingNavbar() {
               textAlign: "center",
               justifyContent: "center",
               alignItems: "center",
-              position: "absolute",
-              right: "5%",
             }}
           >
             <li>
