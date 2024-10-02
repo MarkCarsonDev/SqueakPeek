@@ -5,7 +5,6 @@ import { Button, Typography } from "@mui/material";
 import { customTheme } from "@/theme/theme";
 import { ThemeProvider } from "@mui/material";
 
-
 /*
  * This Landing Navbar will be responsible for rendering the Navbar of the Landing Page
  */
@@ -118,24 +117,21 @@ export function LandingNavbar() {
             </li>
 
             <li>
-              <ThemeProvider theme={customTheme}>
-                <Button
-                  variant="contained"
-                  href="/signup"
-                  sx={{
-                    backgroundColor: "#496FFF",
-                    borderRadius: "8px",
-                    padding: "10px 60px",
-                    fontSize: "18px",
-                    "&:hover": {
-                      backgroundColor: "#3C435C",
-                      transform: "scale(1.05)",
-                    },
-                  }}
-                >
-                  <Typography sx={{ color: "#FFFFFF" }}>Get Started</Typography>
-                </Button>
-              </ThemeProvider>
+              <Button
+                variant="contained"
+                href="/signup"
+                sx={{
+                  backgroundColor: "#496FFF",
+                  borderRadius: "8px",
+                  padding: "10px 60px",
+                  fontSize: "18px",
+                  "&:hover": {
+                    backgroundColor: "#3C435C",
+                  },
+                }}
+              >
+                <Typography sx={{ color: "white" }}>Get Started</Typography>
+              </Button>
             </li>
           </ul>
         </div>
