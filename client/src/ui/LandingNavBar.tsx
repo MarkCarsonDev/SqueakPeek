@@ -26,7 +26,7 @@ export function LandingNavbar() {
           width: "100%",
           display: "flex",
           alignItems: "center",
-          justifyContent: "center"
+          justifyContent: "space-between"
         }}
       >
         <Link
@@ -35,10 +35,10 @@ export function LandingNavbar() {
             height: "80px",
             color: "#3C435C",
             position: "relative",
-            right: "28%",
             display: "flex",
             alignItems: "center",
             textDecoration: "none",
+            left: "1%",
           }}
         >
           <div
@@ -67,7 +67,7 @@ export function LandingNavbar() {
             alignItems: "center",
             justifyContent: "center",
             position: "relative",
-            left: "29%",
+            left: "0%",
             height: "80px",
             width: "500px",
           }}
