@@ -35,8 +35,7 @@ export function LandingNavbar() {
         <Link
           href="/"
           style={{
-            fontSize: "3rem",
-            fontFamily: "'Droid Sans', sans-serif",
+            outline: "solid red",
             color: "#3C435C",
             position: "absolute",
             left: "2%",
