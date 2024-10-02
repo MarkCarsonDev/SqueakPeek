@@ -2,8 +2,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button, Typography } from "@mui/material";
-import { customTheme } from "@/theme/theme";
-import { ThemeProvider } from "@mui/material";
 
 /*
  * This Landing Navbar will be responsible for rendering the Navbar of the Landing Page
