@@ -67,7 +67,6 @@ export function LandingNavbar() {
             alignItems: "center",
             justifyContent: "center",
             position: "relative",
-            left: "0%",
             height: "80px",
             width: "500px",
           }}
