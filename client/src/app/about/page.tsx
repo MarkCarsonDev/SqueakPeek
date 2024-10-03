@@ -100,6 +100,7 @@ export default function Page() {
             style={{
               margin: "20px",
             }}
+            key={profile.name}
           >
             <AboutProfile key={profile.name} {...profile} />
           </div>
