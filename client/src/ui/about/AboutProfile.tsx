@@ -1,4 +1,4 @@
-import { Card, CardHeader, Typography } from "@mui/material";
+import { Card, CardContent, CardHeader, Typography } from "@mui/material";
 import Image from "next/image";
 export interface IAboutProfile {
   name: string;
@@ -40,6 +40,9 @@ export function AboutProfile({
         }
         subheader={<Typography variant="subtitle1">{role}</Typography>}
       />
+      <CardContent>
+        <Typography>{description}</Typography>
+      </CardContent>
     </Card>
   );
 }
