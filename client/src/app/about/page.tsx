@@ -101,7 +101,7 @@ export default function Page() {
               margin: "20px",
             }}
           >
-            <AboutProfile {...profile} />
+            <AboutProfile key={profile.name} {...profile} />
           </div>
         ))}
       </div>
