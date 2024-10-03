@@ -89,7 +89,22 @@ export default function Page() {
         The Team
       </Typography>
 
-      <AboutProfile {...aboutProfiles[0]} />
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "auto auto",
+        }}
+      >
+        {aboutProfiles.map((profile) => (
+          <div
+            style={{
+              margin: "20px",
+            }}
+          >
+            <AboutProfile {...profile} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

@@ -31,7 +31,6 @@ export function AboutProfile({
     <Card
       className="borderline"
       sx={{
-        maxWidth: 345,
         borderRadius: "5px",
         boxShadow: "none",
       }}
