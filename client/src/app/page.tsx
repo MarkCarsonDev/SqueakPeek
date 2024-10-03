@@ -1,54 +1,55 @@
 "use client";
-import { LandingNavbar } from "@/ui/LandingNavbar";
+//import { LandingNavbar } from "@/ui/LandingNavbar";
 import "@/ui/styling/LandingPage.css";
 import Image from "next/image";
-import { TextCarousel } from "@/ui/TextCarousel";
+//import { TextCarousel } from "@/ui/TextCarousel";
 import { Typography } from "@mui/material";
 import Link from "@mui/material/Link";
 
 export default function Home() {
-
-    {/*Added Image Array to allow for easy image changes*/}
-    const ImageData = [
-      {
-        // Section 1 Logo Image
-        imageSrc: "/LandingPage-images/rat_1.png",
-        imageAlt: "SqueakPeek Logo",
-        imageWidth: 300,
-        imageHeight: 300,
-      },
-      {
-        // Section 2 Threads Feature
-        imageSrc: "/LandingPage-images/rat_2.png",
-        imageAlt: "Two rats speaking",
-        imageWidth: 600,
-        imageHeight: 300,
-      },
-      {
-        // Section 3 Tracking Feature
-        imageSrc: "/LandingPage-images/rat_1.png",
-        imageAlt: "Rat looking up",
-        imageWidth: 400,
-        imageHeight: 400,
-      },
-      {
-        // Section 4 Explore Feature
-        imageSrc: "/LandingPage-images/rat_3.png",
-        imageAlt: "Rat looking at star",
-        imageWidth: 400,
-        imageHeight: 400,
-      },
-    ];
+  {
+    /*Added Image Array to allow for easy image changes*/
+  }
+  const ImageData = [
+    {
+      // Section 1 Logo Image
+      imageSrc: "/LandingPage-images/rat_1.png",
+      imageAlt: "SqueakPeek Logo",
+      imageWidth: 300,
+      imageHeight: 300,
+    },
+    {
+      // Section 2 Threads Feature
+      imageSrc: "/LandingPage-images/rat_2.png",
+      imageAlt: "Two rats speaking",
+      imageWidth: 600,
+      imageHeight: 300,
+    },
+    {
+      // Section 3 Tracking Feature
+      imageSrc: "/LandingPage-images/rat_1.png",
+      imageAlt: "Rat looking up",
+      imageWidth: 400,
+      imageHeight: 400,
+    },
+    {
+      // Section 4 Explore Feature
+      imageSrc: "/LandingPage-images/rat_3.png",
+      imageAlt: "Rat looking at star",
+      imageWidth: 400,
+      imageHeight: 400,
+    },
+  ];
 
   return (
     <div>
-      <LandingNavbar />
+      {/* <LandingNavbar /> Cant be referrenced yet*/}
 
       {/*Section 1 Block*/}
       <div className="sec1-container">
         <div className="sec1-box">
           <div className="sec1-text-wheel">
-            <TextCarousel />
+            {/* <TextCarousel /> Cant be referenced yet*/}
           </div>
           <div className="sec1-logo-box">
             <Image
@@ -72,8 +73,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-
-      
     </div>
   );
 }
