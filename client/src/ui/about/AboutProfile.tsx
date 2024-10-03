@@ -54,9 +54,11 @@ export function AboutProfile({
         }
         subheader={<Typography variant="h6">{role}</Typography>}
       />
-      <CardContent sx={{
-        height:"50px"
-      }}>
+      <CardContent
+        sx={{
+          height: "50px",
+        }}
+      >
         <Typography>{description}</Typography>
       </CardContent>
       <CardActions>
