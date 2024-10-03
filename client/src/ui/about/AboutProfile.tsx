@@ -48,18 +48,18 @@ export function AboutProfile({
           />
         }
         title={
-          <Typography sx={{ fontWeight: "bold" }} variant="h6">
+          <Typography sx={{ fontWeight: "bold" }} variant="h5">
             {name}
           </Typography>
         }
-        subheader={<Typography variant="h6">{role}</Typography>}
+        subheader={<Typography variant="h5">{role}</Typography>}
       />
       <CardContent
         sx={{
-          height: "50px",
+          height: "130px",
         }}
       >
-        <Typography>{description}</Typography>
+        <Typography variant="h5">{description}</Typography>
       </CardContent>
       <CardActions>
         <IconButton

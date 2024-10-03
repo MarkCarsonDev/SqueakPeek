@@ -1,6 +1,7 @@
 import { AboutHero } from "@/ui/about/AboutHero";
 import { Typography } from "@mui/material";
 import { AboutProfile, IAboutProfile } from "@/ui/about/AboutProfile";
+import { AboutMission } from "@/ui/about/AboutMission";
 export default function Page() {
   const aboutProfiles: IAboutProfile[] = [
     {
@@ -55,36 +56,13 @@ export default function Page() {
   return (
     <div>
       <AboutHero />
-
-      <Typography
-        sx={{
-          textAlign: "center",
-          marginTop: "50px",
-          marginBottom: "20px",
-        }}
-        variant="h4"
-      >
-        We are a dedicated team of Computer Science students from California
-        State University Long Beach, who understand firsthand the challenges of
-        job searching and building professional connections.
-      </Typography>
-      <Typography
-        sx={{
-          textAlign: "center",
-          textDecoration: "underline",
-          fontWeight: "bold",
-          marginBottom: "60px",
-        }}
-        variant="h4"
-      >
-        Our mission is to empower your job search. 
-      </Typography>
+      <AboutMission />
       <Typography
         sx={{
           textAlign: "center",
           fontWeight: "bold",
         }}
-        variant="h5"
+        variant="h4"
       >
         The Team
       </Typography>
