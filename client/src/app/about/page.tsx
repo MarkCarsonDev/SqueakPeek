@@ -1,6 +1,6 @@
 import { AboutHero } from "@/ui/about/AboutHero";
 import { Typography } from "@mui/material";
-import { IAboutProfile } from "@/ui/about/AboutProfile";
+import { AboutProfile, IAboutProfile } from "@/ui/about/AboutProfile";
 export default function Page() {
   const aboutProfiles: IAboutProfile[] = [
     {
@@ -48,6 +48,8 @@ export default function Page() {
       >
         The Team
       </Typography>
+
+      <AboutProfile />
     </div>
   );
 }

@@ -6,5 +6,5 @@ export interface IAboutProfile {
   profilePic: string;
 }
 export function AboutProfile() {
-  return <div></div>;
+  return <div className="borderline">Hello</div>;
 }
