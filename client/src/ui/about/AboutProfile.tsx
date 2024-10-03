@@ -39,7 +39,7 @@ export function AboutProfile({
           </Typography>
         }
         subheader={<Typography variant="subtitle1">{role}</Typography>}
-      ></CardHeader>
+      />
     </Card>
   );
 }
