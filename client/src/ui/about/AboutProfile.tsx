@@ -32,6 +32,8 @@ export function AboutProfile({
       className="borderline"
       sx={{
         maxWidth: 345,
+        borderRadius: "5px",
+        boxShadow: "none",
       }}
     >
       <CardHeader
@@ -63,6 +65,7 @@ export function AboutProfile({
             "&:hover": {
               backgroundColor: "transparent",
             },
+            borderRadius: "45",
           }}
           aria-label="LinkedIn"
           href={linkedInURl}
