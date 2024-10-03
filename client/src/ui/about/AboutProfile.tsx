@@ -33,6 +33,7 @@ export function AboutProfile({
       sx={{
         borderRadius: "5px",
         boxShadow: "none",
+        margin: "20px", // margin for each card
       }}
     >
       <CardHeader

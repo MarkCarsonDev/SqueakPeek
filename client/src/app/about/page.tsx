@@ -74,14 +74,7 @@ export default function Page() {
         }}
       >
         {aboutProfiles.map((profile) => (
-          <div
-            style={{
-              margin: "20px",
-            }}
-            key={profile.name}
-          >
-            <AboutProfile key={profile.name} {...profile} />
-          </div>
+          <AboutProfile key={profile.name} {...profile} />
         ))}
       </div>
     </div>
