@@ -73,7 +73,7 @@ export default function Page() {
           textAlign: "center",
           textDecoration: "underline",
           fontWeight: "bold",
-          marginBottom: "20px",
+          marginBottom: "60px",
         }}
         variant="h4"
       >
