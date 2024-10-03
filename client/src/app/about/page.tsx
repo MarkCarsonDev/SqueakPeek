@@ -24,8 +24,8 @@ export default function Page() {
       role: "Frontend",
       description:
         "David Serrano is an aspiring software developer and or IT technician with a passion for fitness and a constant drive to learn and grow.",
-      linkedInURl: "#", // TODO Add missing url
-      profilePic: "/about/profilepic_mark.png", // TODO Add missing profile pic
+      linkedInURl: "https://www.linkedin.com/in/david-serrano-0a6a5523a/",
+      profilePic: "/about/profilepic_david.png",
     },
     {
       name: "Kate Steer",
