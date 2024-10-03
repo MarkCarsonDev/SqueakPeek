@@ -16,6 +16,10 @@ export interface IAboutProfile {
   linkedInURl: string;
   profilePic: string;
 }
+
+/**
+ * Renders a user profile of a team member of SqueakPeek
+ */
 export function AboutProfile({
   name,
   role,
