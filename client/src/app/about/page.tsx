@@ -1,3 +1,8 @@
+import { AboutHero } from "@/ui/about/AboutHero";
 export default function Page() {
-  return <div></div>;
+  return (
+    <div>
+      <AboutHero />
+    </div>
+  );
 }
