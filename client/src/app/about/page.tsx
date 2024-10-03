@@ -1,8 +1,19 @@
 import { AboutHero } from "@/ui/about/AboutHero";
 import { Typography } from "@mui/material";
+import { IAboutProfile } from "@/ui/about/AboutProfile";
 export default function Page() {
+  const aboutProfiles: IAboutProfile[] = [
+    {
+      name: "Mekhi Hart Dela Cruz",
+      role: "Lead",
+      description:
+        "Mekhi Hart has vast experience developing software from video games, mobile, and web. He also like to rock climb in his spare time.",
+      linkedInURl: "https://www.linkedin.com/in/mekhihart-delacruz/",
+      profilePic: "/profilepic-mekhi",
+    },
+  ];
   return (
-    <div style={{}}>
+    <div>
       <AboutHero />
 
       <Typography
