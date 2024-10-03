@@ -61,6 +61,7 @@ export default function Page() {
         sx={{
           textAlign: "center",
           fontWeight: "bold",
+          marginBottom: "20px",
         }}
         variant="h4"
       >
