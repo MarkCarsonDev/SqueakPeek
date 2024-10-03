@@ -40,15 +40,15 @@ export function AboutProfile({
             style={{
               borderRadius: 12,
             }}
-            width={75}
-            height={75}
+            width={85}
+            height={85}
             src={profilePic}
             alt={`Profile picture of ${name}`}
           />
         }
         title={
           <Typography sx={{ fontWeight: "bold" }} variant="body1">
-            Mekhi Hart Dela Cruz
+            {name}
           </Typography>
         }
         subheader={<Typography variant="subtitle1">{role}</Typography>}
