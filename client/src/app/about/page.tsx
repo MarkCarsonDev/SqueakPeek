@@ -9,7 +9,7 @@ export default function Page() {
       description:
         "Mekhi Hart has vast experience developing software from video games, mobile, and web. He also like to rock climb in his spare time.",
       linkedInURl: "https://www.linkedin.com/in/mekhihart-delacruz/",
-      profilePic: "/profilepic-mekhi",
+      profilePic: "/about/profilepic_mekhi.png",
     },
   ];
   return (
@@ -49,7 +49,7 @@ export default function Page() {
         The Team
       </Typography>
 
-      <AboutProfile />
+      <AboutProfile {...aboutProfiles[0]} />
     </div>
   );
 }

@@ -1,5 +1,4 @@
 import { Card, CardHeader, Typography } from "@mui/material";
-import mekhiPic from "@/../../public/about/profilepic_mekhi.png";
 import Image from "next/image";
 export interface IAboutProfile {
   name: string;
@@ -8,7 +7,13 @@ export interface IAboutProfile {
   linkedInURl: string;
   profilePic: string;
 }
-export function AboutProfile() {
+export function AboutProfile({
+  name,
+  role,
+  description,
+  linkedInURl,
+  profilePic,
+}: IAboutProfile) {
   return (
     <Card
       className="borderline"
@@ -24,8 +29,8 @@ export function AboutProfile() {
             }}
             width={75}
             height={75}
-            src={mekhiPic}
-            alt=""
+            src={profilePic}
+            alt={`Profile picture of ${name}`}
           />
         }
         title={
@@ -33,7 +38,7 @@ export function AboutProfile() {
             Mekhi Hart Dela Cruz
           </Typography>
         }
-        subheader={<Typography variant="subtitle1">Lead</Typography>}
+        subheader={<Typography variant="subtitle1">{role}</Typography>}
       ></CardHeader>
     </Card>
   );
