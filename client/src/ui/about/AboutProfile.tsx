@@ -1,4 +1,13 @@
-import { Card, CardContent, CardHeader, Typography } from "@mui/material";
+import {
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Typography,
+  IconButton,
+} from "@mui/material";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLinkedin } from "@fortawesome/free-brands-svg-icons/faLinkedin";
 import Image from "next/image";
 export interface IAboutProfile {
   name: string;
@@ -43,6 +52,21 @@ export function AboutProfile({
       <CardContent>
         <Typography>{description}</Typography>
       </CardContent>
+      <CardActions>
+        <IconButton
+          sx={{
+            backgroundColor: "transparent", // makes hover transparent
+            "&:hover": {
+              backgroundColor: "transparent",
+            },
+          }}
+          aria-label="LinkedIn"
+          href={linkedInURl}
+          target="_blank" // creates a new tab when LinkedIn icon is clicked
+        >
+          <FontAwesomeIcon size="2x" color="#0b66c2" icon={faLinkedin} />
+        </IconButton>
+      </CardActions>
     </Card>
   );
 }
