@@ -1,8 +1,8 @@
 "use client";
-import { LandingNavbar } from "@/ui/LandingNavbar";
+//import { LandingNavbar } from "@/ui/LandingNavbar";
 import "@/ui/styling/LandingPage.css";
 import Image from "next/image";
-import { TextCarousel } from "@/ui/TextCarousel";
+//import { TextCarousel } from "@/ui/TextCarousel";
 import { Typography } from "@mui/material";
 import Link from "@mui/material/Link";
 
@@ -41,13 +41,13 @@ export default function Home() {
   
   return (
     <div>
-      <LandingNavbar />
+      {/* <LandingNavbar /> Cant be refferenced yet*/}
 
       {/*Section 1 Block*/}
       <div className="sec1-container">
         <div className="sec1-box">
           <div className="sec1-text-wheel">
-            <TextCarousel />
+            {/* <TextCarousel /> */}
           </div>
           <div className="sec1-logo-box">
             <Image
