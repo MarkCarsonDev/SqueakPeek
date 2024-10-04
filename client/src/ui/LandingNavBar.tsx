@@ -17,7 +17,7 @@ export function LandingNavbar() {
         display: "flex",
         zIndex: 1,
         position: "sticky",
-        borderBottom: "5px solid #E0E4F2",
+        borderBottom: "5px solid #E0E4F2", //TODO Refactor color as a global css
       }}
     >
       <div
@@ -26,7 +26,7 @@ export function LandingNavbar() {
           width: "100%",
           display: "flex",
           alignItems: "center",
-          justifyContent: "space-between"
+          justifyContent: "space-between",
         }}
       >
         <Link
