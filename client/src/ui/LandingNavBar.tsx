@@ -18,7 +18,7 @@ export function LandingNavbar() {
         display: "flex",
         zIndex: 1,
         position: "sticky",
-        borderBottom: "5px solid #E0E4F2", //TODO Refactor color as a global css
+        borderBottom: "5px solid #E0E4F2",
       }}
     >
       <div
