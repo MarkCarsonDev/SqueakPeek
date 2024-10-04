@@ -1,9 +1,8 @@
-
 import { LandingNavbar } from "@/ui/LandingNavBar";
 
 /*
 This will represpent the home page of the application
 * */
 export default function Home() {
-  return <LandingNavbar />;
+  return <h1>Home Placeholder</h1>;
 }
