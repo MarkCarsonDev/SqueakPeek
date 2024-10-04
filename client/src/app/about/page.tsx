@@ -8,7 +8,7 @@ export default function Page() {
       name: "Mekhi Hart Dela Cruz",
       role: "Lead",
       description:
-        "Mekhi Hart is a Software Engineer at Netflix and has vast experience developing software from video games, mobile, and web. He also like to rock climb in his spare time.",
+        "Mekhi Hart is a Software Engineer at Netflix and has vast experience developing software for video games, mobile, and web. He also likes to rock climb in his spare time.",
       linkedInURl: "https://www.linkedin.com/in/mekhihart-delacruz/",
       profilePic: "/about/profilepic_mekhi.png",
     },
@@ -32,7 +32,7 @@ export default function Page() {
       name: "Kate Steer",
       role: "Backend",
       description:
-        "Kate Steer is a software developer with experience in database management and architecture, well as application design. In her free time, she enjoys creating music and reading.",
+        "Kate Steer is a software developer with experience in database management and architecture, as well as application design. In her free time, she enjoys creating music and reading.",
       linkedInURl: "https://www.linkedin.com/in/kate-steer-4149001a6/",
       profilePic: "/about/profilepic_kate.png",
     },
@@ -40,7 +40,7 @@ export default function Page() {
       name: "Howie",
       role: "Frontend",
       description:
-        "Hao Phan is a full stack developer with experience in IT and automated flow, with passion in web development. In his free time, he likes watching soccer and formula 1.",
+        "Hao Phan is a full-stack developer with experience in IT and automated flow, as well as a passion for web development. In his free time, he likes watching soccer and fFormula1.",
       linkedInURl: "https://www.linkedin.com/in/hao-phan-b049b91aa/",
       profilePic: "/about/profilepic_howie.png",
     },
