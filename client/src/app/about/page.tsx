@@ -40,7 +40,7 @@ export default function Page() {
       name: "Hao Phan",
       role: "Frontend",
       description:
-        "Hao Phan is a full-stack developer with experience in IT and automated flow, as well as a passion for web development. In his free time, he likes watching soccer and fFormula1.",
+        "Hao Phan is a full-stack developer with experience in IT and automated flow, as well as a passion for web development. In his free time, he likes watching soccer and Formula 1.",
       linkedInURl: "https://www.linkedin.com/in/hao-phan-b049b91aa/",
       profilePic: "/about/profilepic_howie.png",
     },
