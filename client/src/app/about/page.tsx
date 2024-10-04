@@ -37,7 +37,7 @@ export default function Page() {
       profilePic: "/about/profilepic_kate.png",
     },
     {
-      name: "Howie",
+      name: "Hao Phan",
       role: "Frontend",
       description:
         "Hao Phan is a full-stack developer with experience in IT and automated flow, as well as a passion for web development. In his free time, he likes watching soccer and fFormula1.",
