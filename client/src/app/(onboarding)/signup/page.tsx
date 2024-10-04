@@ -1,3 +1,3 @@
-export function Page(){
-    return <h1>Signup placeholder</h1>
+export function Page() {
+  return <h1>Signup placeholder</h1>;
 }
