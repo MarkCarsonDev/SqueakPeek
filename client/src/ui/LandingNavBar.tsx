@@ -2,12 +2,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button, Typography } from "@mui/material";
-
+import { usePathname } from "next/navigation";
 /*
  * This Landing Navbar will be responsible for rendering the Navbar of the Landing Page
  */
 
 export function LandingNavbar() {
+  const pathName = usePathname();
   return (
     <nav
       style={{
@@ -17,7 +18,7 @@ export function LandingNavbar() {
         display: "flex",
         zIndex: 1,
         position: "sticky",
-        borderBottom: "5px solid #E0E4F2", //TODO Refactor color as a global css
+        borderBottom: "5px solid #E0E4F2",
       }}
     >
       <div
@@ -90,7 +91,13 @@ export function LandingNavbar() {
                   textDecoration: "none",
                 }}
               >
-                <Typography>About Us</Typography>
+                <Typography
+                  sx={{
+                    fontWeight: pathName === "/about" ? "bold" : "normal",
+                  }}
+                >
+                  About Us
+                </Typography>
               </Link>
             </li>
 
@@ -102,7 +109,13 @@ export function LandingNavbar() {
                   textDecoration: "none",
                 }}
               >
-                <Typography>Log In</Typography>
+                <Typography
+                  sx={{
+                    fontWeight: pathName === "/login" ? "bold" : "normal",
+                  }}
+                >
+                  Log In
+                </Typography>
               </Link>
             </li>
 
