@@ -48,21 +48,28 @@ export default function Home() {
       {/*Section 1 Block*/}
       <div className="sec1-container">
         <div className="sec1-box">
-            
-          {/* <TextCarousel className="sec1-text-wheel" /> Cant be referenced yet */}
+          
+          <div className="sec1-primary">
 
-          <div className="sec1-logo-box">
-            <Image
-              className="sec1-main-logo"
-              src={ImageData[0].imageSrc}
-              width={ImageData[0].imageWidth}
-              height={ImageData[0].imageHeight}
-              alt={ImageData[0].imageAlt}
-            />
-            <Typography variant="h2">SqueakPeek</Typography>
-            <Typography variant="h4">
-              Job hunting is hard, we’re here to help.
-            </Typography>
+            <div className="sec1-text-wheel">(placeholder for carousel)</div>
+            {/* <TextCarousel className="sec1-text-wheel" /> Cant be referenced yet */}
+  
+            <div className="sec1-logo-box">
+              <Image
+                className="sec1-main-logo"
+                src={ImageData[0].imageSrc}
+                width={ImageData[0].imageWidth}
+                height={ImageData[0].imageHeight}
+                alt={ImageData[0].imageAlt}
+              />
+              <Typography variant="h2">SqueakPeek</Typography>
+              <Typography variant="h4">
+                Job hunting is hard, 
+              </Typography>
+              <Typography variant="h4">
+                we’re here to help.
+              </Typography>
+            </div>
           </div>
 
             <Link href="/signup" className="sec1-Link">
