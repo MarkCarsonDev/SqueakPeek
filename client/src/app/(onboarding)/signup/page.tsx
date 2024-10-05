@@ -1,6 +1,12 @@
 "use client";
 import { Button, TextField, Typography, Box, Link, Divider } from "@mui/material";
 
+/*
+This page will represent the signup page of the application, 
+which include the signup with google button, email, confirm email, and password fields
+and logging in link.
+*/
+
 export default function SignupPage() {
   return (
     <Box
@@ -87,25 +93,24 @@ export default function SignupPage() {
         }}
       >
           <TextField
+            required
+            id = "outlined-required"
             label="Email"
-            name="email"
             fullWidth
-            required
             margin="normal"
           />
           <TextField
-            label="Confirm Email"
-            name="confirmEmail"
-            fullWidth
             required
-            margin="normal"
-          />
-          <TextField
+            id = "outlined-required"
             label="Password"
-            name="password"
-            type="password"
             fullWidth
+            margin="normal"
+          />
+          <TextField
             required
+            id = "outlined-required"
+            label="Confirm Password"
+            fullWidth
             margin="normal"
           />
           <Button
