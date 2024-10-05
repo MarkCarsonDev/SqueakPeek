@@ -22,7 +22,7 @@ export default function SignupPage() {
       <Button
         variant="outlined"
         startIcon={
-          <img src="https://www.google.com/favicon.ico" alt="Google" />
+          <img src="https://www.google.com/favicon.ico" alt="Google" />// will fix this to icon with mui
         }
         sx={{
           marginBottom: 3,
