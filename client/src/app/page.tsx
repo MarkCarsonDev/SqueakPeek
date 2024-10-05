@@ -54,8 +54,9 @@ export default function Home() {
             <div className="sec1-text-wheel">
               <Typography variant="h4">
                 This is a placeholder for the carousel text.
-              </Typography></div>
-            {/* <TextCarousel className="sec1-text-wheel" /> Cant be referenced yet */}
+              </Typography>
+              {/* <TextCarousel className="sec1-text-wheel" /> Cant be referenced yet */}
+            </div>
   
             <div className="sec1-logo-box">
               <Image
