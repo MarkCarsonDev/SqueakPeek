@@ -1,6 +1,6 @@
 "use client";
 //import { LandingNavbar } from "@/ui/LandingNavbar";
-import "@/ui/styling/LandingPage.css";
+import "./LandingPage.css";
 import Image from "next/image";
 //import { TextCarousel } from "@/ui/TextCarousel";
 import { Typography } from "@mui/material";
@@ -48,9 +48,9 @@ export default function Home() {
       {/*Section 1 Block*/}
       <div className="sec1-container">
         <div className="sec1-box">
-          <div className="sec1-text-wheel">
-            {/* <TextCarousel /> Cant be referenced yet*/}
-          </div>
+            
+          {/* <TextCarousel className="sec1-text-wheel" /> Cant be referenced yet */}
+
           <div className="sec1-logo-box">
             <Image
               className="sec1-main-logo"
@@ -60,17 +60,17 @@ export default function Home() {
               alt={ImageData[0].imageAlt}
             />
             <Typography variant="h2">SqueakPeek</Typography>
-            <Typography className="sec1-logo-text" variant="h4">
+            <Typography variant="h4">
               Job hunting is hard, we’re here to help.
             </Typography>
           </div>
-          <div className="sec1-Link">
-            <Link href="/signup">
+
+            <Link href="/signup" className="sec1-Link">
               <Typography variant="h5" sx={{ color: "#496FFF" }}>
                 Get Started
               </Typography>
             </Link>
-          </div>
+
         </div>
       </div>
     </div>

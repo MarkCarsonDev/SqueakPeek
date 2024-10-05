@@ -7,15 +7,15 @@
 }
 
 .sec1-box{
-    display: grid;
+    display: flex;
     width: 90%;
     height: 700px;
     background-color: white;
-    border: #E0E4F2;
     border: 10px solid #E0E4F2;
+    box-shadow: #6d6d6d 0px 0px 10px;
     border-radius: 20px; 
     align-items: center;
-    box-shadow: rgb(109, 109, 109) 0px 0px 10px;
+    justify-content: center;
 }
 
 .sec1-logo-box{
@@ -23,11 +23,9 @@
     width: 400px;
     height: 500px;
     position: absolute;
-    right: 17%;
-    bottom: 25%;
     text-align: center;
-    justify-content: center;
-    align-items: center;
+    right: 15%;
+    top: 10%;
 }
 
 .sec1-text-wheel{
@@ -41,15 +39,11 @@
 
 .sec1-main-logo{
     justify-self: center;
-
-}
-
-.sec1-logo-text{
-    justify-self: center;
 }
 
 .sec1-Link{
-    justify-self: center;
     position: relative;
-    top: 20%;
+    outline: solid red;
+    text-align: center;
+    bottom: -40%;
 }
