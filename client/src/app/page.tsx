@@ -51,7 +51,10 @@ export default function Home() {
           
           <div className="sec1-primary">
 
-            <div className="sec1-text-wheel">(placeholder for carousel)</div>
+            <div className="sec1-text-wheel">
+              <Typography variant="h4">
+                This is a placeholder for the carousel text.
+              </Typography></div>
             {/* <TextCarousel className="sec1-text-wheel" /> Cant be referenced yet */}
   
             <div className="sec1-logo-box">
@@ -71,12 +74,14 @@ export default function Home() {
               </Typography>
             </div>
           </div>
-
-            <Link href="/signup" className="sec1-Link">
+        
+          <div className="sec1-Link">
+            <Link href="/signup">
               <Typography variant="h5" sx={{ color: "#496FFF" }}>
                 Get Started
               </Typography>
             </Link>
+          </div>
 
         </div>
       </div>
