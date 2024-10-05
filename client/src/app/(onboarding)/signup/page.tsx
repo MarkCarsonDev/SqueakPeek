@@ -20,13 +20,13 @@ export default function SignupPage() {
 
       {/* Sign in with Google Button */}
       <Button
+        className="border-line"
         variant="outlined"
         startIcon={
           <img src="https://www.google.com/favicon.ico" alt="Google" />// will fix this to icon with mui
         }
         sx={{
           marginBottom: 3,
-          boxShadow: 3,
           backgroundColor: "#ffff",
           width: "780px",
           borderRadius: "8px",
@@ -76,16 +76,16 @@ export default function SignupPage() {
 
       {/* Signup form */}
       <Box
+      component={"form"}
+      className="border-line"
         sx={{
           backgroundColor: "#fff",
           padding: "40px",
           borderRadius: "8px",
-          boxShadow: 3,
           textAlign: "center",
           width: "700px",
         }}
       >
-        <form>
           <TextField
             label="Email"
             name="email"
@@ -109,15 +109,23 @@ export default function SignupPage() {
             margin="normal"
           />
           <Button
-            type="button"
-            variant="contained"
-            color="primary"
-            fullWidth
-            sx={{ mt: 2 }}
-          >
-            Confirm
-          </Button>
-        </form>
+          type="button"
+          variant="contained"
+          color="primary"
+          fullWidth
+          sx={{ 
+            mt: 2,
+            boxShadow: "none", // Removed the shadow 
+            backgroundColor: "#496FFF", // Applied the requested color for the button
+            ":hover": { 
+            backgroundColor: "#3B5AC6", 
+            boxShadow: "none"
+            } // Slightly darker shade on hover
+          }}
+        >
+          Confirm
+        </Button>
+
         <Typography variant="body2" sx={{ mt: 2 }}>
           <Link href="/login" color="inherit">
             Logging in?
