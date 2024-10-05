@@ -131,7 +131,7 @@ export default function SignupPage() {
           Confirm
         </Button>
 
-        <Typography variant="body2" sx={{ mt: 2, textAlign: 'right' }}>
+        <Typography variant="body2" sx={{ mt: 2, textAlign: "right" }}>
           <Link href="/login" color="inherit">
             Logging in?
           </Link>
