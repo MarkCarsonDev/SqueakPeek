@@ -1,6 +1,13 @@
 "use client";
-import { Button, TextField, Typography, Box, Link, Divider } from "@mui/material";
-
+import {
+  Button,
+  TextField,
+  Typography,
+  Box,
+  Link,
+  Divider,
+} from "@mui/material";
+import { InputField } from "@/ui/Inputbox";
 /*
 This page will represent the signup page of the application, 
 which include the signup with google button, email, confirm email, and password fields
@@ -29,7 +36,7 @@ export default function SignupPage() {
         className="border-line"
         variant="outlined"
         startIcon={
-          <img src="https://www.google.com/favicon.ico" alt="Google" />// will fix this to icon with mui
+          <img src="https://www.google.com/favicon.ico" alt="Google" /> // will fix this to icon with mui
         }
         sx={{
           marginBottom: 3,
@@ -82,56 +89,49 @@ export default function SignupPage() {
 
       {/* Signup form */}
       <Box
-      component={"form"}
-      className="border-line"
+        component={"form"}
+        className="border-line"
         sx={{
           backgroundColor: "#fff",
           padding: "40px",
           borderRadius: "8px",
-          textAlign: "center",
           width: "700px",
         }}
       >
-          <TextField
-            required
-            id = "outlined-required"
-            label="Email"
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            required
-            id = "outlined-required"
-            label="Password"
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            required
-            id = "outlined-required"
-            label="Confirm Password"
-            fullWidth
-            margin="normal"
-          />
-          <Button
+        <InputField
+          label="Email"
+          placeholder="Enter your email"
+          required={true}
+        />
+        <InputField
+          label="Password"
+          placeholder="Enter your password"
+          required={true}
+        />
+        <InputField
+          label="Password"
+          placeholder="Confirm your password"
+          required={true}
+        />
+        <Button
           type="button"
           variant="contained"
           color="primary"
           fullWidth
-          sx={{ 
+          sx={{
             mt: 2,
-            boxShadow: "none", // Removed the shadow 
+            boxShadow: "none", // Removed the shadow
             backgroundColor: "#496FFF", // Applied the requested color for the button
-            ":hover": { 
-            backgroundColor: "#3B5AC6", 
-            boxShadow: "none"
-            } // Slightly darker shade on hover
+            ":hover": {
+              backgroundColor: "#3B5AC6",
+              boxShadow: "none",
+            }, // Slightly darker shade on hover
           }}
         >
           Confirm
         </Button>
 
-        <Typography variant="body2" sx={{ mt: 2 }}>
+        <Typography variant="body2" sx={{ mt: 2, textAlign: 'right' }}>
           <Link href="/login" color="inherit">
             Logging in?
           </Link>
