@@ -1,10 +1,10 @@
 "use client";
-import { Button, TextField, Typography, Box, Link } from "@mui/material";
+import { Button, TextField, Typography, Box, Link, Divider } from "@mui/material";
 
 export default function SignupPage() {
   return (
-    <div
-      style={{
+    <Box
+      sx={{
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
@@ -13,34 +13,68 @@ export default function SignupPage() {
         backgroundColor: "#f6f8ff",
       }}
     >
-      {/* Let's get started section*/ }
-      <Typography variant="h4" style={{ marginBottom: "20px" }}>
+      {/* Let's get started section */}
+      <Typography variant="h4" sx={{ marginBottom: "20px" }}>
         Let’s Get Started.
       </Typography>
 
-      {/* Sign in with Google Button*/ }
+      {/* Sign in with Google Button */}
       <Button
         variant="outlined"
         startIcon={
-          <img
-            src="https://www.google.com/favicon.ico"
-            alt="Google"
-          />
+          <img src="https://www.google.com/favicon.ico" alt="Google" />
         }
-        sx={{ 
-          marginBottom: 3, 
+        sx={{
+          marginBottom: 3,
           boxShadow: 3,
           backgroundColor: "#ffff",
           width: "780px",
           borderRadius: "8px",
-          border: "none"
+          border: "none",
         }}
       >
         Sign up with Google
       </Button>
-      
-      
-      
+
+      {/* Divider with "Or" */}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "100%",
+          marginY: 2,
+        }}
+      >
+        <Divider
+          sx={{
+            width: "100px",
+            height: "1px",
+            backgroundColor: "#ccc",
+            marginRight: 2, // MUI shorthand for marginRight
+          }}
+        />
+        <Typography
+          variant="h4"
+          sx={{
+            fontWeight: "bold",
+            fontSize: "1.25rem",
+            textAlign: "center",
+          }}
+        >
+          Or
+        </Typography>
+        <Divider
+          sx={{
+            width: "100px",
+            height: "1px",
+            backgroundColor: "#ccc",
+            marginLeft: 2, // MUI shorthand for marginLeft
+          }}
+        />
+      </Box>
+
+      {/* Signup form */}
       <Box
         sx={{
           backgroundColor: "#fff",
@@ -51,9 +85,6 @@ export default function SignupPage() {
           width: "700px",
         }}
       >
-        <Typography variant="body2" color="textSecondary" sx={{ mb: 2 }}>
-          or
-        </Typography>
         <form>
           <TextField
             label="Email"
@@ -93,6 +124,6 @@ export default function SignupPage() {
           </Link>
         </Typography>
       </Box>
-    </div>
+    </Box>
   );
 }
