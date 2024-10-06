@@ -1,6 +1,7 @@
 "use client";
-import { Button, TextField, Typography, Link, Divider} from "@mui/material";
+import { Button, TextField, Typography, Link, Divider } from "@mui/material";
 import "./signup.css";
+import { useState } from "react";
 /*
 This page will represent the signup page of the application,
 which include the signup with google button, email, confirm email, and password fields
@@ -8,6 +9,15 @@ and logging in link.
 */
 
 export default function SignupPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = () => {
+    // Handle login logic here
+    console.log("Email:", email);
+    console.log("Password:", password);
+  };
+
   return (
     <div className="main-container">
       {/* Let's get started section */}
@@ -73,7 +83,7 @@ export default function SignupPage() {
           >
             Email
           </Typography>
-          <TextField fullWidth placeholder="Enter your email" required />
+          <TextField  fullWidth placeholder="Enter your email" required />
         </div>
 
         {/* Password field */}
