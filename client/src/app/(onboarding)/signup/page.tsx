@@ -72,7 +72,7 @@ export default function SignupPage() {
       </div>
 
       {/* Signup form */}
-      <div className="signup-form" >
+      <div className="signup-form">
         <InputField
           label="Email"
           placeholder="Enter your email"
@@ -92,9 +92,9 @@ export default function SignupPage() {
           type="button"
           variant="contained"
           color="primary"
-          fullWidth
           sx={{
             mt: 2,
+            width: "200px", // Custom width
             boxShadow: "none", // Removed the shadow
             backgroundColor: "#496FFF", // Applied the requested color for the button
             ":hover": {
