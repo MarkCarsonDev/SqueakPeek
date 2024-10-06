@@ -153,7 +153,7 @@ export default function Page() {
           <Typography variant="h6">Sign Up</Typography>
         </Link>
         <Link
-          href="/signup"
+          href="/recovery"
           sx={{
             alignSelf: "flex-end",
             justifySelf: "flex-end",
