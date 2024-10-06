@@ -2,6 +2,7 @@
 import "./login.css";
 import { Button, Typography, Divider, TextField, Link } from "@mui/material";
 import { useState } from "react";
+import { InputField } from "@/ui/Inputbox";
 
 export default function Page() {
   const [email, setEmail] = useState("");
@@ -29,7 +30,6 @@ export default function Page() {
           width: "708px",
           borderRadius: "10px",
           border: "4px solid #E0E4F2",
-          boxShadow: "#6d6d6d 0px 0px 5px",
         }}
       >
         Login with Google
@@ -65,105 +65,95 @@ export default function Page() {
       </div>
 
       <div className="login-box">
-        <Typography
-          variant="h5"
-          marginTop="50px"
-          sx={{
-            textAlign: "start",
-            width: "500px",
-          }}
-        >
-          Email
-        </Typography>
-        <TextField
-          variant="outlined"
-          required
-          name="email"
-          label="Email"
-          type="email"
-          id="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          sx={{
-            width: "500px",
-            "& .MuiOutlinedInput-root": {
-              "& fieldset": {
-                borderColor: "#769FCD", // Default outline color
+        <div className="login-fields">
+          <Typography
+            variant="h5"
+            sx={{
+              textAlign: "start",
+              width: "500px",
+            }}
+          >
+            Email
+          </Typography>
+          <TextField
+            variant="outlined"
+            required
+            name="email"
+            label="Email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            sx={{
+              width: "500px",
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: "#769FCD", // Default outline color
+                },
               },
-            },
-          }}
-        />
-        <Typography
-          variant="h5"
-          margin="normal"
-          sx={{
-            marginTop: "20px",
-            textAlign: "start",
-            width: "500px",
-          }}
-        >
-          Password
-        </Typography>
-        <TextField
-          variant="outlined"
-          required
-          name="password"
-          label="Password"
-          type="password"
-          id="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          sx={{
-            width: "500px",
-            marginBottom: "30px",
-            "& .MuiOutlinedInput-root": {
-              "& fieldset": {
-                borderColor: "#769FCD", // Default outline color
+            }}
+          />
+          <Typography
+            variant="h5"
+            sx={{
+              marginTop: "20px",
+              textAlign: "start",
+              width: "500px",
+            }}
+          >
+            Password
+          </Typography>
+          <TextField
+            variant="outlined"
+            required
+            name="password"
+            label="Password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            sx={{
+              width: "500px",
+              marginBottom: "30px",
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: "#769FCD", // Default outline color
+                },
               },
-            },
-          }}
-        />
+            }}
+          />
+        </div>
+        
+        <div className="login-button-links">
+          <div className="spacer">
 
-        <Button
-          variant="contained"
-          onClick={handleSubmit}
-          sx={{
-            backgroundColor: "#496FFF",
-            borderRadius: "8px",
-            padding: "10px 60px",
-            fontSize: "18px",
-            "&:hover": {
-              backgroundColor: "#3C435C",
-            },
-          }}
-        >
-          <Typography sx={{ color: "white" }}>Log In</Typography>
-        </Button>
+          </div>
+          <div className="login-button">
+          <Button
+            variant="contained"
+            onClick={handleSubmit}
+            sx={{
+              backgroundColor: "#496FFF",
+              borderRadius: "8px",
+              padding: "10px 60px",
+              fontSize: "18px",
+              "&:hover": {
+                backgroundColor: "#3C435C",
+              },
+            }}
+          >
+            <Typography sx={{ color: "white" }}>Log In</Typography>
+          </Button>
+          </div>
+          
+          <div className="links">
+          <Link href="/signup">
+            <Typography variant="h6" sx={{textAlign: "right"}}>Sign Up</Typography>
+          </Link>
+          <Link href="/recovery">
+            <Typography variant="h6" sx={{textAlign: "right"}}>Forgot Password?</Typography>
+          </Link>
+          </div>
 
-        <Link
-          href="/signup"
-          sx={{
-            alignSelf: "flex-end",
-            justifySelf: "flex-end",
-            marginRight: "15px",
-            position: "relative",
-            bottom: "55px",
-          }}
-        >
-          <Typography variant="h6">Sign Up</Typography>
-        </Link>
-        <Link
-          href="/recovery"
-          sx={{
-            alignSelf: "flex-end",
-            justifySelf: "flex-end",
-            marginRight: "15px",
-            position: "relative",
-            bottom: "55px"
-          }}
-        >
-          <Typography variant="h6">Forgot Password?</Typography>
-        </Link>
+        </div>
       </div>
     </div>
   );
