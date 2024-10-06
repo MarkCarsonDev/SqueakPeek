@@ -24,3 +24,8 @@
   flex-direction: column;
   align-items: center; /* Ensures child elements are centered */
 }
+
+.text-field {
+  width: 100%;
+  margin: 8px 0; /* Equivalent to marginY: 1 */
+}

@@ -1,13 +1,5 @@
 "use client";
-import {
-  Button,
-  TextField,
-  Typography,
-  Box,
-  Link,
-  Divider,
-} from "@mui/material";
-import { InputField } from "@/ui/Inputbox";
+import { Button, TextField, Typography, Link, Divider} from "@mui/material";
 import "./signup.css";
 /*
 This page will represent the signup page of the application,
@@ -73,21 +65,38 @@ export default function SignupPage() {
 
       {/* Signup form */}
       <div className="signup-form">
-        <InputField
-          label="Email"
-          placeholder="Enter your email"
-          required={true}
-        />
-        <InputField
-          label="Password"
-          placeholder="Enter your password"
-          required={true}
-        />
-        <InputField
-          label="Password"
-          placeholder="Confirm your password"
-          required={true}
-        />
+        {/* Email field */}
+        <div className="text-field">
+          <Typography
+            variant="subtitle1"
+            sx={{ fontWeight: "bold", marginBottom: "8px" }}
+          >
+            Email
+          </Typography>
+          <TextField fullWidth placeholder="Enter your email" required />
+        </div>
+
+        {/* Password field */}
+        <div className="text-field">
+          <Typography
+            variant="subtitle1"
+            sx={{ fontWeight: "bold", marginBottom: "8px" }}
+          >
+            Password
+          </Typography>
+          <TextField fullWidth placeholder="Enter your password" required />
+        </div>
+
+        {/* Confirm Password field */}
+        <div className="text-field">
+          <Typography
+            variant="subtitle1"
+            sx={{ fontWeight: "bold", marginBottom: "8px" }}
+          >
+            Confirm Password
+          </Typography>
+          <TextField fullWidth placeholder="Confirm your password" required />
+        </div>
         <Button
           type="button"
           variant="contained"
