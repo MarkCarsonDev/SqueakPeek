@@ -22,7 +22,7 @@ export default function Page() {
         className="border-line"
         variant="outlined"
         startIcon={
-          <img src="https://www.google.com/favicon.ico" alt="Google" /> // will fix this to icon with mui
+          <img src="https://www.google.com/favicon.ico" alt="Google" />
         }
         sx={{
           backgroundColor: "#ffff",
@@ -40,7 +40,7 @@ export default function Page() {
             width: "100px",
             height: "1px",
             backgroundColor: "#E0E4F2",
-            marginRight: 2, // MUI shorthand for marginRight
+            marginRight: 2,
           }}
         />
         <Typography
@@ -86,7 +86,7 @@ export default function Page() {
               width: "500px",
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {
-                  borderColor: "#769FCD", // Default outline color
+                  borderColor: "#769FCD",
                 },
               },
             }}
@@ -114,7 +114,7 @@ export default function Page() {
               marginBottom: "30px",
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {
-                  borderColor: "#769FCD", // Default outline color
+                  borderColor: "#769FCD",
                 },
               },
             }}
