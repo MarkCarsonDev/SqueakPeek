@@ -99,6 +99,25 @@ export default function Home() {
         />
         </div>
       </div>
+
+      {/*Section 3 Block*/}
+      <div className="sec3-container">
+        <div className="sec3-image">
+        <Image
+          src={ImageData[2].imageSrc}
+          width={ImageData[2].imageWidth}
+          height={ImageData[2].imageHeight}
+          alt={ImageData[2].imageAlt}
+        />
+        </div>
+        <div className="sec3-text-box">
+          <Typography variant="h3">Track your applications</Typography>
+
+          <Typography variant="body1">
+            Streamline your job search with ease using our tracking board
+          </Typography>
+        </div>
+      </div>
     </div>
   );
 }
