@@ -1,5 +1,5 @@
 "use client";
-//import { LandingNavbar } from "@/ui/LandingNavbar";
+import { LandingNavbar } from "@/ui/LandingNavBar"
 import "./LandingPage.css";
 import Image from "next/image";
 import { TextCarousel } from "@/ui/TextCarousel";
@@ -43,7 +43,7 @@ export default function Home() {
 
   return (
     <div>
-      {/* <LandingNavbar /> Cant be referrenced yet*/}
+      <LandingNavbar />
 
       {/*Section 1 Block*/}
       <div className="sec1-container">
