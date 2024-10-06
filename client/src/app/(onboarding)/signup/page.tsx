@@ -11,9 +11,14 @@ and logging in link.
 export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleSubmit = () => {
-    // Handle login logic here
+    if (password !== confirmPassword) {
+      console.log("Passwords do not match");
+      return;
+    }
+    // Handle signup logic here (e.g., call an API)
     console.log("Email:", email);
     console.log("Password:", password);
   };
@@ -83,7 +88,13 @@ export default function SignupPage() {
           >
             Email
           </Typography>
-          <TextField  fullWidth placeholder="Enter your email" required />
+          <TextField
+            fullWidth
+            placeholder="Enter your email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)} // Update email state
+          />
         </div>
 
         {/* Password field */}
@@ -94,7 +105,14 @@ export default function SignupPage() {
           >
             Password
           </Typography>
-          <TextField fullWidth placeholder="Enter your password" required />
+          <TextField
+            fullWidth
+            type="password" // Ensure this is password input
+            placeholder="Enter your password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)} // Update password state
+          />
         </div>
 
         {/* Confirm Password field */}
@@ -105,21 +123,31 @@ export default function SignupPage() {
           >
             Confirm Password
           </Typography>
-          <TextField fullWidth placeholder="Confirm your password" required />
+          <TextField
+            fullWidth
+            type="password" // Ensure this is password input
+            placeholder="Confirm your password"
+            required
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)} // Update confirm password state
+          />
         </div>
+
+        {/* Submit button */}
         <Button
           type="button"
           variant="contained"
           color="primary"
+          onClick={handleSubmit} // Trigger submit logic on click
           sx={{
             mt: 2,
-            width: "200px", // Custom width
-            boxShadow: "none", // Removed the shadow
-            backgroundColor: "#496FFF", // Applied the requested color for the button
+            width: "200px",
+            boxShadow: "none",
+            backgroundColor: "#496FFF",
             ":hover": {
               backgroundColor: "#3B5AC6",
               boxShadow: "none",
-            }, // Slightly darker shade on hover
+            },
           }}
         >
           Confirm
