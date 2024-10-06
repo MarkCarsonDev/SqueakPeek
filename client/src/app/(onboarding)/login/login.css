@@ -1,0 +1,26 @@
+.login-container{
+    display: flex;
+    height: 80vh;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+ .login-box{
+    display: flex;
+    flex-direction: column;
+    height: 400px;
+    width: 700px;
+    background-color: white;
+    border: 4px solid #E0E4F2;
+    border-radius: 20px; 
+    box-shadow: #6d6d6d 0px 0px 5px;
+    justify-content: center;
+    align-items: center;
+ }
+
+ .login-divider{
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+ }
