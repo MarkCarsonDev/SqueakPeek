@@ -153,7 +153,15 @@ export default function SignupPage() {
           Confirm
         </Button>
 
-        <Typography variant="body2" sx={{ mt: 2, textAlign: "right" }}>
+        <Typography 
+          variant="body2" 
+          sx={{ 
+            mt: 2, 
+            width: "100%", // Ensures the Typography takes full width of the parent
+            display: "flex", // Flexbox for controlling alignment
+            justifyContent: "flex-end", // Aligns the link to the right
+            textAlign: "right", // Ensures the text is aligned right
+          }}>
           <Link href="/login" color="inherit">
             Logging in?
           </Link>
