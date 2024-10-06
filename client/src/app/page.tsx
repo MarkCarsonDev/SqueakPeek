@@ -82,21 +82,21 @@ export default function Home() {
 
       {/*Section 2 Block*/}
       <div className="sec2-container">
-        <Image
-          className="sec2-image"
-          src={ImageData[1].imageSrc}
-          width={ImageData[1].imageWidth}
-          height={ImageData[1].imageHeight}
-          alt={ImageData[1].imageAlt}
-        />
-
-        <div className="sec2-text-box">
+      <div className="sec2-text-box">
           <Typography variant="h3">Talk to other applicants</Typography>
 
           <Typography variant="body1">
             Engage with company thread to ask questions and support fellow
             applicants
           </Typography>
+        </div>
+        <div className="sec2-image">
+        <Image
+          src={ImageData[1].imageSrc}
+          width={ImageData[1].imageWidth}
+          height={ImageData[1].imageHeight}
+          alt={ImageData[1].imageAlt}
+        />
         </div>
       </div>
     </div>
