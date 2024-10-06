@@ -2,7 +2,6 @@
 import "./login.css";
 import { Button, Typography, Divider, TextField, Link } from "@mui/material";
 import { useState } from "react";
-import { InputField } from "@/ui/Inputbox";
 
 export default function Page() {
   const [email, setEmail] = useState("");
