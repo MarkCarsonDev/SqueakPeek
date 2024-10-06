@@ -38,7 +38,6 @@ export default function SignupPage() {
           <img src="https://www.google.com/favicon.ico" alt="Google" /> // will fix this to icon with mui
         }
         sx={{
-          marginBottom: 3,
           backgroundColor: "#ffff",
           width: "780px",
           borderRadius: "8px",
