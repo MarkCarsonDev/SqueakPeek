@@ -82,7 +82,7 @@ export default function Home() {
 
       {/*Section 2 Block*/}
       <div className="sec2-container">
-      <div className="sec2-text-box">
+        <div className="sec2-text-box">
           <Typography variant="h3">Talk to other applicants</Typography>
 
           <Typography variant="body1">
@@ -91,24 +91,24 @@ export default function Home() {
           </Typography>
         </div>
         <div className="sec2-image">
-        <Image
-          src={ImageData[1].imageSrc}
-          width={ImageData[1].imageWidth}
-          height={ImageData[1].imageHeight}
-          alt={ImageData[1].imageAlt}
-        />
+          <Image
+            src={ImageData[1].imageSrc}
+            width={ImageData[1].imageWidth}
+            height={ImageData[1].imageHeight}
+            alt={ImageData[1].imageAlt}
+          />
         </div>
       </div>
 
       {/*Section 3 Block*/}
       <div className="sec3-container">
         <div className="sec3-image">
-        <Image
-          src={ImageData[2].imageSrc}
-          width={ImageData[2].imageWidth}
-          height={ImageData[2].imageHeight}
-          alt={ImageData[2].imageAlt}
-        />
+          <Image
+            src={ImageData[2].imageSrc}
+            width={ImageData[2].imageWidth}
+            height={ImageData[2].imageHeight}
+            alt={ImageData[2].imageAlt}
+          />
         </div>
         <div className="sec3-text-box">
           <Typography variant="h3">Track your applications</Typography>
@@ -120,19 +120,20 @@ export default function Home() {
       </div>
       {/*Section 4 Block*/}
       <div className="sec4-container">
-        <Image
-          className="sec4-image"
-          src={ImageData[3].imageSrc}
-          width={ImageData[3].imageWidth}
-          height={ImageData[3].imageHeight}
-          alt={ImageData[3].imageAlt}
-        />
         <div className="sec4-text-box">
           <Typography variant="h3">Gain Insight</Typography>
 
           <Typography variant="body1">
             View helpful stats about job openings with a single glance.
           </Typography>
+        </div>
+        <div className="sec4-image">
+          <Image
+            src={ImageData[3].imageSrc}
+            width={ImageData[3].imageWidth}
+            height={ImageData[3].imageHeight}
+            alt={ImageData[3].imageAlt}
+          />
         </div>
       </div>
     </div>
