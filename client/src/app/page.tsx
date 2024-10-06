@@ -82,14 +82,14 @@ export default function Home() {
 
       {/*Section 2 Block*/}
       <div className="sec2-container">
+        <div className="sec2-image">
         <Image
-          className="sec2-image"
           src={ImageData[1].imageSrc}
           width={ImageData[1].imageWidth}
           height={ImageData[1].imageHeight}
           alt={ImageData[1].imageAlt}
         />
-
+        </div>
         <div className="sec2-text-box">
           <Typography variant="h3">Talk to other applicants</Typography>
 
@@ -99,21 +99,23 @@ export default function Home() {
           </Typography>
         </div>
       </div>
+      
       {/*Section 3 Block*/}
       <div className="sec3-container">
-        <Image
-          className="sec3-image"
-          src={ImageData[2].imageSrc}
-          width={ImageData[2].imageWidth}
-          height={ImageData[2].imageHeight}
-          alt={ImageData[2].imageAlt}
-        />
         <div className="sec3-text-box">
           <Typography variant="h3">Track your applications</Typography>
 
           <Typography variant="body1">
             Streamline your job search with ease using our tracking board
           </Typography>
+        </div>
+        <div className="sec3-image">
+        <Image
+          src={ImageData[2].imageSrc}
+          width={ImageData[2].imageWidth}
+          height={ImageData[2].imageHeight}
+          alt={ImageData[2].imageAlt}
+        />
         </div>
       </div>
     </div>
