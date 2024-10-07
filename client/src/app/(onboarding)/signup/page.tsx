@@ -13,14 +13,44 @@ export default function SignupPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleSubmit = () => {
-    if (password !== confirmPassword) {
-      console.log("Passwords do not match");
-      return;
+  // Error state for form validation
+  const [error, setError] = useState({
+    email: "",
+    password: "",
+    confirmPassword: ""
+  });
+
+  // Function to handle form submission
+  const validateForm = () => {
+    const formErrors = { email:"", password:"", confirmPassword:"" };
+    let isValid = true;
+
+    if (!email) {
+      formErrors.email = "Email is required";
+      isValid = false;
     }
-    // Handle signup logic here (e.g., call an API)
-    console.log("Email:", email);
-    console.log("Password:", password);
+
+    if (!password) {
+      formErrors.password = "Password is required";
+      isValid = false;
+    } 
+
+    if (password !== confirmPassword) {
+      formErrors.confirmPassword = "Passwords do not match";
+      isValid = false;
+    }
+
+    setError(formErrors);
+    return isValid;
+  };
+
+  const handleSubmit = () => {
+    if (validateForm()) {
+      console.log("Enail: ", email);
+      console.log("Password", password);
+    } else {
+      console.log("Validation is failed");
+    }
   };
 
   return (
@@ -85,12 +115,14 @@ export default function SignupPage() {
             variant="subtitle1"
             sx={{ fontWeight: "bold", marginBottom: "8px" }}
           >
-            Email
+            Email <span style={{ color: "red" }}>*</span>
           </Typography>
           <TextField
             fullWidth
             placeholder="Enter your email"
             required
+            error={!!error.email} // Check if there is an error
+            helperText={error.email} // Display error message
             value={email}
             onChange={(e) => setEmail(e.target.value)} // Update email state
           />
@@ -102,13 +134,15 @@ export default function SignupPage() {
             variant="subtitle1"
             sx={{ fontWeight: "bold", marginBottom: "8px" }}
           >
-            Password
+            Password <span style={{ color: "red" }}>*</span>
           </Typography>
           <TextField
             fullWidth
             type="password" // Ensure this is password input
             placeholder="Enter your password"
             required
+            error={!!error.password} // Check if there is an error
+            helperText={error.password} // Display error message
             value={password}
             onChange={(e) => setPassword(e.target.value)} // Update password state
           />
@@ -120,13 +154,15 @@ export default function SignupPage() {
             variant="subtitle1"
             sx={{ fontWeight: "bold", marginBottom: "8px" }}
           >
-            Confirm Password
+            Confirm Password <span style={{ color: "red" }}>*</span>
           </Typography>
           <TextField
             fullWidth
             type="password" // Ensure this is password input
             placeholder="Confirm your password"
             required
+            error={!!error.confirmPassword} // Check if there is an error
+            helperText={error.confirmPassword} // Display error message
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)} // Update confirm password state
           />
