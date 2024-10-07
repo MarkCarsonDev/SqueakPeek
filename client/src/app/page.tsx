@@ -58,10 +58,11 @@ export default function Home() {
         </div>
         <div className="sec2-image">
         <Image
-          src={ImageData[1].imageSrc}
-          width={ImageData[1].imageWidth}
-          height={ImageData[1].imageHeight}
-          alt={ImageData[1].imageAlt}
+          className="sec2-image"
+          src="/LandingPage-images/rat_2.png"
+          width={600}
+          height={300}
+          alt="Two rats speaking"
         />
         </div>
       </div>
