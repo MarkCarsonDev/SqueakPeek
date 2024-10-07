@@ -25,7 +25,7 @@ export default function Home() {
             <div className="sec1-logo-box">
               <Image
                 className="sec1-main-logo"
-                src="/LandingPage-images/rat_3.png"
+                src="/LandingPage-images/rat_1.png"
                 width={300}
                 height={300}
                 alt="SqueakPeek Logo"
