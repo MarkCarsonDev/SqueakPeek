@@ -10,7 +10,6 @@ export default function Page() {
   const [emailHelperText, setEmailHelperText] = useState("");
   const [passwordHelperText, setPasswordHelperText] = useState("");
 
-
   // Dummy Function, will handle login logic
   const handleSubmit = () => {
     console.log("Email:", email);
@@ -18,26 +17,25 @@ export default function Page() {
   };
 
   const validateInput = () => {
-
     setError(false);
     setEmailHelperText("");
     setPasswordHelperText("");
 
     let hasError = false;
-    
+
     if (email === "") {
       setError(true);
       setEmailHelperText("Email is required");
-      hasError=true
-    } 
+      hasError = true;
+    }
 
     if (password === "") {
       setError(true);
       setPasswordHelperText("Password is required");
-      hasError=true
-    } 
-    
-    if (hasError===false) {
+      hasError = true;
+    }
+
+    if (hasError === false) {
       handleSubmit();
     }
   };
@@ -130,7 +128,7 @@ export default function Page() {
               marginTop: "10px",
               textAlign: "start",
               width: "500px",
-              marginBottom: "10px"
+              marginBottom: "10px",
             }}
           >
             Password
@@ -157,38 +155,39 @@ export default function Page() {
             }}
           />
         </div>
-        
+
         <div className="login-button-links">
-          <div className="spacer">
-
-          </div>
+          <div className="spacer"></div>
           <div className="login-button">
-          <Button
-            variant="contained"
-            onClick={validateInput}
-            sx={{
-              backgroundColor: "#496FFF",
-              borderRadius: "8px",
-              padding: "10px 60px",
-              fontSize: "18px",
-              "&:hover": {
-                backgroundColor: "#3C435C",
-              },
-            }}
-          >
-            <Typography sx={{ color: "white" }}>Log In</Typography>
-          </Button>
-          </div>
-          
-          <div className="links">
-          <Link href="/signup">
-            <Typography variant="h6" sx={{textAlign: "right"}}>Sign Up</Typography>
-          </Link>
-          <Link href="/recovery">
-            <Typography variant="h6" sx={{textAlign: "right"}}>Forgot Password?</Typography>
-          </Link>
+            <Button
+              variant="contained"
+              onClick={validateInput}
+              sx={{
+                backgroundColor: "#496FFF",
+                borderRadius: "8px",
+                padding: "10px 60px",
+                fontSize: "18px",
+                "&:hover": {
+                  backgroundColor: "#3C435C",
+                },
+              }}
+            >
+              <Typography sx={{ color: "white" }}>Log In</Typography>
+            </Button>
           </div>
 
+          <div className="links">
+            <Link href="/signup">
+              <Typography variant="h6" sx={{ textAlign: "right" }}>
+                Sign Up
+              </Typography>
+            </Link>
+            <Link href="/recovery">
+              <Typography variant="h6" sx={{ textAlign: "right" }}>
+                Forgot Password?
+              </Typography>
+            </Link>
+          </div>
         </div>
       </div>
     </div>
