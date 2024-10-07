@@ -24,7 +24,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="main-container">
+    <div className="borderline main-container">
       {/* Let's get started section */}
       <Typography variant="h4" sx={{ marginBottom: "20px" }}>
         Let’s Get Started.
@@ -32,13 +32,13 @@ export default function SignupPage() {
 
       {/* Sign in with Google Button */}
       <Button
-        className="border-line"
+        className="borderline"
         variant="outlined"
         startIcon={
           <img src="https://www.google.com/favicon.ico" alt="Google" /> // will fix this to icon with mui
         }
         sx={{
-          backgroundColor: "#ffff",
+          backgroundColor: "white",
           width: "780px",
           borderRadius: "8px",
           border: "none",
