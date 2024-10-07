@@ -25,7 +25,7 @@ export default function Home() {
             <div className="sec1-logo-box">
               <Image
                 className="sec1-main-logo"
-                src="/LandingPage-images/rat_3.png"
+                src="/LandingPage-images/rat_1.png"
                 width={300}
                 height={300}
                 alt="SqueakPeek Logo"
@@ -58,7 +58,6 @@ export default function Home() {
         </div>
         <div className="sec2-image">
         <Image
-          className="sec2-image"
           src="/LandingPage-images/rat_2.png"
           width={600}
           height={300}
@@ -71,10 +70,10 @@ export default function Home() {
       <div className="sec3-container">
         <div className="sec3-image">
         <Image
-          src={ImageData[2].imageSrc}
-          width={ImageData[2].imageWidth}
-          height={ImageData[2].imageHeight}
-          alt={ImageData[2].imageAlt}
+          src="/LandingPage-images/rat_1.png"
+          width={400}
+          height={400}
+          alt="Rat looking up"
         />
         </div>
         <div className="sec3-text-box">
