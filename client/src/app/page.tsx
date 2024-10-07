@@ -58,7 +58,6 @@ export default function Home() {
         </div>
         <div className="sec2-image">
         <Image
-          className="sec2-image"
           src="/LandingPage-images/rat_2.png"
           width={600}
           height={300}
