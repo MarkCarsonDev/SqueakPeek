@@ -2,11 +2,7 @@
 import { Button, TextField, Typography, Link, Divider } from "@mui/material";
 import "./signup.css";
 import { useState } from "react";
-/*
-This page will represent the signup page of the application,
-which include the signup with google button, email, confirm email, and password fields
-and logging in link.
-*/
+import "/src/theme/global.css";
 
 export default function SignupPage() {
   const [email, setEmail] = useState("");
@@ -22,7 +18,7 @@ export default function SignupPage() {
 
   // Function to handle form submission
   const validateForm = () => {
-    const formErrors = { email:"", password:"", confirmPassword:"" };
+    const formErrors = { email: "", password: "", confirmPassword: "" };
     let isValid = true;
 
     if (!email) {
@@ -33,10 +29,13 @@ export default function SignupPage() {
     if (!password) {
       formErrors.password = "Password is required";
       isValid = false;
-    } 
+    }
 
     if (password !== confirmPassword) {
       formErrors.confirmPassword = "Passwords do not match";
+      isValid = false;
+    } else if (!confirmPassword) {
+      formErrors.confirmPassword = "Confirm password is required";
       isValid = false;
     }
 
@@ -46,10 +45,10 @@ export default function SignupPage() {
 
   const handleSubmit = () => {
     if (validateForm()) {
-      console.log("Enail: ", email);
+      console.log("Email: ", email);
       console.log("Password", password);
     } else {
-      console.log("Validation is failed");
+      console.log("Validation failed");
     }
   };
 
@@ -64,27 +63,25 @@ export default function SignupPage() {
       <Button
         className="borderline"
         variant="outlined"
-        startIcon={
-          <img src="https://www.google.com/favicon.ico" alt="Google" /> // will fix this to icon with mui
-        }
+        startIcon={<img src="https://www.google.com/favicon.ico" alt="Google" />}
         sx={{
+          border: "4px solid #E0E4F2",
           backgroundColor: "white",
           width: "780px",
           borderRadius: "8px",
-          border: "none",
         }}
       >
         Sign up with Google
       </Button>
 
       {/* Divider with "Or" */}
-      <div className="box-container">
+      <div className="divider">
         <Divider
           sx={{
             width: "100px",
             height: "1px",
             backgroundColor: "#ccc",
-            marginRight: 2, // MUI shorthand for marginRight
+            marginRight: 2,
           }}
         />
         <Typography
@@ -102,7 +99,7 @@ export default function SignupPage() {
             width: "100px",
             height: "1px",
             backgroundColor: "#ccc",
-            marginLeft: 2, // MUI shorthand for marginLeft
+            marginLeft: 2,
           }}
         />
       </div>
@@ -115,7 +112,7 @@ export default function SignupPage() {
             variant="subtitle1"
             sx={{ fontWeight: "bold", marginBottom: "8px" }}
           >
-            Email <span style={{ color: "red" }}>*</span>
+            Email {true && <span style={{ color: "red" }}>*</span>}
           </Typography>
           <TextField
             fullWidth
@@ -134,7 +131,7 @@ export default function SignupPage() {
             variant="subtitle1"
             sx={{ fontWeight: "bold", marginBottom: "8px" }}
           >
-            Password <span style={{ color: "red" }}>*</span>
+            Password {true && <span style={{ color: "red" }}>*</span>}
           </Typography>
           <TextField
             fullWidth
@@ -154,7 +151,7 @@ export default function SignupPage() {
             variant="subtitle1"
             sx={{ fontWeight: "bold", marginBottom: "8px" }}
           >
-            Confirm Password <span style={{ color: "red" }}>*</span>
+            Confirm Password {true && <span style={{ color: "red" }}>*</span>}
           </Typography>
           <TextField
             fullWidth
@@ -193,11 +190,12 @@ export default function SignupPage() {
           variant="body2" 
           sx={{ 
             mt: 2, 
-            width: "100%", // Ensures the Typography takes full width of the parent
-            display: "flex", // Flexbox for controlling alignment
-            justifyContent: "flex-end", // Aligns the link to the right
-            textAlign: "right", // Ensures the text is aligned right
-          }}>
+            width: "100%", 
+            display: "flex", 
+            justifyContent: "flex-end", 
+            textAlign: "right", 
+          }}
+        >
           <Link href="/login" color="inherit">
             Logging in?
           </Link>
