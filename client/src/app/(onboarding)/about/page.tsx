@@ -56,7 +56,7 @@ export default function Page() {
       name: "Mia Lang",
       role: "Artist",
       description:
-        "Mia Lang is a BFA Animation Student at CSULB. She likes to cook and explore new restaurants in her local community",
+        "Mia Lang is a BFA Animation Student at CSULB. She likes to cook and explore new restaurants in her local community.",
       linkedInURl: "https://www.linkedin.com/in/mia-lang-08bb1121b/",
       profilePic: "/about/profilepic_mia.png",
     },
