@@ -95,10 +95,10 @@ export default function Home() {
         </div>
         <div className="sec4-image">
           <Image
-            src={ImageData[3].imageSrc}
-            width={ImageData[3].imageWidth}
-            height={ImageData[3].imageHeight}
-            alt={ImageData[3].imageAlt}
+            src="/LandingPage-images/rat_3.png"
+            width={400}
+            height={400}
+            alt="Rat looking at star"
           />
         </div>
       </div>
