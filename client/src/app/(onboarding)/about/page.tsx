@@ -52,6 +52,14 @@ export default function Page() {
       linkedInURl: "https://www.linkedin.com/in/noah-daniels-07b5401a9/",
       profilePic: "/about/profilepic_noah.png",
     },
+    {
+      name: "Mia Lang",
+      role: "Artist",
+      description:
+        "Mia Lang is a BFA Animation Student at CSULB. She likes to cook and explore new restaurants in her local community.",
+      linkedInURl: "https://www.linkedin.com/in/mia-lang-08bb1121b/",
+      profilePic: "/about/profilepic_mia.png",
+    },
   ];
   return (
     <div>
