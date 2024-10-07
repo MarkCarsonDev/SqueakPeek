@@ -8,6 +8,7 @@ export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [hasSubmitted, setHasSubmitted] = useState(false); // Tracks form submission
 
   // Error state for form validation
   const [error, setError] = useState({
@@ -16,7 +17,7 @@ export default function SignupPage() {
     confirmPassword: ""
   });
 
-  // Function to handle form submission
+  // Function to handle form validation
   const validateForm = () => {
     const formErrors = { email: "", password: "", confirmPassword: "" };
     let isValid = true;
@@ -44,6 +45,7 @@ export default function SignupPage() {
   };
 
   const handleSubmit = () => {
+    setHasSubmitted(true); // Set the form as submitted
     if (validateForm()) {
       console.log("Email: ", email);
       console.log("Password", password);
@@ -112,7 +114,7 @@ export default function SignupPage() {
             variant="subtitle1"
             sx={{ fontWeight: "bold", marginBottom: "8px" }}
           >
-            Email {true && <span style={{ color: "red" }}>*</span>}
+            Email {hasSubmitted && <span style={{ color: "red" }}>*</span>}
           </Typography>
           <TextField
             fullWidth
@@ -131,7 +133,7 @@ export default function SignupPage() {
             variant="subtitle1"
             sx={{ fontWeight: "bold", marginBottom: "8px" }}
           >
-            Password {true && <span style={{ color: "red" }}>*</span>}
+            Password {hasSubmitted && <span style={{ color: "red" }}>*</span>}
           </Typography>
           <TextField
             fullWidth
@@ -151,7 +153,7 @@ export default function SignupPage() {
             variant="subtitle1"
             sx={{ fontWeight: "bold", marginBottom: "8px" }}
           >
-            Confirm Password {true && <span style={{ color: "red" }}>*</span>}
+            Confirm Password {hasSubmitted && <span style={{ color: "red" }}>*</span>}
           </Typography>
           <TextField
             fullWidth
