@@ -134,6 +134,7 @@ export default function SignupPage() {
 
         {/* Submit button */}
         <Button
+          className="borderline"
           type="button"
           variant="contained"
           color="primary"
