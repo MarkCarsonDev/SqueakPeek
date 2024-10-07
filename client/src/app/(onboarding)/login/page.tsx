@@ -7,24 +7,37 @@ export default function Page() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
-  const [helperText, setHelperText] = useState("");
+  const [emailHelperText, setEmailHelperText] = useState("");
+  const [passwordHelperText, setPasswordHelperText] = useState("");
 
+
+  // Dummy Function, will handle login logic
   const handleSubmit = () => {
-    // Handle login logic here
     console.log("Email:", email);
     console.log("Password:", password);
   };
 
   const validateInput = () => {
+
+    setError(false);
+    setEmailHelperText("");
+    setPasswordHelperText("");
+
+    let hasError = false;
+    
     if (email === "") {
       setError(true);
-      setHelperText("Email is required");
-    } else if (password === "") {
+      setEmailHelperText("Email is required");
+      hasError=true
+    } 
+
+    if (password === "") {
       setError(true);
-      setHelperText("password is required");
-    } else {
-      setError(false);
-      setHelperText("");
+      setPasswordHelperText("Password is required");
+      hasError=true
+    } 
+    
+    if (hasError===false) {
       handleSubmit();
     }
   };
@@ -86,6 +99,7 @@ export default function Page() {
             sx={{
               textAlign: "start",
               width: "500px",
+              marginBottom: "10px",
             }}
           >
             Email
@@ -93,9 +107,11 @@ export default function Page() {
           <TextField
             variant="outlined"
             required
-            error
+            error={error}
+            helperText={emailHelperText}
+            autoComplete="email"
             name="email"
-            label="Email"
+            label="Enter your email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -111,9 +127,10 @@ export default function Page() {
           <Typography
             variant="h5"
             sx={{
-              marginTop: "20px",
+              marginTop: "10px",
               textAlign: "start",
               width: "500px",
+              marginBottom: "10px"
             }}
           >
             Password
@@ -121,9 +138,11 @@ export default function Page() {
           <TextField
             variant="outlined"
             required
-            error
+            error={error}
+            helperText={passwordHelperText}
+            autoComplete="current-password"
             name="password"
-            label="Password"
+            label="Enter your password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
