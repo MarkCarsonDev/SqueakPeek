@@ -6,11 +6,27 @@ import { useState } from "react";
 export default function Page() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
+  const [helperText, setHelperText] = useState("");
 
   const handleSubmit = () => {
     // Handle login logic here
     console.log("Email:", email);
     console.log("Password:", password);
+  };
+
+  const validateInput = () => {
+    if (email === "") {
+      setError(true);
+      setHelperText("Email is required");
+    } else if (password === "") {
+      setError(true);
+      setHelperText("password is required");
+    } else {
+      setError(false);
+      setHelperText("");
+      handleSubmit();
+    }
   };
 
   return (
@@ -77,6 +93,7 @@ export default function Page() {
           <TextField
             variant="outlined"
             required
+            error
             name="email"
             label="Email"
             type="email"
@@ -104,6 +121,7 @@ export default function Page() {
           <TextField
             variant="outlined"
             required
+            error
             name="password"
             label="Password"
             type="password"
@@ -128,7 +146,7 @@ export default function Page() {
           <div className="login-button">
           <Button
             variant="contained"
-            onClick={handleSubmit}
+            onClick={validateInput}
             sx={{
               backgroundColor: "#496FFF",
               borderRadius: "8px",
