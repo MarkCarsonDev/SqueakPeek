@@ -1,7 +1,10 @@
-/**
- * This will represpent the home page of the application
- */
+import "./LandingPage.css";
+import { LandingPageHero } from "@/ui/landingpage/LandingPageHero";
 
 export default function Home() {
-  return <h1>Home Placeholder</h1>;
+  return (
+    <div>
+      <LandingPageHero />
+    </div>
+  );
 }
