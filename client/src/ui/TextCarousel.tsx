@@ -26,7 +26,14 @@ export const TextCarousel = () => {
   }, []);
 
   return (
-    <Box>
+    <Box
+      sx={{
+        justifyContent: "center",
+        alignItems: "center",
+        height: "50px",
+        width: "700px",
+      }}
+    >
       <TransitionGroup>
         <CSSTransition key={currentIndex} timeout={500} classNames="fade">
           <Typography
