@@ -26,6 +26,25 @@ export default function Home() {
         />
         </div>
       </div>
+
+      {/*Section 3 Block*/}
+      <div className="sec3-container">
+        <div className="sec3-image">
+        <Image
+          src="/LandingPage-images/rat_1.png"
+          width={400}
+          height={400}
+          alt="Rat looking up"
+        />
+        </div>
+        <div className="sec3-text-box">
+          <Typography variant="h3">Track your applications</Typography>
+
+          <Typography variant="body1">
+            Streamline your job search with ease using our tracking board
+          </Typography>
+        </div>
+      </div>
     </div>
   );
 }
