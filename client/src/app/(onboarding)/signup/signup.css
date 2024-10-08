@@ -1,0 +1,50 @@
+.main-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 16px 0; /* Equivalent to marginY: 2 */
+}
+
+.signup-box {
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 8px;
+  width: 700px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Ensures child elements are centered */
+  border: 4px solid #E0E4F2;
+}
+
+.text-field {
+  width: 100%;
+  margin: 8px 0; /* Equivalent to marginY: 1 */
+}
+
+.buttons-links {
+  display: flex;
+  justify-content: space-around;
+}
+
+.submit-button {
+  display: "flex";
+  align-items: "center";
+  width: 225px;
+}
+
+.spacer {
+  width: 200px;
+}
+
+.login-link {
+  width: 200px;
+}
