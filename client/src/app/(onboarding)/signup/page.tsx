@@ -14,7 +14,7 @@ export default function SignupPage() {
   const [error, setError] = useState({
     email: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
   });
 
   // Function to handle form validation
@@ -55,7 +55,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="borderline main-container">
+    <div className="main-container">
       {/* Let's get started section */}
       <Typography variant="h4" sx={{ marginBottom: "20px" }}>
         Let’s Get Started.
@@ -65,7 +65,9 @@ export default function SignupPage() {
       <Button
         className="borderline"
         variant="outlined"
-        startIcon={<img src="https://www.google.com/favicon.ico" alt="Google" />}
+        startIcon={
+          <img src="https://www.google.com/favicon.ico" alt="Google" />
+        }
         sx={{
           border: "4px solid #E0E4F2",
           backgroundColor: "white",
@@ -114,14 +116,15 @@ export default function SignupPage() {
             variant="subtitle1"
             sx={{ fontWeight: "bold", marginBottom: "8px" }}
           >
-            Email {hasSubmitted && <span style={{ color: "red" }}>*</span>}
+            Email
           </Typography>
           <TextField
             fullWidth
+            label="Email"
             placeholder="Enter your email"
             required
-            error={!!error.email} // Check if there is an error
-            helperText={error.email} // Display error message
+            // error={!!error.email} // Check if there is an error
+            // helperText={error.email} // Display error message
             value={email}
             onChange={(e) => setEmail(e.target.value)} // Update email state
           />
@@ -133,10 +136,11 @@ export default function SignupPage() {
             variant="subtitle1"
             sx={{ fontWeight: "bold", marginBottom: "8px" }}
           >
-            Password {hasSubmitted && <span style={{ color: "red" }}>*</span>}
+            Password 
           </Typography>
           <TextField
             fullWidth
+            label="Password"
             type="password" // Ensure this is password input
             placeholder="Enter your password"
             required
@@ -153,10 +157,11 @@ export default function SignupPage() {
             variant="subtitle1"
             sx={{ fontWeight: "bold", marginBottom: "8px" }}
           >
-            Confirm Password {hasSubmitted && <span style={{ color: "red" }}>*</span>}
+            Confirm Password
           </Typography>
           <TextField
             fullWidth
+            label="Confirm Password"
             type="password" // Ensure this is password input
             placeholder="Confirm your password"
             required
@@ -188,14 +193,14 @@ export default function SignupPage() {
           Confirm
         </Button>
 
-        <Typography 
-          variant="body2" 
-          sx={{ 
-            mt: 2, 
-            width: "100%", 
-            display: "flex", 
-            justifyContent: "flex-end", 
-            textAlign: "right", 
+        <Typography
+          variant="body2"
+          sx={{
+            mt: 2,
+            width: "100%",
+            display: "flex",
+            justifyContent: "flex-end",
+            textAlign: "right",
           }}
         >
           <Link href="/login" color="inherit">
