@@ -25,7 +25,7 @@ export function NavBar() {
       }}
     >
       <Link
-        href="/"
+        href="/explore"
         style={{
           display: "flex",
           alignItems: "center",

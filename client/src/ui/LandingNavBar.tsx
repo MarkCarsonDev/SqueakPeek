@@ -24,7 +24,7 @@ export function LandingNavbar() {
     >
       
         <Link
-          href="/explore"
+          href="/"
           style={{
             display: "flex",
             alignItems: "center",
