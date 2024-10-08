@@ -3,6 +3,15 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
 import { customTheme } from "@/theme/theme";
 import { Inter } from "next/font/google";
+import { PageFooter } from "@/ui/PageFooter";
+
+// Allows FontAwesome styles to work properly
+import { config } from "@fortawesome/fontawesome-svg-core";
+import "@fortawesome/fontawesome-svg-core/styles.css";
+config.autoAddCss = false;
+
+// this makes the global.css accessible in all pages
+import "@/theme/global.css";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -38,6 +47,7 @@ export default function RootLayout({
       >
         <AppRouterCacheProvider>
           <ThemeProvider theme={customTheme}>{children}</ThemeProvider>
+          <PageFooter />
         </AppRouterCacheProvider>
       </body>
     </html>
