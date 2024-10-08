@@ -5,7 +5,7 @@ import { updateSession } from "@/../lib/supabase/middleware";
  * Middleware that is incoked in every route in the project
  */
 export async function middleware(request: NextRequest) {
-  return await updateSession(request);
+  // return await updateSession(request); // TODO: add updateSession back after getting env files
 }
 
 export const config = {
