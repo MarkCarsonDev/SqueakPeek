@@ -83,7 +83,7 @@ export default function Page() {
             helperText={emailHelperText}
             autoComplete="email"
             name="email"
-            label="Enter your email"
+            placeholder="Enter your email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -115,7 +115,7 @@ export default function Page() {
             helperText={passwordHelperText}
             autoComplete="current-password"
             name="password"
-            label="Enter your password"
+            placeholder="Enter your password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
