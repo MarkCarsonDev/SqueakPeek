@@ -107,7 +107,7 @@ export default function SignupPage() {
       </div>
 
       {/* Signup form */}
-      <div className="signup-form">
+      <div className="signup-box">
         {/* Email field */}
         <div className="text-field">
           <Typography
@@ -134,7 +134,7 @@ export default function SignupPage() {
             variant="subtitle1"
             sx={{ fontWeight: "bold", marginBottom: "8px" }}
           >
-            Password 
+            Password
           </Typography>
           <TextField
             fullWidth
@@ -171,40 +171,45 @@ export default function SignupPage() {
         </div>
 
         {/* Submit button */}
-        <Button
-          className="borderline"
-          type="button"
-          variant="contained"
-          color="primary"
-          onClick={handleSubmit} // Trigger submit logic on click
-          sx={{
-            mt: 2,
-            width: "200px",
-            boxShadow: "none",
-            backgroundColor: "#496FFF",
-            ":hover": {
-              backgroundColor: "#3B5AC6",
-              boxShadow: "none",
-            },
-          }}
-        >
-          Confirm
-        </Button>
-
-        <Typography
-          variant="body2"
-          sx={{
-            mt: 2,
-            width: "100%",
-            display: "flex",
-            justifyContent: "flex-end",
-            textAlign: "right",
-          }}
-        >
-          <Link href="/login" color="inherit">
-            Logging in?
-          </Link>
-        </Typography>
+        <div className="buttons-links">
+          <div className="spacer"></div>
+          <div className="submit-button">
+            <Button
+              className="borderline"
+              type="button"
+              variant="contained"
+              color="primary"
+              onClick={handleSubmit} // Trigger submit logic on click
+              sx={{
+                mt: 2,
+                width: "200px",
+                boxShadow: "none",
+                backgroundColor: "#496FFF",
+                ":hover": {
+                  backgroundColor: "#3B5AC6",
+                  boxShadow: "none",
+                },
+              }}
+            >
+              Confirm
+            </Button>
+          </div>
+          <div className="login-link">
+            <Link
+              href="/login"
+              color="inherit"
+              sx={{
+                mt: 2,
+                width: "100%",
+                display: "flex",
+                justifyContent: "flex-end",
+                textAlign: "right",
+              }}
+            >
+              <Typography variant="body2">Logging in?</Typography>
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );

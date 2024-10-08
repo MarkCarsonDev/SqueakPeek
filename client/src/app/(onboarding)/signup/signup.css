@@ -14,7 +14,7 @@
   margin: 16px 0; /* Equivalent to marginY: 2 */
 }
 
-.signup-form {
+.signup-box {
   background-color: #fff;
   padding: 40px;
   border-radius: 8px;
@@ -28,4 +28,23 @@
 .text-field {
   width: 100%;
   margin: 8px 0; /* Equivalent to marginY: 1 */
+}
+
+.buttons-links {
+  display: flex;
+  justify-content: space-around;
+}
+
+.submit-button {
+  display: "flex";
+  align-items: "center";
+  width: 225px;
+}
+
+.spacer {
+  width: 200px;
+}
+
+.login-link {
+  width: 200px;
 }
