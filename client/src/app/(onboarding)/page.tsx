@@ -28,7 +28,7 @@ export default function Home() {
               width: "600px",
             }}
           >
-            Engage with company thread to ask questions and support fellow
+            Engage with company threads to ask questions and support fellow
             applicants
           </Typography>
         </div>
