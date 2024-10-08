@@ -1,7 +1,6 @@
 import Image from "next/image";
 //import { TextCarousel } from "@/ui/TextCarousel";
 import { Typography } from "@mui/material";
-import Link from "@mui/material/Link";
 
 export function LandingPageHero() {
   return (
