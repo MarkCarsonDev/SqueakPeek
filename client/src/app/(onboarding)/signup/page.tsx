@@ -118,11 +118,7 @@ export default function SignupPage() {
           </Typography>
           <TextField
             fullWidth
-            label="Email"
-            //placeholder="Enter your email"
-            InputLabelProps={{
-              shrink: false, // Prevents the label from floating
-            }}
+            placeholder="Enter your email"
             required
             error={!!error.email} // Check if there is an error
             helperText={error.email} // Display error message
@@ -141,12 +137,8 @@ export default function SignupPage() {
           </Typography>
           <TextField
             fullWidth
-            label="Password"
             type="password" // Ensure this is password input
-            //placeholder="Enter your password"
-            InputLabelProps={{
-              shrink: false, // Prevents the label from floating
-            }}
+            placeholder="Enter your password"
             required
             error={!!error.password} // Check if there is an error
             helperText={error.password} // Display error message
@@ -165,12 +157,8 @@ export default function SignupPage() {
           </Typography>
           <TextField
             fullWidth
-            label="Confirm Password"
             type="password" // Ensure this is password input
-            //placeholder="Confirm your password"
-            InputLabelProps={{
-              shrink: false, // Prevents the label from floating
-            }}
+            placeholder="Confirm your password"
             required
             error={!!error.confirmPassword} // Check if there is an error
             helperText={error.confirmPassword} // Display error message
