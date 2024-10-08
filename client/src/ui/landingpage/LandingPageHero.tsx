@@ -1,7 +1,6 @@
 import Image from "next/image";
 //import { TextCarousel } from "@/ui/TextCarousel";
 import { Typography } from "@mui/material";
-import Link from "@mui/material/Link";
 
 export function LandingPageHero() {
   return (
@@ -39,29 +38,18 @@ export function LandingPageHero() {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                marginBottom: "5%",
           }}>
             <Image
               src="/LandingPage-images/rat_1.png"
               width={300}
-              height={300}
+              height={225}
               alt="SqueakPeek Logo"
+              style={{ objectFit: 'cover', objectPosition: 'bottom' }} 
             />
             <Typography variant="h2" sx={{marginBottom: "2%"}}>SqueakPeek</Typography>
             <Typography variant="h5">Job hunting is hard,</Typography>
             <Typography variant="h5">we’re here to help.</Typography>
           </div>
-        </div>
-
-        <div style={{
-              textAlign: "center",
-              marginTop: "3%",
-        }}>
-          <Link href="/signup">
-            <Typography variant="h5" sx={{ color: "#496FFF" }}>
-              Get Started
-            </Typography>
-          </Link>
         </div>
       </div>
     </div>
