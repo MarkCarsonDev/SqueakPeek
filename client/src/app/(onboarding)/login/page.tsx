@@ -71,6 +71,7 @@ export default function Page() {
               textAlign: "start",
               width: "500px",
               marginBottom: "10px",
+              fontWeight: "bold"
             }}
           >
             Email
@@ -102,6 +103,7 @@ export default function Page() {
               textAlign: "start",
               width: "500px",
               marginBottom: "10px",
+              fontWeight: "bold"
             }}
           >
             Password
