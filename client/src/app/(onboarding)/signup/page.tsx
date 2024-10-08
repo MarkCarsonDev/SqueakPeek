@@ -110,14 +110,9 @@ export default function SignupPage() {
       <div className="signup-box">
         {/* Email field */}
         <div className="text-field">
-          <Typography
-            variant="subtitle1"
-            sx={{ fontWeight: "bold", marginBottom: "8px" }}
-          >
-            Email
-          </Typography>
           <TextField
             fullWidth
+            label="Email"
             placeholder="Enter your email"
             required
             error={!!error.email} // Check if there is an error
@@ -129,14 +124,9 @@ export default function SignupPage() {
 
         {/* Password field */}
         <div className="text-field">
-          <Typography
-            variant="subtitle1"
-            sx={{ fontWeight: "bold", marginBottom: "8px" }}
-          >
-            Password
-          </Typography>
           <TextField
             fullWidth
+            label="Password"
             type="password" // Ensure this is password input
             placeholder="Enter your password"
             required
@@ -149,15 +139,10 @@ export default function SignupPage() {
 
         {/* Confirm Password field */}
         <div className="text-field">
-          <Typography
-            variant="subtitle1"
-            sx={{ fontWeight: "bold", marginBottom: "8px" }}
-          >
-            Confirm Password
-          </Typography>
           <TextField
             fullWidth
             type="password" // Ensure this is password input
+            label="Confirm Password"
             placeholder="Confirm your password"
             required
             error={!!error.confirmPassword} // Check if there is an error
