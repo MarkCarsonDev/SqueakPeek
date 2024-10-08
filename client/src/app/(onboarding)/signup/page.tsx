@@ -8,7 +8,6 @@ export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [hasSubmitted, setHasSubmitted] = useState(false); // Tracks form submission
 
   // Error state for form validation
   const [error, setError] = useState({
@@ -45,7 +44,6 @@ export default function SignupPage() {
   };
 
   const handleSubmit = () => {
-    setHasSubmitted(true); // Set the form as submitted
     if (validateForm()) {
       console.log("Email: ", email);
       console.log("Password", password);
@@ -123,8 +121,8 @@ export default function SignupPage() {
             label="Email"
             placeholder="Enter your email"
             required
-            // error={!!error.email} // Check if there is an error
-            // helperText={error.email} // Display error message
+            error={!!error.email} // Check if there is an error
+            helperText={error.email} // Display error message
             value={email}
             onChange={(e) => setEmail(e.target.value)} // Update email state
           />
