@@ -27,7 +27,6 @@ export function NavBar() {
       <Link
         href="/"
         style={{
-          color: "#3C435C",
           display: "flex",
           alignItems: "center",
           textDecoration: "none",
