@@ -26,15 +26,5 @@ export const customTheme = createTheme({
         },
       },
     },
-    MuiInputLabel: {
-      styleOverrides: {
-        asterisk: {
-          color: "red",
-          '&$error': {
-            color: 'red',
-          },
-        }
-      }
-    },
   },
 });
