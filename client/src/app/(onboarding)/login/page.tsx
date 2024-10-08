@@ -1,7 +1,8 @@
 "use client";
 import "./login.css";
-import { Button, Typography, Divider, TextField, Link } from "@mui/material";
+import { Button, Typography, TextField, Link } from "@mui/material";
 import { useState } from "react";
+import { DividerWithText } from "@/ui/DividerWithText"
 
 export default function Page() {
   const [email, setEmail] = useState("");
@@ -46,13 +47,12 @@ export default function Page() {
         Welcome Back
       </Typography>
       <Button
-        className="border-line"
         variant="outlined"
         startIcon={
           <img src="https://www.google.com/favicon.ico" alt="Google" />
         }
         sx={{
-          backgroundColor: "#ffff",
+          backgroundColor: "white",
           width: "708px",
           borderRadius: "10px",
           border: "4px solid #E0E4F2",
@@ -61,39 +61,12 @@ export default function Page() {
         Login with Google
       </Button>
 
-      <div className="login-divider">
-        <Divider
-          sx={{
-            width: "100px",
-            height: "1px",
-            backgroundColor: "#E0E4F2",
-            marginRight: 2,
-          }}
-        />
-        <Typography
-          variant="h4"
-          sx={{
-            fontWeight: "bold",
-            fontSize: "1.25rem",
-            textAlign: "center",
-          }}
-        >
-          Or
-        </Typography>
-        <Divider
-          sx={{
-            width: "100px",
-            height: "1px",
-            backgroundColor: "#E0E4F2",
-            marginLeft: 2,
-          }}
-        />
-      </div>
+      <DividerWithText />
 
       <div className="login-box">
         <div className="login-fields">
           <Typography
-            variant="h5"
+            variant="subtitle1"
             sx={{
               textAlign: "start",
               width: "500px",
@@ -123,7 +96,7 @@ export default function Page() {
             }}
           />
           <Typography
-            variant="h5"
+            variant="subtitle1"
             sx={{
               marginTop: "10px",
               textAlign: "start",
@@ -178,12 +151,12 @@ export default function Page() {
 
           <div className="links">
             <Link href="/signup">
-              <Typography variant="h6" sx={{ textAlign: "right" }}>
+              <Typography variant="body2" sx={{ textAlign: "right" }}>
                 Sign Up
               </Typography>
             </Link>
             <Link href="/recovery">
-              <Typography variant="h6" sx={{ textAlign: "right" }}>
+              <Typography variant="body2" sx={{ textAlign: "right" }}>
                 Forgot Password?
               </Typography>
             </Link>
