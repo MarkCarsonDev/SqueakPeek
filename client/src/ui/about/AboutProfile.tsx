@@ -57,7 +57,7 @@ export function AboutProfile({
       />
       <CardContent
         sx={{
-          height: "130px",
+          height: "105px",
         }}
       >
         <Typography variant="h5">{description}</Typography>
