@@ -1,5 +1,3 @@
-export default function Page() {
-  return <h1>Signup placeholder</h1>;
 "use client";
 import { Button, TextField, Typography, Link, Divider } from "@mui/material";
 import "./signup.css";
