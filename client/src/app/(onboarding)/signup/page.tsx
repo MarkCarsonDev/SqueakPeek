@@ -196,3 +196,14 @@ export default function SignupPage() {
     </div>
   );
 }
+
+
+// Old code for reference in the future
+{
+  /* <Typography
+variant="subtitle1"
+sx={{ fontWeight: "bold", marginBottom: "8px" }}
+>
+Email
+</Typography> */
+}
