@@ -150,12 +150,12 @@ export default function Page() {
           </div>
 
           <div className="links">
-            <Link href="/signup">
+            <Link href="/signup" sx={{textDecorationColor: "#496FFF"}}>
               <Typography variant="body2" sx={{ textAlign: "right" }}>
                 Sign Up
               </Typography>
             </Link>
-            <Link href="/recovery">
+            <Link href="/recovery" sx={{textDecorationColor: "#496FFF"}}>
               <Typography variant="body2" sx={{ textAlign: "right" }}>
                 Forgot Password?
               </Typography>
