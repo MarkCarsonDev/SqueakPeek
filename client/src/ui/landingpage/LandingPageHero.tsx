@@ -46,9 +46,9 @@ export function LandingPageHero() {
               alt="SqueakPeek Logo"
               style={{ objectFit: 'cover', objectPosition: 'bottom' }} 
             />
-            <Typography variant="h2" sx={{marginBottom: "2%"}}>SqueakPeek</Typography>
-            <Typography variant="h5">Job hunting is hard,</Typography>
-            <Typography variant="h5">we’re here to help.</Typography>
+            <Typography variant="h2" sx={{marginBottom: "2%", fontWeight: "bold"}}>SqueakPeek</Typography>
+            <Typography variant="h4">Job hunting is hard,</Typography>
+            <Typography variant="h4">we’re here to help.</Typography>
           </div>
         </div>
       </div>
