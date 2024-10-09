@@ -15,7 +15,7 @@ export default function Home() {
             style={{
               fontWeight: "bold",
               textAlign: "center",
-              width: "700px",
+              marginBottom: "2%",
             }}
           >
             Talk to other applicants
@@ -25,7 +25,7 @@ export default function Home() {
             variant="h4"
             style={{
               textAlign: "center",
-              width: "600px",
+              width: "60%",
             }}
           >
             Engage with company threads to ask questions and support fellow
@@ -38,7 +38,7 @@ export default function Home() {
           height={500}
           alt="Two rats speaking"
           style={{
-            marginRight: "8%",
+            marginRight: "5%",
           }}
         />
       </div>
@@ -47,11 +47,11 @@ export default function Home() {
       <div className="sec3-container">
         <Image
           src="/LandingPage-images/rat_1.png"
-          width={500}
-          height={400}
+          width={600}
+          height={500}
           alt="Rat looking up"
           style={{
-            marginLeft: "8%",
+            marginLeft: "8.5%",
             objectFit: "cover",
             objectPosition: "bottom",
           }}
@@ -62,7 +62,7 @@ export default function Home() {
             style={{
               fontWeight: "bold",
               textAlign: "center",
-              width: "700px",
+              marginBottom: "2%",
             }}
           >
             Track your applications
@@ -72,7 +72,7 @@ export default function Home() {
             variant="h4"
             style={{
               textAlign: "center",
-              width: "600px",
+              width: "65%",
             }}
           >
             Streamline your job search with ease using our tracking board
@@ -88,7 +88,7 @@ export default function Home() {
             style={{
               fontWeight: "bold",
               textAlign: "center",
-              width: "700px",
+              marginBottom: "2%",
             }}
           >
             Gain Insight
@@ -98,7 +98,7 @@ export default function Home() {
             variant="h4"
             style={{
               textAlign: "center",
-              width: "600px",
+              width: "65%",
             }}
           >
             View helpful stats about job openings with a single glance.
