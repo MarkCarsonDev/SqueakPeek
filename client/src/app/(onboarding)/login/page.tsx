@@ -3,6 +3,7 @@ import "./login.css";
 import { Button, Typography, TextField, Link } from "@mui/material";
 import { useState } from "react";
 import { DividerWithText } from "@/ui/DividerWithText"
+import { handleGoogleLoginClientSide } from "../../../../lib/supabase/auth/handleGoogleLoginClientSide";
 
 export default function Page() {
   const [email, setEmail] = useState("");
@@ -47,6 +48,7 @@ export default function Page() {
         Welcome Back
       </Typography>
       <Button
+        onClick={handleGoogleLoginClientSide}
         variant="outlined"
         startIcon={
           <img src="https://www.google.com/favicon.ico" alt="Google" />
@@ -70,9 +72,9 @@ export default function Page() {
             className="required-label"
             sx={{
               textAlign: "start",
-              width: "500px",
               marginBottom: "10px",
-              fontWeight: "bold"
+              fontWeight: "bold",
+              width: "100%"
             }}
           >
             Email
@@ -80,6 +82,7 @@ export default function Page() {
           <TextField
             variant="outlined"
             required
+            fullWidth
             error={error}
             helperText={emailHelperText}
             autoComplete="email"
@@ -89,7 +92,6 @@ export default function Page() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             sx={{
-              width: "500px",
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {
                   borderColor: "#769FCD",
@@ -103,7 +105,7 @@ export default function Page() {
             sx={{
               marginTop: "10px",
               textAlign: "start",
-              width: "500px",
+              width: "100%",
               marginBottom: "10px",
               fontWeight: "bold"
             }}
@@ -113,6 +115,7 @@ export default function Page() {
           <TextField
             variant="outlined"
             required
+            fullWidth
             error={error}
             helperText={passwordHelperText}
             autoComplete="current-password"
@@ -122,7 +125,6 @@ export default function Page() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             sx={{
-              width: "500px",
               marginBottom: "30px",
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {
