@@ -3,7 +3,7 @@ import { Button, TextField, Typography, Link, Divider } from "@mui/material";
 import "./signup.css";
 import { useState } from "react";
 import "/src/theme/global.css";
-
+import { handleGoogleLoginClientSide } from "../../../../lib/supabase/auth/handleGoogleLoginClientSide";
 export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -61,6 +61,7 @@ export default function SignupPage() {
 
       {/* Sign in with Google Button */}
       <Button
+        onClick={handleGoogleLoginClientSide}
         className="borderline"
         variant="outlined"
         startIcon={
@@ -196,7 +197,6 @@ export default function SignupPage() {
     </div>
   );
 }
-
 
 // Old code for reference in the future
 {
