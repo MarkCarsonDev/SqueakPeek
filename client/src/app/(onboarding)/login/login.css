@@ -5,12 +5,7 @@
     justify-content: center;
     align-items: center;
 }
-.login-fields{
-   display: flex;
-   flex-direction: column;
-   width: 85%;
-   align-items: center;
-}
+
  .login-box{
     display: flex;
     flex-direction: column;
@@ -22,6 +17,13 @@
     justify-content: center;
     align-items: center;
  }
+
+ .login-fields{
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   width: 85%;
+}
 
  .login-divider{
     height: 50px;
@@ -40,18 +42,18 @@
 
  .login-button-links{
     display: flex;
-    width: 650px;
+    width: 100%;
     justify-content: space-around;
  }
 .login-button{
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 225px;
+    width: 30%;
 }
 .spacer{
-    width: 200px;
+    width: 20%;
 }
  .links{
-    width: 200px;
+    width: 20%;
  }
