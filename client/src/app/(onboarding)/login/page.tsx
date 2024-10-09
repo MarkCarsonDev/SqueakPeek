@@ -133,8 +133,9 @@ export default function Page() {
 
         <div className="login-button-links">
           <div className="spacer"></div>
-          <div className="login-button">
+
             <Button
+              className="login-button"
               variant="contained"
               onClick={validateInput}
               sx={{
@@ -149,7 +150,6 @@ export default function Page() {
             >
               <Typography sx={{ color: "white" }}>Log In</Typography>
             </Button>
-          </div>
 
           <div className="links">
             <Link href="/signup" sx={{textDecorationColor: "#496FFF"}}>
