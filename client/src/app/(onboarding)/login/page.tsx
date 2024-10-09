@@ -3,6 +3,7 @@ import "./login.css";
 import { Button, Typography, TextField, Link } from "@mui/material";
 import { useState } from "react";
 import { DividerWithText } from "@/ui/DividerWithText"
+import { handleGoogleLoginClientSide } from "../../../../lib/supabase/auth/handleGoogleLoginClientSide";
 
 export default function Page() {
   const [email, setEmail] = useState("");
@@ -47,6 +48,7 @@ export default function Page() {
         Welcome Back
       </Typography>
       <Button
+        onClick={handleGoogleLoginClientSide}
         variant="outlined"
         startIcon={
           <img src="https://www.google.com/favicon.ico" alt="Google" />
