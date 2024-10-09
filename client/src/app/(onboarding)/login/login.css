@@ -24,6 +24,14 @@
     justify-content: center;
  }
 
+ .required-label{
+   &::after{
+      padding: 0 5px;
+      content:"*";
+      color: red;
+   }
+ }
+
  .login-button-links{
     display: flex;
     width: 650px;

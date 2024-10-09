@@ -67,6 +67,7 @@ export default function Page() {
         <div className="login-fields">
           <Typography
             variant="subtitle1"
+            className="required-label"
             sx={{
               textAlign: "start",
               width: "500px",
@@ -98,6 +99,7 @@ export default function Page() {
           />
           <Typography
             variant="subtitle1"
+            className="required-label"
             sx={{
               marginTop: "10px",
               textAlign: "start",
