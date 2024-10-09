@@ -72,9 +72,9 @@ export default function Page() {
             className="required-label"
             sx={{
               textAlign: "start",
-              width: "500px",
               marginBottom: "10px",
-              fontWeight: "bold"
+              fontWeight: "bold",
+              width: "100%"
             }}
           >
             Email
@@ -82,6 +82,7 @@ export default function Page() {
           <TextField
             variant="outlined"
             required
+            fullWidth
             error={error}
             helperText={emailHelperText}
             autoComplete="email"
@@ -91,7 +92,6 @@ export default function Page() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             sx={{
-              width: "500px",
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {
                   borderColor: "#769FCD",
@@ -105,7 +105,7 @@ export default function Page() {
             sx={{
               marginTop: "10px",
               textAlign: "start",
-              width: "500px",
+              width: "100%",
               marginBottom: "10px",
               fontWeight: "bold"
             }}
@@ -115,6 +115,7 @@ export default function Page() {
           <TextField
             variant="outlined"
             required
+            fullWidth
             error={error}
             helperText={passwordHelperText}
             autoComplete="current-password"
@@ -124,7 +125,6 @@ export default function Page() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             sx={{
-              width: "500px",
               marginBottom: "30px",
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {
