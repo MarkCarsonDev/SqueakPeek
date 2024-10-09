@@ -30,6 +30,14 @@
   margin: 8px 0; /* Equivalent to marginY: 1 */
 }
 
+.required-label{
+  &::after{
+     padding: 0 5px;
+     content:"*";
+     color: red;
+  }
+}
+
 .buttons-links {
   display: flex;
   justify-content: space-around;

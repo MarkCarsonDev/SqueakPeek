@@ -112,6 +112,7 @@ export default function SignupPage() {
         <div className="text-field">
           <Typography
             variant="subtitle1"
+            className="required-label"
             sx={{ fontWeight: "bold", marginBottom: "8px" }}
           >
             Email
@@ -132,6 +133,7 @@ export default function SignupPage() {
         <div className="text-field">
           <Typography
             variant="subtitle1"
+            className="required-label"
             sx={{ fontWeight: "bold", marginBottom: "8px" }}
           >
             Password
@@ -153,6 +155,7 @@ export default function SignupPage() {
         <div className="text-field">
           <Typography
             variant="subtitle1"
+            className="required-label"
             sx={{ fontWeight: "bold", marginBottom: "8px" }}
           >
             Confirm Password
