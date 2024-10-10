@@ -3,7 +3,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: auto;
+    height: 80vh;
   }
 
 .profile-setup {
@@ -15,6 +15,7 @@
     display: flex;
     flex-direction: column;
     border: 4px solid #E0E4F2;
+    margin: auto;
 }
 
 .input-field {

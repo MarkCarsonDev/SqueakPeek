@@ -7,6 +7,12 @@ export default function ProfilePage() {
   return (
     <div className="main-container">
       <div className="profile-setup">
+        <Typography variant="h5" sx={{ marginBottom: "20px", fontWeight: "bold" }}>
+          Profile Setup
+        </Typography>
+
+
+        {/* This is the InputField component */}
         <InputField
           fullWidth
           className="input-field"
@@ -29,8 +35,18 @@ export default function ProfilePage() {
           variant="outlined"
           sx={{ marginBottom: "20px" }}
         />
-        <Button variant="contained" sx={{ marginBottom: "20px" }}>
-          Save
+        <Button variant="contained" 
+        sx={{
+          mt: 2,
+          width: "200px",
+          boxShadow: "none",
+          backgroundColor: "#496FFF",
+          ":hover": {
+            backgroundColor: "#3B5AC6",
+            boxShadow: "none",
+          },
+        }}>
+          Create Account
         </Button>
       </div>
     </div>
