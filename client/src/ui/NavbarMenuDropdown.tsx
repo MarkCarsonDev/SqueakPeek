@@ -1,4 +1,3 @@
-"use client";
 import * as React from "react";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -68,12 +67,18 @@ export function NavbarMenuDropdown() {
         icon={open ? faChevronUp : faChevronDown}
         style={{ marginLeft: "8px", color: "#e0e4f2" }}
       />
+      {/* box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px; */}
       <Menu
         id="basic-menu"
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
-        sx={{ border: "solid 3px #e0e4f2" }}
+        sx={{
+          "& .MuiPaper-root": {
+            boxShadow: "#959DA533 0px 8px 24px",
+            border: "solid 2px #e0e4f2"
+          },
+        }}
         MenuListProps={{
           "aria-labelledby": "basic-button",
         }}

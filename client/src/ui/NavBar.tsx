@@ -7,7 +7,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMessage,
   faChartLine,
-  faUser,
   faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
 import { NavbarMenuDropdown } from "./NavbarMenuDropdown";
@@ -61,7 +60,7 @@ export function NavBar() {
 
         <ul
           style={{
-            display: "flex",
+            display: "grid",
             gridTemplateColumns: "repeat(4, auto)",
             gridGap: "30px",
             listStyle: "none",
@@ -140,7 +139,6 @@ export function NavBar() {
             </Link>
           </li>
         </ul>
-        
       </div>
       <NavbarMenuDropdown />
     </nav>
