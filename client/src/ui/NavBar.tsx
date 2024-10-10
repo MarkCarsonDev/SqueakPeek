@@ -4,10 +4,13 @@ import Link from "next/link";
 import { Typography } from "@mui/material";
 import { usePathname } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { faMessage } from "@fortawesome/free-solid-svg-icons";
-import { faChartLine } from "@fortawesome/free-solid-svg-icons";
-import { faUser} from "@fortawesome/free-solid-svg-icons";
+import {
+  faMessage,
+  faChartLine,
+  faUser,
+  faMagnifyingGlass,
+} from "@fortawesome/free-solid-svg-icons";
+import { NavbarMenuDropdown } from "./NavbarMenuDropdown";
 
 export function NavBar() {
   const pathName = usePathname();
@@ -21,28 +24,10 @@ export function NavBar() {
         zIndex: 1,
         position: "sticky",
         borderBottom: "5px solid #E0E4F2",
-        alignContent: "center"
+        alignContent: "center",
+        justifyContent: "space-between",
       }}
     >
-      <Link
-        href="/explore"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          textDecoration: "none",
-          marginLeft: "1%"
-        }}
-      >
-          <Image
-            src="/LandingPage-images/rat_1.png"
-            height={100}
-            width={100}
-            alt="Squeakpeek Logo"
-            style={{ objectFit: 'cover', objectPosition: 'bottom', marginBottom: "5%", marginRight: "2%"}}
-          />
-        <Typography variant="h4">SqueakPeek</Typography>
-      </Link>
-
       <div
         style={{
           display: "flex",
@@ -50,6 +35,30 @@ export function NavBar() {
           justifyContent: "center",
         }}
       >
+        <Link
+          href="/explore"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            textDecoration: "none",
+            marginLeft: "1%",
+          }}
+        >
+          <Image
+            src="/LandingPage-images/rat_1.png"
+            height={100}
+            width={100}
+            alt="Squeakpeek Logo"
+            style={{
+              objectFit: "cover",
+              objectPosition: "bottom",
+              marginBottom: "5%",
+              marginRight: "2%",
+            }}
+          />
+          <Typography variant="h4">SqueakPeek</Typography>
+        </Link>
+
         <ul
           style={{
             display: "flex",
@@ -130,32 +139,10 @@ export function NavBar() {
               </Typography>
             </Link>
           </li>
-
-          <li>
-            <Link
-              href="/profile"
-              style={{
-                color: "#3C435C",
-                textDecoration: "none",
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <FontAwesomeIcon
-                icon={faUser}
-                style={{ marginRight: "10%" }}
-              />
-              <Typography
-                sx={{
-                  fontWeight: pathName === "/profile" ? "bold" : "normal",
-                }}
-              >
-                Profile
-              </Typography>
-            </Link>
-          </li>
         </ul>
+        
       </div>
+      <NavbarMenuDropdown />
     </nav>
   );
 }
