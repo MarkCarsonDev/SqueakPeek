@@ -178,6 +178,7 @@ export default function SignupPage() {
         <div className="buttons-links">
           <div className="spacer"></div>
           <div className="submit-button">
+            <Link href = "/profile_setup">
             <Button
               className="borderline"
               type="button"
@@ -197,6 +198,7 @@ export default function SignupPage() {
             >
               Confirm
             </Button>
+            </Link>
           </div>
           <div className="login-link">
             <Link

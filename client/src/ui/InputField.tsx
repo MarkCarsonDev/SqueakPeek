@@ -5,9 +5,9 @@ import { TextFieldProps, TextField, Typography } from "@mui/material";
  * @param props TextFieldProps
  */
 export function InputField(props: TextFieldProps) {
-  const { required, label } = props;
+  const { required, label, fullWidth } = props;
   return (
-    <div>
+    <div style={{ width: fullWidth ? "100%" : "auto" }}>
       <div
         style={{
           display: "flex",
@@ -34,7 +34,7 @@ export function InputField(props: TextFieldProps) {
         )}
       </div>
 
-      <TextField {...props} label="" />
+      <TextField {...props} label="" fullWidth={fullWidth} />
     </div>
   );
 }
