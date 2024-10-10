@@ -8,21 +8,22 @@ export default function ProfilePage() {
     <div className="main-container">
       <div className="profile-setup">
         <InputField
-          fullWidth = {true}
+          fullWidth
+          className="input-field"
           label="Full Name"
           placeholder="Enter your full name"
           variant="outlined"
           sx={{ marginBottom: "20px" }}
         />
         <InputField
-          fullWidth = {true}
+          fullWidth
           label="Username"
           placeholder="Enter your username"
           variant="outlined"
           sx={{ marginBottom: "20px" }}
         />
         <InputField
-          fullWidth = {true}
+          fullWidth
           label="School"
           placeholder="Enter your school"
           variant="outlined"
