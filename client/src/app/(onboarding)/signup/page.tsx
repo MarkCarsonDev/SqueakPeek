@@ -71,7 +71,7 @@ export default function SignupPage() {
           border: "4px solid #E0E4F2",
           backgroundColor: "white",
           width: "780px",
-          borderRadius: "8px",
+          borderRadius: "10px",
         }}
       >
         Sign up with Google
@@ -190,6 +190,7 @@ export default function SignupPage() {
                 width: "200px",
                 boxShadow: "none",
                 backgroundColor: "#496FFF",
+                borderRadius: "8px",
                 ":hover": {
                   backgroundColor: "#3B5AC6",
                   boxShadow: "none",

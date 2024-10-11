@@ -94,6 +94,7 @@ export default function ProfilePage() {
               boxShadow: "none",
               backgroundColor: "#496FFF",
               alignSelf: "center",
+              borderRadius: "8px",
               ":hover": {
                 backgroundColor: "#3B5AC6",
                 boxShadow: "none",
