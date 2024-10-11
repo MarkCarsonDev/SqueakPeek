@@ -94,6 +94,7 @@ export function NavBar() {
           {links.map((links) => (
             <li>
               <Link
+                key={links.name}
                 href={links.href}
                 style={{
                   color: "#3C435C",
