@@ -29,7 +29,7 @@ export function LandingNavbar() {
             display: "flex",
             alignItems: "center",
             textDecoration: "none",
-            marginLeft: "1%"
+            marginLeft: "10px"
           }}
         >
             <Image

@@ -64,7 +64,7 @@ export function NavBar() {
             display: "flex",
             alignItems: "center",
             textDecoration: "none",
-            marginLeft: "1%",
+            marginLeft: "10px",
           }}
         >
           <Image
@@ -75,8 +75,8 @@ export function NavBar() {
             style={{
               objectFit: "cover",
               objectPosition: "bottom",
-              marginBottom: "5%",
-              marginRight: "2%",
+              marginBottom: "5px",
+              marginRight: "2px",
             }}
           />
           <Typography variant="h4">SqueakPeek</Typography>
@@ -86,9 +86,7 @@ export function NavBar() {
 
         <ul
           style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(4, auto)",
-            gridGap: "30px",
+            display: "flex",
             listStyle: "none",
             textAlign: "center",
           }}
@@ -102,6 +100,7 @@ export function NavBar() {
                   textDecoration: "none",
                   display: "flex",
                   alignItems: "center",
+                  marginLeft: "30px"
                 }}
               >
                 {links.icon}

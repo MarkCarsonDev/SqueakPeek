@@ -45,7 +45,7 @@ export function NavbarMenuDropdown() {
       style={{
         justifyContent: "center",
         alignContent: "center",
-        marginRight: "1%",
+        marginRight: "15px",
       }}
     >
       {/* IconButton Section Note: Image should be replaced in future with users avatar choice*/}
@@ -67,8 +67,8 @@ export function NavbarMenuDropdown() {
           style={{
             objectFit: "cover",
             objectPosition: "bottom",
-            marginBottom: "5%",
-            marginRight: "2%",
+            marginBottom: "5px",
+            marginRight: "2px",
           }}
         />
       </IconButton>
@@ -109,7 +109,7 @@ export function NavbarMenuDropdown() {
           }}
         >
           <Typography variant="body1">
-            <FontAwesomeIcon icon={faUser} style={{ marginRight: "10%" }} />
+            <FontAwesomeIcon icon={faUser} style={{ marginRight: "8px" }} />
             Profile
           </Typography>
         </MenuItem>
@@ -124,7 +124,7 @@ export function NavbarMenuDropdown() {
           <Typography variant="body1">
             <FontAwesomeIcon
               icon={faRightFromBracket}
-              style={{ marginRight: "5%" }}
+              style={{ marginRight: "5px" }}
             />
             Logout
           </Typography>
