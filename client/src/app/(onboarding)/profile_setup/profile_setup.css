@@ -3,7 +3,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 80vh;
+    height: 1000px;
+
     
   }
 
@@ -11,7 +12,7 @@
     background-color: #fff;
     padding: 40px;
     border-radius: 8px;
-    height: auto;
+    /* height: auto; */
     width: 700px;
     display: flex;
     flex-direction: column;
