@@ -66,6 +66,7 @@ export default function ProfilePage() {
           label="Full Name"
           placeholder="Enter your full name"
           variant="outlined"
+          required
           sx={{ marginBottom: "20px" }}
         />
         <InputField
@@ -73,6 +74,7 @@ export default function ProfilePage() {
           label="Username"
           placeholder="Enter your username"
           variant="outlined"
+          required
           sx={{ marginBottom: "20px" }}
         />
         <InputField
@@ -99,6 +101,19 @@ export default function ProfilePage() {
         >
           Create Account
         </Button>
+
+        <Typography variant="subtitle2"
+        sx={{
+            marginTop: "40px",
+            textAlign: "center",
+            color: "#6E7191"
+          }}>
+
+          Your anonymity is valued.<br/>
+          Information we collect will not be shared.
+        </Typography>
+
+
       </div>
     </div>
   );
