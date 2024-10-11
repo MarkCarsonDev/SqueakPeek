@@ -15,6 +15,7 @@ export function NavBar() {
   const pathName = usePathname();
 
   return (
+    // Navbar container
     <nav
       style={{
         background: "white",
@@ -27,6 +28,7 @@ export function NavBar() {
         justifyContent: "space-between",
       }}
     >
+      {/* Container for logo and navigation links. Note: This is to align these element to left while the drop down is aligned to the right  */}
       <div
         style={{
           display: "flex",
@@ -34,6 +36,7 @@ export function NavBar() {
           justifyContent: "center",
         }}
       >
+        {/* Logo Section Note: Links to explore page because that will be our users homepage */}
         <Link
           href="/explore"
           style={{
@@ -57,6 +60,8 @@ export function NavBar() {
           />
           <Typography variant="h4">SqueakPeek</Typography>
         </Link>
+
+        {/* Navigations links section Note: Similar to landingnavbar but has inlcuded FA icons */}
 
         <ul
           style={{
@@ -140,6 +145,9 @@ export function NavBar() {
           </li>
         </ul>
       </div>
+
+      {/* Dropdown Section */}
+
       <NavbarMenuDropdown />
     </nav>
   );
