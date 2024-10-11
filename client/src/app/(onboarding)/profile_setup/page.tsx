@@ -60,7 +60,6 @@ export default function ProfilePage() {
         </Typography>
 
         {/* This is the InputField component */}
-        {/* <div className="input-field"> */}
           <InputField
             fullWidth
             className="input-field"
@@ -85,8 +84,6 @@ export default function ProfilePage() {
             variant="outlined"
             sx={{ marginBottom: "10px" }}
           />
-
-        {/* </div> */}
           
         {/* Submit button */}
         <Button

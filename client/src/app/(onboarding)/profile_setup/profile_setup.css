@@ -18,15 +18,6 @@
     margin: auto;
 }
 
-.input-field {
-    width: 100%;
-    margin-bottom: 20px;
-    border: 4px solid #E0E4F2;
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Center the input fields horizontally */
-}
-
 .avatar-container {
   display: flex; 
   justify-content: center; 
