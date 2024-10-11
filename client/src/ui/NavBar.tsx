@@ -20,17 +20,24 @@ export function NavBar() {
     {
       name: "Explore",
       href: "/explore",
-      icon: <FontAwesomeIcon icon={faMagnifyingGlass} style={{ marginRight: "10%" }} />,
+      icon: (
+        <FontAwesomeIcon
+          icon={faMagnifyingGlass}
+          style={{ marginRight: "10%" }}
+        />
+      ),
     },
     {
       name: "Message",
       href: "/message",
-      icon: <FontAwesomeIcon icon={faMessage} style={{ marginRight: "10%" }}/>,
+      icon: <FontAwesomeIcon icon={faMessage} style={{ marginRight: "10%" }} />,
     },
     {
       name: "Threads",
       href: "/thread",
-      icon: <FontAwesomeIcon icon={faChartLine} style={{ marginRight: "10%" }}/>,
+      icon: (
+        <FontAwesomeIcon icon={faChartLine} style={{ marginRight: "10%" }} />
+      ),
     },
   ];
   const pathName = usePathname();
@@ -92,16 +99,15 @@ export function NavBar() {
           }}
         >
           {links.map((links) => (
-            <li>
+            <li key={links.name}>
               <Link
-                key={links.name}
                 href={links.href}
                 style={{
                   color: "#3C435C",
                   textDecoration: "none",
                   display: "flex",
                   alignItems: "center",
-                  marginLeft: "30px"
+                  marginLeft: "30px",
                 }}
               >
                 {links.icon}
