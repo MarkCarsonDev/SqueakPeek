@@ -10,8 +10,29 @@ import {
   faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
 import { NavbarMenuDropdown } from "./NavbarMenuDropdown";
-
+interface ILinks {
+  name: string;
+  href: string;
+  icon: JSX.Element;
+}
 export function NavBar() {
+  const links: ILinks[] = [
+    {
+      name: "Explore",
+      href: "/explore",
+      icon: <FontAwesomeIcon icon={faMagnifyingGlass} style={{ marginRight: "10%" }} />,
+    },
+    {
+      name: "Message",
+      href: "/message",
+      icon: <FontAwesomeIcon icon={faMessage} style={{ marginRight: "10%" }}/>,
+    },
+    {
+      name: "Threads",
+      href: "/thread",
+      icon: <FontAwesomeIcon icon={faChartLine} style={{ marginRight: "10%" }}/>,
+    },
+  ];
   const pathName = usePathname();
 
   return (
@@ -72,77 +93,28 @@ export function NavBar() {
             textAlign: "center",
           }}
         >
-          <li>
-            <Link
-              href="/explore"
-              style={{
-                color: "#3C435C",
-                textDecoration: "none",
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <FontAwesomeIcon
-                icon={faMagnifyingGlass}
-                style={{ marginRight: "10%" }}
-              />
-              <Typography
-                sx={{
-                  fontWeight: pathName === "/explore" ? "bold" : "normal",
+          {links.map((links) => (
+            <li>
+              <Link
+                href={links.href}
+                style={{
+                  color: "#3C435C",
+                  textDecoration: "none",
+                  display: "flex",
+                  alignItems: "center",
                 }}
               >
-                Explore
-              </Typography>
-            </Link>
-          </li>
-
-          <li>
-            <Link
-              href="/message"
-              style={{
-                color: "#3C435C",
-                textDecoration: "none",
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <FontAwesomeIcon
-                icon={faMessage}
-                style={{ marginRight: "10%" }}
-              />
-              <Typography
-                sx={{
-                  fontWeight: pathName === "/message" ? "bold" : "normal",
-                }}
-              >
-                Message
-              </Typography>
-            </Link>
-          </li>
-
-          <li>
-            <Link
-              href="/track"
-              style={{
-                color: "#3C435C",
-                textDecoration: "none",
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <FontAwesomeIcon
-                icon={faChartLine}
-                style={{ marginRight: "10%" }}
-              />
-              <Typography
-                sx={{
-                  fontWeight: pathName === "/track" ? "bold" : "normal",
-                }}
-              >
-                Track
-              </Typography>
-            </Link>
-          </li>
+                {links.icon}
+                <Typography
+                  sx={{
+                    fontWeight: pathName === links.href ? "bold" : "normal",
+                  }}
+                >
+                  {links.name}
+                </Typography>
+              </Link>
+            </li>
+          ))}
         </ul>
       </div>
 
