@@ -1,8 +1,8 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
 import { Button, Typography } from "@mui/material";
 import { usePathname } from "next/navigation";
+import { LogoNameLink } from "../LogoNameLink";
 /*
  * This Landing Navbar will be responsible for rendering the Navbar of the Landing Page
  */
@@ -23,25 +23,7 @@ export function LandingNavbar() {
       }}
     >
       
-        <Link
-          href="/"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            textDecoration: "none",
-            marginLeft: "10px"
-          }}
-        >
-            <Image
-              src="/LandingPage-images/rat_1.png"
-              height={100}
-              width={100}
-              alt="Squeakpeek Logo"
-              style={{ objectFit: 'cover', objectPosition: 'bottom', marginBottom: "5%", marginRight: "2%"}}
-            />
-
-          <Typography variant="h4">SqueakPeek</Typography>
-        </Link>
+        <LogoNameLink/>
 
         <div
           style={{

@@ -1,4 +1,4 @@
-import { LandingNavbar } from "@/ui/LandingNavBar";
+import { LandingNavbar } from "@/ui/landingpage/LandingNavBar";
 
 /**
  * This layout file affects files in the (onboarding) directory

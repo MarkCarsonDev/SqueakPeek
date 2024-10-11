@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
 import { Typography } from "@mui/material";
 import { usePathname } from "next/navigation";
@@ -10,6 +9,8 @@ import {
   faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
 import { NavbarMenuDropdown } from "./NavbarMenuDropdown";
+import { LogoNameLink } from "./LogoNameLink";
+
 interface ILinks {
   name: string;
   href: string;
@@ -65,29 +66,7 @@ export function NavBar() {
         }}
       >
         {/* Logo Section Note: Links to explore page because that will be our users homepage */}
-        <Link
-          href="/explore"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            textDecoration: "none",
-            marginLeft: "10px",
-          }}
-        >
-          <Image
-            src="/LandingPage-images/rat_1.png"
-            height={100}
-            width={100}
-            alt="Squeakpeek Logo"
-            style={{
-              objectFit: "cover",
-              objectPosition: "bottom",
-              marginBottom: "5px",
-              marginRight: "2px",
-            }}
-          />
-          <Typography variant="h4">SqueakPeek</Typography>
-        </Link>
+        <LogoNameLink href="/expore" />
 
         {/* Navigations links section Note: Similar to landingnavbar but has inlcuded FA icons */}
 
