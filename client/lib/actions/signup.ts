@@ -63,7 +63,6 @@ export async function createAccount(
     confirmPassword: formData.get("confirmPassword"),
   });
 
-  validatedFields.error?.flatten().fieldErrors.confirmPassword;
   // form validation fails
   if (!validatedFields.success) {
     // add error meesages
@@ -73,7 +72,7 @@ export async function createAccount(
     };
   }
 
-  const { email, password, confirmPassword } = validatedFields.data;
+  const { email, password } = validatedFields.data;
 
   // call supabase to create account
   const supabase = createSupabaseServer();
