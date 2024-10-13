@@ -1,8 +1,16 @@
 "use client";
-import { Button, TextField, Typography, Link, Divider } from "@mui/material";
+import {
+  Button,
+  TextField,
+  Typography,
+  Link,
+  Divider,
+  Input,
+} from "@mui/material";
 import "./signup.css";
 import { useState } from "react";
 import "/src/theme/global.css";
+import { InputField } from "@/ui/InputField";
 
 export default function SignupPage() {
   return (
@@ -60,59 +68,36 @@ export default function SignupPage() {
       </div>
 
       {/* Signup form */}
-      <div className="signup-box">
+      <form className="signup-box">
         {/* Email field */}
-        <div className="text-field">
-          <Typography
-            variant="subtitle1"
-            className="required-label"
-            sx={{ fontWeight: "bold", marginBottom: "8px" }}
-          >
-            Email
-          </Typography>
-          <TextField
-            fullWidth
-            // label="Email"
-            placeholder="Enter your email"
-            required
-          />
-        </div>
+        <InputField
+          fullWidth
+          placeholder="Enter your email"
+          required
+          label="Email"
+          name="email"
+        />
 
         {/* Password field */}
-        <div className="text-field">
-          <Typography
-            variant="subtitle1"
-            className="required-label"
-            sx={{ fontWeight: "bold", marginBottom: "8px" }}
-          >
-            Password
-          </Typography>
-          <TextField
-            fullWidth
-            // label="Password"
-            type="password" // Ensure this is password input
-            placeholder="Enter your password"
-            required
-          />
-        </div>
+        <InputField
+          type="password" // Ensure this is password input
+          placeholder="Enter your password"
+          required
+          label="Password"
+          fullWidth
+          name="password"
+        />
 
         {/* Confirm Password field */}
-        <div className="text-field">
-          <Typography
-            variant="subtitle1"
-            className="required-label"
-            sx={{ fontWeight: "bold", marginBottom: "8px" }}
-          >
-            Confirm Password
-          </Typography>
-          <TextField
-            fullWidth
-            type="password" // Ensure this is password input
-            // label="Confirm Password"
-            placeholder="Confirm your password"
-            required
-          />
-        </div>
+        <InputField
+          fullWidth
+          type="password" // Ensure this is password input
+          // label="Confirm Password"
+          placeholder="Confirm your password"
+          required
+          label="Confirm Password"
+          name="confirmPassword"
+        />
 
         {/* Submit button */}
         <div className="buttons-links">
@@ -153,17 +138,7 @@ export default function SignupPage() {
             </Link>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   );
-}
-
-// Old code for reference in the future
-{
-  /* <Typography
-variant="subtitle1"
-sx={{ fontWeight: "bold", marginBottom: "8px" }}
->
-Email
-</Typography> */
 }
