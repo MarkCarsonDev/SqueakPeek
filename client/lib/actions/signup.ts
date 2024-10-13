@@ -7,6 +7,16 @@ const SignUpFormSchema = z.object({
   confirmPassword: z.string(),
 });
 
+// Used for getting errors for each field during form validation
+export type SignUpState = {
+  errors?: {
+    email?: string[];
+    password?: string[];
+    confirmPassword?: string[];
+  };
+  message?: string | null;
+};
+
 export async function createAccount(formData: FormData) {
   //TODO add form validation here. Assuming the forms are valid for now
   const validatedFields = SignUpFormSchema.safeParse({
