@@ -76,6 +76,9 @@ export default function SignupPage() {
           required
           label="Email"
           name="email"
+          style={{
+            marginBottom: "15px",
+          }}
         />
 
         {/* Password field */}
@@ -86,6 +89,9 @@ export default function SignupPage() {
           label="Password"
           fullWidth
           name="password"
+          style={{
+            marginBottom: "15px",
+          }}
         />
 
         {/* Confirm Password field */}
@@ -97,6 +103,9 @@ export default function SignupPage() {
           required
           label="Confirm Password"
           name="confirmPassword"
+          style={{
+            marginBottom: "15px",
+          }}
         />
 
         {/* Submit button */}

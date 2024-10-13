@@ -6,8 +6,12 @@ import { TextFieldProps, TextField, Typography } from "@mui/material";
  */
 export function InputField(props: TextFieldProps) {
   const { required, label } = props;
+
+  // removing the style props so it impacts the rest of the component rather than just the TextField component
+  const { style, ...restProps } = props;
+
   return (
-    <div>
+    <div style={style}>
       <div
         style={{
           display: "flex",
@@ -34,7 +38,7 @@ export function InputField(props: TextFieldProps) {
         )}
       </div>
 
-      <TextField {...props} label="" />
+      <TextField {...restProps} label="" />
     </div>
   );
 }
