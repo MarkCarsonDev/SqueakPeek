@@ -1,59 +1,43 @@
-.login-container{
-    display: flex;
-    height: 80vh;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.main-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 
- .login-box{
-    display: flex;
-    flex-direction: column;
-    height: 400px;
-    width: 700px;
-    background-color: white;
-    border: 4px solid #E0E4F2;
-    border-radius: 20px; 
-    justify-content: center;
-    align-items: center;
- }
-
- .login-fields{
-   display: flex;
-   flex-direction: column;
-   align-items: center;
-   width: 85%;
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 16px 0; /* Equivalent to marginY: 2 */
 }
 
- .login-divider{
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
- }
-
- .required-label{
-   &::after{
-      padding: 0 5px;
-      content:"*";
-      color: red;
-   }
- }
-
- .login-button-links{
-    display: flex;
-    width: 100%;
-    justify-content: space-around;
- }
-.login-button{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 30%;
+.signup-box {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  border: 4px solid #e0e4f2;
+  width: 700px;
 }
-.spacer{
-    width: 20%;
+
+.buttons-links {
+  display: flex;
+  justify-content: space-around;
 }
- .links{
-    width: 20%;
- }
+
+.submit-button {
+  display: "flex";
+  align-items: "center";
+}
+
+.spacer {
+  width: 200px;
+}
+
+.login-link {
+  width: 200px;
+}
