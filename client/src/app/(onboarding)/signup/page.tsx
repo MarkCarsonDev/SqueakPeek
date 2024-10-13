@@ -8,7 +8,6 @@ import {
   Input,
 } from "@mui/material";
 import "./signup.css";
-import { useState } from "react";
 import "/src/theme/global.css";
 import { InputField } from "@/ui/InputField";
 
