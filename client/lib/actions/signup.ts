@@ -1,12 +1,13 @@
 "use server";
 import { z } from "zod";
+import { createSupabaseServer } from "../supabase/server";
 const SignUpFormSchema = z.object({
   email: z.string(),
   password: z.string(),
   confirmPassword: z.string(),
 });
 
-export function createAccount(formData: FormData) {
+export async function createAccount(formData: FormData) {
   //TODO add form validation here. Assuming the forms are valid for now
   const validatedFields = SignUpFormSchema.safeParse({
     email: formData.get("email"),
@@ -26,4 +27,9 @@ export function createAccount(formData: FormData) {
   const { email, password, confirmPassword } = validatedFields.data;
 
   // call supabase to create account
+  const supabase = createSupabaseServer();
+  const { data, error } = await supabase.auth.signUp({
+    email: email,
+    password: password,
+  });
 }
