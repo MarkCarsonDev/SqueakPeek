@@ -7,6 +7,7 @@ import {
   faMessage,
   faChartLine,
   faMagnifyingGlass,
+  IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
 import { NavbarMenuDropdown } from "./NavbarMenuDropdown";
 import { LogoNameLink } from "./LogoNameLink";
@@ -14,7 +15,7 @@ import { LogoNameLink } from "./LogoNameLink";
 interface ILinks {
   name: string;
   href: string;
-  icon: any;
+  icon: IconDefinition;
 }
 export function NavBar() {
   const links: ILinks[] = [
