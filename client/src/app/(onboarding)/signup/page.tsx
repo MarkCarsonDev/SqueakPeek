@@ -1,12 +1,5 @@
 "use client";
-import {
-  Button,
-  TextField,
-  Typography,
-  Link,
-  Divider,
-  Input,
-} from "@mui/material";
+import { Button, Typography, Link, Divider } from "@mui/material";
 import "./signup.css";
 import "/src/theme/global.css";
 import { InputField } from "@/ui/InputField";
