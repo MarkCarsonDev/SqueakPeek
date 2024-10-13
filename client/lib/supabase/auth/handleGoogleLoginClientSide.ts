@@ -1,6 +1,7 @@
 import { createSupabaseClient } from "../client";
 /**
  * Handles Google login Client Side
+ * This is also works for Google signup
  */
 export function handleGoogleLoginClientSide() {
   const supabase = createSupabaseClient();
@@ -11,4 +12,3 @@ export function handleGoogleLoginClientSide() {
     },
   });
 }
-

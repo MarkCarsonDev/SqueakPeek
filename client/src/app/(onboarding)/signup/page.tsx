@@ -1,78 +1,37 @@
 "use client";
-import { Button, TextField, Typography, Link, Divider } from "@mui/material";
+import { Button, Typography, Link, Divider } from "@mui/material";
 import "./signup.css";
-import { useState } from "react";
-import "/src/theme/global.css";
+import { InputField } from "@/ui/InputField";
+import { SignUpState, createAccount } from "../../../../lib/actions/signup";
+import { useFormState } from "react-dom";
 import { handleGoogleLoginClientSide } from "../../../../lib/supabase/auth/handleGoogleLoginClientSide";
-export default function SignupPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
 
-  // Error state for form validation
-  const [error, setError] = useState({
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
-
-  // Function to handle form validation
-  const validateForm = () => {
-    const formErrors = { email: "", password: "", confirmPassword: "" };
-    let isValid = true;
-
-    if (!email) {
-      formErrors.email = "Email is required";
-      isValid = false;
-    }
-
-    if (!password) {
-      formErrors.password = "Password is required";
-      isValid = false;
-    }
-
-    if (password !== confirmPassword) {
-      formErrors.confirmPassword = "Passwords do not match";
-      isValid = false;
-    } else if (!confirmPassword) {
-      formErrors.confirmPassword = "Confirm password is required";
-      isValid = false;
-    }
-
-    setError(formErrors);
-    return isValid;
-  };
-
-  const handleSubmit = () => {
-    if (validateForm()) {
-      console.log("Email: ", email);
-      console.log("Password", password);
-    } else {
-      console.log("Validation failed");
-    }
-  };
-
+export default function Page() {
+  const initialState: SignUpState = { message: null, errors: {} };
+  const [state, formAction] = useFormState(createAccount, initialState);
   return (
     <div className="main-container">
       {/* Let's get started section */}
-      <Typography variant="h4" sx={{ marginBottom: "20px" }}>
+      <Typography
+        variant="h4"
+        sx={{ marginBottom: "20px", marginTop: "110px" }}
+      >
         Let’s Get Started.
       </Typography>
 
       {/* Sign in with Google Button */}
       <Button
-        onClick={handleGoogleLoginClientSide}
         className="borderline"
-        variant="outlined"
         startIcon={
           <img src="https://www.google.com/favicon.ico" alt="Google" />
         }
         sx={{
           border: "4px solid #E0E4F2",
           backgroundColor: "white",
-          width: "780px",
-          borderRadius: "10px",
+          borderRadius: "8px",
+          width: "760px",
         }}
+        onClick={handleGoogleLoginClientSide}
       >
         Sign up with Google
       </Button>
@@ -108,71 +67,48 @@ export default function SignupPage() {
       </div>
 
       {/* Signup form */}
-      <div className="signup-box">
+      <form className="signup-box" action={formAction}>
         {/* Email field */}
-        <div className="text-field">
-          <Typography
-            variant="subtitle1"
-            className="required-label"
-            sx={{ fontWeight: "bold", marginBottom: "8px" }}
-          >
-            Email
-          </Typography>
-          <TextField
-            fullWidth
-            // label="Email"
-            placeholder="Enter your email"
-            required
-            error={!!error.email} // Check if there is an error
-            helperText={error.email} // Display error message
-            value={email}
-            onChange={(e) => setEmail(e.target.value)} // Update email state
-          />
-        </div>
+        <InputField
+          fullWidth
+          placeholder="Enter your email"
+          required
+          label="Email"
+          name="email"
+          style={{
+            marginBottom: "15px",
+          }}
+          helperText={state.errors?.email}
+        />
 
         {/* Password field */}
-        <div className="text-field">
-          <Typography
-            variant="subtitle1"
-            className="required-label"
-            sx={{ fontWeight: "bold", marginBottom: "8px" }}
-          >
-            Password
-          </Typography>
-          <TextField
-            fullWidth
-            // label="Password"
-            type="password" // Ensure this is password input
-            placeholder="Enter your password"
-            required
-            error={!!error.password} // Check if there is an error
-            helperText={error.password} // Display error message
-            value={password}
-            onChange={(e) => setPassword(e.target.value)} // Update password state
-          />
-        </div>
+        <InputField
+          type="password" // Ensure this is password input
+          placeholder="Enter your password"
+          required
+          label="Password"
+          fullWidth
+          name="password"
+          style={{
+            marginBottom: "15px",
+          }}
+          helperText={state.errors?.password}
+        />
 
         {/* Confirm Password field */}
-        <div className="text-field">
-          <Typography
-            variant="subtitle1"
-            className="required-label"
-            sx={{ fontWeight: "bold", marginBottom: "8px" }}
-          >
-            Confirm Password
-          </Typography>
-          <TextField
-            fullWidth
-            type="password" // Ensure this is password input
-            // label="Confirm Password"
-            placeholder="Confirm your password"
-            required
-            error={!!error.confirmPassword} // Check if there is an error
-            helperText={error.confirmPassword} // Display error message
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)} // Update confirm password state
-          />
-        </div>
+        <InputField
+          fullWidth
+          type="password" // Ensure this is password input
+          // label="Confirm Password"
+          placeholder="Confirm your password"
+          required
+          label="Confirm Password"
+          name="confirmPassword"
+          style={{
+            marginBottom: "15px",
+          }}
+          helperText={state.errors?.confirmPassword}
+        />
 
         {/* Submit button */}
         <div className="buttons-links">
@@ -181,10 +117,9 @@ export default function SignupPage() {
             <Link href = "/profile_setup">
             <Button
               className="borderline"
-              type="button"
+              type="submit"
               variant="contained"
               color="primary"
-              onClick={handleSubmit} // Trigger submit logic on click
               sx={{
                 mt: 2,
                 width: "200px",
@@ -217,17 +152,7 @@ export default function SignupPage() {
             </Link>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   );
-}
-
-// Old code for reference in the future
-{
-  /* <Typography
-variant="subtitle1"
-sx={{ fontWeight: "bold", marginBottom: "8px" }}
->
-Email
-</Typography> */
 }
