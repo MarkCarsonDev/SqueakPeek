@@ -78,6 +78,7 @@ export default function Page() {
           style={{
             marginBottom: "15px",
           }}
+          helperText={state.errors?.email}
         />
 
         {/* Password field */}
@@ -91,6 +92,7 @@ export default function Page() {
           style={{
             marginBottom: "15px",
           }}
+          helperText={state.errors?.password}
         />
 
         {/* Confirm Password field */}
@@ -105,6 +107,7 @@ export default function Page() {
           style={{
             marginBottom: "15px",
           }}
+          helperText={state.errors?.confirmPassword}
         />
 
         {/* Submit button */}

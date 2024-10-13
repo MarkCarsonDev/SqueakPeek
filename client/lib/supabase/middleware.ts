@@ -48,7 +48,8 @@ export async function updateSession(request: NextRequest) {
     // url.pathname = "/login";
     // return NextResponse.redirect(url);
   } else {
-    console.log("user: ", user);
+    // console.log("user: ", user);
+    console.log("user logged authenticated");
   }
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're

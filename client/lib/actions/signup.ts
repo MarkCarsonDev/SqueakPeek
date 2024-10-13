@@ -29,11 +29,16 @@ import { redirect } from "next/navigation";
  */
 
 //TODO add form validation here. Assuming the forms are valid for now
-const SignUpFormSchema = z.object({
-  email: z.string(),
-  password: z.string(),
-  confirmPassword: z.string(),
-});
+const SignUpFormSchema = z
+  .object({
+    email: z.string(),
+    password: z.string(),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Password don't match",
+    path: ["confirmPassword"],
+  }); // form validation if confirm password does not equal password
 
 // Used for getting errors for each field during form validation
 export type SignUpState = {
@@ -58,12 +63,13 @@ export async function createAccount(
     confirmPassword: formData.get("confirmPassword"),
   });
 
+  validatedFields.error?.flatten().fieldErrors.confirmPassword;
   // form validation fails
   if (!validatedFields.success) {
     // add error meesages
     return {
-      errors: {}, // errors for each field
-      message: "", // one message describing the failutre
+      errors: validatedFields.error.flatten().fieldErrors, // returns error for each field
+      message: "Incorrect Fields. Sign Up Failed",
     };
   }
 
