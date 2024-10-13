@@ -33,9 +33,9 @@ export default function Home() {
           </Typography>
         </div>
         <Image
-          src="/LandingPage-images/rat_2.png"
-          width={800}
-          height={500}
+          src="/landingpage/message.svg"
+          width={450}
+          height={450}
           alt="Two rats speaking"
           style={{
             marginRight: "5%",
@@ -46,9 +46,9 @@ export default function Home() {
       {/*Section 3 Block*/}
       <div className="sec3-container">
         <Image
-          src="/LandingPage-images/rat_1.png"
-          width={600}
-          height={500}
+          src="/landingpage/track.svg"
+          width={450}
+          height={450}
           alt="Rat looking up"
           style={{
             marginLeft: "8.5%",
@@ -105,9 +105,9 @@ export default function Home() {
           </Typography>
         </div>
         <Image
-          src="/LandingPage-images/rat_3.png"
-          width={600}
-          height={525}
+          src="/landingpage/insight.svg"
+          width={450}
+          height={450}
           alt="Rat looking at star"
           style={{
             marginRight: "10%",
