@@ -80,6 +80,5 @@ export async function createAccount(
     return { message: "Database Error" };
   }
 
-  // TODO: Change this to route to the profile page
-  return {};
+  redirect("/profile-setup");
 }
