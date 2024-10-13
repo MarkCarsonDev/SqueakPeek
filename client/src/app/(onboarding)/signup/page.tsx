@@ -1,7 +1,6 @@
 "use client";
 import { Button, Typography, Link, Divider } from "@mui/material";
 import "./signup.css";
-import "/src/theme/global.css";
 import { InputField } from "@/ui/InputField";
 
 export default function SignupPage() {
