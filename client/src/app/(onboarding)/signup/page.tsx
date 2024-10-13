@@ -109,7 +109,7 @@ export default function Page() {
           <div className="submit-button">
             <Button
               className="borderline"
-              type="button"
+              type="submit"
               variant="contained"
               color="primary"
               sx={{
