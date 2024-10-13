@@ -2,8 +2,12 @@
 import { Button, Typography, Link, Divider } from "@mui/material";
 import "./signup.css";
 import { InputField } from "@/ui/InputField";
+import { SignUpState, createAccount } from "../../../../lib/actions/signup";
+import { useFormState } from "react-dom";
 
-export default function SignupPage() {
+export default function Page() {
+  const initialState: SignUpState = { message: null, errors: {} };
+  const [state, formAction] = useFormState(createAccount, initialState);
   return (
     <div className="main-container">
       {/* Let's get started section */}
@@ -59,7 +63,7 @@ export default function SignupPage() {
       </div>
 
       {/* Signup form */}
-      <form className="signup-box">
+      <form className="signup-box" action={formAction}>
         {/* Email field */}
         <InputField
           fullWidth
