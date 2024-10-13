@@ -4,6 +4,7 @@ import "./signup.css";
 import { InputField } from "@/ui/InputField";
 import { SignUpState, createAccount } from "../../../../lib/actions/signup";
 import { useFormState } from "react-dom";
+import { handleGoogleLoginClientSide } from "../../../../lib/supabase/auth/handleGoogleLoginClientSide";
 
 export default function Page() {
   const initialState: SignUpState = { message: null, errors: {} };
@@ -30,6 +31,7 @@ export default function Page() {
           borderRadius: "8px",
           width: "760px",
         }}
+        onClick={handleGoogleLoginClientSide}
       >
         Sign up with Google
       </Button>
