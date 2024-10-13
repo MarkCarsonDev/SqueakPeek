@@ -1,8 +1,9 @@
 .main-container {
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  width: 100%;
 }
 
 .divider {
@@ -15,25 +16,12 @@
 
 .signup-box {
   background-color: #fff;
-  padding: 40px;
+  padding: 30px;
   border-radius: 8px;
-  height: auto;
   display: flex;
   flex-direction: column;
   border: 4px solid #e0e4f2;
-}
-
-.text-field {
-  width: 100%;
-  margin: 8px 0; /* Equivalent to marginY: 1 */
-}
-
-.required-label {
-  &::after {
-    padding: 0 5px;
-    content: "*";
-    color: red;
-  }
+  width: 700px;
 }
 
 .buttons-links {
@@ -44,7 +32,6 @@
 .submit-button {
   display: "flex";
   align-items: "center";
-  width: 225px;
 }
 
 .spacer {

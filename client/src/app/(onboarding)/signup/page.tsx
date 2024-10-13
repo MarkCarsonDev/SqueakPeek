@@ -11,22 +11,24 @@ export default function Page() {
   return (
     <div className="main-container">
       {/* Let's get started section */}
-      <Typography variant="h4" sx={{ marginBottom: "20px" }}>
+      <Typography
+        variant="h4"
+        sx={{ marginBottom: "20px", marginTop: "110px" }}
+      >
         Let’s Get Started.
       </Typography>
 
       {/* Sign in with Google Button */}
       <Button
         className="borderline"
-        variant="outlined"
         startIcon={
           <img src="https://www.google.com/favicon.ico" alt="Google" />
         }
         sx={{
           border: "4px solid #E0E4F2",
           backgroundColor: "white",
-          width: "780px",
           borderRadius: "8px",
+          width: "760px",
         }}
       >
         Sign up with Google
