@@ -84,6 +84,7 @@ export const PageFooter = () => {
               paddingLeft: "15px",
             }}
             href={link.href}
+            key={link.title}
           >
             <Typography>{link.title}</Typography>
           </Link>
