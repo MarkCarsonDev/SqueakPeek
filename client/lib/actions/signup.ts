@@ -18,6 +18,30 @@ export type SignUpState = {
 };
 
 export async function createAccount(formData: FormData) {
+  // error validation from signup.tsx
+  /**
+    //     const formErrors = { email: "", password: "", confirmPassword: "" };
+  //     let isValid = true;
+
+  //     if (!email) {
+  //       formErrors.email = "Email is required";
+  //       isValid = false;
+  //     }
+
+  //     if (!password) {
+  //       formErrors.password = "Password is required";
+  //       isValid = false;
+  //     }
+
+  //     if (password !== confirmPassword) {
+  //       formErrors.confirmPassword = "Passwords do not match";
+  //       isValid = false;
+  //     } else if (!confirmPassword) {
+  //       formErrors.confirmPassword = "Confirm password is required";
+  //       isValid = false;
+  //     }
+ */
+
   //TODO add form validation here. Assuming the forms are valid for now
   const validatedFields = SignUpFormSchema.safeParse({
     email: formData.get("email"),
