@@ -14,31 +14,24 @@ import { LogoNameLink } from "./LogoNameLink";
 interface ILinks {
   name: string;
   href: string;
-  icon: JSX.Element;
+  icon: any;
 }
 export function NavBar() {
   const links: ILinks[] = [
     {
       name: "Explore",
       href: "/explore",
-      icon: (
-        <FontAwesomeIcon
-          icon={faMagnifyingGlass}
-          style={{ marginRight: "10%" }}
-        />
-      ),
+      icon: faMagnifyingGlass,
     },
     {
       name: "Message",
       href: "/message",
-      icon: <FontAwesomeIcon icon={faMessage} style={{ marginRight: "10%" }} />,
+      icon: faMessage,
     },
     {
-      name: "Threads",
-      href: "/thread",
-      icon: (
-        <FontAwesomeIcon icon={faChartLine} style={{ marginRight: "10%" }} />
-      ),
+      name: "Tracking",
+      href: "/track",
+      icon: faChartLine,
     },
   ];
   const pathName = usePathname();
@@ -66,7 +59,7 @@ export function NavBar() {
         }}
       >
         {/* Logo Section Note: Links to explore page because that will be our users homepage */}
-        <LogoNameLink href="/expore" />
+        <LogoNameLink href="/explore" />
 
         {/* Navigations links section Note: Similar to landingnavbar but has inlcuded FA icons */}
 
@@ -89,7 +82,10 @@ export function NavBar() {
                   marginLeft: "30px",
                 }}
               >
-                {links.icon}
+                <FontAwesomeIcon
+                  icon={links.icon}
+                  style={{ marginRight: "10%" }}
+                />
                 <Typography
                   sx={{
                     fontWeight: pathName === links.href ? "bold" : "normal",

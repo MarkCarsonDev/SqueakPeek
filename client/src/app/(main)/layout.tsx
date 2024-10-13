@@ -1,4 +1,4 @@
-import { NavBar } from "@/ui/NavBar";
+import { NavBar } from "@/ui/navbar/NavBar";
 
 /**
  * This layout file affects files in the (main) directory
