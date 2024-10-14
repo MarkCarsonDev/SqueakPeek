@@ -114,6 +114,7 @@ export default function Page() {
         <div className="buttons-links">
           <div className="spacer"></div>
           <div className="submit-button">
+            <Link href = "/profile_setup">
             <Button
               className="borderline"
               type="submit"
@@ -124,6 +125,7 @@ export default function Page() {
                 width: "200px",
                 boxShadow: "none",
                 backgroundColor: "#496FFF",
+                borderRadius: "8px",
                 ":hover": {
                   backgroundColor: "#3B5AC6",
                   boxShadow: "none",
@@ -132,6 +134,7 @@ export default function Page() {
             >
               Confirm
             </Button>
+            </Link>
           </div>
           <div className="login-link">
             <Link
