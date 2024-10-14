@@ -52,6 +52,7 @@ export async function createProfile(
     data: { user },
     error: userError,
   } = await supabase.auth.getUser();
+  console.log("User: ", user);
 
   if (userError) {
     console.log("Error retrieving user:", userError.message);
@@ -64,9 +65,9 @@ export async function createProfile(
     return { message: "User not authenticated" };
   }
 
+  // TODO: Finish implementation to insert a profile
   // update the profile in Supabase
-  const { error } = await supabase.from("profiles").upsert({
-    id: userId,
+  const { error } = await supabase.from("profiles").insert({
     name,
     username,
     school,
@@ -74,7 +75,7 @@ export async function createProfile(
   });
 
   if (error) {
-    console.log("Error occurred creating profile:", error.message);
+    console.log("Error occurred creating profile:", error);
     return { message: "Database Error" };
   }
 

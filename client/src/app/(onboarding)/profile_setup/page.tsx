@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Button, Avatar, Typography, Link } from "@mui/material";
+import { Button, Avatar, Typography } from "@mui/material";
 import { InputField } from "@/ui/InputField";
 import {
   ProfileSetupState,
