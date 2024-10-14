@@ -1,5 +1,5 @@
 import Image from "next/image";
-//import { TextCarousel } from "@/ui/TextCarousel";
+import { TextCarousel } from "@/ui/TextCarousel";
 import { Typography } from "@mui/material";
 
 export function LandingPageHero() {
@@ -29,10 +29,7 @@ export function LandingPageHero() {
               justifyContent: "space-between",
               width: "80%",
         }}>
-            <Typography variant="h4">
-              This is a placeholder for the carousel text.
-            </Typography>
-            {/* <TextCarousel className="sec1-text-wheel" /> Cant be referenced yet */}
+            <TextCarousel  />
 
           <div style={{
                 display: "flex",
