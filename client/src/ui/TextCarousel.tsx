@@ -81,6 +81,9 @@ export const TextCarousel = () => {
             sx={{
               height: `${itemHeight}px`,
               lineHeight: `${itemHeight}px`,
+              whiteSpace: "nowrap",
+              fontSize: "clamp(0.5vw, 2vw, 2.125rem)",
+              color: "#3C435C",
             }}
           >
             {item}
@@ -97,6 +100,17 @@ export const TextCarousel = () => {
           height: "100%",
           pointerEvents: "none",
           background: `linear-gradient(to bottom, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.75) 35%, rgba(255, 255, 255, 0) 45%, rgba(255, 255, 255, 0) 55%, rgba(255, 255, 255, 0.75) 65%, rgba(255, 255, 255, 1))`,
+        }}
+      />
+      <Box
+        sx={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          pointerEvents: "none",
+          background: `linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0) 5%, rgba(255, 255, 255, 0) 95%, rgba(255, 255, 255, 1))`,
         }}
       />
     </Box>
