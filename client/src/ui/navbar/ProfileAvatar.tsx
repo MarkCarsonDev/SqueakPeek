@@ -10,6 +10,7 @@ type AvatarTypes =
   | null
   | undefined;
 
+// TODO: Make a new component that renders the avatar based on the props passed in, instead of just the user's avatar
 /**
  * Returns the Avatar based on the profile's chosen avatar.
  */
