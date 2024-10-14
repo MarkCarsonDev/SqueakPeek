@@ -1,4 +1,4 @@
-'use server';
+"use server";
 import { z } from "zod";
 import { createSupabaseServer } from "../supabase/server";
 import { redirect } from "next/navigation";
@@ -36,6 +36,7 @@ export async function createProfile(
   });
 
   if (!validatedFields.success) {
+    console.log("validation failed");
     return {
       errors: validatedFields.error.flatten().fieldErrors,
       message: "Incorrect fields. Create Profile Failed",
@@ -43,7 +44,7 @@ export async function createProfile(
   }
 
   const { name, username, school, avatar } = validatedFields.data;
-
+  console.log("avatar: ", avatar);
   const supabase = createSupabaseServer();
 
   // Retrieve the authenticated user to get the user ID
@@ -64,8 +65,8 @@ export async function createProfile(
   }
 
   // update the profile in Supabase
-  const { error } = await supabase.from('profiles').upsert({
-    id: userId, 
+  const { error } = await supabase.from("profiles").upsert({
+    id: userId,
     name,
     username,
     school,

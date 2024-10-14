@@ -2,34 +2,38 @@
 import { useState } from "react";
 import { Button, Avatar, Typography, Link } from "@mui/material";
 import { InputField } from "@/ui/InputField";
-import {ProfileSetupState,createProfile} from "../../../../lib/actions/profile_setup";
+import {
+  ProfileSetupState,
+  createProfile,
+} from "../../../../lib/actions/profile_setup";
 import { useFormState } from "react-dom"; // Assuming this is available for form state management
-import "/src/theme/global.css";
 import "./profile_setup.css";
 
 export default function ProfilePage() {
   const initialState: ProfileSetupState = { message: null, errors: {} };
   const [state, formAction] = useFormState(createProfile, initialState); // Use form state hook
+  const [chosenAvatar, setAvatar] = useState("");
 
-  const [profileData, setProfileData] = useState({
-    name: "",
-    username: "",
-    school: "",
-    avatar: "", // Default to no avatar selected initially
-  });
-
+  // TODO: Change with the real profile assets
   const avatars = [
-    "/landingpage/track.svg",
-    "/landingpage/insight.svg",
-    "/landingpage/message.svg",
-    "/landingpage/track.svg",
-  ];
+    {
+      profile: "/landingpage/track.svg",
+      avatarType: "avatar1",
+    },
 
-  // Handle avatar selection
-  const handleAvatarSelect = (avatar: string) => {
-    setProfileData((prev) => ({ ...prev, avatar }));
-    console.log(`Selected Avatar: ${avatar}`);
-  };
+    {
+      profile: "/landingpage/insight.svg",
+      avatarType: "avatar2",
+    },
+    {
+      profile: "/landingpage/message.svg",
+      avatarType: "avatar3",
+    },
+    {
+      profile: "/landingpage/track.svg",
+      avatarType: "avatar4",
+    },
+  ];
 
   return (
     <div className="main-container">
@@ -43,33 +47,37 @@ export default function ProfilePage() {
 
         {/* Avatar Images sections */}
         <div className="avatar-container">
-          {avatars.map((avatar, index) => (
+          {avatars.map(({ profile, avatarType }) => (
             <Avatar
-              key={index}
-              src={avatar}
-              alt={`Avatar ${index + 1}`}
+              key={avatarType}
+              src={profile}
               sx={{
                 width: 80,
                 height: 80,
                 cursor: "pointer",
                 margin: "0 10px",
                 border:
-                  profileData.avatar === `avatar${index + 1}`
+                  avatarType === chosenAvatar
                     ? "4px solid #496FFF" // Highlight selected avatar
                     : "4px solid #E0E4F2", // Default border for unselected avatars
-                opacity: profileData.avatar === `avatar${index + 1}` ? 1 : 0.85,
+                opacity: avatarType === chosenAvatar ? 1 : 0.85,
                 ":hover": {
                   opacity: 1,
                 },
               }}
-              onClick={() => handleAvatarSelect(`avatar${index + 1}`)} // Select avatar on click
+              onClick={() => setAvatar(avatarType)} // Select avatar on click
             />
           ))}
         </div>
 
         <Typography
           variant="h6"
-          sx={{ marginTop: "10px", marginBottom: "20px", fontWeight: "bold", alignSelf: "center" }}
+          sx={{
+            marginTop: "10px",
+            marginBottom: "20px",
+            fontWeight: "bold",
+            alignSelf: "center",
+          }}
         >
           Select an avatar
         </Typography>
@@ -82,11 +90,7 @@ export default function ProfilePage() {
           variant="outlined"
           name="name"
           required
-          value={profileData.name}
-          onChange={(e) =>
-            setProfileData({ ...profileData, name: e.target.value })
-          }
-          helperText={state.errors?.name?.[0]} // Display first name error
+          helperText={state.errors?.name} // Display first name error
           sx={{ marginBottom: "15px" }}
         />
 
@@ -98,11 +102,7 @@ export default function ProfilePage() {
           variant="outlined"
           name="username"
           required
-          value={profileData.username}
-          onChange={(e) =>
-            setProfileData({ ...profileData, username: e.target.value })
-          }
-          helperText={state.errors?.username?.[0]} // Display first username error
+          helperText={state.errors?.username} // Display first username error
           sx={{ marginBottom: "15px" }}
         />
 
@@ -113,16 +113,12 @@ export default function ProfilePage() {
           placeholder="Enter your school"
           variant="outlined"
           name="school"
-          value={profileData.school}
-          onChange={(e) =>
-            setProfileData({ ...profileData, school: e.target.value })
-          }
-          helperText={state.errors?.school?.[0]} // Display first school error
+          helperText={state.errors?.school} // Display first school error
           sx={{ marginBottom: "15px" }}
         />
 
         {/* Button container */}
-        <div className= "button-links">
+        <div className="button-links">
           <Button
             className="borderline"
             variant="contained"
