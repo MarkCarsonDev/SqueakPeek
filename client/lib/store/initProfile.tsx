@@ -8,18 +8,14 @@ import { User } from "@supabase/supabase-js";
  * NOTE: This is not a UI component which is why it returns null
  */
 export default function InitProfile({ user }: { user: User | null }) {
-  console.log("initprofile rendered");
   const { profile, initializeProfile } = useProfile((state) => state);
 
-  //   console.log("user profile: ", profile);
-
   useEffect(() => {
-    console.log("user profile: ", profile);
-
     // only calls when an authenticated user doesn't have their profile initialized
     if (user && profile === null) {
+      // TODO: Switch this to the actual profile received from the actual user
       initializeProfile({
-        avatar: "avatar_1",
+        avatar: "avatar_2",
         created_at: new Date().toISOString(),
         profile_id: 12,
         school: "CSULB",
@@ -27,7 +23,6 @@ export default function InitProfile({ user }: { user: User | null }) {
         user_id: 11,
       });
     }
-    console.log("user profile: ", profile);
   }, [profile]);
   return null;
 }
