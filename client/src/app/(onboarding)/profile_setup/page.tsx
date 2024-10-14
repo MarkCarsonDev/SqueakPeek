@@ -81,7 +81,8 @@ export default function ProfilePage() {
         >
           Select an avatar
         </Typography>
-
+        {/* Hidden input field for avatar */}
+        <input type="hidden" name="avatar" value={chosenAvatar} />
         {/* Full Name */}
         <InputField
           fullWidth
