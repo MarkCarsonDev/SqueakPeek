@@ -85,5 +85,5 @@ export async function createAccount(
     return { message: "Database Error" };
   }
 
-  redirect("/profile-setup");
+  redirect("/profile_setup");
 }
