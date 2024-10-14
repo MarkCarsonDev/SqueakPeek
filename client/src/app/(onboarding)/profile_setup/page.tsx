@@ -2,10 +2,7 @@
 import { useState } from "react";
 import { Button, Avatar, Typography, Link } from "@mui/material";
 import { InputField } from "@/ui/InputField";
-import {
-  ProfileSetupState,
-  createProfile,
-} from "../../../../lib/actions/profile_setup";
+import {ProfileSetupState,createProfile} from "../../../../lib/actions/profile_setup";
 import { useFormState } from "react-dom"; // Assuming this is available for form state management
 import "/src/theme/global.css";
 import "./profile_setup.css";
@@ -72,7 +69,7 @@ export default function ProfilePage() {
 
         <Typography
           variant="h6"
-          sx={{ marginTop: "10px", marginBottom: "20px", fontWeight: "bold" }}
+          sx={{ marginTop: "10px", marginBottom: "20px", fontWeight: "bold", alignSelf: "center" }}
         >
           Select an avatar
         </Typography>
@@ -125,6 +122,7 @@ export default function ProfilePage() {
         />
 
         {/* Submit button */}
+        <div className="button-links">
         <Link href="/dashboard">
           <Button
             variant="contained"
@@ -133,6 +131,7 @@ export default function ProfilePage() {
               mt: 2,
               width: "200px",
               boxShadow: "none",
+              alignSelf: "center",
               backgroundColor: "#496FFF",
               ":hover": {
                 backgroundColor: "#3B5AC6",
@@ -143,6 +142,21 @@ export default function ProfilePage() {
             Create Profile
           </Button>
         </Link>
+
+        {/* Anonymity text */}
+        <Typography
+          variant="subtitle2"
+          sx={{
+            marginTop: "40px",
+            textAlign: "center",
+            color: "#6E7191",
+          }}
+        >
+          Your anonymity is valued.
+          <br />
+          Information we collect will not be shared.
+        </Typography>
+        </div>
       </form>
     </div>
   );
