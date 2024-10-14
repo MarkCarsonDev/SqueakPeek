@@ -37,8 +37,8 @@ export function LandingPageHero() {
                 alignItems: "center",
           }}>
             <Image
-              src="/LandingPage-images/rat_1.png"
-              width={300}
+              src="/landingpage/logo.svg"
+              width={225}
               height={225}
               alt="SqueakPeek Logo"
               style={{ objectFit: 'cover', objectPosition: 'bottom' }} 

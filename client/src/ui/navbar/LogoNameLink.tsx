@@ -14,15 +14,14 @@ export function LogoNameLink({ href = "/"}) {
       }}
     >
       <Image
-        src="/LandingPage-images/rat_1.png"
-        height={100}
-        width={100}
+        src="/landingpage/logo.svg"
+        height={60}
+        width={60}
         alt="Squeakpeek Logo"
         style={{
           objectFit: "cover",
           objectPosition: "bottom",
-          marginBottom: "5px",
-          marginRight: "2px",
+          margin: "5px"
         }}
       />
 
