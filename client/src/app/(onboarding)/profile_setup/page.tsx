@@ -1,8 +1,11 @@
 "use client";
 import { useState } from "react";
-import { Button, Avatar, Typography } from "@mui/material";
+import { Button, Avatar, Typography, Link } from "@mui/material";
 import { InputField } from "@/ui/InputField";
-import { ProfileSetupState, createProfile } from "../../../../lib/actions/profile_setup";
+import {
+  ProfileSetupState,
+  createProfile,
+} from "../../../../lib/actions/profile_setup";
 import { useFormState } from "react-dom"; // Assuming this is available for form state management
 import "/src/theme/global.css";
 import "./profile_setup.css";
@@ -34,7 +37,10 @@ export default function ProfilePage() {
   return (
     <div className="main-container">
       <form action={formAction} className="profile-setup">
-        <Typography variant="h5" sx={{ marginBottom: "20px", fontWeight: "bold" }}>
+        <Typography
+          variant="h5"
+          sx={{ marginBottom: "20px", fontWeight: "bold" }}
+        >
           Profile Setup
         </Typography>
 
@@ -50,9 +56,10 @@ export default function ProfilePage() {
                 height: 80,
                 cursor: "pointer",
                 margin: "0 10px",
-                border: profileData.avatar === `avatar${index + 1}`
-                  ? "4px solid #496FFF" // Highlight selected avatar
-                  : "4px solid #E0E4F2", // Default border for unselected avatars
+                border:
+                  profileData.avatar === `avatar${index + 1}`
+                    ? "4px solid #496FFF" // Highlight selected avatar
+                    : "4px solid #E0E4F2", // Default border for unselected avatars
                 opacity: profileData.avatar === `avatar${index + 1}` ? 1 : 0.85,
                 ":hover": {
                   opacity: 1,
@@ -79,9 +86,11 @@ export default function ProfilePage() {
           name="name"
           required
           value={profileData.name}
-          onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
+          onChange={(e) =>
+            setProfileData({ ...profileData, name: e.target.value })
+          }
           helperText={state.errors?.name?.[0]} // Display first name error
-          sx={{ marginBottom: "20px" }}
+          sx={{ marginBottom: "15px" }}
         />
 
         {/* Username */}
@@ -93,9 +102,11 @@ export default function ProfilePage() {
           name="username"
           required
           value={profileData.username}
-          onChange={(e) => setProfileData({ ...profileData, username: e.target.value })}
+          onChange={(e) =>
+            setProfileData({ ...profileData, username: e.target.value })
+          }
           helperText={state.errors?.username?.[0]} // Display first username error
-          sx={{ marginBottom: "20px" }}
+          sx={{ marginBottom: "15px" }}
         />
 
         {/* School */}
@@ -106,28 +117,32 @@ export default function ProfilePage() {
           variant="outlined"
           name="school"
           value={profileData.school}
-          onChange={(e) => setProfileData({ ...profileData, school: e.target.value })}
+          onChange={(e) =>
+            setProfileData({ ...profileData, school: e.target.value })
+          }
           helperText={state.errors?.school?.[0]} // Display first school error
-          sx={{ marginBottom: "10px" }}
+          sx={{ marginBottom: "15px" }}
         />
 
         {/* Submit button */}
-        <Button
-          variant="contained"
-          type="submit"
-          sx={{
-            mt: 2,
-            width: "200px",
-            boxShadow: "none",
-            backgroundColor: "#496FFF",
-            ":hover": {
-              backgroundColor: "#3B5AC6",
+        <Link href="/dashboard">
+          <Button
+            variant="contained"
+            type="submit"
+            sx={{
+              mt: 2,
+              width: "200px",
               boxShadow: "none",
-            },
-          }}
-        >
-          Create Profile
-        </Button>
+              backgroundColor: "#496FFF",
+              ":hover": {
+                backgroundColor: "#3B5AC6",
+                boxShadow: "none",
+              },
+            }}
+          >
+            Create Profile
+          </Button>
+        </Link>
       </form>
     </div>
   );
