@@ -1,6 +1,9 @@
+// FiltersParentComponent.tsx
+
 import React, { useEffect, useState } from 'react';
 import { Filters, SelectedFilters, FilterOption } from './Filters';
 import { useRouter, useSearchParams } from 'next/navigation';
+import FilteredContentComponent from './FilteredContentComponent';
 
 // Mock data for filter options
 const jobTypes: FilterOption[] = [
@@ -20,10 +23,11 @@ const years: FilterOption[] = [
   { label: '2023', value: '2023' },
 ];
 
-const ParentComponent: React.FC = () => {
+const FiltersParentComponent: React.FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  // Define getInitialFilters function
   const getInitialFilters = (): SelectedFilters => {
     const jobTypes = searchParams.getAll('jobType');
     const appliedStatuses = searchParams.getAll('appliedStatus');
@@ -54,35 +58,6 @@ const ParentComponent: React.FC = () => {
     router.replace(`?${queryParams.toString()}`);
   }, [filters, router]);
 
-  // Example data to be filtered
-  const data = [
-    // {
-    //   id: 1,
-    //   jobType: 'full-time',
-    //   appliedStatus: 'applied',
-    //   year: '2022',
-    // },
-    // ... more data
-  ];
-
-  // Function to filter data based on selected filters
-  const getFilteredData = () => {
-    return data.filter((item) => {
-      const matchesJobType =
-        filters.jobTypes.length === 0 ||
-        filters.jobTypes.includes(item.jobType);
-      const matchesAppliedStatus =
-        filters.appliedStatuses.length === 0 ||
-        filters.appliedStatuses.includes(item.appliedStatus);
-      const matchesYear =
-        filters.years.length === 0 || filters.years.includes(item.year);
-
-      return matchesJobType && matchesAppliedStatus && matchesYear;
-    });
-  };
-
-  const filteredData = getFilteredData();
-
   return (
     <div>
       <Filters
@@ -92,19 +67,10 @@ const ParentComponent: React.FC = () => {
         initialFilters={filters}
         onFilterChange={handleFilterChange}
       />
-      {/* Render filtered results here */}
-      <div>
-        {filteredData.map((item) => (
-          <div key={item.id}>
-            {/* Render item details */}
-            <p>{item.jobType}</p>
-            <p>{item.appliedStatus}</p>
-            <p>{item.year}</p>
-          </div>
-        ))}
-      </div>
+      {/* Pass filters to the child component */}
+      <FilteredContentComponent filters={filters} />
     </div>
   );
 };
 
-export default ParentComponent;
+export default FiltersParentComponent;

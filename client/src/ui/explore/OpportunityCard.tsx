@@ -1,25 +1,37 @@
+// OpportunityCard.tsx
+
 import {
   Avatar,
   Card,
   CardHeader,
   CardContent,
   Typography,
-} from "@mui/material";
+} from '@mui/material';
+
+interface OpportunityCardProps {
+  title: string;
+  dateRangeStart: string;
+  dateRangeEnd: string;
+  jobPosition: string;
+  jobType: string;
+  positionStatus: string;
+  userPositionStatus: string;
+}
 
 export function OpportunityCard({
-  title = "Amazon",
-  dateRangeStart = "2023",
-  dateRangeEnd = "2024",
-  jobPostion = "Software Development Engineer",
-  jobType = "Internship",
-  positionStatus = "Actively Hiring",
-  userPositionStatus = "Applied"
-}) {
+  title,
+  dateRangeStart,
+  dateRangeEnd,
+  jobPosition,
+  jobType,
+  positionStatus,
+  userPositionStatus,
+}: OpportunityCardProps) {
   return (
-    <Card sx={{ border: "solid 3px #e0e4f2" }}>
+    <Card sx={{ border: 'solid 3px #e0e4f2', marginBottom: '16px' }}>
       <CardHeader
-        sx={{ height: "25px" }}
-        avatar={<Avatar>R</Avatar>}
+        sx={{ height: '25px' }}
+        avatar={<Avatar>{title ? title.charAt(0) : "*"}</Avatar>}
         title={<Typography>{title}</Typography>}
         subheader={
           <Typography>
@@ -27,14 +39,17 @@ export function OpportunityCard({
           </Typography>
         }
       />
-      <Typography variant="h5" sx={{ marginInline: "20px" }}>
-        {jobPostion}, {jobType}
+      <Typography variant="h5" sx={{ marginInline: '20px' }}>
+        {jobPosition}, {jobType}
       </Typography>
-      <Typography>{userPositionStatus}</Typography>
+      <Typography sx={{ marginInline: '20px' }}>
+        Position Status: {positionStatus}
+      </Typography>
+      <Typography sx={{ marginInline: '20px' }}>
+        Application Status: {userPositionStatus}
+      </Typography>
 
-      <CardContent>
-
-      </CardContent>
+      <CardContent>{/* Additional content if needed */}</CardContent>
     </Card>
   );
 }

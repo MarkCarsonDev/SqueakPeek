@@ -6,7 +6,10 @@ import {
   FormGroup,
   Typography,
   Divider,
+  Card
 } from '@mui/material';
+
+
 
 export interface FilterOption {
   label: string;
@@ -86,15 +89,15 @@ export const Filters: React.FC<FiltersProps> = ({
           />
         ))}
       </FormGroup>
-      <Divider sx={{ marginTop: 2 }} />
+      <Divider/>
     </Box>
   );
 
   return (
-    <Box sx={{ width: '100%', padding: 2 }}>
+    <Card>
       {renderSection('Job Type', jobTypes, 'jobTypes')}
       {renderSection('Applied', appliedStatuses, 'appliedStatuses')}
       {renderSection('Year', years, 'years')}
-    </Box>
+    </Card>
   );
 };

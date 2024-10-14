@@ -4,4 +4,20 @@
 
 .card-filter-container{
     display: flex;
+    gap: 2rem;
+    div {
+        margin: 1rem;
+    }
+}
+
+.opportunity-column {
+    flex: 3;
+}
+
+.filter-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
 }
