@@ -19,10 +19,10 @@ export default function ProfilePage() {
   });
 
   const avatars = [
-    "/LandingPage-images/rat_1.png",
-    "/LandingPage-images/rat_1.png",
-    "/LandingPage-images/rat_1.png",
-    "/LandingPage-images/rat_1.png",
+    "/landingpage/track.svg",
+    "/landingpage/insight.svg",
+    "/landingpage/message.svg",
+    "/landingpage/track.svg",
   ];
 
   // Handle avatar selection
@@ -121,8 +121,8 @@ export default function ProfilePage() {
           sx={{ marginBottom: "15px" }}
         />
 
-        {/* Submit button */}
-        <Link href="/dashboard">
+        {/* Button container */}
+        <div className= "button-links">
           <Button
             className="borderline"
             variant="contained"
@@ -131,7 +131,6 @@ export default function ProfilePage() {
               mt: 2,
               width: "200px",
               boxShadow: "none",
-              alignSelf: "center",
               backgroundColor: "#496FFF",
               borderRadius: "8px",
               ":hover": {
@@ -142,7 +141,7 @@ export default function ProfilePage() {
           >
             Create Profile
           </Button>
-        </Link>
+        </div>
 
         {/* Anonymity text */}
         <Typography
