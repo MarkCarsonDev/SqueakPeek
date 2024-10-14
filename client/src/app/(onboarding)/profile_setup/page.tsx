@@ -122,9 +122,9 @@ export default function ProfilePage() {
         />
 
         {/* Submit button */}
-        <div className="button-links">
         <Link href="/dashboard">
           <Button
+            className="borderline"
             variant="contained"
             type="submit"
             sx={{
@@ -133,6 +133,7 @@ export default function ProfilePage() {
               boxShadow: "none",
               alignSelf: "center",
               backgroundColor: "#496FFF",
+              borderRadius: "8px",
               ":hover": {
                 backgroundColor: "#3B5AC6",
                 boxShadow: "none",
@@ -156,7 +157,6 @@ export default function ProfilePage() {
           <br />
           Information we collect will not be shared.
         </Typography>
-        </div>
       </form>
     </div>
   );
