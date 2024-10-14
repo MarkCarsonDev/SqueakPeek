@@ -14,7 +14,7 @@ export function LogoNameLink({ href = "/"}) {
       }}
     >
       <Image
-        src="/LandingPage-images/rat_1.png"
+        src="/landingpage/logo.svg"
         height={100}
         width={100}
         alt="Squeakpeek Logo"
