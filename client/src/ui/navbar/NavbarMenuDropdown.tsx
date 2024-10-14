@@ -2,7 +2,6 @@ import * as React from "react";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import IconButton from "@mui/material/IconButton";
-import Image from "next/image";
 import { Typography } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -12,6 +11,7 @@ import {
   faChevronUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/navigation";
+import { ProfileAvatar } from "./ProfileAvatar";
 
 export function NavbarMenuDropdown() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -55,22 +55,9 @@ export function NavbarMenuDropdown() {
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
-        style={{ border: "solid 3px #e0e4f2" }}
         size="small"
       >
-        {/* This will be replaced */}
-        <Image
-          src={"/LandingPage-images/rat_1.png"}
-          height={40}
-          width={40}
-          alt="Avatar icon"
-          style={{
-            objectFit: "cover",
-            objectPosition: "bottom",
-            marginBottom: "5px",
-            marginRight: "2px",
-          }}
-        />
+        <ProfileAvatar />
       </IconButton>
 
       {/* Menu open arrow */}
