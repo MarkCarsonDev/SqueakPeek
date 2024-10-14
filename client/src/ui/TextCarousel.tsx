@@ -15,7 +15,7 @@ export const TextCarousel = () => {
   const itemHeight = 50;
   const numVisibleItems = 5;
   const transitionDuration = 500; 
-  const intervalDuration = 4000;
+  const intervalDuration = 3000;
 
   const [displayItems, setDisplayItems] = useState(
     textItems.slice(0, Math.min(numVisibleItems, textItems.length))
