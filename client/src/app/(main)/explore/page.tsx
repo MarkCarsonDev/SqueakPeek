@@ -1,11 +1,4 @@
-import { OpportunityCard } from "@/ui/explore/OpportunityCard"
-
+import { Typography } from "@mui/material";
 export default function Page() {
-  return (
-
-
-    <OpportunityCard/>
-
-  )
-  
+  return <Typography variant="h2">Explore</Typography>;
 }
