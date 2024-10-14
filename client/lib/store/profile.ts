@@ -12,5 +12,5 @@ interface ProfileState {
 // hook that will be access in UI components
 export const useProfile = create<ProfileState>()((set) => ({
   profile: null,
-  initializeProfile: (profile) => set(() => ({ profile })),
+  initializeProfile: (profile) => set(() => ({ profile })), // TODO: Create logic that will get the profile based on the user's id. Do a join from the user table to get the particular profile row
 }));
