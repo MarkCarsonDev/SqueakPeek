@@ -1,10 +1,11 @@
-import { OpportunityCard } from "@/ui/explore/OpportunityCard"
+"use client";
+import FiltersParentComponent from "@/ui/explore/FiltersParentComponent"
 
 export default function Page() {
   return (
 
 
-    <OpportunityCard/>
+    <FiltersParentComponent/>
 
   )
   
