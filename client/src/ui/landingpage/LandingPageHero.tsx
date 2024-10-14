@@ -38,7 +38,7 @@ export function LandingPageHero() {
           }}>
             <Image
               src="/landingpage/logo.svg"
-              width={300}
+              width={225}
               height={225}
               alt="SqueakPeek Logo"
               style={{ objectFit: 'cover', objectPosition: 'bottom' }} 
