@@ -1,3 +1,7 @@
+.page-container{
+    padding: 1rem;
+}
+
 .header-search-container{
     display: flex;
 }
@@ -10,14 +14,20 @@
     }
 }
 
-.opportunity-column {
-    flex: 3;
-}
-
 .filter-column {
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+}
 
+.opportunity-column{
+    display: flex;
+    flex-direction: column;
+    flex: 4;
+}
+
+.header-text{
+    display: flex;
+    flex-direction: column;
 }
