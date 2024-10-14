@@ -1,7 +1,22 @@
+.page-container{
+    padding: 1rem;
+}
+
 .header-search-container{
     display: flex;
 }
 
 .card-filter-container{
     display: flex;
+}
+
+.opportunity-column{
+    display: flex;
+    flex-direction: column;
+    flex: 4;
+}
+
+.header-text{
+    display: flex;
+    flex-direction: column;
 }

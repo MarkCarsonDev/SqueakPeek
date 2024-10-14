@@ -6,6 +6,9 @@ import {
   Typography,
 } from "@mui/material";
 
+import { faAnglesUp } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 export function OpportunityCard({
   title = "Amazon",
   dateRangeStart = "2023",
@@ -13,7 +16,10 @@ export function OpportunityCard({
   jobPostion = "Software Development Engineer",
   jobType = "Internship",
   positionStatus = "Actively Hiring",
-  userPositionStatus = "Applied"
+  userPositionStatus = "Applied",
+  psColor = "solid 1px green",
+  upsColor = "solid 1px green",
+  psAngles = faAnglesUp
 }) {
   return (
     <Card sx={{ border: "solid 3px #e0e4f2" }}>
@@ -27,14 +33,40 @@ export function OpportunityCard({
           </Typography>
         }
       />
-      <Typography variant="h5" sx={{ marginInline: "20px" }}>
+      <Typography variant="h5" sx={{ marginInline: "1rem" }}>
         {jobPostion}, {jobType}
       </Typography>
-      <Typography>{userPositionStatus}</Typography>
-
-      <CardContent>
-
+      <CardContent sx={{display: "flex", gap: "1rem"}}>
+        <Typography
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            padding: ".25rem .50rem",
+            border: psColor,
+            borderRadius: "10px",
+            height: "30px",
+            minWidth: "auto",
+            textAlign: "center",
+          }}
+        >
+          {userPositionStatus}
+        </Typography>
+        <Typography
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            padding: ".25rem .50rem",
+            border: upsColor,
+            borderRadius: "10px",
+            height: "30px",
+            minWidth: "auto",
+            textAlign: "center",
+          }}
+        >
+          {positionStatus} <FontAwesomeIcon style={{marginLeft: ".25rem"}} icon={psAngles}/>
+        </Typography>
       </CardContent>
+      <CardContent></CardContent>
     </Card>
   );
 }
