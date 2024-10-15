@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Typography, Button } from "@mui/material";
 import "./tracking.css";
 
 export default function Page() {
@@ -13,13 +13,32 @@ export default function Page() {
 
   return (
     <div className="main">
-      <Typography variant="h6">Submitted Applications</Typography>
+      {/* this is for the title and total applications */}
+      <Typography variant="h3">Submitted Applications</Typography>
       <Typography variant="subtitle1">
         Total Applications: {num_applications}
       </Typography>
 
       {/* this is for the new application button and search box */}
-      <div></div>
+      <div>
+        <Button
+          variant="contained"
+          color="primary"
+          sx={{
+            mt: 2,
+            width: "200px",
+            boxShadow: "none",
+            backgroundColor: "#496FFF",
+            borderRadius: "8px",
+            ":hover": {
+              backgroundColor: "#3B5AC6",
+              boxShadow: "none",
+            },
+          }}
+        >
+          New Application
+        </Button>
+      </div>
 
       {/* this is for the application stages */}
       <div className="application-stages">
@@ -35,7 +54,7 @@ export default function Page() {
             >
               <span
                 style={{
-                  backgroundColor: stage.color, 
+                  backgroundColor: stage.color,
                   display: "inline-block",
                   width: "12px",
                   height: "12px",
