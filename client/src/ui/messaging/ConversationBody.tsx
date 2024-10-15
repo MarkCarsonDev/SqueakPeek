@@ -11,6 +11,7 @@ interface ConversationBodyProps {
  */
 import { MessageCard } from "./MessageCard";
 import { MessageInput } from "./MessageInput";
+import { ConversationHeader } from "./ConversationHeader";
 export function ConversationBody({ conversationId }: ConversationBodyProps) {
   console.log("convoID: ", conversationId);
 
@@ -130,12 +131,13 @@ export function ConversationBody({ conversationId }: ConversationBodyProps) {
       style={{
         height: "90vh", // not 100vh since it takes into account the navigation bar
         backgroundColor: "white",
+        display: "grid",
+        gridTemplateRows: "10% 80% 10%",
       }}
     >
       {/* Header */}
       <div
         style={{
-          height: "10%",
           backgroundColor: "yellow",
         }}
       ></div>
@@ -143,7 +145,6 @@ export function ConversationBody({ conversationId }: ConversationBodyProps) {
       {/* Messages */}
       <div
         style={{
-          height: "80%",
           overflowY: "auto", // allows scrolling on the messages
         }}
       >
@@ -155,10 +156,10 @@ export function ConversationBody({ conversationId }: ConversationBodyProps) {
       {/* Message Input */}
       <div
         style={{
-          height: "10%",
           display: "flex",
           justifyContent: "center",
           padding: "10px 20px",
+          backgroundColor: "yellow",
         }}
       >
         <MessageInput />
