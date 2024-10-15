@@ -58,7 +58,7 @@ export function OpportunityCard({
             border: userPositionStatus ? "solid 2px green": "solid 2px red",
             borderRadius: "10px",
             minWidth: "auto",
-            minHeight: "auto",
+            height: "15px",
             textAlign: "center",
           }}
           variant='body2'
@@ -72,7 +72,7 @@ export function OpportunityCard({
             padding: ".25rem .50rem",
             border: positionStatus ? "solid 2px green": "solid 2px red",
             borderRadius: "10px",
-            height: "30px",
+            height: "15px",
             minWidth: "auto",
             textAlign: "center",
           }}
@@ -80,7 +80,14 @@ export function OpportunityCard({
           {userPositionStatus? "Actively Hiring" : "Not Hiring"} <FontAwesomeIcon style={{marginLeft: ".25rem"}} icon={positionStatus ? faAnglesUp :faAnglesDown }/>
         </Typography>
       </CardContent>
-      <CardContent></CardContent>
+      <CardContent sx={{display: "flex", justifyContent: "center"}}>
+        <Image
+        src="/explore/opportunityLine.svg"
+        alt="Opportunity Line"
+        height={40}
+        width={800}
+        />
+      </CardContent>
     </Card>
   );
 }
