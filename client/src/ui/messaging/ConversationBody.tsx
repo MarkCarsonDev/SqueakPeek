@@ -1,9 +1,9 @@
-import { MessageBodyProps } from "./MessageBody";
+import { MessageBodyProps } from "./MessageCard";
 
 interface ConversationBodyProps {
   conversationId: string;
 }
-import { MessageBody } from "./MessageBody";
+import { MessageCard } from "./MessageCard";
 export function ConversationBody({ conversationId }: ConversationBodyProps) {
   const messageTest: MessageBodyProps = {
     avatar: "avatar1",
@@ -13,5 +13,5 @@ export function ConversationBody({ conversationId }: ConversationBodyProps) {
     upVotes: 0,
     downVotes: 0,
   };
-  return <MessageBody {...messageTest} />;
+  return <MessageCard {...messageTest} />;
 }

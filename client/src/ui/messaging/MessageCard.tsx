@@ -14,7 +14,7 @@ export interface MessageBodyProps {
  */
 
 // TODO: Make CardHeader match the UI in figma file
-export function MessageBody({
+export function MessageCard({
   avatar,
   sender_username,
   timestamp,
