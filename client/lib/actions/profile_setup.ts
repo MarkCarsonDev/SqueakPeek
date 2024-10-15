@@ -43,8 +43,7 @@ export async function createProfile(
     };
   }
 
-  const { name, username, school, avatar } = validatedFields.data;
-  console.log("avatar: ", avatar);
+  const { username, school, avatar } = validatedFields.data;
   const supabase = createSupabaseServer();
 
   // Retrieve the authenticated user to get the user ID
