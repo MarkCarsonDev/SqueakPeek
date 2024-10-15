@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, Typography } from "@mui/material";
 import { AvatarTypes, ProfileAvatar } from "../ProfileAvatar";
+import { UUID } from "crypto";
 export interface MessageBodyProps {
   avatar: AvatarTypes;
   sender_username: string;
@@ -7,13 +8,12 @@ export interface MessageBodyProps {
   message: string;
   upVotes: number;
   downVotes: number;
+  messageId: UUID;
 }
 
 /**
  * UI that contains the metadata of a message
  */
-
-// TODO: Make CardHeader match the UI in figma file
 export function MessageCard({
   avatar,
   sender_username,
@@ -22,6 +22,8 @@ export function MessageCard({
   upVotes,
   downVotes,
 }: MessageBodyProps) {
+  // TODO: Make CardHeader match the UI in figma file
+  // TODO: Add upVotes and downVotes component
   return (
     <Card
       sx={{

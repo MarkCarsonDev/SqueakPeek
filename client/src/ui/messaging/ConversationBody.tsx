@@ -1,3 +1,4 @@
+import { randomUUID } from "crypto";
 import { MessageBodyProps } from "./MessageCard";
 
 interface ConversationBodyProps {
@@ -10,13 +11,64 @@ interface ConversationBodyProps {
  */
 import { MessageCard } from "./MessageCard";
 export function ConversationBody({ conversationId }: ConversationBodyProps) {
-  const messageTest: MessageBodyProps = {
-    avatar: "avatar1",
-    sender_username: "Bropharah",
-    timestamp: new Date(),
-    message: "Hi There!",
-    upVotes: 0,
-    downVotes: 0,
-  };
-  return <MessageCard {...messageTest} />;
+  // TODO: Remove this when fetching from zustand store
+  const messages: MessageBodyProps[] = [
+    {
+      avatar: "avatar1",
+      sender_username: "Bropharah",
+      timestamp: new Date(),
+      message: "Hi There!",
+      upVotes: 0,
+      downVotes: 0,
+      messageId: randomUUID(),
+    },
+    {
+      avatar: "avatar1",
+      sender_username: "Bropharah",
+      timestamp: new Date(),
+      message: "Hi There!",
+      upVotes: 0,
+      downVotes: 0,
+      messageId: randomUUID(),
+    },
+    {
+      avatar: "avatar1",
+      sender_username: "Bropharah",
+      timestamp: new Date(),
+      message: "Hi There!",
+      upVotes: 0,
+      downVotes: 0,
+      messageId: randomUUID(),
+    },
+    {
+      avatar: "avatar1",
+      sender_username: "Bropharah",
+      timestamp: new Date(),
+      message: "Hi There!",
+      upVotes: 0,
+      downVotes: 0,
+      messageId: randomUUID(),
+    },
+    {
+      avatar: "avatar1",
+      sender_username: "Bropharah",
+      timestamp: new Date(),
+      message: "Hi There!",
+      upVotes: 0,
+      downVotes: 0,
+      messageId: randomUUID(),
+    },
+    {
+      avatar: "avatar1",
+      sender_username: "Bropharah",
+      timestamp: new Date(),
+      message: "Hi There!",
+      upVotes: 0,
+      downVotes: 0,
+      messageId: randomUUID(),
+    },
+  ];
+  return messages.map((message) => (
+    <MessageCard key={message.messageId} {...message} />
+  ));
 }
