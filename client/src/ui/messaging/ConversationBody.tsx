@@ -13,7 +13,7 @@ import { MessageCard } from "./MessageCard";
 import { MessageInput } from "./MessageInput";
 export function ConversationBody({ conversationId }: ConversationBodyProps) {
   console.log("convoID: ", conversationId);
-  
+
   // TODO: Remove this when fetching from zustand store
   const messages: MessageBodyProps[] = [
     {
@@ -128,13 +128,23 @@ export function ConversationBody({ conversationId }: ConversationBodyProps) {
   return (
     <div
       style={{
-        height: "90vh",
+        height: "90vh", // not 100vh since it takes into account the navigation bar
+        backgroundColor: "white",
       }}
     >
+      {/* Header */}
       <div
         style={{
-          height: "90%",
-          overflowY: "auto",
+          height: "10%",
+          backgroundColor: "yellow",
+        }}
+      ></div>
+
+      {/* Messages */}
+      <div
+        style={{
+          height: "80%",
+          overflowY: "auto", // allows scrolling on the messages
         }}
       >
         {messages.map((message) => (
@@ -142,10 +152,10 @@ export function ConversationBody({ conversationId }: ConversationBodyProps) {
         ))}
       </div>
 
+      {/* Message Input */}
       <div
         style={{
           height: "10%",
-          backgroundColor: "white",
           display: "flex",
           justifyContent: "center",
           padding: "10px 20px",
