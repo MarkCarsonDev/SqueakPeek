@@ -94,7 +94,7 @@ export const Filters: React.FC<FiltersProps> = ({
   );
 
   return (
-    <Card>
+    <Card sx={{border: "solid 3px #e0e4f2", borderRadius: "20px"}}>
       {renderSection('Job Type', jobTypes, 'jobTypes')}
       {renderSection('Applied', appliedStatuses, 'appliedStatuses')}
       {renderSection('Year', years, 'years')}

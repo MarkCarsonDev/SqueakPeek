@@ -67,9 +67,9 @@ export default function Page() {
     <div className="page-container">
       <div className="header-search-container">
         <div className="header-text">
-          <Typography sx={{margin: "20px 0"}}><span style={{ fontWeight: "bold" }}>Explore</span> 321 Results</Typography>
-          <Typography>Explore entry-level roles, discover the application pipeline,</Typography>
-          <Typography>and talk to other applicants in the <span style={{ fontWeight: "bold"}}>company threads</span>.</Typography>
+          <Typography sx={{margin: "1rem 1rem"}} variant="h5"><span style={{ fontWeight: "bold" }}>Explore</span> 321 Results</Typography>
+          <Typography sx={{marginLeft: "1rem"}} variant="body1">Explore entry-level roles, discover the application pipeline,</Typography>
+          <Typography sx={{marginLeft: "1rem"}} variant="body1">and talk to other applicants in the <span style={{ fontWeight: "bold"}}>company threads</span>.</Typography>
         </div>
 
       </div>
@@ -80,7 +80,7 @@ export default function Page() {
         </div>
 
         <div className="filter-column">
-          <Typography variant="h6" style={{ marginBottom: "20px" }}>Filters</Typography>
+          <Typography variant="h6" style={{ marginBottom: "5px", marginLeft: ".5rem" }}>Filters</Typography>
           {/* Render Filters component here */}
           <Filters
             jobTypes={jobTypes}

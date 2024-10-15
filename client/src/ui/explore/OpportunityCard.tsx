@@ -35,7 +35,7 @@ export function OpportunityCard({
 }: OpportunityCardProps) {
 
   return (
-    <Card sx={{ border: 'solid 3px #e0e4f2', marginBottom: '3rem', borderRadius: "20px",}}>
+    <Card sx={{ border: 'solid 3px #e0e4f2', margin: '3rem', borderRadius: "20px"}}>
       <CardHeader
         sx={{ height: '25px' }}
         avatar={jobAvatar}
