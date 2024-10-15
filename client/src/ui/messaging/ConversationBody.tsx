@@ -3,6 +3,11 @@ import { MessageBodyProps } from "./MessageCard";
 interface ConversationBodyProps {
   conversationId: string;
 }
+
+/**
+ * This is a UI container that holds all messages for a particular conversation
+ * Also allows to send messages to that particular conversation
+ */
 import { MessageCard } from "./MessageCard";
 export function ConversationBody({ conversationId }: ConversationBodyProps) {
   const messageTest: MessageBodyProps = {
