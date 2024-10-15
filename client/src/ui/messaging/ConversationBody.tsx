@@ -1,6 +1,6 @@
 interface MessageBodyProps {
   conversationId: string;
 }
-export function MessageBody({ conversationId }: MessageBodyProps) {
+export function ConversationBody({ conversationId }: MessageBodyProps) {
   return <div>MessageBody</div>;
 }

@@ -1,9 +1,9 @@
-import { MessageBody } from "@/ui/messaging/MessageBody";
+import { ConversationBody } from "@/ui/messaging/ConversationBody";
 export default function Page({ params }: { params: { id: string } }) {
   const { id: conversationId } = params;
   return (
     <div>
-      <MessageBody conversationId={conversationId} />
+      <ConversationBody conversationId={conversationId} />
     </div>
   );
 }
