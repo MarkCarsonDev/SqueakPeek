@@ -1,5 +1,5 @@
 .page-container{
-    padding: 1rem;
+    padding: 2rem;
 }
 
 .header-search-container{
@@ -10,7 +10,7 @@
     display: flex;
     gap: 2rem;
     div {
-        margin: 1rem;
+        margin: .5rem;
     }
 }
 

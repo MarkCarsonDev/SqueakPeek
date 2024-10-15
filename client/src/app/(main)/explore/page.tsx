@@ -2,9 +2,11 @@
 
 "use client";
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Filters, SelectedFilters, FilterOption } from "@/ui/explore/Filters";
-import { Typography } from "@mui/material";
+import { Typography, Avatar } from '@mui/material';
+import { OpportunityCard } from "@/ui/explore/OpportunityCard";
 import "@/app/(main)/explore/explore.css";
 import FilteredContentComponent from "@/ui/explore/FilteredContentComponent";
 
@@ -74,7 +76,7 @@ export default function Page() {
       <div className="card-filter-container">
         <div className="opportunity-column">
           {/* Render FilteredContentComponent here */}
-          <FilteredContentComponent filters={filters} />
+          <OpportunityCard title="Amazon" jobAvatar={<Image src="/landingpage/insight.svg" height={50} width={50} alt='Logo'/>} dateRangeStart="2023" dateRangeEnd="2024" jobPosition="Software Developer" jobType="Full-Time" positionStatus={false} userPositionStatus={false} />
         </div>
 
         <div className="filter-column">
