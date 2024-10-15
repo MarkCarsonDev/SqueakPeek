@@ -1,6 +1,6 @@
+import { Card, CardContent, CardHeader, Typography } from "@mui/material";
 
-
-interface MessageBodyProps {
+export interface MessageBodyProps {
   avatar: string;
   sender_username: string;
   timestamp: Date;
@@ -8,6 +8,23 @@ interface MessageBodyProps {
   upVotes: number;
   downVotes: number;
 }
-export default function MessageBody() {
-  return <div>MessageBody</div>;
+export function MessageBody({
+  avatar,
+  sender_username,
+  timestamp,
+  message,
+  upVotes,
+  downVotes,
+}: MessageBodyProps) {
+  return (
+    <Card>
+      <CardHeader
+        title={sender_username}
+        subheader={timestamp.toDateString()}
+      />
+      <CardContent>
+        <Typography>{message}</Typography>
+      </CardContent>
+    </Card>
+  );
 }
