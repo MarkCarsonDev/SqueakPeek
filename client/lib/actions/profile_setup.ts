@@ -68,6 +68,7 @@ export async function createProfile(
   // TODO: Finish implementation to insert a profile
   // update the profile in Supabase
   const { error } = await supabase.from("profile").insert({
+    user_id: userId,
     name,
     username,
     school,
