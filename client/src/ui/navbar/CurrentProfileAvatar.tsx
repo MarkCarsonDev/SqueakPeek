@@ -1,6 +1,5 @@
 "use client";
 import { useProfile } from "../../../lib/store/profile";
-import { Avatar } from "@mui/material";
 import { ProfileAvatar } from "../ProfileAvatar";
 import { AvatarTypes } from "../ProfileAvatar";
 /**
