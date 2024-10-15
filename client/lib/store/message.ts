@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { Tables } from "../types/database.types";
 
-type MessageType = Tables<"public_message" | "private_message">;
+export type MessageType = Tables<"public_message" | "private_message">;
 
 // state of the hook
 interface MessageState {
