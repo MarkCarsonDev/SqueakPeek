@@ -1,5 +1,9 @@
 import { randomUUID } from "crypto";
 import { MessageBodyProps } from "./MessageCard";
+import { MessageCard } from "./MessageCard";
+import { MessageInput } from "./MessageInput";
+import { ConversationHeader } from "./ConversationHeader";
+import Image from "next/image";
 
 interface ConversationBodyProps {
   conversationId: string;
@@ -9,9 +13,6 @@ interface ConversationBodyProps {
  * This is a UI container that holds all messages for a particular conversation
  * Also allows to send messages to that particular conversation
  */
-import { MessageCard } from "./MessageCard";
-import { MessageInput } from "./MessageInput";
-import { ConversationHeader } from "./ConversationHeader";
 export function ConversationBody({ conversationId }: ConversationBodyProps) {
   console.log("convoID: ", conversationId);
 
@@ -136,11 +137,19 @@ export function ConversationBody({ conversationId }: ConversationBodyProps) {
       }}
     >
       {/* Header */}
-      <div
-        style={{
-          backgroundColor: "yellow",
-        }}
-      ></div>
+      {/* TODO: Make this consuem the metadata of an opportunity or user */}
+      <ConversationHeader
+        title="Amazon"
+        subheader="Software Engineering, Internship"
+        avatar={
+          <Image
+            alt="Profile of {company}"
+            src="https://www.amazon.com/favicon.ico"
+            width={50}
+            height={50}
+          />
+        }
+      />
 
       {/* Messages */}
       <div
@@ -158,8 +167,7 @@ export function ConversationBody({ conversationId }: ConversationBodyProps) {
         style={{
           display: "flex",
           justifyContent: "center",
-          padding: "10px 20px",
-          backgroundColor: "yellow",
+          padding: "10px 10px",
         }}
       >
         <MessageInput />

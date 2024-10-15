@@ -1,18 +1,12 @@
-import { AvatarProps } from "@mui/material";
-import { AvatarTypes } from "../ProfileAvatar";
-import { CardHeader } from "@mui/material";
-import Image from "next/image";
+import { CardHeader, CardHeaderProps } from "@mui/material";
 
-interface ConversationHeaderProps {
-  icon: AvatarProps | AvatarTypes;
-}
-
-export function ConversationHeader({ icon }: ConversationHeaderProps) {
+export function ConversationHeader(props: CardHeaderProps) {
   return (
     <CardHeader
       sx={{
-        backgroundColor: "yellow",
+        borderBottom: "2px #3C435C solid",
       }}
+      {...props}
     />
   );
 }
