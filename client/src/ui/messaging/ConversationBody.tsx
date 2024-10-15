@@ -1,9 +1,9 @@
-import { randomUUID } from "crypto";
-import { MessageBodyProps } from "./MessageCard";
+"use client";
 import { MessageCard } from "./MessageCard";
 import { MessageInput } from "./MessageInput";
 import { ConversationHeader } from "./ConversationHeader";
 import Image from "next/image";
+import { useMessage } from "../../../lib/store/message";
 
 interface ConversationBodyProps {
   conversationId: string;
@@ -15,118 +15,8 @@ interface ConversationBodyProps {
  */
 export function ConversationBody({ conversationId }: ConversationBodyProps) {
   console.log("convoID: ", conversationId);
+  const { messages } = useMessage();
 
-  // TODO: Remove this when fetching from zustand store
-  const messages: MessageBodyProps[] = [
-    {
-      avatar: "avatar1",
-      sender_username: "Bropharah",
-      timestamp: new Date(),
-      message: "Hi There!",
-      upVotes: 0,
-      downVotes: 0,
-      messageId: randomUUID(),
-    },
-    {
-      avatar: "avatar1",
-      sender_username: "Bropharah",
-      timestamp: new Date(),
-      message: "Hi There!",
-      upVotes: 0,
-      downVotes: 0,
-      messageId: randomUUID(),
-    },
-    {
-      avatar: "avatar1",
-      sender_username: "Bropharah",
-      timestamp: new Date(),
-      message: "Hi There!",
-      upVotes: 0,
-      downVotes: 0,
-      messageId: randomUUID(),
-    },
-    {
-      avatar: "avatar1",
-      sender_username: "Bropharah",
-      timestamp: new Date(),
-      message: "Hi There!",
-      upVotes: 0,
-      downVotes: 0,
-      messageId: randomUUID(),
-    },
-    {
-      avatar: "avatar1",
-      sender_username: "Bropharah",
-      timestamp: new Date(),
-      message: "Hi There!",
-      upVotes: 0,
-      downVotes: 0,
-      messageId: randomUUID(),
-    },
-    {
-      avatar: "avatar1",
-      sender_username: "Bropharah",
-      timestamp: new Date(),
-      message: "Hi There!",
-      upVotes: 0,
-      downVotes: 0,
-      messageId: randomUUID(),
-    },
-    {
-      avatar: "avatar1",
-      sender_username: "Bropharah",
-      timestamp: new Date(),
-      message: "Hi There!",
-      upVotes: 0,
-      downVotes: 0,
-      messageId: randomUUID(),
-    },
-    {
-      avatar: "avatar1",
-      sender_username: "Bropharah",
-      timestamp: new Date(),
-      message: "Hi There!",
-      upVotes: 0,
-      downVotes: 0,
-      messageId: randomUUID(),
-    },
-    {
-      avatar: "avatar1",
-      sender_username: "Bropharah",
-      timestamp: new Date(),
-      message: "Hi There!",
-      upVotes: 0,
-      downVotes: 0,
-      messageId: randomUUID(),
-    },
-    {
-      avatar: "avatar1",
-      sender_username: "Bropharah",
-      timestamp: new Date(),
-      message: "Hi There!",
-      upVotes: 0,
-      downVotes: 0,
-      messageId: randomUUID(),
-    },
-    {
-      avatar: "avatar1",
-      sender_username: "Bropharah",
-      timestamp: new Date(),
-      message: "Hi There!",
-      upVotes: 0,
-      downVotes: 0,
-      messageId: randomUUID(),
-    },
-    {
-      avatar: "avatar1",
-      sender_username: "Bropharah",
-      timestamp: new Date(),
-      message: "Hi There!",
-      upVotes: 0,
-      downVotes: 0,
-      messageId: randomUUID(),
-    },
-  ];
   return (
     <div
       style={{

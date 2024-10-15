@@ -1,14 +1,13 @@
 import { Card, CardContent, CardHeader, Typography } from "@mui/material";
 import { AvatarTypes, ProfileAvatar } from "../ProfileAvatar";
-import { UUID } from "crypto";
 export interface MessageBodyProps {
   avatar: AvatarTypes;
   sender_username: string;
   timestamp: Date;
   message: string;
-  upVotes: number;
-  downVotes: number;
-  messageId: UUID;
+  upVotes?: number;
+  downVotes?: number;
+  messageId: number;
 }
 
 /**
