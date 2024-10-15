@@ -12,6 +12,8 @@ interface ConversationBodyProps {
 import { MessageCard } from "./MessageCard";
 import { MessageInput } from "./MessageInput";
 export function ConversationBody({ conversationId }: ConversationBodyProps) {
+  console.log("convoID: ", conversationId);
+  
   // TODO: Remove this when fetching from zustand store
   const messages: MessageBodyProps[] = [
     {

@@ -24,6 +24,8 @@ export function MessageCard({
 }: MessageBodyProps) {
   // TODO: Make CardHeader match the UI in figma file
   // TODO: Add upVotes and downVotes component
+
+  console.log(upVotes, downVotes);
   return (
     <Card
       sx={{
