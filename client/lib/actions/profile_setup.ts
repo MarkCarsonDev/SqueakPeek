@@ -43,8 +43,7 @@ export async function createProfile(
     };
   }
 
-  const { name, username, school, avatar } = validatedFields.data;
-  console.log("avatar: ", avatar);
+  const { username, school, avatar } = validatedFields.data;
   const supabase = createSupabaseServer();
 
   // Retrieve the authenticated user to get the user ID
@@ -68,7 +67,7 @@ export async function createProfile(
   // TODO: Finish implementation to insert a profile
   // update the profile in Supabase
   const { error } = await supabase.from("profile").insert({
-    name,
+    user_id: userId,
     username,
     school,
     avatar,

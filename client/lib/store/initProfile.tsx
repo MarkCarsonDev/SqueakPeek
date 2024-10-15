@@ -17,12 +17,12 @@ export default function InitProfile({ user }: { user: User | null }) {
       initializeProfile({
         avatar: "avatar_2",
         created_at: new Date().toISOString(),
-        profile_id: 12,
         school: "CSULB",
         username: "Bropharah",
-        user_id: 11,
+        user_id: "",
+        profile_id: "",
       });
     }
-  }, [profile]);
+  }, [profile, initializeProfile, user]);
   return null;
 }
