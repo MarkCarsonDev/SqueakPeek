@@ -3,7 +3,7 @@ import { AvatarTypes, ProfileAvatar } from "../ProfileAvatar";
 export interface MessageBodyProps {
   avatar: AvatarTypes;
   sender_username: string;
-  timestamp: Date;
+  timestamp: string;
   message: string;
   upVotes?: number;
   downVotes?: number;
@@ -34,7 +34,7 @@ export function MessageCard({
       <CardHeader
         avatar={<ProfileAvatar avatar={avatar} />}
         title={sender_username}
-        subheader={timestamp.toDateString()}
+        subheader={timestamp}
       />
       <CardContent
         sx={{

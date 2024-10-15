@@ -6,16 +6,19 @@ import { useMessage } from "../../../lib/store/message";
 import { MessageBodyProps } from "./MessageCard";
 import { useProfile } from "../../../lib/store/profile";
 import { AvatarTypes } from "../ProfileAvatar";
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
+import { createSupabaseClient } from "../../../lib/supabase/client";
+import { RealtimeChannel } from "@supabase/supabase-js";
 /**
- * Allows user to send a message into a conversation
+ * Allows user to send a chmessage into a conversation
  */
-export function MessageInput() {
+export function MessageInput({ channel }: { channel?: RealtimeChannel }) {
   const { addMessage } = useMessage();
   const { profile } = useProfile();
   const [currentMessage, setCurrentMessage] = useState("");
-  
+  const supabase = createSupabaseClient();
+  const channelB = supabase.channel("room-1");
+
   // TODO: Add this as a server action
   function handleSendMessage(message: string) {
     // only allows to add message if profile is made
@@ -23,12 +26,25 @@ export function MessageInput() {
       const newMessage: MessageBodyProps = {
         avatar: (profile.avatar as AvatarTypes) || "avatar1",
         sender_username: profile.username!,
-        timestamp: new Date(),
+        timestamp: new Date().toISOString(),
         messageId: 12,
         message,
       };
+
+      channelB.subscribe((status) => {
+        // Wait for successful connection
+        if (status !== "SUBSCRIBED") {
+          return null;
+        }
+
+        // Send a message once the client is subscribed
+        channelB.send({
+          type: "broadcast",
+          event: "test",
+          payload: { message: newMessage },
+        });
+      });
       addMessage(newMessage);
-      // TODO Call on Supabase to insert the message in the conversation table
     }
   }
 

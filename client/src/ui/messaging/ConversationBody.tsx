@@ -1,9 +1,11 @@
 "use client";
-import { MessageCard } from "./MessageCard";
+import { MessageBodyProps, MessageCard } from "./MessageCard";
 import { MessageInput } from "./MessageInput";
 import { ConversationHeader } from "./ConversationHeader";
 import Image from "next/image";
 import { useMessage } from "../../../lib/store/message";
+import { createSupabaseClient } from "../../../lib/supabase/client";
+import { useEffect } from "react";
 
 interface ConversationBodyProps {
   conversationId: string;
@@ -15,7 +17,24 @@ interface ConversationBodyProps {
  */
 export function ConversationBody({ conversationId }: ConversationBodyProps) {
   console.log("convoID: ", conversationId);
-  const { messages } = useMessage();
+  const { messages, addMessage } = useMessage();
+  const supabase = createSupabaseClient();
+
+  useEffect(() => {
+    // Join a room/topic. Can be anything except for 'realtime'.
+    const channelA = supabase.channel("room-1");
+
+    // Simple function to log any messages we receive
+    function messageReceived(payload: any) {
+      console.log("payload: ", payload.payload.message);
+      addMessage(payload.payload.message as MessageBodyProps);
+    }
+
+    // Subscribe to the Channel
+    channelA
+      .on("broadcast", { event: "test" }, (payload) => messageReceived(payload))
+      .subscribe();
+  }, []);
 
   return (
     <div
