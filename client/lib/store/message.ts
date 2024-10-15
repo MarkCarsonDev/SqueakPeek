@@ -1,12 +1,15 @@
 import { create } from "zustand";
-import { Tables } from "../types/database.types";
+// import { Tables } from "../types/database.types";
+import { MessageBodyProps } from "@/ui/messaging/MessageCard";
 
-export type MessageType = Tables<"public_message" | "private_message">;
+
+// TODO Get the actual types from the database
+// export type MessageType = Tables<"public_message" | "private_message">;
 
 // state of the hook
 interface MessageState {
-  messages: MessageType[];
-  addMessage: (newMessage: MessageType) => void;
+  messages: MessageBodyProps[];
+  addMessage: (newMessage: MessageBodyProps) => void;
 }
 
 // hook that will be access in UI components
