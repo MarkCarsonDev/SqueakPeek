@@ -3,10 +3,10 @@ import { useProfile } from "../../../lib/store/profile";
 import { Avatar } from "@mui/material";
 
 type AvatarTypes =
-  | "avatar_1"
-  | "avatar_2"
-  | "avatar_3"
-  | "avatar_4"
+  | "avatar1"
+  | "avatar2"
+  | "avatar3"
+  | "avatar4"
   | null
   | undefined;
 
@@ -21,10 +21,10 @@ export function ProfileAvatar() {
   // TODO: Change this to the actual mapping to the correct avatar images
   // TODO (BUG): On page refresh, or any situation that turns profile = null, it defaults to the image, creating a janky look when profile is initialize
   const avatarMaps = {
-    avatar_1: "/landingpage/insight.svg",
-    avatar_2: "/landingpage/message.svg",
-    avatar_3: "/landingpage/track.svg",
-    avatar_4: "/landingpage/track.svg",
+    avatar1: "/landingpage/insight.svg",
+    avatar2: "/landingpage/message.svg",
+    avatar3: "/landingpage/track.svg",
+    avatar4: "/landingpage/track.svg",
   };
   return (
     <Avatar
