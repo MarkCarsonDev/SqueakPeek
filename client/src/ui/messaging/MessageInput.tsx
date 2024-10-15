@@ -1,6 +1,10 @@
 import { IconButton, InputAdornment, TextField } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUp } from "@fortawesome/free-solid-svg-icons/faCircleUp";
+
+/**
+ * Allows user to send a message into a conversation
+ */
 export function MessageInput() {
   return (
     <TextField
