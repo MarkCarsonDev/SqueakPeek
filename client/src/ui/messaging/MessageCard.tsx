@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, Typography } from "@mui/material";
 import { AvatarTypes, ProfileAvatar } from "../ProfileAvatar";
+import { memo } from "react";
 export interface MessageCardProps {
   avatar: AvatarTypes;
   sender_username: string;
@@ -13,7 +14,7 @@ export interface MessageCardProps {
 /**
  * UI that contains the metadata of a message
  */
-export function MessageCard({
+export const MessageCard = memo(function MessageCard({
   avatar,
   sender_username,
   timestamp,
@@ -45,4 +46,4 @@ export function MessageCard({
       </CardContent>
     </Card>
   );
-}
+});
