@@ -5,7 +5,8 @@ import { ConversationHeader } from "./ConversationHeader";
 import Image from "next/image";
 import { useMessage } from "../../../lib/store/message";
 import { createSupabaseClient } from "../../../lib/supabase/client";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { Typography } from "@mui/material";
 
 interface ConversationBodyProps {
   conversationId: string;
@@ -17,6 +18,7 @@ interface ConversationBodyProps {
  */
 export function ConversationBody({ conversationId }: ConversationBodyProps) {
   const { messages, addMessage } = useMessage();
+  // const prevDate = useRef<null | Date>(null);
 
   useEffect(() => {
     const supabase = createSupabaseClient();
@@ -69,9 +71,9 @@ export function ConversationBody({ conversationId }: ConversationBodyProps) {
           overflowY: "auto", // allows scrolling on the messages
         }}
       >
-        {messages.map((message) => (
-          <MessageCard key={message.messageId} {...message} />
-        ))}
+        {messages.map((message) => {
+          return <MessageCard key={message.messageId} {...message} />;
+        })}
       </div>
 
       {/* Message Input */}

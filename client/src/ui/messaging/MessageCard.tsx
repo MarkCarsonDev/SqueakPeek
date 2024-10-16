@@ -26,6 +26,8 @@ export const MessageCard = memo(function MessageCard({
   // TODO: Make CardHeader match the UI in figma file
   // TODO: Add upVotes and downVotes component
   const { profile } = useProfile();
+  const messageDate = new Date(timestamp);
+
   console.log(upVotes, downVotes);
   return (
     <Card
@@ -36,7 +38,15 @@ export const MessageCard = memo(function MessageCard({
       <CardHeader
         avatar={<ProfileAvatar avatar={avatar} />}
         title={sender_username}
-        subheader={timestamp}
+        subheader={
+          messageDate.toLocaleDateString("en-US", {
+            month: "2-digit",
+            day: "2-digit",
+            year: "2-digit",
+          }) +
+          " " +
+          messageDate.toLocaleTimeString("en-US")
+        }
         titleTypographyProps={{
           color: profile?.username === sender_username ? "#496FFF" : "#3C435C",
         }}
