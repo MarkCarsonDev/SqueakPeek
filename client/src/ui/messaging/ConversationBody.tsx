@@ -4,6 +4,8 @@ import { MessageInput } from "./MessageInput";
 import { ConversationHeader } from "./ConversationHeader";
 import Image from "next/image";
 import { useMessage } from "../../../lib/store/message";
+import { createSupabaseClient } from "../../../lib/supabase/client";
+import { useEffect } from "react";
 
 interface ConversationBodyProps {
   conversationId: string;
@@ -14,8 +16,29 @@ interface ConversationBodyProps {
  * Also allows to send messages to that particular conversation
  */
 export function ConversationBody({ conversationId }: ConversationBodyProps) {
-  console.log("convoID: ", conversationId);
-  const { messages } = useMessage();
+  const { messages, addMessage } = useMessage();
+
+  useEffect(() => {
+    const supabase = createSupabaseClient();
+
+    // Client joins conversation, and listens to messages
+    const listenerChannel = supabase.channel(conversationId);
+
+    // Subscribe to the Channel
+    listenerChannel
+      .on("broadcast", { event: "conversation" }, async (payload) =>
+
+        // TODO check if payload is valid first
+        // TODO: Payload is type of 'any' on this. If possible make this more explicit
+        addMessage(payload.payload.message)
+      )
+      .subscribe();
+
+    // unsubscribes once component unmounts
+    return () => {
+      listenerChannel.unsubscribe();
+    };
+  }, [addMessage, conversationId]);
 
   return (
     <div
@@ -60,7 +83,7 @@ export function ConversationBody({ conversationId }: ConversationBodyProps) {
           padding: "10px 10px",
         }}
       >
-        <MessageInput />
+        <MessageInput conversationId={conversationId} />
       </div>
     </div>
   );

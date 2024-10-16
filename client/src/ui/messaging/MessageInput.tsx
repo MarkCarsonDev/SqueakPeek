@@ -2,33 +2,48 @@
 import { IconButton, InputAdornment, TextField } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUp } from "@fortawesome/free-solid-svg-icons/faCircleUp";
-import { useMessage } from "../../../lib/store/message";
-import { MessageBodyProps } from "./MessageCard";
+import { MessageCardProps } from "./MessageCard";
 import { useProfile } from "../../../lib/store/profile";
 import { AvatarTypes } from "../ProfileAvatar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { createSupabaseClient } from "../../../lib/supabase/client";
+import { v4 as uuidv4 } from "uuid";
 
 /**
- * Allows user to send a message into a conversation
+ * Allows user to send a message into a conversation, and broadcasts the message based on the conversationId
  */
-export function MessageInput() {
-  const { addMessage } = useMessage();
+export function MessageInput({ conversationId }: { conversationId: string }) {
   const { profile } = useProfile();
   const [currentMessage, setCurrentMessage] = useState("");
-  
-  // TODO: Add this as a server action
+  const supabase = createSupabaseClient();
+  const senderChannel = supabase.channel(conversationId);
+
+  useEffect(() => {
+    // unsubscribes once component unmounts
+    return () => {
+      senderChannel.unsubscribe();
+    };
+  });
+
   function handleSendMessage(message: string) {
     // only allows to add message if profile is made
     if (profile) {
-      const newMessage: MessageBodyProps = {
+      const newMessage: MessageCardProps = {
         avatar: (profile.avatar as AvatarTypes) || "avatar1",
         sender_username: profile.username!,
-        timestamp: new Date(),
-        messageId: 12,
+        timestamp: new Date().toISOString(),
+        messageId: uuidv4(),
         message,
       };
-      addMessage(newMessage);
-      // TODO Call on Supabase to insert the message in the conversation table
+
+      // TODO: need to check state of channel before sending message
+      senderChannel.send({
+        type: "broadcast",
+        event: "conversation",
+        payload: { message: newMessage },
+      });
+
+      // TODO: Insert message into the message table
     }
   }
 
