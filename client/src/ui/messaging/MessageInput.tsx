@@ -2,10 +2,10 @@
 import { IconButton, InputAdornment, TextField } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUp } from "@fortawesome/free-solid-svg-icons/faCircleUp";
-import { MessageBodyProps } from "./MessageCard";
+import { MessageCardProps } from "./MessageCard";
 import { useProfile } from "../../../lib/store/profile";
 import { AvatarTypes } from "../ProfileAvatar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createSupabaseClient } from "../../../lib/supabase/client";
 import { v4 as uuidv4 } from "uuid";
 
@@ -18,10 +18,17 @@ export function MessageInput({ conversationId }: { conversationId: string }) {
   const supabase = createSupabaseClient();
   const senderChannel = supabase.channel(conversationId);
 
+  useEffect(() => {
+    // unsubscribes once component unmounts
+    return () => {
+      senderChannel.unsubscribe();
+    };
+  });
+
   function handleSendMessage(message: string) {
     // only allows to add message if profile is made
     if (profile) {
-      const newMessage: MessageBodyProps = {
+      const newMessage: MessageCardProps = {
         avatar: (profile.avatar as AvatarTypes) || "avatar1",
         sender_username: profile.username!,
         timestamp: new Date().toISOString(),

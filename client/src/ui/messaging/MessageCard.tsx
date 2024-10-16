@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, Typography } from "@mui/material";
 import { AvatarTypes, ProfileAvatar } from "../ProfileAvatar";
-export interface MessageBodyProps {
+export interface MessageCardProps {
   avatar: AvatarTypes;
   sender_username: string;
   timestamp: string;
@@ -20,7 +20,7 @@ export function MessageCard({
   message,
   upVotes,
   downVotes,
-}: MessageBodyProps) {
+}: MessageCardProps) {
   // TODO: Make CardHeader match the UI in figma file
   // TODO: Add upVotes and downVotes component
 

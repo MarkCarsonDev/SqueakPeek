@@ -1,5 +1,5 @@
 "use client";
-import { MessageBodyProps, MessageCard } from "./MessageCard";
+import { MessageCard } from "./MessageCard";
 import { MessageInput } from "./MessageInput";
 import { ConversationHeader } from "./ConversationHeader";
 import Image from "next/image";
@@ -18,24 +18,27 @@ interface ConversationBodyProps {
 export function ConversationBody({ conversationId }: ConversationBodyProps) {
   const { messages, addMessage } = useMessage();
 
-  // subscribes to the channel as a listener
   useEffect(() => {
     const supabase = createSupabaseClient();
-    // Join a room/topic. Can be anything except for 'realtime'.
+
+    // Client joins conversation, and listens to messages
     const listenerChannel = supabase.channel(conversationId);
-    // Simple function to log any messages we receive
-    function messageReceived(payload: any) {
-      console.log("payload: ", payload.payload.message);
-      addMessage(payload.payload.message as MessageBodyProps);
-    }
 
     // Subscribe to the Channel
     listenerChannel
       .on("broadcast", { event: "conversation" }, async (payload) =>
-        messageReceived(payload)
+
+        // TODO check if payload is valid first
+        // TODO: Payload is type of 'any' on this. If possible make this more explicit
+        addMessage(payload.payload.message)
       )
       .subscribe();
-  }, []);
+
+    // unsubscribes once component unmounts
+    return () => {
+      listenerChannel.unsubscribe();
+    };
+  }, [addMessage, conversationId]);
 
   return (
     <div
