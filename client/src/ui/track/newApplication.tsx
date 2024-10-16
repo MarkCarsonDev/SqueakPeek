@@ -2,6 +2,7 @@
 import React from 'react';
 import { Modal, Typography, Button } from '@mui/material';
 import { InputField } from '@/ui/InputField'; // Assuming this is a custom input component
+import {ComboBox} from '@/ui/Searchbox'; // Assuming this is a custom combobox component
 
 // Define the types for the props
 interface NewApplicationModalProps {
@@ -41,7 +42,8 @@ export default function NewApplicationModal({ open, handleClose }: NewApplicatio
 
             {/* Right side of the form */}
             <div style={{ flex: 1 }}>
-              <InputField label="Company" placeholder="Company Name" />
+              {/* <InputField label="Company" placeholder="Company Name" /> */}
+              <ComboBox label = "Company" placeholder="Company Name" />
               <InputField label="Job Type" placeholder="Type" />
               <InputField label="Link to Job Application" placeholder="Link" />
             </div>
