@@ -1,10 +1,17 @@
-import { Typography, Button } from "@mui/material";
-import React from "react";
+"use client";
+import React, { useState } from "react";
+import { Button, Typography } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileCirclePlus } from "@fortawesome/free-solid-svg-icons";
+import NewApplicationModal from "@/ui/track/newApplication"; // Import the modal
 import "./tracking.css";
 
 export default function Page() {
+  const [openModal, setOpenModal] = useState(false); // State to manage modal visibility
+
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
+
   const num_applications = "<Dummy Holder>"; // dummy data for number of applications
   const stages = [
     { name: "Initial Screen", color: "#769FCD" },
@@ -16,18 +23,14 @@ export default function Page() {
 
   return (
     <div className="main">
-      {/* this is for the title and total applications */}
       <Typography variant="h3">Submitted Applications</Typography>
-      <Typography variant="subtitle1">
-        Total Applications: {num_applications}
-      </Typography>
+      <Typography variant="subtitle1">Total Applications: {num_applications}</Typography>
 
-      {/* this is for the new application button and search box */}
       <div>
         <Button
           variant="contained"
           color="primary"
-          endIcon={<FontAwesomeIcon icon={faFileCirclePlus} />} // Use the faFileCirclePlus icon
+          endIcon={<FontAwesomeIcon icon={faFileCirclePlus} />}
           sx={{
             mt: 2,
             width: "200px",
@@ -39,12 +42,15 @@ export default function Page() {
               boxShadow: "none",
             },
           }}
+          onClick={handleOpenModal}
         >
           New Application
         </Button>
       </div>
 
-      {/* this is for the application stages */}
+      {/* The New Application Modal */}
+      <NewApplicationModal open={openModal} handleClose={handleCloseModal} />
+
       <div className="application-stages">
         {stages.map((stage, index) => (
           <div key={index} className="stage-column">
