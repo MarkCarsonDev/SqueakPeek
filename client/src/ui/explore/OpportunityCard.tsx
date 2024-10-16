@@ -84,8 +84,8 @@ export function OpportunityCard({
         <Image
         src="/explore/opportunityLine.svg"
         alt="Opportunity Line"
-        height={40}
-        width={800}
+        height={100}
+        width={1200}
         />
       </CardContent>
     </Card>
