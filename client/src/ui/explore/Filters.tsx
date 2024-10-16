@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   Box,
   Checkbox,
@@ -9,67 +9,61 @@ import {
   Card
 } from '@mui/material';
 
-
-
 export interface FilterOption {
   label: string;
   value: string;
-}
-
-export interface FiltersProps {
-  jobTypes: FilterOption[];
-  appliedStatuses: FilterOption[];
-  years: FilterOption[];
-  initialFilters: SelectedFilters;
-  onFilterChange: (filters: SelectedFilters) => void;
 }
 
 export interface SelectedFilters {
   jobTypes: string[];
   appliedStatuses: string[];
   years: string[];
+  searchQuery: string;
+  sortOption: string;
 }
 
-export const Filters: React.FC<FiltersProps> = ({
-  jobTypes,
-  appliedStatuses,
-  years,
-  initialFilters,
-  onFilterChange,
-}) => {
-  const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>(
-    initialFilters
-  );
+interface FiltersProps {
+  filters: SelectedFilters;
+  setFilters: React.Dispatch<React.SetStateAction<SelectedFilters>>;
+}
 
-  useEffect(() => {
-    setSelectedFilters(initialFilters);
-  }, [initialFilters]);
+export const Filters: React.FC<FiltersProps> = ({ filters, setFilters }) => {
+  const jobTypeOptions: FilterOption[] = [
+    { label: 'Full-Time', value: 'full-time' },
+    { label: 'Part-Time', value: 'part-time' },
+    { label: 'Internship', value: 'internship' },
+    // Fetch from Supabase if needed
+  ];
+
+  const appliedStatusOptions: FilterOption[] = [
+    { label: 'Applied', value: 'applied' },
+    { label: 'Not Applied', value: 'not-applied' },
+  ];
+
+  const yearOptions: FilterOption[] = [
+    { label: '2021', value: '2021' },
+    { label: '2022', value: '2022' },
+    { label: '2023', value: '2023' },
+  ];
 
   const handleCheckboxChange = (
-    section: keyof SelectedFilters,
+    section: keyof Omit<SelectedFilters, 'searchQuery' | 'sortOption'>,
     value: string
   ) => {
-    setSelectedFilters((prev) => {
-      const updatedSection = prev[section].includes(value)
-        ? prev[section].filter((item) => item !== value)
-        : [...prev[section], value];
+    setFilters((prev) => {
+      const currentValues = prev[section];
+      const newValues = currentValues.includes(value)
+        ? currentValues.filter((v) => v !== value)
+        : [...currentValues, value];
 
-      const newFilters = {
-        ...prev,
-        [section]: updatedSection,
-      };
-
-      // Call the parent callback function to update filters
-      onFilterChange(newFilters);
-
-      return newFilters;
+      return { ...prev, [section]: newValues };
     });
   };
 
   const renderSection = (
     title: string,
     options: FilterOption[],
-    sectionKey: keyof SelectedFilters
+    sectionKey: keyof Omit<SelectedFilters, 'searchQuery' | 'sortOption'>
   ) => (
     <Box sx={{ marginBottom: 4 }}>
       <Typography variant="h6" sx={{ fontWeight: 'bold', marginBottom: 2 }}>
@@ -81,7 +75,7 @@ export const Filters: React.FC<FiltersProps> = ({
             key={option.value}
             control={
               <Checkbox
-                checked={selectedFilters[sectionKey].includes(option.value)}
+                checked={filters[sectionKey].includes(option.value)}
                 onChange={() => handleCheckboxChange(sectionKey, option.value)}
               />
             }
@@ -89,15 +83,16 @@ export const Filters: React.FC<FiltersProps> = ({
           />
         ))}
       </FormGroup>
-      <Divider/>
+      <Divider />
     </Box>
   );
 
   return (
-    <Card sx={{border: "solid 3px #e0e4f2", borderRadius: "20px"}}>
-      {renderSection('Job Type', jobTypes, 'jobTypes')}
-      {renderSection('Applied', appliedStatuses, 'appliedStatuses')}
-      {renderSection('Year', years, 'years')}
+    <Card sx={{ border: "solid 3px #e0e4f2", borderRadius: "20px", padding: "1rem" }}>
+      {renderSection('Job Type', jobTypeOptions, 'jobTypes')}
+      {renderSection('Applied Status', appliedStatusOptions, 'appliedStatuses')}
+      {renderSection('Year', yearOptions, 'years')}
+      {/* Add more filter sections as needed */}
     </Card>
   );
 };
