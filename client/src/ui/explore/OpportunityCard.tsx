@@ -17,7 +17,6 @@ interface OpportunityCardProps {
   jobType: string;
   positionStatus: string;
   userPositionStatus: string;
-  // Add other necessary props
 }
 
 export const OpportunityCard: React.FC<OpportunityCardProps> = ({
