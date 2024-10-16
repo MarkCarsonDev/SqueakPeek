@@ -61,10 +61,11 @@ export default function Page() {
   return (
     <div className="page-container">
       <div className="header-search-container">
-        {/* Search bar component can be placed here */}
-        <Typography variant="h5" sx={{ margin: "1rem" }}>
-          <strong>Explore</strong>
-        </Typography>
+        <div className="header-text">
+          <Typography sx={{margin: "1rem 1rem"}} variant="h5"><span style={{ fontWeight: "bold" }}>Explore</span> 321 Results</Typography>
+          <Typography sx={{marginLeft: "1rem"}} variant="body1">Explore entry-level roles, discover the application pipeline,</Typography>
+          <Typography sx={{marginLeft: "1rem"}} variant="body1">and talk to other applicants in the <span style={{ fontWeight: "bold"}}>company threads</span>.</Typography>
+        </div>
         <SearchBar filters={filters} setFilters={setFilters} />
         <SortOptions filters={filters} setFilters={setFilters} />
       </div>
