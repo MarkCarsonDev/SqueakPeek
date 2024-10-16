@@ -1,38 +1,43 @@
-// Page.tsx
-
 "use client";
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Filters, SelectedFilters, FilterOption } from "@/ui/explore/Filters";
-import { Typography, Avatar } from '@mui/material';
-import { OpportunityCard } from "@/ui/explore/OpportunityCard";
+import { Typography } from '@mui/material';
+import { Filters, SelectedFilters } from "@/ui/explore/Filters";
+import { OpportunityList } from "@/ui/explore/OpportunityList";
+import { SearchBar } from '@/ui/explore/SearchBar';
+import { SortOptions } from '@/ui/explore/SortOptions';
 import "@/app/(main)/explore/explore.css";
-import FilteredContentComponent from "@/ui/explore/FilteredContentComponent";
 
 export default function Page() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Define getInitialFilters function
-  const getInitialFilters = (): SelectedFilters => {
+  const [filters, setFilters] = useState<SelectedFilters>({
+    jobTypes: [],
+    appliedStatuses: [],
+    years: [],
+    searchQuery: '',
+    sortOption: ''
+  });
+
+  // Update filters when URL parameters change
+  useEffect(() => {
     const jobTypes = searchParams.getAll('jobType');
     const appliedStatuses = searchParams.getAll('appliedStatus');
     const years = searchParams.getAll('year');
+    const searchQuery = searchParams.get('search') || '';
+    const sortOption = searchParams.get('sort') || '';
 
-    return {
+    setFilters({
       jobTypes,
       appliedStatuses,
       years,
-    };
-  };
+      searchQuery,
+      sortOption
+    });
+  }, [searchParams]);
 
-  const [filters, setFilters] = useState<SelectedFilters>(getInitialFilters());
-
-  const handleFilterChange = (selectedFilters: SelectedFilters) => {
-    setFilters(selectedFilters);
-  };
-
+  // Update URL parameters when filters change
   useEffect(() => {
     const queryParams = new URLSearchParams();
 
@@ -42,53 +47,36 @@ export default function Page() {
     );
     filters.years.forEach((value) => queryParams.append('year', value));
 
+    if (filters.searchQuery) {
+      queryParams.set('search', filters.searchQuery);
+    }
+
+    if (filters.sortOption) {
+      queryParams.set('sort', filters.sortOption);
+    }
+
     router.replace(`?${queryParams.toString()}`);
   }, [filters, router]);
-
-  // Mock data for filter options
-  const jobTypes: FilterOption[] = [
-    { label: 'Full-Time', value: 'full-time' },
-    { label: 'Part-Time', value: 'part-time' },
-    { label: 'Internship', value: 'internship' },
-  ];
-
-  const appliedStatuses: FilterOption[] = [
-    { label: 'Applied', value: 'applied' },
-    { label: 'Not Applied', value: 'not-applied' },
-  ];
-
-  const years: FilterOption[] = [
-    { label: '2021', value: '2021' },
-    { label: '2022', value: '2022' },
-    { label: '2023', value: '2023' },
-  ];
 
   return (
     <div className="page-container">
       <div className="header-search-container">
-        <div className="header-text">
-          <Typography sx={{margin: "1rem 1rem"}} variant="h5"><span style={{ fontWeight: "bold" }}>Explore</span> 321 Results</Typography>
-          <Typography sx={{marginLeft: "1rem"}} variant="body1">Explore entry-level roles, discover the application pipeline,</Typography>
-          <Typography sx={{marginLeft: "1rem"}} variant="body1">and talk to other applicants in the <span style={{ fontWeight: "bold"}}>company threads</span>.</Typography>
-        </div>
-
+        {/* Search bar component can be placed here */}
+        <Typography variant="h5" sx={{ margin: "1rem" }}>
+          <strong>Explore</strong>
+        </Typography>
+        <SearchBar filters={filters} setFilters={setFilters} />
+        <SortOptions filters={filters} setFilters={setFilters} />
       </div>
       <div className="card-filter-container">
         <div className="opportunity-column">
-          {/* Render FilteredContentComponent here */}
-          <OpportunityCard title="Amazon" jobAvatar={<Image src="/landingpage/insight.svg" height={50} width={50} alt='Logo'/>} dateRangeStart="2023" dateRangeEnd="2024" jobPosition="Software Developer" jobType="Full-Time" positionStatus={false} userPositionStatus={false} />
+          <OpportunityList filters={filters} />
         </div>
-
         <div className="filter-column">
-          <Typography variant="h6" style={{ marginBottom: "5px", marginLeft: ".5rem" }}>Filters</Typography>
-          {/* Render Filters component here */}
-          <Filters
-            jobTypes={jobTypes}
-            appliedStatuses={appliedStatuses}
-            years={years}
-            initialFilters={filters}
-            onFilterChange={handleFilterChange}
-          />
+          <Typography variant="h6" sx={{ marginBottom: "0.5rem", marginLeft: "0.5rem" }}>
+            Filters
+          </Typography>
+          <Filters filters={filters} setFilters={setFilters} />
         </div>
       </div>
     </div>

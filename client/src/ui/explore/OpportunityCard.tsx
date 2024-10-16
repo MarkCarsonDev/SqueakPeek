@@ -1,93 +1,90 @@
-// OpportunityCard.tsx
-
 import {
-  Avatar,
   Card,
   CardHeader,
   CardContent,
   Typography,
 } from '@mui/material';
-import { faAnglesUp, IconDefinition, faAnglesDown } from "@fortawesome/free-solid-svg-icons";
+import { faAnglesUp, faAnglesDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from 'next/image';
 
 interface OpportunityCardProps {
+  id: number;
   title: string;
-  jobAvatar: JSX.Element;
   dateRangeStart: string;
   dateRangeEnd: string;
   jobPosition: string;
   jobType: string;
-  positionStatus: boolean;
-  userPositionStatus: boolean;
+  positionStatus: string;
+  userPositionStatus: string;
+  // Add other necessary props
 }
 
-
-export function OpportunityCard({
+export const OpportunityCard: React.FC<OpportunityCardProps> = ({
   title,
-  jobAvatar,
   dateRangeStart,
   dateRangeEnd,
   jobPosition,
   jobType,
   positionStatus,
-  userPositionStatus
-}: OpportunityCardProps) {
+  userPositionStatus,
+}) => {
+  const isPositionActive = positionStatus.toLowerCase() === 'actively hiring';
+  const hasApplied = userPositionStatus.toLowerCase() === 'applied';
 
   return (
-    <Card sx={{ border: 'solid 3px #e0e4f2', margin: '3rem', borderRadius: "20px"}}>
+    <Card sx={{ border: 'solid 3px #e0e4f2', margin: '1rem', borderRadius: "20px" }}>
       <CardHeader
-        sx={{ height: '25px' }}
-        avatar={jobAvatar}
-        title={<Typography>{title}</Typography>}
+        avatar={
+          <Image
+            src={`/company-logos/${title.toLowerCase()}.png`}
+            alt={`${title} Logo`}
+            width={50}
+            height={50}
+          />
+        }
+        title={<Typography variant="h6">{title}</Typography>}
         subheader={
-          <Typography>
+          <Typography variant="body2">
             {dateRangeStart} - {dateRangeEnd}
           </Typography>
         }
       />
-      <Typography variant="h5" sx={{ marginInline: "1.5rem" }}>
-        {jobPosition}, {jobType}
-      </Typography>
-      <CardContent sx={{display: "flex", gap: "1rem"}}>
-        <Typography
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            padding: ".25rem .50rem",
-            border: userPositionStatus ? "solid 2px green": "solid 2px red",
-            borderRadius: "10px",
-            minWidth: "auto",
-            height: "15px",
-            textAlign: "center",
-          }}
-          variant='body2'
-        >
-          {userPositionStatus? "Applied" : "Not Applied"}
+      <CardContent>
+        <Typography variant="h5">
+          {jobPosition}, {jobType}
         </Typography>
-        <Typography
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            padding: ".25rem .50rem",
-            border: positionStatus ? "solid 2px green": "solid 2px red",
-            borderRadius: "10px",
-            height: "15px",
-            minWidth: "auto",
-            textAlign: "center",
-          }}
-        >
-          {userPositionStatus? "Actively Hiring" : "Not Hiring"} <FontAwesomeIcon style={{marginLeft: ".25rem"}} icon={positionStatus ? faAnglesUp :faAnglesDown }/>
-        </Typography>
-      </CardContent>
-      <CardContent sx={{display: "flex", justifyContent: "center"}}>
-        <Image
-        src="/explore/opportunityLine.svg"
-        alt="Opportunity Line"
-        height={40}
-        width={800}
-        />
+        <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
+          <Typography
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              padding: '0.25rem 0.5rem',
+              border: hasApplied ? 'solid 2px green' : 'solid 2px red',
+              borderRadius: '10px',
+            }}
+            variant="body2"
+          >
+            {hasApplied ? 'Applied' : 'Not Applied'}
+          </Typography>
+          <Typography
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              padding: '0.25rem 0.5rem',
+              border: isPositionActive ? 'solid 2px green' : 'solid 2px red',
+              borderRadius: '10px',
+            }}
+            variant="body2"
+          >
+            {positionStatus}{' '}
+            <FontAwesomeIcon
+              style={{ marginLeft: '0.25rem' }}
+              icon={isPositionActive ? faAnglesUp : faAnglesDown}
+            />
+          </Typography>
+        </div>
       </CardContent>
     </Card>
   );
-}
+};
