@@ -3,7 +3,6 @@ import { AvatarTypes, ProfileAvatar } from "../ProfileAvatar";
 import { memo } from "react";
 import { MutableRefObject } from "react";
 import { useProfile } from "../../../lib/store/profile";
-import { DividerWithText } from "../DividerWithText";
 export interface MessageCardProps {
   avatar: AvatarTypes;
   sender_username: string;
@@ -23,8 +22,6 @@ export const MessageCard = memo(function MessageCard({
   sender_username,
   timestamp,
   message,
-  upVotes,
-  downVotes,
   prevDate,
 }: MessageCardProps) {
   // TODO: Make CardHeader match the UI in figma file
