@@ -1,4 +1,7 @@
 import { Typography, Button } from "@mui/material";
+import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFileCirclePlus } from "@fortawesome/free-solid-svg-icons";
 import "./tracking.css";
 
 export default function Page() {
@@ -24,6 +27,7 @@ export default function Page() {
         <Button
           variant="contained"
           color="primary"
+          endIcon={<FontAwesomeIcon icon={faFileCirclePlus} />} // Use the faFileCirclePlus icon
           sx={{
             mt: 2,
             width: "200px",
