@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Checkbox,
@@ -6,20 +6,28 @@ import {
   FormGroup,
   Typography,
   Divider,
-  Card
+  Card,
 } from '@mui/material';
+import { createSupabaseClient } from '../../../lib/supabase/client';
+
+const supabase = createSupabaseClient();
 
 export interface FilterOption {
   label: string;
   value: string;
+  count: number;
 }
 
 export interface SelectedFilters {
-  jobTypes: string[];
-  appliedStatuses: string[];
-  years: string[];
+  [key: string]: string[]; // Changed to make it dynamic
   searchQuery: string;
   sortOption: string;
+}
+
+interface FilterDefinition {
+  title: string;
+  dbColumn: string;
+  stateKey: string;
 }
 
 interface FiltersProps {
@@ -28,44 +36,102 @@ interface FiltersProps {
 }
 
 export const Filters: React.FC<FiltersProps> = ({ filters, setFilters }) => {
-  const jobTypeOptions: FilterOption[] = [
-    { label: 'Full-Time', value: 'full-time' },
-    { label: 'Part-Time', value: 'part-time' },
-    { label: 'Internship', value: 'internship' },
-    // Fetch from Supabase if needed
+  const [filterOptions, setFilterOptions] = useState<{
+    [key: string]: FilterOption[];
+  }>({});
+
+  // Define filters here
+  const filterDefinitions: FilterDefinition[] = [
+    // {
+    //   title: 'Applied Status',
+    //   dbColumn: 'user_position_status',
+    //   stateKey: 'appliedStatuses',
+    // },
+    // {
+    //   title: 'Year',
+    //   dbColumn: 'start_date',
+    //   stateKey: 'years',
+    // },
+    {
+        title: 'Company',
+        dbColumn: 'company_name',
+        stateKey: 'title',
+    },
+    {
+        title: 'Role Title',
+        dbColumn: 'role_title',
+        stateKey: 'jobPosition',
+    }
   ];
 
-  const appliedStatusOptions: FilterOption[] = [
-    { label: 'Applied', value: 'applied' },
-    { label: 'Not Applied', value: 'not-applied' },
-  ];
+  useEffect(() => {
+    const fetchFilterOptions = async () => {
+      // Fetch all necessary data
+      const { data: opportunities, error } = await supabase
+        .from('opportunity')
+        .select('*');
 
-  const yearOptions: FilterOption[] = [
-    { label: '2021', value: '2021' },
-    { label: '2022', value: '2022' },
-    { label: '2023', value: '2023' },
-  ];
+      if (error) {
+        console.error('Error fetching opportunities:', error);
+      } else if (opportunities) {
+        const optionsData: { [key: string]: FilterOption[] } = {};
+
+        for (const filterDef of filterDefinitions) {
+          const counts: { [key: string]: number } = {};
+
+          opportunities.forEach((item) => {
+            let value: string;
+
+            // if (filterDef.dbColumn === 'start_date') {
+            //   if (item.start_date) {
+            //     value = new Date(item.start_date).getFullYear().toString();
+            //   } else {
+            //     value = 'Unknown';
+            //   }
+            // } else {
+            //   value = item[filterDef.dbColumn] || 'Unknown';
+            // }
+            value = item[filterDef.dbColumn] || 'Unknown';
+
+            counts[value] = (counts[value] || 0) + 1;
+          });
+
+          const options = Object.entries(counts).map(([value, count]) => ({
+            label: `${value} (${count})`,
+            value: value,
+            count,
+          }));
+
+          optionsData[filterDef.stateKey] = options;
+        }
+
+        setFilterOptions(optionsData);
+      }
+    };
+
+    fetchFilterOptions();
+  }, [filterDefinitions]);
 
   const handleCheckboxChange = (
-    section: keyof Omit<SelectedFilters, 'searchQuery' | 'sortOption'>,
+    sectionKey: string,
     value: string
   ) => {
     setFilters((prev) => {
-      const currentValues = prev[section];
+      const currentValues = prev[sectionKey] || [];
       const newValues = currentValues.includes(value)
         ? currentValues.filter((v) => v !== value)
         : [...currentValues, value];
 
-      return { ...prev, [section]: newValues };
+      return { ...prev, [sectionKey]: newValues };
     });
   };
 
   const renderSection = (
     title: string,
     options: FilterOption[],
-    sectionKey: keyof Omit<SelectedFilters, 'searchQuery' | 'sortOption'>
+    sectionKey: string
   ) => (
-    <Box sx={{ marginBottom: 4 }}>
+    <Box sx={{ marginBottom: 4 }} key={sectionKey}>
       <Typography variant="h6" sx={{ fontWeight: 'bold', marginBottom: 2 }}>
         {title}
       </Typography>
@@ -75,7 +141,7 @@ export const Filters: React.FC<FiltersProps> = ({ filters, setFilters }) => {
             key={option.value}
             control={
               <Checkbox
-                checked={filters[sectionKey].includes(option.value)}
+                checked={(filters[sectionKey] || []).includes(option.value)}
                 onChange={() => handleCheckboxChange(sectionKey, option.value)}
               />
             }
@@ -88,10 +154,14 @@ export const Filters: React.FC<FiltersProps> = ({ filters, setFilters }) => {
   );
 
   return (
-    <Card sx={{ border: "solid 3px #e0e4f2", borderRadius: "20px", padding: "1rem" }}>
-      {renderSection('Job Type', jobTypeOptions, 'jobTypes')}
-      {renderSection('Applied Status', appliedStatusOptions, 'appliedStatuses')}
-      {renderSection('Year', yearOptions, 'years')}
+    <Card sx={{ border: 'solid 3px #e0e4f2', borderRadius: '20px', padding: '1rem' }}>
+      {filterDefinitions.map((filterDef) =>
+        renderSection(
+          filterDef.title,
+          filterOptions[filterDef.stateKey] || [],
+          filterDef.stateKey
+        )
+      )}
       {/* Add more filter sections as needed */}
     </Card>
   );
