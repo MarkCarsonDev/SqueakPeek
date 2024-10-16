@@ -7,7 +7,7 @@ export interface MessageBodyProps {
   message: string;
   upVotes?: number;
   downVotes?: number;
-  messageId: number;
+  messageId: string;
 }
 
 /**

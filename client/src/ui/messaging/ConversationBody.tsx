@@ -16,14 +16,13 @@ interface ConversationBodyProps {
  * Also allows to send messages to that particular conversation
  */
 export function ConversationBody({ conversationId }: ConversationBodyProps) {
-  console.log("convoID: ", conversationId);
   const { messages, addMessage } = useMessage();
-  const supabase = createSupabaseClient();
 
+  // subscribes to the channel as a listener
   useEffect(() => {
+    const supabase = createSupabaseClient();
     // Join a room/topic. Can be anything except for 'realtime'.
-    const channelA = supabase.channel("room-1");
-
+    const listenerChannel = supabase.channel(conversationId);
     // Simple function to log any messages we receive
     function messageReceived(payload: any) {
       console.log("payload: ", payload.payload.message);
@@ -31,8 +30,10 @@ export function ConversationBody({ conversationId }: ConversationBodyProps) {
     }
 
     // Subscribe to the Channel
-    channelA
-      .on("broadcast", { event: "test" }, (payload) => messageReceived(payload))
+    listenerChannel
+      .on("broadcast", { event: "conversation" }, async (payload) =>
+        messageReceived(payload)
+      )
       .subscribe();
   }, []);
 
@@ -79,7 +80,7 @@ export function ConversationBody({ conversationId }: ConversationBodyProps) {
           padding: "10px 10px",
         }}
       >
-        <MessageInput />
+        <MessageInput conversationId={conversationId} />
       </div>
     </div>
   );

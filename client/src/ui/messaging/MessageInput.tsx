@@ -2,24 +2,22 @@
 import { IconButton, InputAdornment, TextField } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUp } from "@fortawesome/free-solid-svg-icons/faCircleUp";
-import { useMessage } from "../../../lib/store/message";
 import { MessageBodyProps } from "./MessageCard";
 import { useProfile } from "../../../lib/store/profile";
 import { AvatarTypes } from "../ProfileAvatar";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { createSupabaseClient } from "../../../lib/supabase/client";
-import { RealtimeChannel } from "@supabase/supabase-js";
+import { v4 as uuidv4 } from "uuid";
+
 /**
- * Allows user to send a chmessage into a conversation
+ * Allows user to send a message into a conversation, and broadcasts the message based on the conversationId
  */
-export function MessageInput({ channel }: { channel?: RealtimeChannel }) {
-  const { addMessage } = useMessage();
+export function MessageInput({ conversationId }: { conversationId: string }) {
   const { profile } = useProfile();
   const [currentMessage, setCurrentMessage] = useState("");
   const supabase = createSupabaseClient();
-  const channelB = supabase.channel("room-1");
+  const senderChannel = supabase.channel(conversationId);
 
-  // TODO: Add this as a server action
   function handleSendMessage(message: string) {
     // only allows to add message if profile is made
     if (profile) {
@@ -27,24 +25,18 @@ export function MessageInput({ channel }: { channel?: RealtimeChannel }) {
         avatar: (profile.avatar as AvatarTypes) || "avatar1",
         sender_username: profile.username!,
         timestamp: new Date().toISOString(),
-        messageId: 12,
+        messageId: uuidv4(),
         message,
       };
 
-      channelB.subscribe((status) => {
-        // Wait for successful connection
-        if (status !== "SUBSCRIBED") {
-          return null;
-        }
-
-        // Send a message once the client is subscribed
-        channelB.send({
-          type: "broadcast",
-          event: "test",
-          payload: { message: newMessage },
-        });
+      // TODO: need to check state of channel before sending message
+      senderChannel.send({
+        type: "broadcast",
+        event: "conversation",
+        payload: { message: newMessage },
       });
-      addMessage(newMessage);
+
+      // TODO: Insert message into the message table
     }
   }
 
