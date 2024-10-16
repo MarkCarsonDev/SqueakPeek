@@ -26,12 +26,11 @@ export function ConversationBody({ conversationId }: ConversationBodyProps) {
 
     // Subscribe to the Channel
     listenerChannel
-      .on("broadcast", { event: "conversation" }, async (payload) =>
-
+      .on("broadcast", { event: "conversation" }, async (payload) => {
         // TODO check if payload is valid first
         // TODO: Payload is type of 'any' on this. If possible make this more explicit
-        addMessage(payload.payload.message)
-      )
+        addMessage(payload.payload.message);
+      })
       .subscribe();
 
     // unsubscribes once component unmounts

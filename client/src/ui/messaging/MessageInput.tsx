@@ -28,10 +28,18 @@ export function MessageInput({ conversationId }: { conversationId: string }) {
   function handleSendMessage(message: string) {
     // only allows to add message if profile is made
     if (profile) {
+      const today = new Date();
       const newMessage: MessageCardProps = {
         avatar: (profile.avatar as AvatarTypes) || "avatar1",
         sender_username: profile.username!,
-        timestamp: new Date().toISOString(),
+        timestamp:
+          today.toLocaleDateString("en-US", {
+            month: "2-digit",
+            day: "2-digit",
+            year: "2-digit",
+          }) +
+          " " +
+          today.toLocaleTimeString("en-US"),
         messageId: uuidv4(),
         message,
       };
