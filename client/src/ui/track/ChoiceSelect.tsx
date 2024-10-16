@@ -19,7 +19,7 @@ export default function SelectLabels({ options, fullWidth }: SelectLabelsProps) 
 
   return (
     <div>
-      <FormControl sx={{ m: 1, minWidth: 120 }} fullWidth={fullWidth}>
+      <FormControl sx={{minWidth: 120 }} fullWidth={fullWidth}>
         {/* <InputLabel>{labels}</InputLabel> */}
         <Select
           value={selectedValue}
