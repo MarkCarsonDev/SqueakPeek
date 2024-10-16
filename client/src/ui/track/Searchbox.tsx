@@ -42,7 +42,7 @@ export function ComboBox(props: TextFieldProps) {
       <Autocomplete
         disablePortal
         options={[]} // Will fix this later
-        sx={{ width: 300 }}
+        // sx={{ width: 300 }}
         renderInput={(params) => (
           <TextField
             {...params} // Spreading the Autocomplete params

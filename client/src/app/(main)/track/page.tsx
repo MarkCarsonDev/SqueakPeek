@@ -49,7 +49,7 @@ export default function Page() {
       </div>
 
       {/* The New Application Modal */}
-      <NewApplicationModal open={openModal} handleClose={handleCloseModal} />
+      <NewApplicationModal open={openModal} handleClose={handleCloseModal}/>
 
       <div className="application-stages">
         {stages.map((stage, index) => (

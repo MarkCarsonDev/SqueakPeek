@@ -1,8 +1,11 @@
-"use client"
+// "use client"
 import React from 'react';
 import { Modal, Typography, Button } from '@mui/material';
 import { InputField } from '@/ui/InputField'; // Assuming this is a custom input component
-import {ComboBox} from '@/ui/Searchbox'; // Assuming this is a custom combobox component
+import {ComboBox} from '@/ui/track/Searchbox'; // Assuming this is a custom combobox component
+import SelectLabels from '@/ui/track/ChoiceSelect'; // Assuming this is a custom select component
+import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // Define the types for the props
 interface NewApplicationModalProps {
@@ -16,8 +19,9 @@ export default function NewApplicationModal({ open, handleClose }: NewApplicatio
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: '80%',
-    maxWidth: '800px',
+    width: '100%',
+    maxWidth: '900px',
+    height: '500px',
     backgroundColor: 'white',
     boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)', // Valid CSS box shadow
     padding: '20px',
@@ -27,25 +31,28 @@ export default function NewApplicationModal({ open, handleClose }: NewApplicatio
   return (
     <Modal open={open} onClose={handleClose}>
       <div style={modalStyle}>
-        <Typography variant="h3" style={{ marginBottom: '20px' }}>
+        <Typography variant="h4" style={{ marginBottom: '20px' }}>
+          <FontAwesomeIcon icon={faPenToSquare} style={{ marginRight: '10px' }} />
           Add New Application
         </Typography>
-
+        {/* Job status */}
+        <SelectLabels  options={['Applied', 'Interviewing', 'Offered', 'Rejected']}/>
+        {/* Field Input part */}
         <form>
           <div style={{ display: 'flex', gap: '20px' }}>
             {/* Left side of the form */}
             <div style={{ flex: 1 }}>
-              <InputField label="Role Title" placeholder="Title" />
-              <InputField label="Location" placeholder="Location" />
-              <InputField label="Date Applied" placeholder="mm/dd/yyyy" />
+              <InputField label="Role Title" placeholder="Title" fullWidth />
+              <InputField label="Location" placeholder="Location" fullWidth />
+              <InputField label="Date Applied" placeholder="mm/dd/yyyy" fullWidth/>
             </div>
 
             {/* Right side of the form */}
             <div style={{ flex: 1 }}>
               {/* <InputField label="Company" placeholder="Company Name" /> */}
-              <ComboBox label = "Company" placeholder="Company Name" />
-              <InputField label="Job Type" placeholder="Type" />
-              <InputField label="Link to Job Application" placeholder="Link" />
+              <ComboBox label = "Company" placeholder="Company Name" fullWidth />
+              <ComboBox label="Job Type" placeholder="Type" fullWidth />
+              <InputField label="Link to Job Application" placeholder="Link" fullWidth/>
             </div>
           </div>
 
