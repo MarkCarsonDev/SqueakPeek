@@ -96,8 +96,8 @@ export default function Page() {
             dateRangeEnd="2024"
             jobPosition="Software Developer"
             jobType="Full-Time"
-            positionStatus={false}
-            userPositionStatus={false}
+            positionStatus={true}
+            userPositionStatus={true}
             totalApplied={100}
             rejected={50}
             oa={50}

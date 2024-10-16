@@ -8,6 +8,8 @@ import {
   Typography,
   IconButton,
   Chip,
+  CardActionArea,
+  Button,
 } from "@mui/material";
 import {
   faAnglesUp,
@@ -35,7 +37,7 @@ interface OpportunityCardProps {
 
 interface jobStats {
   status: string;
-  borderColor: string;
+  color: string;
   quantity: number;
 }
 
@@ -57,37 +59,37 @@ export function OpportunityCard({
   const stats: jobStats[] = [
     {
       status: "Total Applied:",
-      borderColor: "1px solid black",
+      color: "black",
       quantity: totalApplied,
     },
     {
       status: "Rejected:",
-      borderColor: "1px solid red",
+      color: "red",
       quantity: rejected,
     },
     {
       status: "OA:",
-      borderColor: "1px solid orange",
+      color: "orange",
       quantity: oa,
     },
     {
       status: "Interviewing:",
-      borderColor: "1px solid yellow",
+      color: "gold",
       quantity: interviewing,
     },
     {
       status: "Offered:",
-      borderColor: "1px solid green",
+      color: "green",
       quantity: offered,
     },
   ];
 
   return (
     <Card
-      sx={{ border: "solid 3px #e0e4f2", margin: "3rem", borderRadius: "20px" }}
+      style={{ border: "solid 3px #e0e4f2", margin: "3rem", borderRadius: "20px", padding: "1rem" }}
     >
       <CardHeader
-        sx={{ height: "25px" }}
+        style={{ height: "25px", margin: 0 }}
         avatar={jobAvatar}
         title={<Typography>{title}</Typography>}
         subheader={
@@ -96,66 +98,65 @@ export function OpportunityCard({
           </Typography>
         }
       />
-      <Typography variant="h5" sx={{ marginInline: "1.5rem" }}>
+      <Typography variant="h5" sx={{ marginLeft: "1.90rem" }}>
         {jobPosition}, {jobType}
       </Typography>
-      <CardContent sx={{ display: "flex", gap: "1rem" }}>
-        <Typography
+      <CardContent style={{ display: "flex", margin: 0, padding: 0, marginLeft: "1.5rem"}}>
+
+        <Chip
+          label={userPositionStatus ? "Applied" : "Not Applied"}
+          variant="outlined"
           sx={{
-            display: "flex",
-            alignItems: "center",
-            padding: ".25rem .50rem",
-            border: userPositionStatus ? "solid 2px green" : "solid 2px red",
-            borderRadius: "10px",
-            minWidth: "auto",
-            height: "15px",
-            textAlign: "center",
+            color: userPositionStatus ? "green" : "red",
+            borderColor: userPositionStatus ? "green" : "red",
           }}
-          variant="body2"
-        >
-          {userPositionStatus ? "Applied" : "Not Applied"}
-        </Typography>
-        <Typography
+        />
+
+        <Chip
+          icon={
+            <FontAwesomeIcon
+              style={{ marginLeft: ".25rem", color: positionStatus? "green" : "red"  }}
+              icon={positionStatus ? faAnglesUp : faAnglesDown}
+            />
+          }
+          label={positionStatus ? "Actively Hiring" : "Not Hiring"}
+          variant="outlined"
           sx={{
-            display: "flex",
-            alignItems: "center",
-            padding: ".25rem .50rem",
-            border: positionStatus ? "solid 2px green" : "solid 2px red",
-            borderRadius: "10px",
-            height: "15px",
-            minWidth: "auto",
-            textAlign: "center",
+            color: positionStatus ? "green" : "red",
+            borderColor: positionStatus ? "green" : "red",
           }}
-        >
-          {userPositionStatus ? "Actively Hiring" : "Not Hiring"}{" "}
-          <FontAwesomeIcon
-            style={{ marginLeft: ".25rem" }}
-            icon={positionStatus ? faAnglesUp : faAnglesDown}
-          />
-        </Typography>
+        />
+
       </CardContent>
       <CardContent
         style={{
           display: "flex",
           justifyContent: "end",
-          gap: "1rem",
           marginRight: "3rem",
         }}
       >
         {stats.map((stats) => (
-            <Chip key={stats.status} label={`${stats.status} ${stats.quantity}`} variant="outlined" sx={{color: "red", borderColor: "red"}}/>
+          <Chip
+            key={stats.status}
+            label={`${stats.status} ${stats.quantity}`}
+            variant="outlined"
+            sx={{ color: stats.color, borderColor: stats.color }}
+          />
         ))}
       </CardContent>
       <CardContent sx={{ display: "flex", justifyContent: "center" }}>
-        <IconButton></IconButton>
+        {/* Portion for timeline TODO */}
         <Image
           src="/explore/opportunityLine.svg"
           alt="Opportunity Line"
           height={100}
           width={1100}
         />
-        <IconButton></IconButton>
       </CardContent>
+      <CardActionArea>
+        <Button variant="contained" size="large"></Button>
+        <Button variant="contained" size="large"></Button>
+      </CardActionArea>
     </Card>
   );
 }
