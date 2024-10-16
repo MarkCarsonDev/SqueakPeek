@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, Typography } from "@mui/material";
 import { AvatarTypes, ProfileAvatar } from "../ProfileAvatar";
 import { memo } from "react";
+import { MutableRefObject } from "react";
 import { useProfile } from "../../../lib/store/profile";
 export interface MessageCardProps {
   avatar: AvatarTypes;
@@ -10,6 +11,7 @@ export interface MessageCardProps {
   upVotes?: number;
   downVotes?: number;
   messageId: string;
+  prevDate?: MutableRefObject<Date | null>;
 }
 
 /**
@@ -22,13 +24,34 @@ export const MessageCard = memo(function MessageCard({
   message,
   upVotes,
   downVotes,
+  prevDate,
 }: MessageCardProps) {
   // TODO: Make CardHeader match the UI in figma file
   // TODO: Add upVotes and downVotes component
   const { profile } = useProfile();
   const messageDate = new Date(timestamp);
 
-  console.log(upVotes, downVotes);
+  function doRenderDivider(): boolean {
+    // if prevDate is passed in
+    if (prevDate) {
+      // if prevDate.current === null or if prevDate day does not match the
+      if (
+        !prevDate.current ||
+        (prevDate.current && prevDate.current.getDay() !== messageDate.getDay())
+      ) {
+        console.log("render divider");
+
+        if (!prevDate.current) {
+          prevDate.current = messageDate;
+        }
+        return true;
+      }
+    }
+    return false;
+  }
+
+  doRenderDivider();
+
   return (
     <Card
       sx={{

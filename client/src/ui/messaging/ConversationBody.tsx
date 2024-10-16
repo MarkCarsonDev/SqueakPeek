@@ -6,7 +6,6 @@ import Image from "next/image";
 import { useMessage } from "../../../lib/store/message";
 import { createSupabaseClient } from "../../../lib/supabase/client";
 import { useEffect, useRef } from "react";
-import { Typography } from "@mui/material";
 
 interface ConversationBodyProps {
   conversationId: string;
@@ -18,7 +17,7 @@ interface ConversationBodyProps {
  */
 export function ConversationBody({ conversationId }: ConversationBodyProps) {
   const { messages, addMessage } = useMessage();
-  // const prevDate = useRef<null | Date>(null);
+  const prevDate = useRef<Date | null>(null);
 
   useEffect(() => {
     const supabase = createSupabaseClient();
@@ -72,7 +71,13 @@ export function ConversationBody({ conversationId }: ConversationBodyProps) {
         }}
       >
         {messages.map((message) => {
-          return <MessageCard key={message.messageId} {...message} />;
+          return (
+            <MessageCard
+              key={message.messageId}
+              {...message}
+              prevDate={prevDate}
+            />
+          );
         })}
       </div>
 
