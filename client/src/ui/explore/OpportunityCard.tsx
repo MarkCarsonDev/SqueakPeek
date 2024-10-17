@@ -7,12 +7,16 @@ import {
   Chip,
   Button,
   Avatar,
+  CardActionArea,
 } from "@mui/material";
 import {
   faAnglesUp,
   faAnglesDown,
   faComment,
   faReply,
+  faArrowLeft,
+  faArrowRight,
+  faBookmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { OpportunityTimeline } from "./OpportunityTimeline";
@@ -33,6 +37,7 @@ interface OpportunityCardProps {
   interviewing: number;
   offered: number;
   recentMessages: number;
+  bookmarked: boolean;
 }
 
 interface jobStats {
@@ -56,6 +61,7 @@ export function OpportunityCard({
   interviewing,
   offered,
   recentMessages,
+  bookmarked,
 }: OpportunityCardProps) {
   const stats: jobStats[] = [
     {
@@ -95,7 +101,7 @@ export function OpportunityCard({
       }}
     >
       <CardHeader
-        style={{ height: "25px", margin: 0 }}
+        style={{ margin: 0, padding: 8 }}
         avatar={<Avatar src={jobAvatar}></Avatar>}
         title={<Typography>{title}</Typography>}
         subheader={
@@ -103,12 +109,19 @@ export function OpportunityCard({
             {dateRangeStart} - {dateRangeEnd}
           </Typography>
         }
-      />
-      <Typography variant="h5" sx={{ marginLeft: "1.90rem" }}>
+      >
+        <FontAwesomeIcon icon={faBookmark}/>
+      </CardHeader>
+      <Typography variant="h5" sx={{ padding: ".5rem .5rem" }}>
         {jobPosition}, {jobType}
       </Typography>
       <CardContent
-        style={{ display: "flex", margin: 0, padding: 0, marginLeft: "1.5rem", gap: "1rem" }}
+        style={{
+          display: "flex",
+          margin: 0,
+          padding: ".5rem .5rem",
+          gap: "1rem",
+        }}
       >
         <Chip
           label={userPositionStatus ? "Applied" : "Not Applied"}
@@ -123,7 +136,7 @@ export function OpportunityCard({
           icon={
             <FontAwesomeIcon
               style={{
-                marginLeft: ".25rem",
+                marginLeft: ".5rem",
                 color: positionStatus ? "green" : "red",
               }}
               icon={positionStatus ? faAnglesUp : faAnglesDown}
@@ -141,8 +154,8 @@ export function OpportunityCard({
         style={{
           display: "flex",
           justifyContent: "end",
-          marginRight: "3rem",
-          gap: "1rem"
+          padding: "1rem 3rem ",
+          gap: "1rem",
         }}
       >
         {stats.map((stats) => (
@@ -154,45 +167,47 @@ export function OpportunityCard({
           />
         ))}
       </CardContent>
-        {/* Portion for timeline TODO */}
+      {/* Portion for timeline TODO */}
 
-        <CardContent style={{display: "flex", justifyContent: "center"}}>
-        <OpportunityTimeline/>
-        </CardContent>
-
-      <Button
-        variant="contained"
-        style={{
-          backgroundColor: "#496FFF",
-          height: "40px",
-          width: "auto",
-          borderRadius: "20px",
-          marginLeft: "1.75rem",
-        }}
-      >
-        <FontAwesomeIcon icon={faComment} />
-        <Typography style={{ color: "white", marginLeft: ".5rem" }}>
-          {recentMessages}
-        </Typography>
-      </Button>
-      <Button
-        variant="contained"
-        style={{
-          backgroundColor: "#496FFF",
-          height: "40px",
-          width: "auto",
-          borderRadius: "20px",
-          marginLeft: "1rem",
-        }}
-      >
-        <FontAwesomeIcon icon={faReply} />
-        <Typography
-          variant="subtitle1"
-          style={{ color: "white", marginLeft: ".5rem" }}
+      <CardContent style={{ display: "flex", justifyContent: "center" }}>
+        <OpportunityTimeline />
+      </CardContent>
+      <CardActionArea style={{display: "flex", gap: "1rem", justifyContent: "flex-start", padding: "0 .5rem"}}>
+        <Button
+          variant="contained"
+          style={{
+            backgroundColor: "#496FFF",
+            height: "40px",
+            width: "auto",
+            borderRadius: "20px",
+            boxShadow: "none",
+          }}
         >
-          Share
-        </Typography>
-      </Button>
+          <FontAwesomeIcon icon={faComment} />
+          <Typography style={{ color: "white", marginLeft: ".5rem" }}>
+            {recentMessages}
+          </Typography>
+        </Button>
+
+        <Button
+          variant="contained"
+          style={{
+            backgroundColor: "#496FFF",
+            height: "40px",
+            width: "auto",
+            borderRadius: "20px",
+            boxShadow: "none",
+          }}
+        >
+          <FontAwesomeIcon icon={faReply} />
+          <Typography
+            variant="subtitle1"
+            style={{ color: "white", marginLeft: ".5rem" }}
+          >
+            Share
+          </Typography>
+        </Button>
+      </CardActionArea>
     </Card>
   );
 }
