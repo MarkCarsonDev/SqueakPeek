@@ -36,7 +36,7 @@ export default function NewApplicationModal({ open, handleClose }: NewApplicatio
           Add New Application
         </Typography>
         {/* Job status */}
-        <SelectLabels  options={['Applied', 'Interviewing', 'Offered', 'Rejected']}/>
+        <SelectLabels  options={['Applied', 'OA', 'Interviewing', 'Offer', 'Rejected']}/>
         {/* Field Input part */}
         <form>
           <div style={{ display: 'flex', gap: '20px' }}>
