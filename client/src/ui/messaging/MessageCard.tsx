@@ -1,6 +1,8 @@
 import { Card, CardContent, CardHeader, Typography } from "@mui/material";
 import { AvatarTypes, ProfileAvatar } from "../ProfileAvatar";
 import { memo } from "react";
+import { MutableRefObject } from "react";
+import { useProfile } from "../../../lib/store/profile";
 export interface MessageCardProps {
   avatar: AvatarTypes;
   sender_username: string;
@@ -9,6 +11,7 @@ export interface MessageCardProps {
   upVotes?: number;
   downVotes?: number;
   messageId: string;
+  prevDate?: MutableRefObject<Date | null>;
 }
 
 /**
@@ -19,31 +22,77 @@ export const MessageCard = memo(function MessageCard({
   sender_username,
   timestamp,
   message,
-  upVotes,
-  downVotes,
+  prevDate,
 }: MessageCardProps) {
   // TODO: Make CardHeader match the UI in figma file
   // TODO: Add upVotes and downVotes component
+  const { profile } = useProfile();
+  const messageDate = new Date(timestamp);
 
-  console.log(upVotes, downVotes);
+  // TODO: Decouple boolean logic and setting prevDate state
+  // TODO: This needs to get tested
+  function doRenderDivider(): boolean {
+    // if prevDate is passed in
+    if (prevDate) {
+      // if prevDate.current === null or if prevDate day does not match the
+      if (
+        !prevDate.current ||
+        (prevDate.current && prevDate.current.getDay() !== messageDate.getDay())
+      ) {
+        console.log("render divider");
+        prevDate.current = messageDate;
+
+        return true;
+      }
+    }
+    return false;
+  }
+
+  const res = doRenderDivider();
   return (
-    <Card
-      sx={{
-        boxShadow: "none",
+    <div
+      style={{
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
       }}
     >
-      <CardHeader
-        avatar={<ProfileAvatar avatar={avatar} />}
-        title={sender_username}
-        subheader={timestamp}
-      />
-      <CardContent
+      {/* TODO: Clean this up to make it simpler */}
+      {res && prevDate?.current && (
+        <Typography>{prevDate.current.toDateString()}</Typography>
+      )}
+      <Card
         sx={{
-          marginTop: "-20px",
+          boxShadow: "none",
+          width: "100%",
         }}
       >
-        <Typography>{message}</Typography>
-      </CardContent>
-    </Card>
+        <CardHeader
+          avatar={<ProfileAvatar avatar={avatar} />}
+          title={sender_username}
+          subheader={
+            messageDate.toLocaleDateString("en-US", {
+              month: "2-digit",
+              day: "2-digit",
+              year: "2-digit",
+            }) +
+            " " +
+            messageDate.toLocaleTimeString("en-US")
+          }
+          titleTypographyProps={{
+            color:
+              profile?.username === sender_username ? "#496FFF" : "#3C435C",
+          }}
+        />
+        <CardContent
+          sx={{
+            marginTop: "-20px",
+          }}
+        >
+          <Typography>{message}</Typography>
+        </CardContent>
+      </Card>
+    </div>
   );
 });
