@@ -39,10 +39,8 @@ export const ConversationBody = memo(function ConversationBody({
     >
       <NewMessagesNotification
         numNewMessages={numNewMessages}
-        onClick={() => {
-          scrollDown();
-          resetNumNewMessages();
-        }}
+        scrollDown={scrollDown}
+        resetNumNewMessages={resetNumNewMessages}
       />
       {messages.map((message) => {
         return (
