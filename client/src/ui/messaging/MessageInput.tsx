@@ -8,7 +8,7 @@ import { AvatarTypes } from "../ProfileAvatar";
 import { useEffect, useState } from "react";
 import { createSupabaseClient } from "../../../lib/supabase/client";
 import { v4 as uuidv4 } from "uuid";
-import { memo } from "react";
+import { memo, useMemo } from "react";
 /**
  * Allows user to send a message into a conversation, and broadcasts the message based on the conversationId
  */
@@ -19,8 +19,13 @@ export const MessageInput = memo(function MessageInput({
 }) {
   const { profile } = useProfile();
   const [currentMessage, setCurrentMessage] = useState("");
-  const supabase = createSupabaseClient();
-  const senderChannel = supabase.channel(conversationId);
+
+  // Memoize the Supabase client and the sender channel to prevent changing it's value when MessageInput re-renders
+  const supabase = useMemo(() => createSupabaseClient(), []);
+  const senderChannel = useMemo(
+    () => supabase.channel(conversationId),
+    [supabase, conversationId]
+  );
 
   useEffect(() => {
     // unsubscribes once component unmounts
