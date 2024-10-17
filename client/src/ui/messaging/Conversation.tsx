@@ -5,7 +5,7 @@ import { ConversationBody } from "./ConversationBody";
 import Image from "next/image";
 import { useMessage } from "../../../lib/store/message";
 import { createSupabaseClient } from "../../../lib/supabase/client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useProfile } from "../../../lib/store/profile";
 import { MessageCardProps } from "./MessageCard";
 interface ConversationBodyProps {
@@ -19,10 +19,19 @@ interface ConversationBodyProps {
 export function Conversation({ conversationId }: ConversationBodyProps) {
   const { addMessage, messages } = useMessage();
   const { profile } = useProfile();
-  const [numNewMessages, setNumNewMessages] = useState(0);
+  const [numNewMessages, setNumNewMessages] = useState(0); // used for rendering new message notification
+  const bottomRef = useRef<null | HTMLDivElement>(null); // used for scrolling down the page
 
+  // Resets numNewMessages to 0
   function resetNumNewMessages() {
     setNumNewMessages(0);
+  }
+
+  // Scroll to the bottom of the element
+  function scrollDown() {
+    if (bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: "smooth" });
+    }
   }
   useEffect(() => {
     const supabase = createSupabaseClient();
@@ -49,6 +58,11 @@ export function Conversation({ conversationId }: ConversationBodyProps) {
       listenerChannel.unsubscribe();
     };
   }, [addMessage, conversationId, profile]);
+
+  // scrolls down to the latest message on page mount
+  useEffect(() => {
+    scrollDown();
+  }, []); // Empty dependency array ensures this runs only once on mount
 
   return (
     <div
@@ -79,6 +93,8 @@ export function Conversation({ conversationId }: ConversationBodyProps) {
         messages={messages}
         numNewMessages={numNewMessages}
         resetNumNewMessages={() => resetNumNewMessages()}
+        scrollDown={scrollDown}
+        bottomRef={bottomRef}
       />
 
       {/* Message Input */}
