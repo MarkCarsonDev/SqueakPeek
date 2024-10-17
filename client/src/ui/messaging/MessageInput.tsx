@@ -8,11 +8,15 @@ import { AvatarTypes } from "../ProfileAvatar";
 import { useEffect, useState } from "react";
 import { createSupabaseClient } from "../../../lib/supabase/client";
 import { v4 as uuidv4 } from "uuid";
-
+import { memo } from "react";
 /**
  * Allows user to send a message into a conversation, and broadcasts the message based on the conversationId
  */
-export function MessageInput({ conversationId }: { conversationId: string }) {
+export const MessageInput = memo(function MessageInput({
+  conversationId,
+}: {
+  conversationId: string;
+}) {
   const { profile } = useProfile();
   const [currentMessage, setCurrentMessage] = useState("");
   const supabase = createSupabaseClient();
@@ -82,4 +86,4 @@ export function MessageInput({ conversationId }: { conversationId: string }) {
       }}
     />
   );
-}
+});
