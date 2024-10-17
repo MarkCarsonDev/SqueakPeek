@@ -1,21 +1,15 @@
-// OpportunityCard.tsx
-
 import {
-  Avatar,
   Card,
   CardHeader,
   CardContent,
   Typography,
-  IconButton,
   Chip,
-  CardActionArea,
   Button,
+  Avatar,
 } from "@mui/material";
 import {
   faAnglesUp,
-  IconDefinition,
   faAnglesDown,
-  faMessage,
   faComment,
   faReply,
 } from "@fortawesome/free-solid-svg-icons";
@@ -23,12 +17,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 
 interface OpportunityCardProps {
+  id: number;
   title: string;
-  jobAvatar: JSX.Element;
   dateRangeStart: string;
   dateRangeEnd: string;
   jobPosition: string;
   jobType: string;
+  jobAvatar: string
   positionStatus: boolean;
   userPositionStatus: boolean;
   totalApplied: number;
@@ -47,11 +42,11 @@ interface jobStats {
 
 export function OpportunityCard({
   title,
-  jobAvatar,
   dateRangeStart,
   dateRangeEnd,
   jobPosition,
   jobType,
+  jobAvatar,
   positionStatus,
   userPositionStatus,
   totalApplied,
@@ -100,10 +95,10 @@ export function OpportunityCard({
     >
       <CardHeader
         style={{ height: "25px", margin: 0 }}
-        avatar={jobAvatar}
+        avatar={<Avatar src={jobAvatar}></Avatar>}
         title={<Typography>{title}</Typography>}
         subheader={
-          <Typography>
+          <Typography variant="body2">
             {dateRangeStart} - {dateRangeEnd}
           </Typography>
         }
@@ -191,4 +186,4 @@ export function OpportunityCard({
         </Button>
     </Card>
   );
-}
+};
