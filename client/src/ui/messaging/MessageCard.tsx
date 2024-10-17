@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, Typography } from "@mui/material";
 import { AvatarTypes, ProfileAvatar } from "../ProfileAvatar";
-import { memo } from "react";
+import { memo, useEffect } from "react";
 import { MutableRefObject } from "react";
 import { useProfile } from "../../../lib/store/profile";
 export interface MessageCardProps {
@@ -12,6 +12,7 @@ export interface MessageCardProps {
   downVotes?: number;
   messageId: string;
   prevDate?: MutableRefObject<Date | null>;
+  scrollDown?: () => void;
 }
 
 /**
@@ -23,11 +24,16 @@ export const MessageCard = memo(function MessageCard({
   timestamp,
   message,
   prevDate,
+  scrollDown,
 }: MessageCardProps) {
   // TODO: Make CardHeader match the UI in figma file
   // TODO: Add upVotes and downVotes component
   const { profile } = useProfile();
   const messageDate = new Date(timestamp);
+
+  useEffect(() => {
+    if (scrollDown && profile?.username === sender_username) scrollDown();
+  }, []);
 
   // TODO: Decouple boolean logic and setting prevDate state
   // TODO: This needs to get tested

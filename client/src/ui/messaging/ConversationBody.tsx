@@ -33,12 +33,13 @@ export const ConversationBody = memo(function ConversationBody({
         scrollDown={scrollDown}
         resetNumNewMessages={resetNumNewMessages}
       />
-      {messages.map((message) => {
+      {messages.map((message, index) => {
         return (
           <MessageCard
             key={message.messageId}
             {...message}
             prevDate={prevDate}
+            scrollDown={index === messages.length - 1 ? scrollDown : undefined}
           />
         );
       })}
