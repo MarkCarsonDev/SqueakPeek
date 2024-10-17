@@ -2,6 +2,7 @@ import * as React from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+
 //import InputLabel from '@mui/material/InputLabel';
 
 interface SelectLabelsProps {
@@ -26,6 +27,14 @@ export default function SelectLabels({ options, fullWidth }: SelectLabelsProps) 
           onChange={handleChange}
           displayEmpty
           // label={labels} // Add label prop for the Select
+          MenuProps={{
+            PaperProps: {
+              sx: {
+                boxShadow: 'none', // Remove the shadow from the dropdown
+                border: '1px solid grey',
+              },
+            },
+          }}
         >
           <MenuItem value="">
             <em>Choice</em>

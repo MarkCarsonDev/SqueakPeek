@@ -42,7 +42,16 @@ export function ComboBox(props: TextFieldProps) {
       <Autocomplete
         disablePortal
         options={[]} // Will fix this later
-        // sx={{ width: 300 }}
+        PaperComponent={(props) => (
+          <div
+            {...props}
+            style={{
+              boxShadow: "none", // Remove shadow
+              border: "1px solid rgba(0, 0, 0, 0.12)", // Retain border
+              backgroundColor: "white", // Retain white background
+            }}
+          />
+        )}        
         renderInput={(params) => (
           <TextField
             {...params} // Spreading the Autocomplete params
