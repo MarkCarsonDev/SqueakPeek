@@ -5,7 +5,7 @@ import { ConversationBody } from "./ConversationBody";
 import Image from "next/image";
 import { useMessage } from "../../../lib/store/message";
 import { createSupabaseClient } from "../../../lib/supabase/client";
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useProfile } from "../../../lib/store/profile";
 import { MessageCardProps } from "./MessageCard";
 interface ConversationBodyProps {
@@ -19,7 +19,11 @@ interface ConversationBodyProps {
 export function Conversation({ conversationId }: ConversationBodyProps) {
   const { addMessage, messages } = useMessage();
   const { profile } = useProfile();
-  const numNewMessages = useRef(0);
+  const [numNewMessages, setNumNewMessages] = useState(0);
+
+  function resetNumNewMessages() {
+    setNumNewMessages(0);
+  }
   useEffect(() => {
     const supabase = createSupabaseClient();
 
@@ -35,7 +39,7 @@ export function Conversation({ conversationId }: ConversationBodyProps) {
         addMessage(newMessage);
 
         if (newMessage.sender_username !== profile?.username) {
-          numNewMessages.current += 1;
+          setNumNewMessages((prev) => prev + 1);
         }
       })
       .subscribe();
@@ -73,7 +77,8 @@ export function Conversation({ conversationId }: ConversationBodyProps) {
       {/* Messages */}
       <ConversationBody
         messages={messages}
-        numNewMessages={numNewMessages.current}
+        numNewMessages={numNewMessages}
+        resetNumNewMessages={() => resetNumNewMessages()}
       />
 
       {/* Message Input */}
