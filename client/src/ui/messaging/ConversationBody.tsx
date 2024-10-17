@@ -16,17 +16,17 @@ export const ConversationBody = memo(function ConversationBody({
   numNewMessages: number;
   resetNumNewMessages: () => void;
 }) {
-  const prevDate = useRef<Date | null>(null);
-  const bottomRef = useRef<null | HTMLDivElement>(null);
-  console.log("number: ", numNewMessages);
-  // Scroll to the bottom of the element
+  const prevDate = useRef<Date | null>(null); // used for rendering date divider
+  const bottomRef = useRef<null | HTMLDivElement>(null); // used for scrolling down the page
 
+  // Scroll to the bottom of the element
   function scrollDown() {
     if (bottomRef.current) {
       bottomRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }
 
+  // scrolls down to the latest message on page mount
   useEffect(() => {
     scrollDown();
   }, []); // Empty dependency array ensures this runs only once on mount
@@ -68,6 +68,8 @@ export const ConversationBody = memo(function ConversationBody({
           />
         );
       })}
+
+      {/* Used as a reference to scroll down the page */}
       <div ref={bottomRef} />
     </div>
   );
