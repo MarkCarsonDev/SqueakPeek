@@ -14,8 +14,8 @@ export default function Page() {
 
   // Initialize filters with dynamic keys
   const [filters, setFilters] = useState<SelectedFilters>({
-    searchQuery: '',
-    sortOption: '',
+    searchQuery: [''],
+    sortOption: [''],
   });
 
   // Update filters when URL parameters change
