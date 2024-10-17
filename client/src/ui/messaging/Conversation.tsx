@@ -6,6 +6,8 @@ import Image from "next/image";
 import { useMessage } from "../../../lib/store/message";
 import { createSupabaseClient } from "../../../lib/supabase/client";
 import { useEffect, useRef } from "react";
+import { useProfile } from "../../../lib/store/profile";
+import { MessageCardProps } from "./MessageCard";
 interface ConversationBodyProps {
   conversationId: string;
 }
@@ -16,8 +18,8 @@ interface ConversationBodyProps {
  */
 export function Conversation({ conversationId }: ConversationBodyProps) {
   const { addMessage, messages } = useMessage();
+  const { profile } = useProfile();
   const numNewMessages = useRef(0);
-
   useEffect(() => {
     const supabase = createSupabaseClient();
 
@@ -29,7 +31,12 @@ export function Conversation({ conversationId }: ConversationBodyProps) {
       .on("broadcast", { event: "conversation" }, async (payload) => {
         // TODO check if payload is valid first
         // TODO: Payload is type of 'any' on this. If possible make this more explicit
-        addMessage(payload.payload.message);
+        const newMessage = payload.payload.message as MessageCardProps;
+        addMessage(newMessage);
+
+        if (newMessage.sender_username !== profile?.username) {
+          numNewMessages.current += 1;
+        }
       })
       .subscribe();
 
@@ -37,7 +44,7 @@ export function Conversation({ conversationId }: ConversationBodyProps) {
     return () => {
       listenerChannel.unsubscribe();
     };
-  }, [addMessage, conversationId]);
+  }, [addMessage, conversationId, profile]);
 
   return (
     <div

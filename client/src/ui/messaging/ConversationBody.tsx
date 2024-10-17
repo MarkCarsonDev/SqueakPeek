@@ -36,7 +36,6 @@ export function ConversationBody({
       }}
     >
       <Chip
-        style={{}}
         label={`${numNewMessages} new messages`}
         variant="outlined"
         sx={{
