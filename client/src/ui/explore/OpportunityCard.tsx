@@ -15,6 +15,9 @@ import {
   faAnglesUp,
   IconDefinition,
   faAnglesDown,
+  faMessage,
+  faComment,
+  faReply,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
@@ -33,6 +36,7 @@ interface OpportunityCardProps {
   oa: number;
   interviewing: number;
   offered: number;
+  recentMessages: number;
 }
 
 interface jobStats {
@@ -55,6 +59,7 @@ export function OpportunityCard({
   oa,
   interviewing,
   offered,
+  recentMessages,
 }: OpportunityCardProps) {
   const stats: jobStats[] = [
     {
@@ -86,7 +91,12 @@ export function OpportunityCard({
 
   return (
     <Card
-      style={{ border: "solid 3px #e0e4f2", margin: "3rem", borderRadius: "20px", padding: "1rem" }}
+      style={{
+        border: "solid 3px #e0e4f2",
+        margin: "1.5rem 0",
+        borderRadius: "20px",
+        padding: "1rem",
+      }}
     >
       <CardHeader
         style={{ height: "25px", margin: 0 }}
@@ -101,8 +111,9 @@ export function OpportunityCard({
       <Typography variant="h5" sx={{ marginLeft: "1.90rem" }}>
         {jobPosition}, {jobType}
       </Typography>
-      <CardContent style={{ display: "flex", margin: 0, padding: 0, marginLeft: "1.5rem"}}>
-
+      <CardContent
+        style={{ display: "flex", margin: 0, padding: 0, marginLeft: "1.5rem" }}
+      >
         <Chip
           label={userPositionStatus ? "Applied" : "Not Applied"}
           variant="outlined"
@@ -115,7 +126,10 @@ export function OpportunityCard({
         <Chip
           icon={
             <FontAwesomeIcon
-              style={{ marginLeft: ".25rem", color: positionStatus? "green" : "red"  }}
+              style={{
+                marginLeft: ".25rem",
+                color: positionStatus ? "green" : "red",
+              }}
               icon={positionStatus ? faAnglesUp : faAnglesDown}
             />
           }
@@ -126,7 +140,6 @@ export function OpportunityCard({
             borderColor: positionStatus ? "green" : "red",
           }}
         />
-
       </CardContent>
       <CardContent
         style={{
@@ -153,10 +166,29 @@ export function OpportunityCard({
           width={1100}
         />
       </CardContent>
-      <CardActionArea>
-        <Button variant="contained" size="large"></Button>
-        <Button variant="contained" size="large"></Button>
-      </CardActionArea>
+
+      <Button
+        variant="contained"
+        style={{
+          backgroundColor: "#496FFF",
+          height: "40px",
+          width: "auto",
+          borderRadius: "20px",
+          marginLeft: "1.75rem"
+        }}
+      >
+        <FontAwesomeIcon icon={faComment} /><Typography style={{color: "white", marginLeft: ".5rem"}}>{recentMessages}</Typography>
+      </Button>
+      <Button variant="contained" style={{
+          backgroundColor: "#496FFF",
+          height: "40px",
+          width: "auto",
+          borderRadius: "20px",
+          marginLeft: "1rem"
+        }}>
+            <FontAwesomeIcon icon={faReply}/>
+            <Typography  variant="subtitle1"style={{color: "white", marginLeft: ".5rem"}}>Share</Typography>
+        </Button>
     </Card>
   );
 }

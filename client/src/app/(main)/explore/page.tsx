@@ -103,6 +103,7 @@ export default function Page() {
             oa={50}
             interviewing={50}
             offered={50}
+            recentMessages={100}
 
           />
         </div>
