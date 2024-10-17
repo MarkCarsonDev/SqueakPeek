@@ -1,7 +1,7 @@
 "use client";
 import { MessageCard, MessageCardProps } from "./MessageCard";
 import { Chip } from "@mui/material";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 
 /**
  * Handles rendering messages
@@ -9,10 +9,25 @@ import { useRef } from "react";
  */
 export function ConversationBody({
   messages,
+  numNewMessages,
 }: {
   messages: MessageCardProps[];
+  numNewMessages: number;
 }) {
   const prevDate = useRef<Date | null>(null);
+  const bottomRef = useRef<null | HTMLDivElement>(null);
+
+  // Scroll to the bottom of the element
+
+  function scrollDown() {
+    if (bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }
+
+  useEffect(() => {
+    scrollDown();
+  }, []); // Empty dependency array ensures this runs only once on mount
 
   return (
     <div
@@ -22,7 +37,7 @@ export function ConversationBody({
     >
       <Chip
         style={{}}
-        label="2 new messages"
+        label={`${numNewMessages} new messages`}
         variant="outlined"
         sx={{
           position: "absolute",
@@ -36,7 +51,7 @@ export function ConversationBody({
           left: "50%",
           transform: "translateX(-50%)",
         }}
-        onClick={() => {}}
+        onClick={() => scrollDown()}
       />
       {messages.map((message) => {
         return (
@@ -47,6 +62,7 @@ export function ConversationBody({
           />
         );
       })}
+      <div ref={bottomRef} />
     </div>
   );
 }

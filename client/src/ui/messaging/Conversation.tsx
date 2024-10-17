@@ -5,7 +5,7 @@ import { ConversationBody } from "./ConversationBody";
 import Image from "next/image";
 import { useMessage } from "../../../lib/store/message";
 import { createSupabaseClient } from "../../../lib/supabase/client";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 interface ConversationBodyProps {
   conversationId: string;
 }
@@ -16,6 +16,7 @@ interface ConversationBodyProps {
  */
 export function Conversation({ conversationId }: ConversationBodyProps) {
   const { addMessage, messages } = useMessage();
+  const numNewMessages = useRef(0);
 
   useEffect(() => {
     const supabase = createSupabaseClient();
@@ -63,7 +64,10 @@ export function Conversation({ conversationId }: ConversationBodyProps) {
       />
 
       {/* Messages */}
-      <ConversationBody messages={messages} />
+      <ConversationBody
+        messages={messages}
+        numNewMessages={numNewMessages.current}
+      />
 
       {/* Message Input */}
       <div
