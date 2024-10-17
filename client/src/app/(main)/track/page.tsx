@@ -29,7 +29,7 @@ export default function Page() {
       <div>
         <Button
           variant="contained"
-          color="primary"
+          // color="primary"
           endIcon={<FontAwesomeIcon icon={faFileCirclePlus} />}
           sx={{
             mt: 2,

@@ -2,11 +2,7 @@ import * as React from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-
-//import InputLabel from '@mui/material/InputLabel';
-
 interface SelectLabelsProps {
-  // labels: string; // Label for the select dropdown
   options: string[]; // Array of options as strings
   fullWidth?: boolean; // Optional boolean for full width
 }
@@ -19,33 +15,62 @@ export default function SelectLabels({ options, fullWidth }: SelectLabelsProps) 
   };
 
   return (
-    <div>
-      <FormControl sx={{minWidth: 120 }} fullWidth={fullWidth}>
-        {/* <InputLabel>{labels}</InputLabel> */}
-        <Select
-          value={selectedValue}
-          onChange={handleChange}
-          displayEmpty
-          // label={labels} // Add label prop for the Select
-          MenuProps={{
-            PaperProps: {
-              sx: {
-                boxShadow: 'none', // Remove the shadow from the dropdown
-                border: '1px solid grey',
-              },
+    <FormControl  
+      sx={{
+        height: '32px', // Reduce the height
+        // minWidth: 100, 
+        backgroundColor: "#496FFF",  
+        borderRadius: '15px',
+        border: 'none', // Remove the outer border
+        "& .MuiOutlinedInput-notchedOutline": {
+          border: "none", // Remove the outer outline when focused
+        },
+      }} 
+      fullWidth={fullWidth}
+    >
+      <Select
+        value={selectedValue}
+        onChange={handleChange}
+        displayEmpty
+        sx={{
+          color: "white", // Change text color to white
+          padding: '4px 10px', // Adjust padding for thinner appearance
+          height: '32px', // Control height for a thinner button
+          fontSize: '14px', // Optionally reduce font size for a sleeker look
+          "& .MuiSelect-icon": {
+            color: "white", // Change the arrow color to white
+          },
+          "&.MuiOutlinedInput-root": {
+            "& fieldset": {
+              border: 'none', // Remove border around the select field
             },
-          }}
-        >
-          <MenuItem value="">
-            <em>Choice</em>
+          },
+        }}
+        MenuProps={{
+          PaperProps: {
+            sx: {
+              minWidth: 100, 
+              boxShadow: 'none', // Remove the shadow from the dropdown
+              border: '1px solid grey', // Retain a light border
+              borderRadius: '15px',
+              backgroundColor: "#496FFF", // Background for dropdown menu
+            },
+          },
+        }}
+      >
+        <MenuItem value="">
+          <em>status</em>
+        </MenuItem>
+        {options.map((option, index) => (
+          <MenuItem 
+            key={index} 
+            value={option}
+            sx={{ color: 'white' }} // Change text color inside dropdown to white
+          >
+            {option}
           </MenuItem>
-          {options.map((option, index) => (
-            <MenuItem key={index} value={option}>
-              {option}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    </div>
+        ))}
+      </Select>
+    </FormControl>
   );
 }

@@ -46,9 +46,10 @@ export function ComboBox(props: TextFieldProps) {
           <div
             {...props}
             style={{
-              boxShadow: "none", // Remove shadow
-              border: "1px solid rgba(0, 0, 0, 0.12)", // Retain border
-              backgroundColor: "white", // Retain white background
+              boxShadow: "none", 
+              border: "1px solid rgba(0, 0, 0, 0.12)", 
+              borderRadius: "8px", 
+              backgroundColor: "white", 
             }}
           />
         )}        
