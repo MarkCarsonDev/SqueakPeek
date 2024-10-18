@@ -61,6 +61,11 @@ export const MessageCard = memo(function MessageCard({
   }
 
   const res = doRenderDivider();
+  const twoDigitDate = messageDate.toLocaleDateString("en-US", {
+    month: "2-digit",
+    day: "2-digit",
+    year: "2-digit",
+  });
   return (
     <div
       style={{
@@ -72,7 +77,20 @@ export const MessageCard = memo(function MessageCard({
     >
       {/* TODO: Clean this up to make it simpler */}
       {res && prevDate?.current && (
-        <Typography>{prevDate.current.toDateString()}</Typography>
+        <Typography
+          sx={{
+            paddingTop: "20px",
+            fontWeight: "bold",
+          }}
+        >
+          {new Intl.DateTimeFormat("en-US", { month: "long" }).format(
+            prevDate.current
+          ) +
+            " " +
+            prevDate.current.getDay() +
+            ", " +
+            prevDate.current.getFullYear()}
+        </Typography>
       )}
       <Card
         sx={{
