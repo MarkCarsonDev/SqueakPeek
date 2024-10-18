@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, Typography } from "@mui/material";
 import { AvatarTypes, ProfileAvatar } from "../ProfileAvatar";
 import { memo, useEffect } from "react";
 import { MutableRefObject } from "react";
-import { useProfile } from "../../../lib/store/profile";
+import { useProfile } from "../../lib/store/profile";
 export interface MessageCardProps {
   avatar: AvatarTypes;
   sender_username: string;

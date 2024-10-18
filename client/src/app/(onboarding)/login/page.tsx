@@ -2,9 +2,9 @@
 import { Button, Typography, Link, Divider } from "@mui/material";
 import "./login.css";
 import { InputField } from "@/ui/InputField";
-import { LoginState, loginAccount } from "../../../../lib/actions/login";
+import { LoginState, loginAccount } from "../../../lib/actions/login";
 import { useFormState } from "react-dom";
-import { handleGoogleLoginClientSide } from "../../../../lib/supabase/auth/handleGoogleLoginClientSide";
+import { handleGoogleLoginClientSide } from "../../../lib/supabase/auth/handleGoogleLoginClientSide";
 
 export default function Page() {
   const initialState: LoginState = { message: null, errors: {} };

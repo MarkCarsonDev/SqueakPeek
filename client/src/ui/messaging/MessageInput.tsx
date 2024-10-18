@@ -3,10 +3,10 @@ import { IconButton, InputAdornment, TextField } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUp } from "@fortawesome/free-solid-svg-icons/faCircleUp";
 import { MessageCardProps } from "./MessageCard";
-import { useProfile } from "../../../lib/store/profile";
+import { useProfile } from "../../lib/store/profile";
 import { AvatarTypes } from "../ProfileAvatar";
 import { useEffect, useState } from "react";
-import { createSupabaseClient } from "../../../lib/supabase/client";
+import { createSupabaseClient } from "../../lib/supabase/client";
 import { v4 as uuidv4 } from "uuid";
 import { memo, useMemo } from "react";
 /**

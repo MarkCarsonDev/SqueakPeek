@@ -2,9 +2,9 @@
 import { Button, Typography, Link, Divider } from "@mui/material";
 import "./signup.css";
 import { InputField } from "@/ui/InputField";
-import { SignUpState, createAccount } from "../../../../lib/actions/signup";
+import { SignUpState, createAccount } from "../../../lib/actions/signup";
 import { useFormState } from "react-dom";
-import { handleGoogleLoginClientSide } from "../../../../lib/supabase/auth/handleGoogleLoginClientSide";
+import { handleGoogleLoginClientSide } from "../../../lib/supabase/auth/handleGoogleLoginClientSide";
 
 export default function Page() {
   const initialState: SignUpState = { message: null, errors: {} };
@@ -114,26 +114,26 @@ export default function Page() {
         <div className="buttons-links">
           <div className="spacer"></div>
           <div className="submit-button">
-            <Link href = "/profile_setup">
-            <Button
-              className="borderline"
-              type="submit"
-              variant="contained"
-              color="primary"
-              sx={{
-                mt: 2,
-                width: "200px",
-                boxShadow: "none",
-                backgroundColor: "#496FFF",
-                borderRadius: "8px",
-                ":hover": {
-                  backgroundColor: "#3B5AC6",
+            <Link href="/profile_setup">
+              <Button
+                className="borderline"
+                type="submit"
+                variant="contained"
+                color="primary"
+                sx={{
+                  mt: 2,
+                  width: "200px",
                   boxShadow: "none",
-                },
-              }}
-            >
-              Confirm
-            </Button>
+                  backgroundColor: "#496FFF",
+                  borderRadius: "8px",
+                  ":hover": {
+                    backgroundColor: "#3B5AC6",
+                    boxShadow: "none",
+                  },
+                }}
+              >
+                Confirm
+              </Button>
             </Link>
           </div>
           <div className="login-link">

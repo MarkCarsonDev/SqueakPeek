@@ -3,10 +3,10 @@ import { MessageInput } from "./MessageInput";
 import { ConversationHeader } from "./ConversationHeader";
 import { ConversationBody } from "./ConversationBody";
 import Image from "next/image";
-import { useMessage } from "../../../lib/store/message";
-import { createSupabaseClient } from "../../../lib/supabase/client";
+import { useMessage } from "../../lib/store/message";
+import { createSupabaseClient } from "../../lib/supabase/client";
 import { useEffect, useState, useRef } from "react";
-import { useProfile } from "../../../lib/store/profile";
+import { useProfile } from "../../lib/store/profile";
 import { MessageCardProps } from "./MessageCard";
 
 /**
