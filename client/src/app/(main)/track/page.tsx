@@ -13,13 +13,6 @@ export default function Page() {
   const handleCloseModal = () => setOpenModal(false);
 
   const num_applications = "<Dummy Holder>"; // dummy data for number of applications
-  const stages = [
-    { name: "Initial Screen", color: "#769FCD" },
-    { name: "Rejected", color: "#C7253E" },
-    { name: "Online Assessment", color: "#EB5B00" },
-    { name: "Interviewing", color: "#F0A202" },
-    { name: "Offer", color: "#2E7E33" },
-  ];
 
   return (
     <div className="main">
@@ -56,6 +49,13 @@ export default function Page() {
 
 
 // Will comeback to this later
+// const stages = [
+//   { name: "Initial Screen", color: "#769FCD" },
+//   { name: "Rejected", color: "#C7253E" },
+//   { name: "Online Assessment", color: "#EB5B00" },
+//   { name: "Interviewing", color: "#F0A202" },
+//   { name: "Offer", color: "#2E7E33" },
+// ];
 {/* <div className="application-stages">
         {stages.map((stage, index) => (
           <div key={index} className="stage-column">
