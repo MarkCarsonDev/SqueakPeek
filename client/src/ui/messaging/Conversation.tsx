@@ -4,10 +4,9 @@ import { ConversationHeader } from "./ConversationHeader";
 import { ConversationBody } from "./ConversationBody";
 import Image from "next/image";
 import { useMessage } from "../../lib/store/message";
-import { createSupabaseClient } from "../../lib/supabase/client";
 import { useEffect, useState, useRef } from "react";
 import { useProfile } from "../../lib/store/profile";
-import { MessageCardProps } from "./MessageCard";
+import { useSubscribeConversation } from "@/lib/hooks/useSubscribeConversation";
 
 /**
  * This is a UI container that holds all messages for a particular conversation
@@ -31,32 +30,12 @@ export function Conversation({ conversationId }: { conversationId: string }) {
     }
   }
 
-  // TODO: Make this in its own custom hook
-  useEffect(() => {
-    const supabase = createSupabaseClient();
-
-    // Client joins conversation, and listens to messages
-    const listenerChannel = supabase.channel(conversationId);
-
-    // Subscribe to the Channel
-    listenerChannel
-      .on("broadcast", { event: "conversation" }, async (payload) => {
-        // TODO check if payload is valid first
-        // TODO: Payload is type of 'any' on this. If possible make this more explicit
-        const newMessage = payload.payload.message as MessageCardProps;
-        addMessage(newMessage);
-
-        if (newMessage.sender_username !== profile?.username) {
-          setNumNewMessages((prev) => prev + 1);
-        }
-      })
-      .subscribe();
-
-    // unsubscribes once component unmounts
-    return () => {
-      listenerChannel.unsubscribe();
-    };
-  }, [addMessage, conversationId, profile]);
+  useSubscribeConversation(
+    conversationId,
+    addMessage,
+    profile,
+    setNumNewMessages
+  );
 
   // scrolls down to the latest message on page mount
   useEffect(() => {

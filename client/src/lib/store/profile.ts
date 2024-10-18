@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { Tables } from "../types/database.types";
 
-type Profile = Tables<"profile">; // type of profile based of the database
+export type Profile = Tables<"profile">; // type of profile based of the database
 
 // state of the hook
 interface ProfileState {
