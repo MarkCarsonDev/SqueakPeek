@@ -7,7 +7,6 @@ import {
   Chip,
   Button,
   Avatar,
-  CardActionArea,
   IconButton,
 } from "@mui/material";
 import {
@@ -20,6 +19,7 @@ import {
 import { faBookmark as regularBookmark } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { OpportunityTimeline } from "./OpportunityTimeline";
+import { useState } from "react";
 
 interface OpportunityCardProps {
   id: number;
@@ -46,9 +46,6 @@ interface jobStats {
   quantity: number;
 }
 
-const handlebookmark = () => {
-
-}
 
 export function OpportunityCard({
   title,
@@ -65,8 +62,9 @@ export function OpportunityCard({
   interviewing,
   offered,
   recentMessages,
-  bookmarked,
+  bookmarked : initialBookmarked,
 }: OpportunityCardProps) {
+  const [bookmarked, setBookmarked] = useState(initialBookmarked);
   const stats: jobStats[] = [
     {
       status: "Total Applied:",
@@ -95,19 +93,23 @@ export function OpportunityCard({
     },
   ];
 
+  const handleBookmark = () => {
+    setBookmarked((prev) => !prev); // Toggle the bookmark state
+  };
+
   return (
     <Card
       style={{
         border: "solid 3px #e0e4f2",
         margin: "1.5rem 0",
         borderRadius: "20px",
-        padding: "2rem",
+        padding: ".5rem 2rem",
       }}
     >
       {/* Card Header in a div with Bookmark */}
-      <div style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+      <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", margin: 0}}>
       <CardHeader
-        style={{ margin: 0, padding: ".5rem" }}
+        style={{ margin: 0, padding: ".5rem", height: "2rem" }}
         avatar={<Avatar src={jobAvatar}></Avatar>}
         title={<Typography variant="h5">{title}</Typography>}
         subheader={
@@ -117,7 +119,7 @@ export function OpportunityCard({
         }
       />
 
-      <IconButton onClick={handlebookmark}>
+      <IconButton onClick={handleBookmark}>
       <FontAwesomeIcon icon={bookmarked? faBookmark: regularBookmark } size="2x" color="#496FFF"/>
       </IconButton>
 
@@ -140,9 +142,10 @@ export function OpportunityCard({
         <Chip
           label={userPositionStatus ? "Applied" : "Not Applied"}
           variant="outlined"
-          sx={{
+          style={{
             color: userPositionStatus ? "green" : "red",
             borderColor: userPositionStatus ? "green" : "red",
+            margin: 0,
           }}
         />
 
@@ -158,9 +161,10 @@ export function OpportunityCard({
           }
           label={positionStatus ? "Actively Hiring" : "Not Hiring"}
           variant="outlined"
-          sx={{
+          style={{
             color: positionStatus ? "green" : "red",
             borderColor: positionStatus ? "green" : "red",
+            margin: 0,
           }}
         />
 
@@ -171,8 +175,9 @@ export function OpportunityCard({
         style={{
           display: "flex",
           justifyContent: "end",
-          padding: "1rem 3rem ",
+          padding: ".5rem 3rem ",
           gap: "1rem",
+          margin: "0",
         }}
       >
         {stats.map((stats) => (
@@ -187,8 +192,8 @@ export function OpportunityCard({
 
       {/* Timeline section, displays stats of opportunity within date range */}
 
-      <CardContent style={{ display: "flex", justifyContent: "center" }}>
-        <OpportunityTimeline />
+      <CardContent style={{ display: "flex", justifyContent: "center", margin: 0 }}>
+        <OpportunityTimeline id={1}/>
       </CardContent>
 
       <CardContent style={{display: "flex", gap: "1rem", justifyContent: "flex-start", padding: "0 .5rem"}}>
