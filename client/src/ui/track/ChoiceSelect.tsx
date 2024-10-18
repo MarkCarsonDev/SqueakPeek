@@ -18,7 +18,6 @@ export default function SelectLabels({ options, fullWidth }: SelectLabelsProps) 
     <FormControl  
       sx={{
         height: '32px', // Reduce the height
-        // minWidth: 100, 
         backgroundColor: "#496FFF",  
         borderRadius: '15px',
         border: 'none', // Remove the outer border
@@ -49,7 +48,7 @@ export default function SelectLabels({ options, fullWidth }: SelectLabelsProps) 
         MenuProps={{
           PaperProps: {
             sx: {
-              minWidth: 100, 
+              Width: "auto", 
               boxShadow: 'none', // Remove the shadow from the dropdown
               border: '1px solid grey', // Retain a light border
               borderRadius: '15px',
