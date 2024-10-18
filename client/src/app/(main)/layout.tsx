@@ -1,6 +1,6 @@
 import { NavBar } from "@/ui/navbar/NavBar";
-import { createSupabaseServer } from "../../../lib/supabase/server";
-import InitProfile from "../../../lib/store/initProfile";
+import { createSupabaseServer } from "../../lib/supabase/server";
+import InitProfile from "../../lib/store/initProfile";
 
 /**
  * This layout file affects files in the (main) directory

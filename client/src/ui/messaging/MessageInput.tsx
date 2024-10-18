@@ -3,20 +3,31 @@ import { IconButton, InputAdornment, TextField } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUp } from "@fortawesome/free-solid-svg-icons/faCircleUp";
 import { MessageCardProps } from "./MessageCard";
-import { useProfile } from "../../../lib/store/profile";
+import { useProfile } from "../../lib/store/profile";
 import { AvatarTypes } from "../ProfileAvatar";
 import { useEffect, useState } from "react";
-import { createSupabaseClient } from "../../../lib/supabase/client";
+import { createSupabaseClient } from "../../lib/supabase/client";
 import { v4 as uuidv4 } from "uuid";
-
+import { memo, useMemo } from "react";
 /**
  * Allows user to send a message into a conversation, and broadcasts the message based on the conversationId
+  * @param {string} conversationId - ID used to broadcast messages to subscribed users
+
  */
-export function MessageInput({ conversationId }: { conversationId: string }) {
+export const MessageInput = memo(function MessageInput({
+  conversationId,
+}: {
+  conversationId: string;
+}) {
   const { profile } = useProfile();
   const [currentMessage, setCurrentMessage] = useState("");
-  const supabase = createSupabaseClient();
-  const senderChannel = supabase.channel(conversationId);
+
+  // Memoize the Supabase client and the sender channel to prevent changing it's value when MessageInput re-renders
+  const supabase = useMemo(() => createSupabaseClient(), []);
+  const senderChannel = useMemo(
+    () => supabase.channel(conversationId),
+    [supabase, conversationId]
+  );
 
   useEffect(() => {
     // unsubscribes once component unmounts
@@ -31,7 +42,7 @@ export function MessageInput({ conversationId }: { conversationId: string }) {
       const newMessage: MessageCardProps = {
         avatar: (profile.avatar as AvatarTypes) || "avatar1",
         sender_username: profile.username!,
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toUTCString(),
         messageId: uuidv4(),
         message,
       };
@@ -82,4 +93,4 @@ export function MessageInput({ conversationId }: { conversationId: string }) {
       }}
     />
   );
-}
+});

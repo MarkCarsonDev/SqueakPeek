@@ -5,7 +5,7 @@ import { InputField } from "@/ui/InputField";
 import {
   ProfileSetupState,
   createProfile,
-} from "../../../../lib/actions/profile_setup";
+} from "../../../lib/actions/profile_setup";
 import { useFormState } from "react-dom"; // Assuming this is available for form state management
 import "./profile_setup.css";
 

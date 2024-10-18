@@ -1,7 +1,7 @@
 "use client";
 import { Typography } from "@mui/material";
 import { useEffect } from "react";
-import { createSupabaseClient } from "../../../../lib/supabase/client";
+import { createSupabaseClient } from "../../../lib/supabase/client";
 export default function Page() {
   useEffect(() => {
     const supabase = createSupabaseClient();

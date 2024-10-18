@@ -1,5 +1,5 @@
 "use client";
-import { useProfile } from "../../../lib/store/profile";
+import { useProfile } from "../../lib/store/profile";
 import { ProfileAvatar } from "../ProfileAvatar";
 import { AvatarTypes } from "../ProfileAvatar";
 /**
