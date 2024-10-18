@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Button, Typography } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileCirclePlus } from "@fortawesome/free-solid-svg-icons";
-import NewApplicationModal from "@/ui/track/newApplication"; // Import the modal
+import NewApplicationModal from "@/ui/track/newApplicationModal"; 
 import "./tracking.css";
 
 export default function Page() {
@@ -26,7 +26,6 @@ export default function Page() {
       <Typography variant="h3">Submitted Applications</Typography>
       <Typography variant="subtitle1">Total Applications: {num_applications}</Typography>
 
-      <div>
         <Button
           variant="contained"
           // color="primary"
@@ -46,12 +45,18 @@ export default function Page() {
         >
           New Application
         </Button>
-      </div>
 
       {/* The New Application Modal */}
       <NewApplicationModal open={openModal} handleClose={handleCloseModal}/>
 
-      <div className="application-stages">
+    </div>
+  );
+}
+
+
+
+// Will comeback to this later
+{/* <div className="application-stages">
         {stages.map((stage, index) => (
           <div key={index} className="stage-column">
             <Typography
@@ -77,7 +82,4 @@ export default function Page() {
             <div className="application-box">+</div>
           </div>
         ))}
-      </div>
-    </div>
-  );
-}
+      </div> */}

@@ -1,10 +1,11 @@
 import React from "react";
 import { Modal, Typography, Button } from "@mui/material";
 import { InputField } from "@/ui/InputField"; 
-import { ComboBox } from "@/ui/track/Searchbox"; 
-import SelectLabels from "@/ui/track/ChoiceSelect"; 
+import { Searchbox } from "@/ui/track/Searchbox"; 
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import UpdateStatus from "@/ui/track/UpdateStatus";
+// You will import your calendar component here once added
 
 interface NewApplicationModalProps {
   open: boolean;
@@ -60,10 +61,11 @@ export default function NewApplicationModal({
           }}
         >
           {/* Status dropdown */}
-          <div style={{width: "30px"}}>
-          <SelectLabels
-            options={["Applied", "OA", "Interviewing", "Offer", "Rejected"]}
-          />
+          <div style={{ width: "150px" }}>
+            <UpdateStatus
+              name="status"
+              options={["Applied", "OA", "Interviewing", "Offer", "Rejected"]}
+            />
           </div>
 
           {/* Input Fields in a single flex container */}
@@ -73,25 +75,31 @@ export default function NewApplicationModal({
               <InputField
                 label="Role Title"
                 placeholder="Title"
+                name="roleTitle" // Added name prop
                 fullWidth
                 sx={{ marginBottom: "20px" }}
               />
               <InputField
                 label="Location"
                 placeholder="Location"
+                name="location" // Added name prop
                 fullWidth
                 sx={{ marginBottom: "20px" }}
               />
+
+              {/* Calendar component for Date Applied */}
+              {/* Replace this with the actual calendar component */}
               <InputField
                 label="Date Applied"
                 placeholder="mm/dd/yyyy"
+                name="dateApplied" // Added name prop
                 fullWidth
                 sx={{ marginBottom: "20px" }}
               />
+              
               {/* Action buttons */}
               <Button
                 variant="contained"
-
                 onClick={handleClose}
                 fullWidth
                 sx={{
@@ -115,21 +123,26 @@ export default function NewApplicationModal({
 
             {/* Right column */}
             <div style={{ flex: 1 }}>
-              <ComboBox
+              <Searchbox
                 label="Company"
                 placeholder="Company Name"
+                name="company" // Added name prop
+                required
                 fullWidth
                 style={{ marginBottom: "20px" }}
               />
-              <ComboBox
+              <Searchbox
                 label="Job Type"
                 placeholder="Type"
+                name="jobType" // Added name prop
+                required
                 fullWidth
                 style={{ marginBottom: "20px" }}
               />
               <InputField
                 label="Link to Job Application"
                 placeholder="Link"
+                name="jobLink" // Added name prop
                 fullWidth
                 style={{ marginBottom: "20px" }}
               />
