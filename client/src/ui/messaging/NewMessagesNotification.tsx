@@ -1,8 +1,10 @@
 import { Chip, Snackbar } from "@mui/material";
 
 /**
- *
- * @param numNewMessages: The number of messages
+ * A floating component that renders whenever a user receives a new message
+ * @param {number} numNewMessages: The number of new messages
+ * @param {() => void} scrollDown: Vertically scrolls down the page when invoked
+ * @param {() => void} resetNumNewMessages: Resets the number of new messages when invoked
  */
 export function NewMessagesNotification({
   numNewMessages,
@@ -24,7 +26,7 @@ export function NewMessagesNotification({
       autoHideDuration={5000}
       onClose={() => resetNumNewMessages()}
       sx={{
-        "&.MuiSnackbar-root": { top: "200px" },
+        "&.MuiSnackbar-root": { top: "200px" }, // positions Snackbar within ConversationBody
       }}
     >
       <Chip

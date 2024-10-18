@@ -17,6 +17,11 @@ export interface MessageCardProps {
 
 /**
  * UI that contains the metadata of a message
+ * @param {AvatarTypes} avatar: Used to render a particular profile avatar
+ * @param {string} sender_username: Username of the user that sent the message
+ * @param {string} timestamp: Time of when  the user sent the message
+ * @param {string} message: Text content of the user's message
+ * @param {() => void} scrollDown: Function that scrolls the page when invoked
  */
 export const MessageCard = memo(function MessageCard({
   avatar,
@@ -31,6 +36,7 @@ export const MessageCard = memo(function MessageCard({
   const { profile } = useProfile();
   const messageDate = new Date(timestamp);
 
+  // Scrolls down page when the current user sends a message
   useEffect(() => {
     if (scrollDown && profile?.username === sender_username) scrollDown();
   }, []);

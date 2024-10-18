@@ -5,7 +5,11 @@ import { NewMessagesNotification } from "./NewMessagesNotification";
 import { MutableRefObject } from "react";
 /**
  * Handles rendering messages
- * @param messages: Messages sent from users in a particular conversation
+ * @param {MessageCardProps[]} messages - Messages sent from users in a particular conversation
+ * @param {number} numNewMessages - The number of new messages was received
+ * @param {() =>  void} resetNumNewMessages - Resets the number of new messages when invoked
+ * @param {() => void} scrollDown - Vertically scrolls down the page when invoked
+ * @param { MutableRefObject<HTMLDivElement | null>} bottomRef - Used as a reference to be able to scroll down the page when scrollDown is invoked
  */
 export const ConversationBody = memo(function ConversationBody({
   messages,

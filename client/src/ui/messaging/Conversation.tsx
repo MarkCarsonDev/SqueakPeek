@@ -8,15 +8,12 @@ import { createSupabaseClient } from "../../../lib/supabase/client";
 import { useEffect, useState, useRef } from "react";
 import { useProfile } from "../../../lib/store/profile";
 import { MessageCardProps } from "./MessageCard";
-interface ConversationBodyProps {
-  conversationId: string;
-}
 
 /**
  * This is a UI container that holds all messages for a particular conversation
- * Also allows to send messages to that particular conversation
+ * @param {string} conversationId - ID used to subscribe users to listen to incoming messages
  */
-export function Conversation({ conversationId }: ConversationBodyProps) {
+export function Conversation({ conversationId }: { conversationId: string }) {
   const { addMessage, messages } = useMessage();
   const { profile } = useProfile();
   const [numNewMessages, setNumNewMessages] = useState(0); // used for rendering new message notification
@@ -33,6 +30,8 @@ export function Conversation({ conversationId }: ConversationBodyProps) {
       bottomRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }
+
+  // TODO: Make this in its own custom hook
   useEffect(() => {
     const supabase = createSupabaseClient();
 

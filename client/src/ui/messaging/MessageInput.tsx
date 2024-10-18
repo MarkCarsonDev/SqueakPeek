@@ -11,6 +11,8 @@ import { v4 as uuidv4 } from "uuid";
 import { memo, useMemo } from "react";
 /**
  * Allows user to send a message into a conversation, and broadcasts the message based on the conversationId
+  * @param {string} conversationId - ID used to broadcast messages to subscribed users
+
  */
 export const MessageInput = memo(function MessageInput({
   conversationId,
