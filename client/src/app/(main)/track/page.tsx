@@ -41,7 +41,7 @@ export default function Page() {
 
       {/* The New Application Modal */}
       <NewApplicationModal open={openModal} handleClose={handleCloseModal}/>
-
+          
     </div>
   );
 }

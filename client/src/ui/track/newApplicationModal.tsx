@@ -63,6 +63,7 @@ export default function NewApplicationModal({
           {/* Status dropdown */}
           <div style={{ width: "150px" }}>
             <UpdateStatus
+              required
               name="status"
               options={["Applied", "OA", "Interviewing", "Offer", "Rejected"]}
             />
@@ -75,7 +76,8 @@ export default function NewApplicationModal({
               <InputField
                 label="Role Title"
                 placeholder="Title"
-                name="roleTitle" // Added name prop
+                name="roleTitle" 
+                required
                 fullWidth
                 sx={{ marginBottom: "20px" }}
               />

@@ -9,14 +9,16 @@ import Select from '@mui/material/Select';
  * @param {string[]} options - Array of options to be displayed in the dropdown menu.
  * @param {boolean} [fullWidth] - Optional prop to allow the Select component to take the full width of its container.
  * @param {string} name - The name of the field to be used in form submissions (useful for FormData extraction).
+ * @param {boolean} [required] - Optional prop to make the Select field required.
  */
-export default function UpdateStatus({ options, fullWidth, name }: { options: string[], fullWidth?: boolean, name: string }) {
+export default function UpdateStatus({ options, fullWidth, name, required }: { options: string[], fullWidth?: boolean, name: string, required?: boolean }) {
   return (
     <Select
       name={name} // Use the name prop for form submission
       displayEmpty
       defaultValue="" // Default value set to show placeholder
       fullWidth={fullWidth}
+      required={required}
       renderValue={(selected) => {
         if (selected === "") {
           return <em>Status</em>; // Only show "Status" in the display area
