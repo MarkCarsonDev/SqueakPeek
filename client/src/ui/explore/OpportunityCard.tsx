@@ -8,16 +8,16 @@ import {
   Button,
   Avatar,
   CardActionArea,
+  IconButton,
 } from "@mui/material";
 import {
   faAnglesUp,
   faAnglesDown,
   faComment,
   faReply,
-  faArrowLeft,
-  faArrowRight,
   faBookmark,
 } from "@fortawesome/free-solid-svg-icons";
+import { faBookmark as regularBookmark } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { OpportunityTimeline } from "./OpportunityTimeline";
 
@@ -44,6 +44,10 @@ interface jobStats {
   status: string;
   color: string;
   quantity: number;
+}
+
+const handlebookmark = () => {
+
 }
 
 export function OpportunityCard({
@@ -97,24 +101,34 @@ export function OpportunityCard({
         border: "solid 3px #e0e4f2",
         margin: "1.5rem 0",
         borderRadius: "20px",
-        padding: "1rem",
+        padding: "2rem",
       }}
     >
+      {/* Card Header in a div with Bookmark */}
+      <div style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
       <CardHeader
-        style={{ margin: 0, padding: 8 }}
+        style={{ margin: 0, padding: ".5rem" }}
         avatar={<Avatar src={jobAvatar}></Avatar>}
-        title={<Typography>{title}</Typography>}
+        title={<Typography variant="h5">{title}</Typography>}
         subheader={
           <Typography variant="body2">
             {dateRangeStart} - {dateRangeEnd}
           </Typography>
         }
-      >
-        <FontAwesomeIcon icon={faBookmark}/>
-      </CardHeader>
+      />
+
+      <IconButton onClick={handlebookmark}>
+      <FontAwesomeIcon icon={bookmarked? faBookmark: regularBookmark } size="2x" color="#496FFF"/>
+      </IconButton>
+
+      </div>
+
+      {/* Job postion and job type */}
       <Typography variant="h5" sx={{ padding: ".5rem .5rem" }}>
         {jobPosition}, {jobType}
       </Typography>
+
+      {/* Opporunity status and user relative opportunity status */}
       <CardContent
         style={{
           display: "flex",
@@ -149,7 +163,10 @@ export function OpportunityCard({
             borderColor: positionStatus ? "green" : "red",
           }}
         />
+
       </CardContent>
+
+      {/* Opportunity stats */}
       <CardContent
         style={{
           display: "flex",
@@ -167,12 +184,14 @@ export function OpportunityCard({
           />
         ))}
       </CardContent>
-      {/* Portion for timeline TODO */}
+
+      {/* Timeline section, displays stats of opportunity within date range */}
 
       <CardContent style={{ display: "flex", justifyContent: "center" }}>
         <OpportunityTimeline />
       </CardContent>
-      <CardActionArea style={{display: "flex", gap: "1rem", justifyContent: "flex-start", padding: "0 .5rem"}}>
+
+      <CardContent style={{display: "flex", gap: "1rem", justifyContent: "flex-start", padding: "0 .5rem"}}>
         <Button
           variant="contained"
           style={{
@@ -207,7 +226,7 @@ export function OpportunityCard({
             Share
           </Typography>
         </Button>
-      </CardActionArea>
+      </CardContent>
     </Card>
   );
 }

@@ -3,6 +3,14 @@ import { Chrono } from "react-chrono";
 import "@/ui/explore/OpportunityTimeline.css";
 
 export function OpportunityTimeline() {
+  interface oppornityData {
+    id: number;
+    
+
+  }
+
+
+
   const data = [
     {
       title: "May 1940",
