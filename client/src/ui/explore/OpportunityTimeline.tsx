@@ -4,30 +4,49 @@ import "@/ui/explore/OpportunityTimeline.css";
 import { Typography } from "@mui/material";
 
 interface oppornityDataProps {
-    id: number;
-  }
-export function OpportunityTimeline({
-    id,
-    
-}: oppornityDataProps) {
-  
+  id: number;
+}
+export function OpportunityTimeline({ id }: oppornityDataProps) {
+  const customContent = [
+    <div style={{ textAlign: "center" }}>
+      <Typography>Job Stats</Typography>
+      <Typography>Interviewing: 50</Typography>
+      <Typography>Rejected: 50</Typography>
+    </div>,
+    <div style={{ textAlign: "center" }}>
+      <Typography>Job Stats</Typography>
+      <Typography>Interviewing: 25</Typography>
+      <Typography>Rejected: 25</Typography>
+    </div>,
+    <div style={{ textAlign: "center" }}>
+      <Typography>Job Stats</Typography>
+      <Typography>Interviewing: 25</Typography>
+      <Typography>Rejected: 25</Typography>
+    </div>,
+    <div style={{ textAlign: "center" }}>
+      <Typography>Job Stats</Typography>
+      <Typography>Interviewing: 25</Typography>
+      <Typography>Rejected: 25</Typography>
+    </div>,
+  ];
 
-
-
-    const customContent = [
-        <div>
-          <Typography>Custom Card 1</Typography>
-          <Typography></Typography>
-        </div>,
-      ];
-      
-      const items = [
-        {
-          title: <Typography color="white">04/29/24 - 05/7/24</Typography>,
-          cardTitle: "Card 1",
-          cardSubtitle: "Subtitle 1",
-        },
-      ];
+  const items = [
+    {
+      title: <Typography color="white">04/29/24 - 05/7/24</Typography>,
+    },
+    {
+      title: <Typography color="white">05/8/24 - 05/15/24</Typography>,
+    },
+    {
+      title: <Typography color="white">05/16/24 - 05/23/24</Typography>,
+    },
+    {
+      title: <Typography color="white">05/24/24 - 05/30/24</Typography>,
+    },
+    {
+      title: <Typography color="white">05/30/24 - 06/06/24</Typography>,
+    },
+  ];
   return (
     <div className="custom-timeline">
       <Chrono
@@ -40,12 +59,14 @@ export function OpportunityTimeline({
           titleColor: "black",
           titleColorActive: "white",
         }}
-        cardHeight={100}
+        cardHeight={125}
         cardWidth={300}
         mode="HORIZONTAL"
         disableToolbar={true}
         lineLength="auto"
-      >{customContent}</Chrono>
+      >
+        {customContent}
+      </Chrono>
     </div>
   );
 }

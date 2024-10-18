@@ -2,6 +2,8 @@
     display: flex;
     justify-content: center;
     width:70%;
+    text-align: center;
+    margin: 0;
 }
 
 .timeline-main-wrapper{

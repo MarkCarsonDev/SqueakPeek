@@ -110,7 +110,7 @@ export function OpportunityCard({
       <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", margin: 0}}>
       <CardHeader
         style={{ margin: 0, padding: ".5rem", height: "2rem" }}
-        avatar={<Avatar src={jobAvatar}></Avatar>}
+        avatar={<Avatar src={jobAvatar} style={{margin: 0}}></Avatar>}
         title={<Typography variant="h5">{title}</Typography>}
         subheader={
           <Typography variant="body2">
@@ -119,8 +119,9 @@ export function OpportunityCard({
         }
       />
 
+      {/* Bookmark button */}
       <IconButton onClick={handleBookmark}>
-      <FontAwesomeIcon icon={bookmarked? faBookmark: regularBookmark } size="2x" color="#496FFF"/>
+      <FontAwesomeIcon icon={bookmarked? faBookmark: regularBookmark } style={{fontSize: "2.5rem"}} color="#496FFF"/>
       </IconButton>
 
       </div>
@@ -135,7 +136,7 @@ export function OpportunityCard({
         style={{
           display: "flex",
           margin: 0,
-          padding: ".5rem .5rem",
+          padding: "0rem .5rem",
           gap: "1rem",
         }}
       >
@@ -175,7 +176,7 @@ export function OpportunityCard({
         style={{
           display: "flex",
           justifyContent: "end",
-          padding: ".5rem 3rem ",
+          padding: "0rem 3rem ",
           gap: "1rem",
           margin: "0",
         }}
@@ -185,14 +186,14 @@ export function OpportunityCard({
             key={stats.status}
             label={`${stats.status} ${stats.quantity}`}
             variant="outlined"
-            sx={{ color: stats.color, borderColor: stats.color }}
+            style={{ color: stats.color, borderColor: stats.color, margin: 0}}
           />
         ))}
       </CardContent>
 
       {/* Timeline section, displays stats of opportunity within date range */}
 
-      <CardContent style={{ display: "flex", justifyContent: "center", margin: 0 }}>
+      <CardContent style={{ display: "flex", justifyContent: "center", margin: 0, padding: "0rem 1rem" }}>
         <OpportunityTimeline id={1}/>
       </CardContent>
 
