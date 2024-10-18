@@ -3,7 +3,6 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
 import { customTheme } from "@/theme/theme";
 import { Inter } from "next/font/google";
-import { PageFooter } from "@/ui/PageFooter";
 
 // Allows FontAwesome styles to work properly
 import { config } from "@fortawesome/fontawesome-svg-core";
@@ -47,7 +46,6 @@ export default function RootLayout({
       >
         <AppRouterCacheProvider>
           <ThemeProvider theme={customTheme}>{children}</ThemeProvider>
-          <PageFooter />
         </AppRouterCacheProvider>
       </body>
     </html>

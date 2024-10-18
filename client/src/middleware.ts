@@ -1,5 +1,5 @@
 import { type NextRequest } from "next/server";
-import { updateSession } from "@/../lib/supabase/middleware";
+import { updateSession } from "@/lib/supabase/middleware";
 
 /**
  * Middleware that is incoked in every route in the project

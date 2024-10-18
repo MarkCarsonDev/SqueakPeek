@@ -3,14 +3,16 @@ import { IconButton, InputAdornment, TextField } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUp } from "@fortawesome/free-solid-svg-icons/faCircleUp";
 import { MessageCardProps } from "./MessageCard";
-import { useProfile } from "../../../lib/store/profile";
+import { useProfile } from "../../lib/store/profile";
 import { AvatarTypes } from "../ProfileAvatar";
 import { useEffect, useState } from "react";
-import { createSupabaseClient } from "../../../lib/supabase/client";
+import { createSupabaseClient } from "../../lib/supabase/client";
 import { v4 as uuidv4 } from "uuid";
 import { memo, useMemo } from "react";
 /**
  * Allows user to send a message into a conversation, and broadcasts the message based on the conversationId
+  * @param {string} conversationId - ID used to broadcast messages to subscribed users
+
  */
 export const MessageInput = memo(function MessageInput({
   conversationId,
