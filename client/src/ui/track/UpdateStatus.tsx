@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { colors, Typography } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 
@@ -21,7 +22,7 @@ export default function UpdateStatus({ options, fullWidth, name, required }: { o
       required={required}
       renderValue={(selected) => {
         if (selected === "") {
-          return <em>Status</em>; // Only show "Status" in the display area
+          return <Typography sx={{color: 'white'}}>Status</Typography>; // Only show "Status" in the display area
         }
         return selected;
       }}

@@ -1,7 +1,7 @@
 import React from "react";
 import { Modal, Typography, Button } from "@mui/material";
-import { InputField } from "@/ui/InputField"; 
-import { Searchbox } from "@/ui/track/Searchbox"; 
+import { InputField } from "@/ui/InputField";
+import { SearchDropdown } from "@/ui/track/SearchDropdown";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import UpdateStatus from "@/ui/track/UpdateStatus";
@@ -28,9 +28,9 @@ export default function NewApplicationModal({
     >
       <form
         style={{
-          width: "70%", 
-          padding: "30px 40px", 
-          backgroundColor: "white", 
+          width: "70%",
+          padding: "30px 40px",
+          backgroundColor: "white",
           borderRadius: "8px",
           display: "flex",
           flexDirection: "column",
@@ -76,7 +76,7 @@ export default function NewApplicationModal({
               <InputField
                 label="Role Title"
                 placeholder="Title"
-                name="roleTitle" 
+                name="roleTitle"
                 required
                 fullWidth
                 sx={{ marginBottom: "20px" }}
@@ -98,7 +98,7 @@ export default function NewApplicationModal({
                 fullWidth
                 sx={{ marginBottom: "20px" }}
               />
-              
+
               {/* Action buttons */}
               <Button
                 variant="contained"
@@ -125,7 +125,7 @@ export default function NewApplicationModal({
 
             {/* Right column */}
             <div style={{ flex: 1 }}>
-              <Searchbox
+              <SearchDropdown
                 label="Company"
                 placeholder="Company Name"
                 name="company" // Added name prop
@@ -133,7 +133,7 @@ export default function NewApplicationModal({
                 fullWidth
                 style={{ marginBottom: "20px" }}
               />
-              <Searchbox
+              <SearchDropdown
                 label="Job Type"
                 placeholder="Type"
                 name="jobType" // Added name prop
@@ -148,9 +148,10 @@ export default function NewApplicationModal({
                 fullWidth
                 style={{ marginBottom: "20px" }}
               />
-              <Button 
-                variant="contained" 
-                color="primary" 
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
                 fullWidth
                 sx={{
                   marginTop: "20px",
