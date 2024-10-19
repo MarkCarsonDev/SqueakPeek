@@ -25,9 +25,9 @@ export const ConversationBody = memo(function ConversationBody({
 }) {
   // Scroll to the bottom of the element
 
-  const {profile} = useProfile()
+  const { profile } = useProfile();
 
-  const scrollThreshold = 30;
+  const scrollThreshold = 20;
   function scrollDown() {
     if (bottomRef.current) {
       bottomRef.current.scrollIntoView({ behavior: "smooth" });
@@ -66,25 +66,6 @@ export const ConversationBody = memo(function ConversationBody({
   const prevDate = useRef<Date | null>(null); // used for rendering date divider
   const scrollContainerRef = useRef<null | HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (scrollContainerRef.current) {
-      const handleScroll = () => {
-        isVisibleInContainer();
-      };
-
-      scrollContainerRef.current.addEventListener("scroll", handleScroll);
-
-      return () => {
-        if (scrollContainerRef.current) {
-          scrollContainerRef.current.removeEventListener(
-            "scroll",
-            handleScroll
-          );
-        }
-      };
-    }
-  }, [scrollContainerRef]);
-
   return (
     <div
       style={{
@@ -98,7 +79,10 @@ export const ConversationBody = memo(function ConversationBody({
         resetNumNewMessages={resetNumNewMessages}
       />
       {messages.map((message, index) => {
-        const res = (index === messages.length - 1 && profile?.username === message.sender_username) || isVisibleInContainer()
+        const res =
+          (index === messages.length - 1 &&
+            profile?.username === message.sender_username) ||
+          isVisibleInContainer();
         return (
           <MessageCard
             key={message.messageId}
@@ -113,12 +97,9 @@ export const ConversationBody = memo(function ConversationBody({
       <div
         ref={bottomRef}
         style={{
-          backgroundColor: "yellow",
           height: `${scrollThreshold}px`,
         }}
-      >
-        Hello
-      </div>
+      />
     </div>
   );
 });
