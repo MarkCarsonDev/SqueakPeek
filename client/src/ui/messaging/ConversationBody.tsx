@@ -3,6 +3,7 @@ import { MessageCard, MessageCardProps } from "./MessageCard";
 import { useRef, memo, useEffect } from "react";
 import { NewMessagesNotification } from "./NewMessagesNotification";
 import { MutableRefObject } from "react";
+import { useProfile } from "@/lib/store/profile";
 
 /**
  * Handles rendering messages
@@ -23,6 +24,8 @@ export const ConversationBody = memo(function ConversationBody({
   bottomRef: MutableRefObject<HTMLDivElement | null>;
 }) {
   // Scroll to the bottom of the element
+
+  const {profile} = useProfile()
 
   const scrollThreshold = 30;
   function scrollDown() {
@@ -95,12 +98,13 @@ export const ConversationBody = memo(function ConversationBody({
         resetNumNewMessages={resetNumNewMessages}
       />
       {messages.map((message, index) => {
+        const res = (index === messages.length - 1 && profile?.username === message.sender_username) || isVisibleInContainer()
         return (
           <MessageCard
             key={message.messageId}
             {...message}
             prevDate={prevDate}
-            scrollDown={index === messages.length - 1 ? scrollDown : undefined}
+            scrollDown={res ? scrollDown : undefined}
           />
         );
       })}

@@ -38,7 +38,7 @@ export const MessageCard = memo(function MessageCard({
 
   // Scrolls down page when the current user sends a
   useEffect(() => {
-    if (scrollDown && profile?.username === sender_username) scrollDown();
+    if (scrollDown) scrollDown();
   });
 
   // TODO: Decouple boolean logic and setting prevDate state
