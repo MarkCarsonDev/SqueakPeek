@@ -21,7 +21,6 @@ export default function Page() {
 
         <Button
           variant="contained"
-          // color="primary"
           endIcon={<FontAwesomeIcon icon={faFileCirclePlus} />}
           sx={{
             mt: 2,
