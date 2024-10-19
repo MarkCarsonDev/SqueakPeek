@@ -1,6 +1,6 @@
 "use client";
 import { MessageCard, MessageCardProps } from "./MessageCard";
-import { useRef, memo } from "react";
+import { useRef, memo, useEffect } from "react";
 import { NewMessagesNotification } from "./NewMessagesNotification";
 import { MutableRefObject } from "react";
 /**
@@ -15,22 +15,34 @@ export const ConversationBody = memo(function ConversationBody({
   messages,
   numNewMessages,
   resetNumNewMessages,
-  scrollDown,
   bottomRef,
 }: {
   messages: MessageCardProps[];
   numNewMessages: number;
   resetNumNewMessages: () => void;
-  scrollDown: () => void;
   bottomRef: MutableRefObject<HTMLDivElement | null>;
 }) {
+  // Scroll to the bottom of the element
+  function scrollDown() {
+    if (bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }
+
+  // scrolls down to the latest message on page mount
+  useEffect(() => {
+    scrollDown();
+  }, []); // Empty dependency array ensures this runs only once on mount
+
   const prevDate = useRef<Date | null>(null); // used for rendering date divider
+  const bodyRef = useRef<null | HTMLDivElement>(null);
 
   return (
     <div
       style={{
         overflowY: "auto", // allows vertical scrolling on the messages
       }}
+      ref={bodyRef}
     >
       <NewMessagesNotification
         numNewMessages={numNewMessages}
@@ -49,7 +61,12 @@ export const ConversationBody = memo(function ConversationBody({
       })}
 
       {/* Used as a reference to scroll down the page */}
-      <div ref={bottomRef} />
+      <div
+        ref={bottomRef}
+        style={{
+          backgroundColor: "yellow",
+        }}
+      />
     </div>
   );
 });

@@ -96,15 +96,31 @@ export const MessageCard = memo(function MessageCard({
       >
         <CardHeader
           avatar={<ProfileAvatar avatar={avatar} />}
-          title={sender_username}
-          subheader={
-            messageDate.toLocaleDateString("en-US", {
-              month: "2-digit",
-              day: "2-digit",
-              year: "2-digit",
-            }) +
-            " " +
-            messageDate.toLocaleTimeString("en-US")
+          title={
+            <span
+              style={{
+                display: "flex",
+                alignItems: "end",
+              }}
+            >
+              <Typography>{sender_username}</Typography>
+              {"  "}
+
+              <Typography
+                variant="caption"
+                style={{
+                  marginLeft: "4px",
+                }}
+              >
+                {messageDate.toLocaleDateString("en-US", {
+                  month: "2-digit",
+                  day: "2-digit",
+                  year: "2-digit",
+                }) +
+                  " " +
+                  messageDate.toLocaleTimeString("en-US")}
+              </Typography>
+            </span>
           }
           titleTypographyProps={{
             color:
