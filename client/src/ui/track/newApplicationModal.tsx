@@ -89,7 +89,7 @@ export default function NewApplicationModal({
                 sx={{ marginBottom: "20px" }}
               />
 
-              {/* Calendar component for Date Applied */}
+              {/* TODO:  Calendar component for Date Applied */}
               {/* Replace this with the actual calendar component */}
               <InputField
                 label="Date Applied"
