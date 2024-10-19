@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { colors, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 
