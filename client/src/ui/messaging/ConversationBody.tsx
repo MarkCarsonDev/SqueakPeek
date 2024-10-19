@@ -24,17 +24,19 @@ export const ConversationBody = memo(function ConversationBody({
   bottomRef: MutableRefObject<HTMLDivElement | null>;
 }) {
   // Scroll to the bottom of the element
-
   const { profile } = useProfile();
+  const prevDate = useRef<Date | null>(null); // used for rendering date divider
+  const scrollContainerRef = useRef<null | HTMLDivElement>(null); 
 
-  const scrollThreshold = 20;
+  const scrollThreshold = 20; // threshold for determining on whether page scrolls down on new messages
   function scrollDown() {
     if (bottomRef.current) {
       bottomRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }
 
-  const isVisibleInContainer = () => {
+  // determines if the scroll page is flushed in the bottom
+  const pageIsBottomFlushed = () => {
     if (bottomRef.current && scrollContainerRef.current) {
       const elementRect = bottomRef.current.getBoundingClientRect();
       const containerRect = scrollContainerRef.current.getBoundingClientRect();
@@ -63,9 +65,6 @@ export const ConversationBody = memo(function ConversationBody({
     scrollDown();
   }, []); // Empty dependency array ensures this runs only once on mount
 
-  const prevDate = useRef<Date | null>(null); // used for rendering date divider
-  const scrollContainerRef = useRef<null | HTMLDivElement>(null);
-
   return (
     <div
       style={{
@@ -79,16 +78,16 @@ export const ConversationBody = memo(function ConversationBody({
         resetNumNewMessages={resetNumNewMessages}
       />
       {messages.map((message, index) => {
-        const res =
+        const doScrollDown =
           (index === messages.length - 1 &&
             profile?.username === message.sender_username) ||
-          isVisibleInContainer();
+          pageIsBottomFlushed();
         return (
           <MessageCard
             key={message.messageId}
             {...message}
             prevDate={prevDate}
-            scrollDown={res ? scrollDown : undefined}
+            scrollDown={doScrollDown ? scrollDown : undefined}
           />
         );
       })}
