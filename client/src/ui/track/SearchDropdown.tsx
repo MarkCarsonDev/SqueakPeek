@@ -1,4 +1,5 @@
-import * as React from "react";
+// import * as React from "react";
+"use client";
 import Autocomplete from "@mui/material/Autocomplete";
 import { TextFieldProps } from "@mui/material";
 import { InputField } from "@/ui/InputField"; // Custom InputField component

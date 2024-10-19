@@ -1,4 +1,5 @@
-import React from "react";
+// import React from "react";
+"use client";
 import { Modal, Typography, Button } from "@mui/material";
 import { InputField } from "@/ui/InputField";
 import { SearchDropdown } from "@/ui/track/SearchDropdown";
