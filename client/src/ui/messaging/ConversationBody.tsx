@@ -55,14 +55,14 @@ export const ConversationBody = memo(function ConversationBody({
     return false;
   };
 
-  // scrolls down to the latest message on page mount
-
+  // scrolls down to the latest message on page mount"
   function scrollDown() {
     if (bottomRef.current) {
       bottomRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }
 
+  // scrolls down on first page render
   useEffect(() => {
     scrollDown();
   }, []);
