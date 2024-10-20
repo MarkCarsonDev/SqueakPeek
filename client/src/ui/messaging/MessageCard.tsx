@@ -150,7 +150,7 @@ export const MessageCard = memo(function MessageCard({
             </Typography>
           }
           sx={{
-            alignItems: "flex-start", // Ensures avatar stays at the top
+            alignItems: "flex-start", // Ensures avatar stays at the top when the message grows
           }}
         />
       </Card>
