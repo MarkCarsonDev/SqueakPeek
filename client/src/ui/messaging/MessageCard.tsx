@@ -3,6 +3,7 @@ import { AvatarTypes, ProfileAvatar } from "../ProfileAvatar";
 import { memo, useEffect } from "react";
 import { MutableRefObject } from "react";
 import { useProfile } from "../../lib/store/profile";
+import { DateDivider } from "./DateDivider";
 export interface MessageCardProps {
   avatar: AvatarTypes;
   sender_username: string;
@@ -11,8 +12,8 @@ export interface MessageCardProps {
   upVotes?: number;
   downVotes?: number;
   messageId: string;
-  prevDate?: MutableRefObject<Date | null>;
   scrollDown?: () => void;
+  doRenderDateDivider?: boolean;
 }
 
 /**
@@ -28,8 +29,8 @@ export const MessageCard = memo(function MessageCard({
   sender_username,
   timestamp,
   message,
-  prevDate,
   scrollDown,
+  doRenderDateDivider,
 }: MessageCardProps) {
   // TODO: Make CardHeader match the UI in figma file
   // TODO: Add upVotes and downVotes component
@@ -43,24 +44,7 @@ export const MessageCard = memo(function MessageCard({
 
   // TODO: Decouple boolean logic and setting prevDate state
   // TODO: This needs to get tested
-  function doRenderDivider(): boolean {
-    // if prevDate is passed in
-    if (prevDate) {
-      // if prevDate.current === null or if prevDate day does not match the
-      if (
-        !prevDate.current ||
-        (prevDate.current && prevDate.current.getDay() !== messageDate.getDay())
-      ) {
-        console.log("render divider");
-        prevDate.current = messageDate;
 
-        return true;
-      }
-    }
-    return false;
-  }
-
-  const renderDateDivider = doRenderDivider();
   const messageSenderIsCurrentUser = profile?.username === sender_username;
 
   return (
@@ -73,22 +57,10 @@ export const MessageCard = memo(function MessageCard({
       }}
     >
       {/* TODO: Clean this up to make it simpler */}
-      {renderDateDivider && prevDate?.current && (
-        <Typography
-          sx={{
-            paddingTop: "20px",
-            fontWeight: "bold",
-          }}
-        >
-          {new Intl.DateTimeFormat("en-US", { month: "long" }).format(
-            prevDate.current
-          ) +
-            " " +
-            prevDate.current.getDay() +
-            ", " +
-            prevDate.current.getFullYear()}
-        </Typography>
-      )}
+      <DateDivider
+        messageDate={messageDate}
+        doRenderDateDivider={doRenderDateDivider}
+      />
       <Card
         sx={{
           boxShadow: "none",

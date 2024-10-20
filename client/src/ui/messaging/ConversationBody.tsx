@@ -4,6 +4,7 @@ import { useRef, memo, useEffect } from "react";
 import { NewMessagesNotification } from "./NewMessagesNotification";
 import { MutableRefObject } from "react";
 import { useProfile } from "@/lib/store/profile";
+import { timeStamp } from "console";
 
 /**
  * Handles rendering messages
@@ -25,7 +26,6 @@ export const ConversationBody = memo(function ConversationBody({
 }) {
   // Scroll to the bottom of the element
   const { profile } = useProfile();
-  const prevDate = useRef<Date | null>(null); // used for rendering date divider
   const scrollContainerRef = useRef<null | HTMLDivElement>(null);
 
   const scrollThreshold = 20; // threshold for determining on whether page scrolls down on new messages
@@ -62,6 +62,16 @@ export const ConversationBody = memo(function ConversationBody({
     }
   }
 
+  function doRenderDateDivider(
+    index: number,
+    currentDate: Date,
+    prevDate?: Date
+  ): boolean {
+    if (index === 0) return true;
+    if (currentDate.getDay() !== prevDate?.getDay()) return true;
+    return false;
+  }
+
   // scrolls down on first page render
   useEffect(() => {
     scrollDown();
@@ -84,12 +94,18 @@ export const ConversationBody = memo(function ConversationBody({
           (index === messages.length - 1 &&
             profile?.username === message.sender_username) ||
           pageIsBottomFlushed();
+        let prevDate: undefined | Date;
+        if (index > 0) prevDate = new Date(messages[index - 1].timestamp);
         return (
           <MessageCard
             key={message.messageId}
             {...message}
-            prevDate={prevDate}
             scrollDown={doScrollDown ? scrollDown : undefined}
+            doRenderDateDivider={doRenderDateDivider(
+              index,
+              new Date(message.timestamp),
+              prevDate
+            )}
           />
         );
       })}
