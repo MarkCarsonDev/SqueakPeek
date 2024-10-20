@@ -1,6 +1,6 @@
 "use client";
 import { MessageCard, MessageCardProps } from "./MessageCard";
-import { useRef, memo, useEffect } from "react";
+import { useRef, memo, useCallback } from "react";
 import { NewMessagesNotification } from "./NewMessagesNotification";
 import { MutableRefObject } from "react";
 import { useProfile } from "@/lib/store/profile";
@@ -26,14 +26,9 @@ export const ConversationBody = memo(function ConversationBody({
   // Scroll to the bottom of the element
   const { profile } = useProfile();
   const prevDate = useRef<Date | null>(null); // used for rendering date divider
-  const scrollContainerRef = useRef<null | HTMLDivElement>(null); 
+  const scrollContainerRef = useRef<null | HTMLDivElement>(null);
 
   const scrollThreshold = 20; // threshold for determining on whether page scrolls down on new messages
-  function scrollDown() {
-    if (bottomRef.current) {
-      bottomRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }
 
   // determines if the scroll page is flushed in the bottom
   const pageIsBottomFlushed = () => {
@@ -61,9 +56,14 @@ export const ConversationBody = memo(function ConversationBody({
   };
 
   // scrolls down to the latest message on page mount
-  useEffect(() => {
-    scrollDown();
-  }, []); // Empty dependency array ensures this runs only once on mount
+  const scrollDown = useCallback(() => {
+    function scrollDown() {
+      if (bottomRef.current) {
+        bottomRef.current.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+    return scrollDown;
+  }, [bottomRef]); // Empty dependency array ensures this runs only once on mount
 
   return (
     <div
