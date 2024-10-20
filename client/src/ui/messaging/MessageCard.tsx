@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, Typography } from "@mui/material";
+import { Card, CardHeader, Typography } from "@mui/material";
 import { AvatarTypes, ProfileAvatar } from "../ProfileAvatar";
 import { memo, useEffect } from "react";
 import { MutableRefObject } from "react";
