@@ -38,7 +38,7 @@ export const MessageCard = memo(function MessageCard({
 
   // Scrolls down page when the current user sends a
   useEffect(() => {
-    if (scrollDown && profile?.username === sender_username) scrollDown();
+    if (scrollDown) scrollDown();
   });
 
   // TODO: Decouple boolean logic and setting prevDate state
@@ -60,7 +60,8 @@ export const MessageCard = memo(function MessageCard({
     return false;
   }
 
-  const res = doRenderDivider();
+  const renderDateDivider = doRenderDivider();
+  const messageSenderIsCurrentUser = profile?.username === sender_username;
 
   return (
     <div
@@ -72,7 +73,7 @@ export const MessageCard = memo(function MessageCard({
       }}
     >
       {/* TODO: Clean this up to make it simpler */}
-      {res && prevDate?.current && (
+      {renderDateDivider && prevDate?.current && (
         <Typography
           sx={{
             paddingTop: "20px",
@@ -95,21 +96,48 @@ export const MessageCard = memo(function MessageCard({
         }}
       >
         <CardHeader
-          avatar={<ProfileAvatar avatar={avatar} />}
-          title={sender_username}
-          subheader={
-            messageDate.toLocaleDateString("en-US", {
-              month: "2-digit",
-              day: "2-digit",
-              year: "2-digit",
-            }) +
-            " " +
-            messageDate.toLocaleTimeString("en-US")
+          avatar={
+            <ProfileAvatar
+              avatar={avatar}
+              sx={{
+                border: messageSenderIsCurrentUser
+                  ? "3px #496FFF solid"
+                  : "none",
+              }}
+            />
           }
-          titleTypographyProps={{
-            color:
-              profile?.username === sender_username ? "#496FFF" : "#3C435C",
-          }}
+          title={
+            <span
+              style={{
+                display: "flex",
+                alignItems: "end",
+              }}
+            >
+              <Typography
+                style={{
+                  color: messageSenderIsCurrentUser ? "#496FFF" : "#3C435C",
+                }}
+              >
+                {sender_username}
+              </Typography>
+              {"  "}
+
+              <Typography
+                variant="caption"
+                style={{
+                  marginLeft: "4px",
+                }}
+              >
+                {messageDate.toLocaleDateString("en-US", {
+                  month: "2-digit",
+                  day: "2-digit",
+                  year: "2-digit",
+                }) +
+                  " " +
+                  messageDate.toLocaleTimeString("en-US")}
+              </Typography>
+            </span>
+          }
         />
         <CardContent
           sx={{
