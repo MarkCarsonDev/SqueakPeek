@@ -103,7 +103,16 @@ export const MessageCard = memo(function MessageCard({
                 alignItems: "end",
               }}
             >
-              <Typography>{sender_username}</Typography>
+              <Typography
+                style={{
+                  color:
+                    profile?.username === sender_username
+                      ? "#496FFF"
+                      : "#3C435C",
+                }}
+              >
+                {sender_username}
+              </Typography>
               {"  "}
 
               <Typography
