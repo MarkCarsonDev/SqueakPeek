@@ -61,6 +61,7 @@ export const MessageCard = memo(function MessageCard({
   }
 
   const renderDateDivider = doRenderDivider();
+  const messageSenderIsCurrentUser = profile?.username === sender_username;
 
   return (
     <div
@@ -95,7 +96,16 @@ export const MessageCard = memo(function MessageCard({
         }}
       >
         <CardHeader
-          avatar={<ProfileAvatar avatar={avatar} />}
+          avatar={
+            <ProfileAvatar
+              avatar={avatar}
+              sx={{
+                border: messageSenderIsCurrentUser
+                  ? "3px #496FFF solid"
+                  : "none",
+              }}
+            />
+          }
           title={
             <span
               style={{
@@ -105,10 +115,7 @@ export const MessageCard = memo(function MessageCard({
             >
               <Typography
                 style={{
-                  color:
-                    profile?.username === sender_username
-                      ? "#496FFF"
-                      : "#3C435C",
+                  color: messageSenderIsCurrentUser ? "#496FFF" : "#3C435C",
                 }}
               >
                 {sender_username}
@@ -131,11 +138,6 @@ export const MessageCard = memo(function MessageCard({
               </Typography>
             </span>
           }
-          titleTypographyProps={{
-            color:
-              profile?.username === sender_username ? "#496FFF" : "#3C435C",
-          }}
-          subheaderTypographyProps={{}}
         />
         <CardContent
           sx={{
