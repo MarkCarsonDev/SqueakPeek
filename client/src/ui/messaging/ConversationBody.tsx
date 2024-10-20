@@ -1,6 +1,6 @@
 "use client";
 import { MessageCard, MessageCardProps } from "./MessageCard";
-import { useRef, memo, useCallback } from "react";
+import { useRef, memo, useCallback, useEffect } from "react";
 import { NewMessagesNotification } from "./NewMessagesNotification";
 import { MutableRefObject } from "react";
 import { useProfile } from "@/lib/store/profile";
@@ -56,14 +56,16 @@ export const ConversationBody = memo(function ConversationBody({
   };
 
   // scrolls down to the latest message on page mount
-  const scrollDown = useCallback(() => {
-    function scrollDown() {
-      if (bottomRef.current) {
-        bottomRef.current.scrollIntoView({ behavior: "smooth" });
-      }
+
+  function scrollDown() {
+    if (bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: "smooth" });
     }
-    return scrollDown;
-  }, [bottomRef]); // Empty dependency array ensures this runs only once on mount
+  }
+
+  useEffect(() => {
+    scrollDown();
+  }, []);
 
   return (
     <div
