@@ -140,7 +140,7 @@ export const MessageCard = memo(function MessageCard({
           }
           subheader={
             <Typography
-              variant="body2"
+              variant="body1"
               sx={{
                 whiteSpace: "pre-wrap", // Preserves line breaks
                 wordWrap: "break-word", // Wraps long words
