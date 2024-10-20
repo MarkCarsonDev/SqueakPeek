@@ -116,12 +116,12 @@ export const MessageCard = memo(function MessageCard({
               <Typography
                 style={{
                   color: messageSenderIsCurrentUser ? "#496FFF" : "#3C435C",
+                  fontWeight: "bold",
                 }}
               >
                 {sender_username}
               </Typography>
               {"  "}
-
               <Typography
                 variant="caption"
                 style={{
@@ -138,14 +138,21 @@ export const MessageCard = memo(function MessageCard({
               </Typography>
             </span>
           }
-        />
-        <CardContent
+          subheader={
+            <Typography
+              variant="body2"
+              sx={{
+                whiteSpace: "pre-wrap", // Preserves line breaks
+                wordWrap: "break-word", // Wraps long words
+              }}
+            >
+              {message}
+            </Typography>
+          }
           sx={{
-            marginTop: "-20px",
+            alignItems: "flex-start", // Ensures avatar stays at the top
           }}
-        >
-          <Typography>{message}</Typography>
-        </CardContent>
+        />
       </Card>
     </div>
   );
