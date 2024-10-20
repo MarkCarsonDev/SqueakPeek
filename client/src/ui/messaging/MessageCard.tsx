@@ -142,8 +142,10 @@ export const MessageCard = memo(function MessageCard({
             <Typography
               variant="body1"
               sx={{
-                whiteSpace: "pre-wrap", // Preserves line breaks
-                wordWrap: "break-word", // Wraps long words
+                width: "100%", // Ensures the message container respects its parent's width
+                whiteSpace: "pre-wrap", // Preserves line breaks and wraps the text
+                wordBreak: "break-word", // Breaks long words if needed to wrap within the containerq
+                overflowWrap: "break-word", // Provides compatibility with older browsers
               }}
             >
               {message}
