@@ -1,6 +1,6 @@
 "use client";
 import { MessageCard, MessageCardProps } from "./MessageCard";
-import { useRef, memo, useCallback, useEffect } from "react";
+import { useRef, memo, useEffect } from "react";
 import { NewMessagesNotification } from "./NewMessagesNotification";
 import { MutableRefObject } from "react";
 import { useProfile } from "@/lib/store/profile";
