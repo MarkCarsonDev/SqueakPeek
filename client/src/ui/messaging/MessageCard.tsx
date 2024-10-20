@@ -60,7 +60,7 @@ export const MessageCard = memo(function MessageCard({
     return false;
   }
 
-  const res = doRenderDivider();
+  const renderDateDivider = doRenderDivider();
 
   return (
     <div
@@ -72,7 +72,7 @@ export const MessageCard = memo(function MessageCard({
       }}
     >
       {/* TODO: Clean this up to make it simpler */}
-      {res && prevDate?.current && (
+      {renderDateDivider && prevDate?.current && (
         <Typography
           sx={{
             paddingTop: "20px",
@@ -135,6 +135,7 @@ export const MessageCard = memo(function MessageCard({
             color:
               profile?.username === sender_username ? "#496FFF" : "#3C435C",
           }}
+          subheaderTypographyProps={{}}
         />
         <CardContent
           sx={{
