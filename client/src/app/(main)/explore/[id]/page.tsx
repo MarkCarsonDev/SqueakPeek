@@ -10,7 +10,11 @@ export default function Page({ params }: { params: { id: string } }) {
       }}
     >
       <Conversation conversationId={conversationId} />
-      <div>
+      <div
+        style={{
+          borderLeft: "3px solid #E0E4F2",
+        }}
+      >
         <Typography>Hello World</Typography>
       </div>
     </div>
