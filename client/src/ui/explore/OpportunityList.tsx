@@ -79,7 +79,7 @@ export const OpportunityList: React.FC<OpportunityListProps> = ({ filters }) => 
 
       // Apply search query filter
       if (filters.searchQuery) {
-        const searchLower = filters.searchQuery.toLowerCase();
+        const searchLower = (filters.searchQuery as string).toLowerCase();
         filtered = filtered.filter(
           (opp) =>
             opp.title.toLowerCase().includes(searchLower) ||
