@@ -14,6 +14,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ filters, setFilters }) => 
 
   return (
     <TextField
+      className="search-bar"
       label="Search Opportunities"
       variant="outlined"
       fullWidth

@@ -1,5 +1,11 @@
 import React from 'react';
-import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import {
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  SelectChangeEvent,
+} from '@mui/material';
 import { SelectedFilters } from './Filters';
 
 interface SortOptionsProps {
@@ -8,12 +14,14 @@ interface SortOptionsProps {
 }
 
 export const SortOptions: React.FC<SortOptionsProps> = ({ filters, setFilters }) => {
-  const handleSortChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setFilters((prev) => ({ ...prev, sortOption: event.target.value as string }));
+  const handleSortChange = (
+    event: SelectChangeEvent,
+  ) => {
+    setFilters((prev) => ({ ...prev, sortOption: event.target.value }));
   };
 
   return (
-    <FormControl variant="outlined" fullWidth sx={{ marginBottom: '1rem' }}>
+    <FormControl variant="outlined" className="sort-options" fullWidth sx={{ marginBottom: '1rem' }}>
       <InputLabel id="sort-label">Sort By</InputLabel>
       <Select
         labelId="sort-label"
