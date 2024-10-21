@@ -1,4 +1,5 @@
-import * as React from "react";
+// import * as React from "react";
+"use client";
 import Autocomplete from "@mui/material/Autocomplete";
 import { TextFieldProps } from "@mui/material";
 import { InputField } from "@/ui/InputField"; // Custom InputField component
@@ -7,7 +8,7 @@ import { InputField } from "@/ui/InputField"; // Custom InputField component
  * A custom version of the Autocomplete component with the label designed similarly to the InputField.
  * @param {TextFieldProps} props - Props for the Autocomplete component, including label, placeholder, required status, and other relevant values.
  */
-export function Searchbox({ required, label, placeholder, style, ...restProps }: TextFieldProps) {
+export function SearchDropdown({ required, label, placeholder, style, ...restProps }: TextFieldProps) {
   return (
     <div style={style}>
       {/* Autocomplete with custom InputField component */}

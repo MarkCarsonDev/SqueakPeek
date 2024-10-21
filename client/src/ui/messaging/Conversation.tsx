@@ -4,7 +4,7 @@ import { ConversationHeader } from "./ConversationHeader";
 import { ConversationBody } from "./ConversationBody";
 import Image from "next/image";
 import { useMessage } from "../../lib/store/message";
-import { useEffect, useState, useRef } from "react";
+import { useState, useRef } from "react";
 import { useProfile } from "../../lib/store/profile";
 import { useSubscribeConversation } from "@/lib/hooks/useSubscribeConversation";
 
@@ -13,7 +13,7 @@ import { useSubscribeConversation } from "@/lib/hooks/useSubscribeConversation";
  * @param {string} conversationId - ID used to subscribe users to listen to incoming messages
  */
 export function Conversation({ conversationId }: { conversationId: string }) {
-  const { addMessage, messages } = useMessage();
+  const { addMessage } = useMessage();
   const { profile } = useProfile();
   const [numNewMessages, setNumNewMessages] = useState(0); // used for rendering new message notification
   const bottomRef = useRef<null | HTMLDivElement>(null); // used for scrolling down the page
@@ -23,24 +23,12 @@ export function Conversation({ conversationId }: { conversationId: string }) {
     setNumNewMessages(0);
   }
 
-  // Scroll to the bottom of the element
-  function scrollDown() {
-    if (bottomRef.current) {
-      bottomRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }
-
   useSubscribeConversation(
     conversationId,
     addMessage,
     profile,
     setNumNewMessages
   );
-
-  // scrolls down to the latest message on page mount
-  useEffect(() => {
-    scrollDown();
-  }, []); // Empty dependency array ensures this runs only once on mount
 
   return (
     <div
@@ -68,10 +56,8 @@ export function Conversation({ conversationId }: { conversationId: string }) {
 
       {/* Messages */}
       <ConversationBody
-        messages={messages}
         numNewMessages={numNewMessages}
         resetNumNewMessages={() => resetNumNewMessages()}
-        scrollDown={scrollDown}
         bottomRef={bottomRef}
       />
 

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Button, Typography } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileCirclePlus } from "@fortawesome/free-solid-svg-icons";
-import NewApplicationModal from "@/ui/track/newApplicationModal"; 
+import NewApplicationModal from "@/ui/track/NewApplicationModal";
 import "./tracking.css";
 
 export default function Page() {
@@ -32,7 +32,9 @@ export default function Page() {
   return (
     <div className="main">
       <Typography variant="h3">Submitted Applications</Typography>
-      <Typography variant="subtitle1">Total Applications: {num_applications}</Typography>
+      <Typography variant="subtitle1">
+        Total Applications: {num_applications}
+      </Typography>
 
       {/* Button to open modal with default status 'Applied' */}
       <Button

@@ -1,7 +1,6 @@
-import { Card, CardContent, CardHeader, Typography } from "@mui/material";
+import { Card, CardHeader, Typography } from "@mui/material";
 import { AvatarTypes, ProfileAvatar } from "../ProfileAvatar";
 import { memo, useEffect } from "react";
-import { MutableRefObject } from "react";
 import { useProfile } from "../../lib/store/profile";
 export interface MessageCardProps {
   avatar: AvatarTypes;
@@ -11,7 +10,6 @@ export interface MessageCardProps {
   upVotes?: number;
   downVotes?: number;
   messageId: string;
-  prevDate?: MutableRefObject<Date | null>;
   scrollDown?: () => void;
 }
 
@@ -28,7 +26,6 @@ export const MessageCard = memo(function MessageCard({
   sender_username,
   timestamp,
   message,
-  prevDate,
   scrollDown,
 }: MessageCardProps) {
   // TODO: Make CardHeader match the UI in figma file
@@ -38,29 +35,13 @@ export const MessageCard = memo(function MessageCard({
 
   // Scrolls down page when the current user sends a
   useEffect(() => {
-    if (scrollDown && profile?.username === sender_username) scrollDown();
+    if (scrollDown) scrollDown();
   });
 
   // TODO: Decouple boolean logic and setting prevDate state
   // TODO: This needs to get tested
-  function doRenderDivider(): boolean {
-    // if prevDate is passed in
-    if (prevDate) {
-      // if prevDate.current === null or if prevDate day does not match the
-      if (
-        !prevDate.current ||
-        (prevDate.current && prevDate.current.getDay() !== messageDate.getDay())
-      ) {
-        console.log("render divider");
-        prevDate.current = messageDate;
 
-        return true;
-      }
-    }
-    return false;
-  }
-
-  const res = doRenderDivider();
+  const messageSenderIsCurrentUser = profile?.username === sender_username;
 
   return (
     <div
@@ -72,22 +53,7 @@ export const MessageCard = memo(function MessageCard({
       }}
     >
       {/* TODO: Clean this up to make it simpler */}
-      {res && prevDate?.current && (
-        <Typography
-          sx={{
-            paddingTop: "20px",
-            fontWeight: "bold",
-          }}
-        >
-          {new Intl.DateTimeFormat("en-US", { month: "long" }).format(
-            prevDate.current
-          ) +
-            " " +
-            prevDate.current.getDay() +
-            ", " +
-            prevDate.current.getFullYear()}
-        </Typography>
-      )}
+
       <Card
         sx={{
           boxShadow: "none",
@@ -95,29 +61,65 @@ export const MessageCard = memo(function MessageCard({
         }}
       >
         <CardHeader
-          avatar={<ProfileAvatar avatar={avatar} />}
-          title={sender_username}
-          subheader={
-            messageDate.toLocaleDateString("en-US", {
-              month: "2-digit",
-              day: "2-digit",
-              year: "2-digit",
-            }) +
-            " " +
-            messageDate.toLocaleTimeString("en-US")
+          avatar={
+            <ProfileAvatar
+              avatar={avatar}
+              sx={{
+                border: messageSenderIsCurrentUser
+                  ? "3px #496FFF solid"
+                  : "none",
+              }}
+            />
           }
-          titleTypographyProps={{
-            color:
-              profile?.username === sender_username ? "#496FFF" : "#3C435C",
+          title={
+            <span
+              style={{
+                display: "flex",
+                alignItems: "end",
+              }}
+            >
+              <Typography
+                style={{
+                  color: messageSenderIsCurrentUser ? "#496FFF" : "#3C435C",
+                  fontWeight: "bold",
+                }}
+              >
+                {sender_username}
+              </Typography>
+              {"  "}
+              <Typography
+                variant="caption"
+                style={{
+                  marginLeft: "4px",
+                }}
+              >
+                {messageDate.toLocaleDateString("en-US", {
+                  month: "2-digit",
+                  day: "2-digit",
+                  year: "2-digit",
+                }) +
+                  " " +
+                  messageDate.toLocaleTimeString("en-US")}
+              </Typography>
+            </span>
+          }
+          subheader={
+            <Typography
+              variant="body1"
+              sx={{
+                width: "100%", // Ensures the message container respects its parent's width
+                whiteSpace: "pre-wrap", // Preserves line breaks and wraps the text
+                wordBreak: "break-word", // Breaks long words if needed to wrap within the containerq
+                overflowWrap: "break-word", // Provides compatibility with older browsers
+              }}
+            >
+              {message}
+            </Typography>
+          }
+          sx={{
+            alignItems: "flex-start", // Ensures avatar stays at the top when the message grows
           }}
         />
-        <CardContent
-          sx={{
-            marginTop: "-20px",
-          }}
-        >
-          <Typography>{message}</Typography>
-        </CardContent>
       </Card>
     </div>
   );
