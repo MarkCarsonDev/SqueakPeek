@@ -10,6 +10,13 @@ export interface MessageBodyProps {
   messageId: number;
 }
 
+export interface Message {
+  messageId: string;
+  message: string;
+  dateCreated?: Date;
+}
+
+
 /**
  * UI that contains the metadata of a message
  */
