@@ -1,11 +1,7 @@
 .custom-timeline{
     display: flex;
     justify-content: center;
-    width:70%;
+    width:80%;
     text-align: center;
     margin: 0;
-}
-
-.timeline-main-wrapper{
-    width: 800px;
 }

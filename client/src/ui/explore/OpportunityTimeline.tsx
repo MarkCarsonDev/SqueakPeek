@@ -54,26 +54,6 @@ export function OpportunityTimeline({ id }: oppornityDataProps) {
     },
   ];
 
-  const chronoRef = useRef<typeof Chrono | null>(null);
-
-  const handleNext = () => {
-    if (chronoRef.current) {
-      const activeIndex = (chronoRef.current as any).state?.activeItemIndex;
-      if (activeIndex !== undefined) {
-        chronoRef.current.scrollToIndex(activeIndex + 1);
-      }
-    }
-  };
-
-  const handlePrevious = () => {
-    if (chronoRef.current) {
-      const activeIndex = (chronoRef.current as any).state?.activeItemIndex;
-      if (activeIndex !== undefined) {
-        chronoRef.current.scrollToIndex(activeIndex - 1);
-      }
-    }
-  };
-
   return (
     <div className="custom-timeline">
       <Chrono
@@ -82,22 +62,21 @@ export function OpportunityTimeline({ id }: oppornityDataProps) {
           primary: "#496FFF",
           secondary: "#496FFF",
           cardBgColor: "white",
-          cardForeColor: "violet",
           titleColor: "black",
           titleColorActive: "white",
         }}
         cardHeight={125}
         cardWidth={175}
         mode="HORIZONTAL"
-        lineLength="auto"
         itemWidth={200}
-        disableToolbar
         showAllCardsHorizontal
+        contentDetailsHeight={100}
+          fontSizes={{
+            title: "1rem"
+          }}
       >
         {customContent}
       </Chrono>
-      <button onClick={handlePrevious}>Previous</button>
-      <button onClick={handleNext}>Next</button>
     </div>
   );
 }
