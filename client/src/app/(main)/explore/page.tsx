@@ -2,10 +2,10 @@
 import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Typography } from "@mui/material";
-import { Filters, SelectedFilters } from "@/ui/explore/Filters";
-import { OpportunityList } from "@/ui/explore/OpportunityList";
-import { SearchBar } from "@/ui/explore/SearchBar";
-import { SortOptions } from "@/ui/explore/SortOptions";
+// import { Filters, SelectedFilters } from "@/ui/explore/Filters";
+// import { OpportunityList } from "@/ui/explore/OpportunityList";
+// import { SearchBar } from "@/ui/explore/SearchBar";
+// import { SortOptions } from "@/ui/explore/SortOptions";
 import "@/app/(main)/explore/explore.css";
 import { OpportunityCard } from "@/ui/explore/OpportunityCard";
 import { faL } from "@fortawesome/free-solid-svg-icons";
