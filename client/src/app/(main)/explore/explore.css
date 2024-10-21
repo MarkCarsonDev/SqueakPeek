@@ -30,4 +30,15 @@
 .header-text{
     display: flex;
     flex-direction: column;
+    flex: 3;
+}
+
+.search-bar {
+    flex: 3;
+    flex-grow: 5;
+}
+
+.sort-options {
+    flex: 1;
+
 }
