@@ -14,12 +14,6 @@ interface NewApplicationModalProps {
   defaultStatus: string;
 }
 
-/**
- * 
- * @param {() => void} open - Renders NewApplicationModal when invoked
- * @param {() => void} handleClose - Closes NewApplicationModal when invoked
- * @returns 
- */
 export default function NewApplicationModal({
   open,
   handleClose,

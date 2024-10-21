@@ -51,7 +51,7 @@ export default function Page() {
             boxShadow: "none",
           },
         }}
-        onClick={() => handleOpenModal("Applied")} // Open modal with default status "Applied"
+        onClick={() => handleOpenModal("")} // Open modal with default status "Applied"
       >
         New Application
       </Button>
