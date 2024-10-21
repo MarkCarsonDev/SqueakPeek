@@ -60,7 +60,7 @@ export function ConversationBody({ conversationId }: ConversationBodyProps) {
           padding: "10px 10px",
         }}
       >
-        <MessageInput />
+        <MessageInput tableName = "private_message" />
       </div>
     </div>
   );

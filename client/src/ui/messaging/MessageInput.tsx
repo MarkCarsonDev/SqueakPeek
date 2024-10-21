@@ -7,7 +7,6 @@ import { MessageBodyProps } from "./MessageCard";
 import { useProfile } from "../../../lib/store/profile";
 import { AvatarTypes } from "../ProfileAvatar";
 import { useState } from "react";
-import { useConversation } from "../../../lib/store/conversation";
 import { createSupabaseClient } from "../../../lib/supabase/client";
 
 
@@ -17,7 +16,6 @@ import { createSupabaseClient } from "../../../lib/supabase/client";
 export function MessageInput(tableName: any) {
   const { addMessage } = useMessage();
   const { profile } = useProfile();
-  const { conversation } = useConversation();
   const [ currentMessage, setCurrentMessage] = useState("");
   
   // TODO: Add this as a server action
