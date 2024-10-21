@@ -23,7 +23,7 @@
   
   .application-box {
     width: 80%;
-    height: 70px;
+    height: 50px;
     border: 2px dashed #E0E4F2;
     border-radius: 8px;
     display: flex;

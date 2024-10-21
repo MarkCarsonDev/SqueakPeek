@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+//import React from "react";
 import { Modal, Typography, Button } from "@mui/material";
 import { InputField } from "@/ui/InputField"; 
 import { Searchbox } from "@/ui/track/Searchbox"; 
@@ -10,11 +11,13 @@ import UpdateStatus from "@/ui/track/UpdateStatus";
 interface NewApplicationModalProps {
   open: boolean;
   handleClose: () => void;
+  defaultStatus: string;
 }
 
 export default function NewApplicationModal({
   open,
   handleClose,
+  defaultStatus
 }: NewApplicationModalProps) {
   return (
     <Modal
@@ -24,7 +27,7 @@ export default function NewApplicationModal({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-      }}
+      }}    
     >
       <form
         style={{
@@ -66,6 +69,7 @@ export default function NewApplicationModal({
               required
               name="status"
               options={["Applied", "OA", "Interviewing", "Offer", "Rejected"]}
+              defaultStatus={defaultStatus}
             />
           </div>
 
