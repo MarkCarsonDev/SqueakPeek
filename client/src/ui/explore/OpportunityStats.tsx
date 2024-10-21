@@ -1,4 +1,5 @@
 import { Typography } from "@mui/material";
+
 export function OpportunityStats() {
   return (
     <div
