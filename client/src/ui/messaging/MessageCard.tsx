@@ -1,7 +1,6 @@
 import { Card, CardHeader, Typography } from "@mui/material";
 import { AvatarTypes, ProfileAvatar } from "../ProfileAvatar";
 import { memo, useEffect } from "react";
-import { MutableRefObject } from "react";
 import { useProfile } from "../../lib/store/profile";
 import { DateDivider } from "./DateDivider";
 export interface MessageCardProps {

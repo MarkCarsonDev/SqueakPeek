@@ -4,7 +4,6 @@ import { useRef, memo, useEffect } from "react";
 import { NewMessagesNotification } from "./NewMessagesNotification";
 import { MutableRefObject } from "react";
 import { useProfile } from "@/lib/store/profile";
-import { timeStamp } from "console";
 
 /**
  * Handles rendering messages
