@@ -70,6 +70,7 @@ export function OpportunityTimeline({ id }: oppornityDataProps) {
         mode="HORIZONTAL"
         itemWidth={200}
         showAllCardsHorizontal
+        disableToolbar
         contentDetailsHeight={100}
           fontSizes={{
             title: "1rem"
