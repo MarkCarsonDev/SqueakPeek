@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation'; // To handle URL params
+import { useRouter } from 'next/navigation'; // To handle URL params
 import { SelectedFilters } from './Filters';
 import { OpportunityCard } from './OpportunityCard';
-import { createSupabaseClient } from "../../../lib/supabase/client";
+import { createSupabaseClient } from '../../../lib/supabase/client';
 
 const supabase = createSupabaseClient();
 
-interface Opportunity {
+export interface Opportunity {
   id: number;
   title: string;
   dateRangeStart: string;
@@ -27,7 +27,6 @@ export const OpportunityList: React.FC<OpportunityListProps> = ({ filters }) => 
   const [loading, setLoading] = useState<boolean>(false);
 
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   // Fetch all opportunities once when the component mounts
   useEffect(() => {
@@ -38,11 +37,12 @@ export const OpportunityList: React.FC<OpportunityListProps> = ({ filters }) => 
       if (error) {
         console.error('Error fetching opportunities:', error);
       } else if (data) {
+        // Map the data to match the Opportunity interface
         const mappedData: Opportunity[] = data.map((item) => ({
           id: item.opportunity_id,
-          title: item.company_name,
-          dateRangeStart: item.start_date ?? 'N/A', // Replace with actual field or default
-          dateRangeEnd: item.end_date ?? 'N/A',     // Replace with actual field or default
+          title: item.company_name ?? 'Unknown',
+          dateRangeStart: item.start_date ?? 'N/A',
+          dateRangeEnd: item.end_date ?? 'N/A',
           jobPosition: item.role_title ?? 'Unknown Position',
           jobType: item.type ?? 'Unknown Type',
           positionStatus: item.position_status ?? 'Unknown',
@@ -58,7 +58,7 @@ export const OpportunityList: React.FC<OpportunityListProps> = ({ filters }) => 
     fetchOpportunities();
   }, []);
 
-  // Apply filters when they change
+  // Apply filters whenever they change
   useEffect(() => {
     const applyFilters = () => {
       let filtered = allOpportunities;
@@ -66,14 +66,14 @@ export const OpportunityList: React.FC<OpportunityListProps> = ({ filters }) => 
       // Apply company filter
       if (filters.title && filters.title.length > 0) {
         filtered = filtered.filter((opp) =>
-          filters.title.includes(opp.title)
+          (filters.title as string[]).includes(opp.title)
         );
       }
 
       // Apply role title filter
       if (filters.jobPosition && filters.jobPosition.length > 0) {
         filtered = filtered.filter((opp) =>
-          filters.jobPosition.includes(opp.jobPosition)
+          (filters.jobPosition as string[]).includes(opp.jobPosition)
         );
       }
 
@@ -106,15 +106,14 @@ export const OpportunityList: React.FC<OpportunityListProps> = ({ filters }) => 
 
       // Company filter
       if (filters.title && filters.title.length > 0) {
-        filters.title.forEach((value) => queryParams.append('company', value));
+        (filters.title as string[]).forEach((value) => queryParams.append('title', value));
       }
 
       // Role title filter
       if (filters.jobPosition && filters.jobPosition.length > 0) {
-        filters.jobPosition.forEach((value) =>
-          queryParams.append('role', value)
+        (filters.jobPosition as string[]).forEach((value) =>
+          queryParams.append('jobPosition', value)
         );
-        console.log('filters.jobPosition:', filters.jobPosition);
       }
 
       // Search query
@@ -127,6 +126,7 @@ export const OpportunityList: React.FC<OpportunityListProps> = ({ filters }) => 
         queryParams.append('sort', filters.sortOption);
       }
 
+      // Update the URL with the new query parameters
       router.replace(`?${queryParams.toString()}`);
     };
 

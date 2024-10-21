@@ -19,7 +19,7 @@ export interface FilterOption {
 }
 
 export interface SelectedFilters {
-  [key: string]: string[]; // Changed to make it dynamic
+  [key: string]: string | string[] | undefined;
   searchQuery: string;
   sortOption: string;
 }
@@ -35,38 +35,37 @@ interface FiltersProps {
   setFilters: React.Dispatch<React.SetStateAction<SelectedFilters>>;
 }
 
+// Define an interface for the raw opportunity data with an index signature
+interface OpportunityRaw {
+  [key: string]: any; // Allows dynamic property access using string keys
+  company_name?: string;
+  role_title?: string;
+  // Add other known properties if needed
+}
+
 export const Filters: React.FC<FiltersProps> = ({ filters, setFilters }) => {
   const [filterOptions, setFilterOptions] = useState<{
     [key: string]: FilterOption[];
   }>({});
 
-  // Define filters here
+  // Define the filters here
   const filterDefinitions: FilterDefinition[] = [
-    // {
-    //   title: 'Applied Status',
-    //   dbColumn: 'user_position_status',
-    //   stateKey: 'appliedStatuses',
-    // },
-    // {
-    //   title: 'Year',
-    //   dbColumn: 'start_date',
-    //   stateKey: 'years',
-    // },
     {
-        title: 'Company',
-        dbColumn: 'company_name',
-        stateKey: 'title',
+      title: 'Company',
+      dbColumn: 'company_name',
+      stateKey: 'title',
     },
     {
-        title: 'Role Title',
-        dbColumn: 'role_title',
-        stateKey: 'jobPosition',
-    }
+      title: 'Role Title',
+      dbColumn: 'role_title',
+      stateKey: 'jobPosition',
+    },
+    // Add more filters as needed
   ];
 
   useEffect(() => {
     const fetchFilterOptions = async () => {
-      // Fetch all necessary data
+      // Fetch all necessary data from the 'opportunity' table
       const { data: opportunities, error } = await supabase
         .from('opportunity')
         .select('*');
@@ -76,35 +75,31 @@ export const Filters: React.FC<FiltersProps> = ({ filters, setFilters }) => {
       } else if (opportunities) {
         const optionsData: { [key: string]: FilterOption[] } = {};
 
+        // Loop through each filter definition to generate options
         for (const filterDef of filterDefinitions) {
           const counts: { [key: string]: number } = {};
 
-          opportunities.forEach((item) => {
-            let value: string;
+          // Cast opportunities to OpportunityRaw[] to use index signature
+          (opportunities as OpportunityRaw[]).forEach((item) => {
+            // Access the value dynamically using the dbColumn
+            let value: string = item[filterDef.dbColumn] || 'Unknown';
 
-            // if (filterDef.dbColumn === 'start_date') {
-            //   if (item.start_date) {
-            //     value = new Date(item.start_date).getFullYear().toString();
-            //   } else {
-            //     value = 'Unknown';
-            //   }
-            // } else {
-            //   value = item[filterDef.dbColumn] || 'Unknown';
-            // }
-            value = item[filterDef.dbColumn] || 'Unknown';
-
+            // Increment the count for this value
             counts[value] = (counts[value] || 0) + 1;
           });
 
+          // Convert counts object to an array of FilterOption
           const options = Object.entries(counts).map(([value, count]) => ({
             label: `${value} (${count})`,
             value: value,
             count,
           }));
 
+          // Store the options using the stateKey
           optionsData[filterDef.stateKey] = options;
         }
 
+        // Update the state with the new filter options
         setFilterOptions(optionsData);
       }
     };
@@ -112,12 +107,19 @@ export const Filters: React.FC<FiltersProps> = ({ filters, setFilters }) => {
     fetchFilterOptions();
   }, [filterDefinitions]);
 
-  const handleCheckboxChange = (
-    sectionKey: string,
-    value: string
-  ) => {
+  const handleCheckboxChange = (sectionKey: string, value: string) => {
     setFilters((prev) => {
-      const currentValues = prev[sectionKey] || [];
+      const prevValue = prev[sectionKey];
+      let currentValues: string[] = [];
+
+      if (Array.isArray(prevValue)) {
+        currentValues = prevValue;
+      } else if (typeof prevValue === 'string') {
+        currentValues = [prevValue];
+      } else {
+        currentValues = [];
+      }
+
       const newValues = currentValues.includes(value)
         ? currentValues.filter((v) => v !== value)
         : [...currentValues, value];
@@ -130,31 +132,42 @@ export const Filters: React.FC<FiltersProps> = ({ filters, setFilters }) => {
     title: string,
     options: FilterOption[],
     sectionKey: string
-  ) => (
-    <Box sx={{ marginBottom: 4 }} key={sectionKey}>
-      <Typography variant="h6" sx={{ fontWeight: 'bold', marginBottom: 2 }}>
-        {title}
-      </Typography>
-      <FormGroup>
-        {options.map((option) => (
-          <FormControlLabel
-            key={option.value}
-            control={
-              <Checkbox
-                checked={(filters[sectionKey] || []).includes(option.value)}
-                onChange={() => handleCheckboxChange(sectionKey, option.value)}
+  ) => {
+    const selectedValues = filters[sectionKey];
+    const isArray = Array.isArray(selectedValues);
+
+    return (
+      <Box sx={{ marginBottom: 4 }} key={sectionKey}>
+        <Typography variant="h6" sx={{ fontWeight: 'bold', marginBottom: 2 }}>
+          {title}
+        </Typography>
+        <FormGroup>
+          {options.map((option) => {
+            const isChecked =
+              isArray && (selectedValues as string[]).includes(option.value);
+            return (
+              <FormControlLabel
+                key={option.value}
+                control={
+                  <Checkbox
+                    checked={isChecked}
+                    onChange={() => handleCheckboxChange(sectionKey, option.value)}
+                  />
+                }
+                label={option.label}
               />
-            }
-            label={option.label}
-          />
-        ))}
-      </FormGroup>
-      <Divider />
-    </Box>
-  );
+            );
+          })}
+        </FormGroup>
+        <Divider />
+      </Box>
+    );
+  };
 
   return (
-    <Card sx={{ border: 'solid 3px #e0e4f2', borderRadius: '20px', padding: '1rem' }}>
+    <Card
+      sx={{ border: 'solid 3px #e0e4f2', borderRadius: '20px', padding: '1rem' }}
+    >
       {filterDefinitions.map((filterDef) =>
         renderSection(
           filterDef.title,
@@ -162,7 +175,6 @@ export const Filters: React.FC<FiltersProps> = ({ filters, setFilters }) => {
           filterDef.stateKey
         )
       )}
-      {/* Add more filter sections as needed */}
     </Card>
   );
 };
