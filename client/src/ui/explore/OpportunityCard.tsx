@@ -1,12 +1,25 @@
+"use client";
 import {
   Card,
   CardHeader,
   CardContent,
   Typography,
-} from '@mui/material';
-import { faAnglesUp, faAnglesDown } from "@fortawesome/free-solid-svg-icons";
+  Chip,
+  Button,
+  Avatar,
+  IconButton,
+} from "@mui/material";
+import {
+  faAnglesUp,
+  faAnglesDown,
+  faComment,
+  faReply,
+  faBookmark,
+} from "@fortawesome/free-solid-svg-icons";
+import { faBookmark as regularBookmark } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Image from 'next/image';
+import { OpportunityTimeline } from "./OpportunityTimeline";
+import { useState } from "react";
 
 interface OpportunityCardProps {
   id: number;
@@ -15,75 +28,211 @@ interface OpportunityCardProps {
   dateRangeEnd: string;
   jobPosition: string;
   jobType: string;
-  positionStatus: string;
-  userPositionStatus: string;
+  jobAvatar: string;
+  positionStatus: boolean;
+  userPositionStatus: boolean;
+  totalApplied: number;
+  rejected: number;
+  oa: number;
+  interviewing: number;
+  offered: number;
+  recentMessages: number;
+  bookmarked: boolean;
 }
 
-export const OpportunityCard: React.FC<OpportunityCardProps> = ({
+interface jobStats {
+  status: string;
+  color: string;
+  quantity: number;
+}
+
+
+export function OpportunityCard({
   title,
   dateRangeStart,
   dateRangeEnd,
   jobPosition,
   jobType,
+  jobAvatar,
   positionStatus,
   userPositionStatus,
-}) => {
-  const isPositionActive = positionStatus.toLowerCase() === 'actively hiring';
-  const hasApplied = userPositionStatus.toLowerCase() === 'applied';
+  totalApplied,
+  rejected,
+  oa,
+  interviewing,
+  offered,
+  recentMessages,
+  bookmarked : initialBookmarked,
+}: OpportunityCardProps) {
+  const [bookmarked, setBookmarked] = useState(initialBookmarked);
+  const stats: jobStats[] = [
+    {
+      status: "Total Applied:",
+      color: "black",
+      quantity: totalApplied,
+    },
+    {
+      status: "Rejected:",
+      color: "red",
+      quantity: rejected,
+    },
+    {
+      status: "OA:",
+      color: "orange",
+      quantity: oa,
+    },
+    {
+      status: "Interviewing:",
+      color: "gold",
+      quantity: interviewing,
+    },
+    {
+      status: "Offered:",
+      color: "green",
+      quantity: offered,
+    },
+  ];
+
+  const handleBookmark = () => {
+    setBookmarked((prev) => !prev); // Toggle the bookmark state
+  };
 
   return (
-    <Card sx={{ border: 'solid 3px #e0e4f2', margin: '1rem', borderRadius: "20px" }}>
+    <Card
+      style={{
+        border: "solid 3px #e0e4f2",
+        margin: "1.5rem 0",
+        borderRadius: "20px",
+        padding: ".5rem 2rem",
+      }}
+    >
+      {/* Card Header in a div with Bookmark */}
+      <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", margin: 0}}>
       <CardHeader
-        avatar={
-          <Image
-            src={`/company-logos/${title.toLowerCase()}.png`}
-            alt={`${title} Logo`}
-            width={50}
-            height={50}
-          />
-        }
-        title={<Typography variant="h6">{title}</Typography>}
+        style={{ margin: 0, padding: ".5rem", height: "2rem" }}
+        avatar={<Avatar src={jobAvatar} style={{margin: 0}}></Avatar>}
+        title={<Typography variant="h5">{title}</Typography>}
         subheader={
           <Typography variant="body2">
             {dateRangeStart} - {dateRangeEnd}
           </Typography>
         }
       />
-      <CardContent>
-        <Typography variant="h5">
-          {jobPosition}, {jobType}
-        </Typography>
-        <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
-          <Typography
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              padding: '0.25rem 0.5rem',
-              border: hasApplied ? 'solid 2px green' : 'solid 2px red',
-              borderRadius: '10px',
-            }}
-            variant="body2"
-          >
-            {hasApplied ? 'Applied' : 'Not Applied'}
-          </Typography>
-          <Typography
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              padding: '0.25rem 0.5rem',
-              border: isPositionActive ? 'solid 2px green' : 'solid 2px red',
-              borderRadius: '10px',
-            }}
-            variant="body2"
-          >
-            {positionStatus}{' '}
+
+      {/* Bookmark button */}
+      <IconButton onClick={handleBookmark}>
+      <FontAwesomeIcon icon={bookmarked? faBookmark: regularBookmark } style={{fontSize: "2.5rem"}} color="#496FFF"/>
+      </IconButton>
+
+      </div>
+
+      {/* Job postion and job type */}
+      <Typography variant="h5" sx={{ padding: ".5rem .5rem" }}>
+        {jobPosition}, {jobType}
+      </Typography>
+
+      {/* Opporunity status and user relative opportunity status */}
+      <CardContent
+        style={{
+          display: "flex",
+          margin: 0,
+          padding: "0rem .5rem",
+          gap: "1rem",
+        }}
+      >
+        <Chip
+          label={userPositionStatus ? "Applied" : "Not Applied"}
+          variant="outlined"
+          style={{
+            color: userPositionStatus ? "green" : "red",
+            borderColor: userPositionStatus ? "green" : "red",
+            margin: 0,
+          }}
+        />
+
+        <Chip
+          icon={
             <FontAwesomeIcon
-              style={{ marginLeft: '0.25rem' }}
-              icon={isPositionActive ? faAnglesUp : faAnglesDown}
+              style={{
+                marginLeft: ".5rem",
+                color: positionStatus ? "green" : "red",
+              }}
+              icon={positionStatus ? faAnglesUp : faAnglesDown}
             />
+          }
+          label={positionStatus ? "Actively Hiring" : "Not Hiring"}
+          variant="outlined"
+          style={{
+            color: positionStatus ? "green" : "red",
+            borderColor: positionStatus ? "green" : "red",
+            margin: 0,
+          }}
+        />
+
+      </CardContent>
+
+      {/* Opportunity stats */}
+      <CardContent
+        style={{
+          display: "flex",
+          justifyContent: "end",
+          padding: "0rem 3rem ",
+          gap: "1rem",
+          margin: "0",
+        }}
+      >
+        {stats.map((stats) => (
+          <Chip
+            key={stats.status}
+            label={`${stats.status} ${stats.quantity}`}
+            variant="outlined"
+            style={{ color: stats.color, borderColor: stats.color, margin: 0}}
+          />
+        ))}
+      </CardContent>
+
+      {/* Timeline section, displays stats of opportunity within date range */}
+
+      <CardContent style={{ display: "flex", justifyContent: "center", margin: 0, padding: "0rem 1rem" }}>
+        <OpportunityTimeline id={1}/>
+      </CardContent>
+
+      <CardContent style={{display: "flex", gap: "1rem", justifyContent: "flex-start", padding: "0 .5rem"}}>
+        <Button
+          variant="contained"
+          style={{
+            backgroundColor: "#496FFF",
+            height: "40px",
+            width: "auto",
+            borderRadius: "20px",
+            boxShadow: "none",
+          }}
+        >
+          <FontAwesomeIcon icon={faComment} />
+          <Typography style={{ color: "white", marginLeft: ".5rem" }}>
+            {recentMessages}
           </Typography>
-        </div>
+        </Button>
+
+        <Button
+          variant="contained"
+          style={{
+            backgroundColor: "#496FFF",
+            height: "40px",
+            width: "auto",
+            borderRadius: "20px",
+            boxShadow: "none",
+          }}
+        >
+          <FontAwesomeIcon icon={faReply} />
+          <Typography
+            variant="subtitle1"
+            style={{ color: "white", marginLeft: ".5rem" }}
+          >
+            Share
+          </Typography>
+        </Button>
       </CardContent>
     </Card>
   );
-};
+}
