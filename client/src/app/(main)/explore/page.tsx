@@ -8,59 +8,63 @@ import { SearchBar } from "@/ui/explore/SearchBar";
 import { SortOptions } from "@/ui/explore/SortOptions";
 import "@/app/(main)/explore/explore.css";
 import { OpportunityCard } from "@/ui/explore/OpportunityCard";
-import { faL } from "@fortawesome/free-solid-svg-icons";
 
 export default function Page() {
-  // const router = useRouter();
-  // const searchParams = useSearchParams();
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-  // // Initialize filters with dynamic keys
-  // const [filters, setFilters] = useState<SelectedFilters>({
-  //   searchQuery: [''],
-  //   sortOption: [''],
-  // });
+  // Initialize filters with dynamic keys
+  const [filters, setFilters] = useState<SelectedFilters>({
+    searchQuery: '', // Initialize as empty string
+    sortOption: '',  // Initialize as empty string
+  });
 
-  // // Update filters when URL parameters change
-  // useEffect(() => {
-  //   const params = new URLSearchParams(window.location.search);
-  //   const newFilters: SelectedFilters = {
-  //     searchQuery: params.get('search') || '',
-  //     sortOption: params.get('sort') || '',
-  //   };
+  // Update filters when URL parameters change
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const newFilters: SelectedFilters = {
+      searchQuery: params.get('search') || '',
+      sortOption: params.get('sort') || '',
+    };
 
-  //   // Iterate over all entries in the URL search params
-  //   params.forEach((value, key) => {
-  //     if (key !== 'search' && key !== 'sort') {
-  //       if (newFilters[key]) {
-  //         newFilters[key] = Array.isArray(newFilters[key])
-  //           ? [...newFilters[key], value]
-  //           : [newFilters[key], value];
-  //       } else {
-  //         newFilters[key] = [value];
-  //       }
-  //     }
-  //   });
+    // Iterate over all entries in the URL search params
+    params.forEach((value, key) => {
+      if (key !== 'search' && key !== 'sort') {
+        // Handle other filters as arrays
+        if (newFilters[key]) {
+          // If the filter already exists, ensure it's an array and add the new value
+          newFilters[key] = Array.isArray(newFilters[key])
+            ? [...(newFilters[key] as string[]), value]
+            : [newFilters[key] as string, value];
+        } else {
+          newFilters[key] = [value];
+        }
+      }
+    });
 
-  //   setFilters(newFilters);
-  // }, [searchParams]);
+    setFilters(newFilters);
+  }, [searchParams]);
 
-  // // Update URL parameters when filters change
-  // useEffect(() => {
-  //   const queryParams = new URLSearchParams();
+  // Update URL parameters when filters change
+  useEffect(() => {
+    const queryParams = new URLSearchParams();
 
-  //   Object.keys(filters).forEach((key) => {
-  //     const value = filters[key];
-  //     if (key === 'searchQuery' && value) {
-  //       queryParams.set('search', value);
-  //     } else if (key === 'sortOption' && value) {
-  //       queryParams.set('sort', value);
-  //     } else if (Array.isArray(value)) {
-  //       value.forEach((item) => queryParams.append(key, item));
-  //     }
-  //   });
+    Object.keys(filters).forEach((key) => {
+      const value = filters[key];
+      if (key === 'searchQuery' && typeof value === 'string' && value) {
+        // TypeScript knows value is a string here
+        queryParams.set('search', value);
+      } else if (key === 'sortOption' && typeof value === 'string' && value) {
+        // TypeScript knows value is a string here
+        queryParams.set('sort', value);
+      } else if (Array.isArray(value)) {
+        // Handle other filters as arrays
+        value.forEach((item) => queryParams.append(key, item));
+      }
+    });
 
-  //   router.replace(`?${queryParams.toString()}`);
-  // }, [filters, router]);
+    router.replace(`?${queryParams.toString()}`);
+  }, [filters, router]);
 
   return (
     <div className="page-container">
@@ -77,17 +81,20 @@ export default function Page() {
             <span style={{ fontWeight: "bold" }}>company threads</span>.
           </Typography>
         </div>
-        {/* <SearchBar filters={filters} setFilters={setFilters} /> */}
-        {/* <SortOptions filters={filters} setFilters={setFilters} /> */}
+        <SearchBar filters={filters} setFilters={setFilters} />
+        <SortOptions filters={filters} setFilters={setFilters} />
+
       </div>
       <div className="card-filter-container">
         <div className="opportunity-column">
-          <OpportunityCard
+          
+
+        <OpportunityCard
             id={1}
             title="Amazon"
             dateRangeStart="2023"
             dateRangeEnd="2024"
-            jobPosition="Lead Software Developer"
+            jobPosition="Lead Software Developer (hardcoded sample, filters don't apply) "
             jobType="Full-Time"
             jobAvatar="/landingpage/insight.svg"
             positionStatus={true}
@@ -100,7 +107,9 @@ export default function Page() {
             recentMessages={50}
             bookmarked={true}
           />
-          {/* <OpportunityList filters={filters} /> */}
+
+
+          <OpportunityList filters={filters} />
         </div>
         <div className="filter-column">
           <Typography
@@ -109,7 +118,7 @@ export default function Page() {
           >
             Filters
           </Typography>
-          {/* <Filters filters={filters} setFilters={setFilters} /> */}
+          <Filters filters={filters} setFilters={setFilters} />
         </div>
       </div>
     </div>
