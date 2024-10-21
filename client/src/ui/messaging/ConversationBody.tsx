@@ -1,31 +1,26 @@
 "use client";
-import { MessageCard, MessageCardProps } from "./MessageCard";
 import { useRef, memo, useEffect } from "react";
 import { NewMessagesNotification } from "./NewMessagesNotification";
 import { MutableRefObject } from "react";
-import { useProfile } from "@/lib/store/profile";
-import { DateDivider } from "./DateDivider";
+import { MessageList } from "./MessageList";
 
 /**
- * Handles rendering messages
- * @param {MessageCardProps[]} messages - Messages sent from users in a particular conversation
+ * Renders new message notifications, message list, and the message input
+ * Handles the page scrolling for new messages and message input
  * @param {number} numNewMessages - The number of new messages received
  * @param {() => void} resetNumNewMessages - Resets the number of new messages when invoked
  * @param { MutableRefObject<HTMLDivElement | null>} bottomRef - Used as a reference to be able to scroll down the page when scrollDown is invoked
  */
 export const ConversationBody = memo(function ConversationBody({
-  messages,
   numNewMessages,
   resetNumNewMessages,
   bottomRef,
 }: {
-  messages: MessageCardProps[];
   numNewMessages: number;
   resetNumNewMessages: () => void;
   bottomRef: MutableRefObject<HTMLDivElement | null>;
 }) {
   // Scroll to the bottom of the element
-  const { profile } = useProfile();
   const scrollContainerRef = useRef<null | HTMLDivElement>(null);
 
   const scrollThreshold = 20; // threshold for determining on whether page scrolls down on new messages
@@ -62,16 +57,6 @@ export const ConversationBody = memo(function ConversationBody({
     }
   }
 
-  function doRenderDateDivider(
-    index: number,
-    currentDate: Date,
-    prevDate?: Date
-  ): boolean {
-    if (index === 0) return true;
-    if (currentDate.getDay() !== prevDate?.getDay()) return true;
-    return false;
-  }
-
   // scrolls down on first page render
   useEffect(() => {
     scrollDown();
@@ -89,31 +74,11 @@ export const ConversationBody = memo(function ConversationBody({
         scrollDown={scrollDown}
         resetNumNewMessages={resetNumNewMessages}
       />
-      {messages.map((message, index) => {
-        const doScrollDown =
-          (index === messages.length - 1 &&
-            profile?.username === message.sender_username) ||
-          pageIsBottomFlushed();
-        let prevDate: undefined | Date;
-        if (index > 0) prevDate = new Date(messages[index - 1].timestamp);
-        return (
-          <>
-            <DateDivider
-              messageDate={new Date(message.timestamp)}
-              doRenderDateDivider={doRenderDateDivider(
-                index,
-                new Date(message.timestamp),
-                prevDate
-              )}
-            />
-            <MessageCard
-              key={message.messageId}
-              {...message}
-              scrollDown={doScrollDown ? scrollDown : undefined}
-            />
-          </>
-        );
-      })}
+
+      <MessageList
+        isPageBottomFlushed={pageIsBottomFlushed()}
+        scrollDown={scrollDown}
+      />
 
       {/* Used as a reference to scroll down the page */}
       <div
