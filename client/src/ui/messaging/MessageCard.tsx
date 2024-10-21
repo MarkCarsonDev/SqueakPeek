@@ -1,7 +1,6 @@
 import { Card, CardHeader, Typography } from "@mui/material";
 import { AvatarTypes, ProfileAvatar } from "../ProfileAvatar";
 import { memo, useEffect } from "react";
-import { MutableRefObject } from "react";
 import { useProfile } from "../../lib/store/profile";
 export interface MessageCardProps {
   avatar: AvatarTypes;
@@ -11,7 +10,6 @@ export interface MessageCardProps {
   upVotes?: number;
   downVotes?: number;
   messageId: string;
-  prevDate?: MutableRefObject<Date | null>;
   scrollDown?: () => void;
 }
 
@@ -28,7 +26,6 @@ export const MessageCard = memo(function MessageCard({
   sender_username,
   timestamp,
   message,
-  prevDate,
   scrollDown,
 }: MessageCardProps) {
   // TODO: Make CardHeader match the UI in figma file
@@ -43,24 +40,7 @@ export const MessageCard = memo(function MessageCard({
 
   // TODO: Decouple boolean logic and setting prevDate state
   // TODO: This needs to get tested
-  function doRenderDivider(): boolean {
-    // if prevDate is passed in
-    if (prevDate) {
-      // if prevDate.current === null or if prevDate day does not match the
-      if (
-        !prevDate.current ||
-        (prevDate.current && prevDate.current.getDay() !== messageDate.getDay())
-      ) {
-        console.log("render divider");
-        prevDate.current = messageDate;
 
-        return true;
-      }
-    }
-    return false;
-  }
-
-  const renderDateDivider = doRenderDivider();
   const messageSenderIsCurrentUser = profile?.username === sender_username;
 
   return (
@@ -73,22 +53,7 @@ export const MessageCard = memo(function MessageCard({
       }}
     >
       {/* TODO: Clean this up to make it simpler */}
-      {renderDateDivider && prevDate?.current && (
-        <Typography
-          sx={{
-            paddingTop: "20px",
-            fontWeight: "bold",
-          }}
-        >
-          {new Intl.DateTimeFormat("en-US", { month: "long" }).format(
-            prevDate.current
-          ) +
-            " " +
-            prevDate.current.getDay() +
-            ", " +
-            prevDate.current.getFullYear()}
-        </Typography>
-      )}
+
       <Card
         sx={{
           boxShadow: "none",

@@ -13,7 +13,7 @@ import { useSubscribeConversation } from "@/lib/hooks/useSubscribeConversation";
  * @param {string} conversationId - ID used to subscribe users to listen to incoming messages
  */
 export function Conversation({ conversationId }: { conversationId: string }) {
-  const { addMessage, messages } = useMessage();
+  const { addMessage } = useMessage();
   const { profile } = useProfile();
   const [numNewMessages, setNumNewMessages] = useState(0); // used for rendering new message notification
   const bottomRef = useRef<null | HTMLDivElement>(null); // used for scrolling down the page
@@ -56,7 +56,6 @@ export function Conversation({ conversationId }: { conversationId: string }) {
 
       {/* Messages */}
       <ConversationBody
-        messages={messages}
         numNewMessages={numNewMessages}
         resetNumNewMessages={() => resetNumNewMessages()}
         bottomRef={bottomRef}

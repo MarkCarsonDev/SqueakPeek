@@ -1,31 +1,26 @@
 "use client";
-import { MessageCard, MessageCardProps } from "./MessageCard";
 import { useRef, memo, useEffect } from "react";
 import { NewMessagesNotification } from "./NewMessagesNotification";
 import { MutableRefObject } from "react";
-import { useProfile } from "@/lib/store/profile";
+import { MessageList } from "./MessageList";
 
 /**
- * Handles rendering messages
- * @param {MessageCardProps[]} messages - Messages sent from users in a particular conversation
+ * Renders new message notifications, message list, and the message input
+ * Handles the page scrolling for new messages and message input
  * @param {number} numNewMessages - The number of new messages received
  * @param {() => void} resetNumNewMessages - Resets the number of new messages when invoked
  * @param { MutableRefObject<HTMLDivElement | null>} bottomRef - Used as a reference to be able to scroll down the page when scrollDown is invoked
  */
 export const ConversationBody = memo(function ConversationBody({
-  messages,
   numNewMessages,
   resetNumNewMessages,
   bottomRef,
 }: {
-  messages: MessageCardProps[];
   numNewMessages: number;
   resetNumNewMessages: () => void;
   bottomRef: MutableRefObject<HTMLDivElement | null>;
 }) {
   // Scroll to the bottom of the element
-  const { profile } = useProfile();
-  const prevDate = useRef<Date | null>(null); // used for rendering date divider
   const scrollContainerRef = useRef<null | HTMLDivElement>(null);
 
   const scrollThreshold = 20; // threshold for determining on whether page scrolls down on new messages
@@ -79,20 +74,11 @@ export const ConversationBody = memo(function ConversationBody({
         scrollDown={scrollDown}
         resetNumNewMessages={resetNumNewMessages}
       />
-      {messages.map((message, index) => {
-        const doScrollDown =
-          (index === messages.length - 1 &&
-            profile?.username === message.sender_username) ||
-          pageIsBottomFlushed();
-        return (
-          <MessageCard
-            key={message.messageId}
-            {...message}
-            prevDate={prevDate}
-            scrollDown={doScrollDown ? scrollDown : undefined}
-          />
-        );
-      })}
+
+      <MessageList
+        isPageBottomFlushed={pageIsBottomFlushed()}
+        scrollDown={scrollDown}
+      />
 
       {/* Used as a reference to scroll down the page */}
       <div
