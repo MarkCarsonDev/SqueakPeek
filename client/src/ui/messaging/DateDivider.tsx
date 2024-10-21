@@ -2,7 +2,7 @@ import { Typography } from "@mui/material";
 import { memo } from "react";
 interface DateDividerProps {
   messageDate: Date;
-  doRenderDateDivider?: boolean;
+  doRenderDateDivider: boolean;
 }
 export const DateDivider = memo(function DateDivider({
   messageDate,

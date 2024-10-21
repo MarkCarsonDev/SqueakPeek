@@ -4,6 +4,7 @@ import { useRef, memo, useEffect } from "react";
 import { NewMessagesNotification } from "./NewMessagesNotification";
 import { MutableRefObject } from "react";
 import { useProfile } from "@/lib/store/profile";
+import { DateDivider } from "./DateDivider";
 
 /**
  * Handles rendering messages
@@ -96,16 +97,21 @@ export const ConversationBody = memo(function ConversationBody({
         let prevDate: undefined | Date;
         if (index > 0) prevDate = new Date(messages[index - 1].timestamp);
         return (
-          <MessageCard
-            key={message.messageId}
-            {...message}
-            scrollDown={doScrollDown ? scrollDown : undefined}
-            doRenderDateDivider={doRenderDateDivider(
-              index,
-              new Date(message.timestamp),
-              prevDate
-            )}
-          />
+          <>
+            <DateDivider
+              messageDate={new Date(message.timestamp)}
+              doRenderDateDivider={doRenderDateDivider(
+                index,
+                new Date(message.timestamp),
+                prevDate
+              )}
+            />
+            <MessageCard
+              key={message.messageId}
+              {...message}
+              scrollDown={doScrollDown ? scrollDown : undefined}
+            />
+          </>
         );
       })}
 

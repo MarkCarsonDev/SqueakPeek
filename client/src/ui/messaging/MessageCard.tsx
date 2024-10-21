@@ -2,7 +2,6 @@ import { Card, CardHeader, Typography } from "@mui/material";
 import { AvatarTypes, ProfileAvatar } from "../ProfileAvatar";
 import { memo, useEffect } from "react";
 import { useProfile } from "../../lib/store/profile";
-import { DateDivider } from "./DateDivider";
 export interface MessageCardProps {
   avatar: AvatarTypes;
   sender_username: string;
@@ -12,7 +11,6 @@ export interface MessageCardProps {
   downVotes?: number;
   messageId: string;
   scrollDown?: () => void;
-  doRenderDateDivider?: boolean;
 }
 
 /**
@@ -29,7 +27,6 @@ export const MessageCard = memo(function MessageCard({
   timestamp,
   message,
   scrollDown,
-  doRenderDateDivider,
 }: MessageCardProps) {
   // TODO: Make CardHeader match the UI in figma file
   // TODO: Add upVotes and downVotes component
@@ -56,10 +53,7 @@ export const MessageCard = memo(function MessageCard({
       }}
     >
       {/* TODO: Clean this up to make it simpler */}
-      <DateDivider
-        messageDate={messageDate}
-        doRenderDateDivider={doRenderDateDivider}
-      />
+
       <Card
         sx={{
           boxShadow: "none",
