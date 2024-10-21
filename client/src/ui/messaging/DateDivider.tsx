@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Divider, Typography } from "@mui/material";
 import { memo } from "react";
 interface DateDividerProps {
   messageDate: Date;
@@ -12,17 +12,23 @@ export const DateDivider = memo(function DateDivider({
   messageDate,
 }: DateDividerProps) {
   return (
-    <Typography
+    <Divider
       sx={{
-        paddingTop: "20px",
-        fontWeight: "bold",
+        marginTop: "20px",
+        padding: "0px 20px",
       }}
     >
-      {new Intl.DateTimeFormat("en-US", {
-        month: "long",
-        day: "2-digit",
-        year: "numeric",
-      }).format(messageDate)}
-    </Typography>
+      <Typography
+        sx={{
+          fontWeight: "bold",
+        }}
+      >
+        {new Intl.DateTimeFormat("en-US", {
+          month: "long",
+          day: "2-digit",
+          year: "numeric",
+        }).format(messageDate)}
+      </Typography>
+    </Divider>
   );
 });
