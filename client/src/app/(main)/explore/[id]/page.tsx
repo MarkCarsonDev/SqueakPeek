@@ -1,3 +1,4 @@
+import { OpportunityStats } from "@/ui/explore/OpportunityStats";
 import { Conversation } from "@/ui/messaging/Conversation";
 import { Typography } from "@mui/material";
 export default function Page({ params }: { params: { id: string } }) {
@@ -10,13 +11,7 @@ export default function Page({ params }: { params: { id: string } }) {
       }}
     >
       <Conversation conversationId={conversationId} />
-      <div
-        style={{
-          borderLeft: "3px solid #E0E4F2",
-        }}
-      >
-        <Typography>Hello World</Typography>
-      </div>
+      <OpportunityStats />
     </div>
   );
 }
