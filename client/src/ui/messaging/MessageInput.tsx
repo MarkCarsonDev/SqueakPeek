@@ -7,30 +7,39 @@ import { MessageBodyProps } from "./MessageCard";
 import { useProfile } from "../../../lib/store/profile";
 import { AvatarTypes } from "../ProfileAvatar";
 import { useState } from "react";
+import { useConversation } from "../../../lib/store/conversation";
+import { createSupabaseClient } from "../../../lib/supabase/client";
+
 
 /**
  * Allows user to send a message into a conversation
  */
-export function MessageInput() {
+export function MessageInput(tableName: any) {
   const { addMessage } = useMessage();
   const { profile } = useProfile();
-  const [currentMessage, setCurrentMessage] = useState("");
+  const { conversation } = useConversation();
+  const [ currentMessage, setCurrentMessage] = useState("");
   
   // TODO: Add this as a server action
-  function handleSendMessage(message: string) {
-    // only allows to add message if profile is made
-    if (profile) {
-      const newMessage: MessageBodyProps = {
-        avatar: (profile.avatar as AvatarTypes) || "avatar1",
-        sender_username: profile.username!,
-        timestamp: new Date(),
-        messageId: 12,
-        message,
-      };
-      addMessage(newMessage);
-      // TODO Call on Supabase to insert the message in the conversation table
-    }
+  async function handleSendMessage(msg: string): Promise<void>
+  {
+    const messageToInsert = {message: msg};
+    const supabase = createSupabaseClient();
+
+    try {
+      const { data, error } = await supabase
+          .from(tableName)
+          .insert([messageToInsert]);
+
+      if (error) {
+          console.error('Error inserting message:', error.message);
+      } else {
+          console.log('Inserted message:', data);
+      }
+  } catch (err) {
+      console.error('Error:', err);
   }
+}
 
   return (
     <TextField
@@ -67,4 +76,5 @@ export function MessageInput() {
       }}
     />
   );
-}
+  }
+
