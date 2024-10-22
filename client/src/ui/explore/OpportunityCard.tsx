@@ -64,6 +64,8 @@ export function OpportunityCard({
   bookmarked: initialBookmarked,
 }: OpportunityCardProps) {
   const [bookmarked, setBookmarked] = useState(initialBookmarked);
+
+  // Array for mapping the job stats
   const stats: jobStats[] = [
     {
       status: "Total Applied:",
