@@ -7,6 +7,8 @@ interface oppornityDataProps {
   id: number;
 }
 export function OpportunityTimeline({ id }: oppornityDataProps) {
+
+  // Hard coded values for content card
   const customContent = [
     <div key={1} style={{ textAlign: "center" }}>
       <Typography>Job Stats</Typography>
@@ -35,6 +37,7 @@ export function OpportunityTimeline({ id }: oppornityDataProps) {
   </div>,
   ];
 
+  //Hard coded Point titles 
   const items = [
     {
       title: <Typography color="white">04/29/24 - 05/7/24</Typography>,

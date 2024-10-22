@@ -24,8 +24,6 @@ import { useState } from "react";
 interface OpportunityCardProps {
   id: number;
   title: string;
-  dateRangeStart: string;
-  dateRangeEnd: string;
   jobPosition: string;
   jobType: string;
   jobAvatar: string;
@@ -48,8 +46,6 @@ interface jobStats {
 
 export function OpportunityCard({
   title,
-  dateRangeStart,
-  dateRangeEnd,
   jobPosition,
   jobType,
   jobAvatar,
@@ -122,6 +118,7 @@ export function OpportunityCard({
           avatar={<Avatar src={jobAvatar} style={{ margin: 0 }}></Avatar>}
           title={<Typography variant="h5">{title}</Typography>}
           subheader={
+            // Job Postion and Job Type in header
             <Typography variant="h6">
               {jobPosition}, {jobType}
             </Typography>
@@ -137,8 +134,6 @@ export function OpportunityCard({
           />
         </IconButton>
       </div>
-
-      {/* Job postion and job type */}
 
       {/* Opporunity status and user relative opportunity status */}
       <CardContent
@@ -207,11 +202,14 @@ export function OpportunityCard({
           justifyContent: "center",
           margin: 0,
           padding: "0rem 1rem",
+          width: "auto"
         }}
       >
         <OpportunityTimeline id={1} />
       </CardContent>
 
+
+      {/* Button to threads and button to share Still in progress */}
       <CardContent
         style={{
           display: "flex",
@@ -255,6 +253,8 @@ export function OpportunityCard({
           </Typography>
         </Button>
       </CardContent>
+
+      
     </Card>
   );
 }

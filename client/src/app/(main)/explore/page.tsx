@@ -20,16 +20,14 @@ export default function Page() {
             <span style={{ fontWeight: "bold" }}>company threads</span>.
           </Typography>
         </div>
-        {/* <SearchBar filters={filters} setFilters={setFilters} /> */}
-        {/* <SortOptions filters={filters} setFilters={setFilters} /> */}
+        {/* To Add Later <SearchBar filters={filters} setFilters={setFilters} /> */}
+        {/* To Add Later <SortOptions filters={filters} setFilters={setFilters} /> */}
       </div>
       <div className="card-filter-container">
         <div className="opportunity-column">
           <OpportunityCard
             id={1}
             title="Amazon"
-            dateRangeStart="2023"
-            dateRangeEnd="2024"
             jobPosition="Lead Software Developer"
             jobType="Full-Time"
             jobAvatar="/landingpage/insight.svg"
