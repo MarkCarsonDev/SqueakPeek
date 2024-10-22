@@ -13,23 +13,35 @@ const reorder = (list: Application[], startIndex: number, endIndex: number): App
   const result = Array.from(list);
   const [removed] = result.splice(startIndex, 1);
   result.splice(endIndex, 0, removed);
-
   return result;
 };
 
 export default function Page() {
   const [openModal, setOpenModal] = useState(false);
   const [selectedStage, setSelectedStage] = useState<string>(""); // Use selectedStage to track the stage
-  const { stages, moveApplication} = TrackingApplicationStore(); // Access stages and addApplication from Zustand
+  const [defaultStatus, setDefaultStatus] = useState<string>(""); // Track the default status
+  const { stages, moveApplication, addApplication } = TrackingApplicationStore(); // Access stages and addApplication from Zustand
 
-  // Handle opening the modal with a specific stage
+  // Handle opening the modal with a specific stage and default status
   const handleOpenModal = (stageId: string) => {
-    setSelectedStage(stageId); // Store the selected stage (could be "" for new application button)
+    setSelectedStage(stageId); // Store the selected stage
+    setDefaultStatus(stageId); // Set the default status based on the stage name
     setOpenModal(true); // Open the modal
   };
 
   // Close the modal
-  const handleCloseModal = () => setOpenModal(false);
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    setDefaultStatus(""); // Clear default status on modal close
+  };
+
+  // Handle adding a new application
+  const handleAddApplication = (application: Application, status: string) => {
+    const targetStage = stages.find(stage => stage.name === status);
+    if (targetStage) {
+      addApplication(targetStage.id, application); // Add application to the correct stage
+    }
+  };
 
   // Handle drag end event with DropResult typing
   const onDragEnd = (result: DropResult) => {
@@ -40,7 +52,7 @@ export default function Page() {
 
     // Reordering within the same stage
     const sourceStage = stages.find((stage: JobStage) => stage.id === source.droppableId);
-    if (!sourceStage) return; // Ensure sourceStage exists
+    if (!sourceStage) return;
 
     if (source.droppableId === destination.droppableId) {
       const reorderedApplications = reorder(
@@ -51,30 +63,16 @@ export default function Page() {
 
       // Update the stage with the reordered applications
       sourceStage.applications = reorderedApplications;
-
-      // Force Zustand to update
-      moveApplication(
-        source.droppableId,
-        destination.droppableId,
-        draggableId
-      );
+      moveApplication(source.droppableId, destination.droppableId, draggableId);
     } else {
-      // Moving between stages
-      const destinationStage = stages.find((stage: JobStage) => stage.id === destination.droppableId);
-      if (!destinationStage) return; // Ensure destinationStage exists
-
-      moveApplication(
-        source.droppableId,
-        destination.droppableId,
-        draggableId
-      );
+      moveApplication(source.droppableId, destination.droppableId, draggableId);
     }
   };
 
   return (
     <div className="main">
       <Typography variant="h4">Submitted Applications</Typography>
-      <Typography variant="subtitle1">Total Applications: #</Typography> {/* Replace # with dynamic data */}
+      <Typography variant="subtitle1">Total Applications: #</Typography> {/* Replace with dynamic data */}
       
       {/* Button to open modal for a new application */}
       <Button
@@ -91,7 +89,7 @@ export default function Page() {
             boxShadow: "none",
           },
         }}
-        onClick={() => handleOpenModal("")} // Empty string for free-form new application
+        onClick={() => handleOpenModal("")} // Open modal for new application without specific status
       >
         New Application
       </Button>
@@ -101,10 +99,9 @@ export default function Page() {
         <NewApplicationModal
           open={openModal}
           handleClose={handleCloseModal}
-          defaultStatus={
-            stages.find((stage: JobStage) => stage.id === selectedStage)?.name || ""
-          }
+          defaultStatus={defaultStatus} // Pass the default status
           selectedStageId={selectedStage} // Pass the selected stage ID to the modal
+          onSubmit={handleAddApplication} // Call a function to add the application
         />
       )}
 
@@ -149,7 +146,7 @@ export default function Page() {
                   {/* Add New Application button */}
                   <Button
                     variant="outlined"
-                    onClick={() => handleOpenModal(stage.id)}
+                    onClick={() => handleOpenModal(stage.name)} // Pass the stage ID and name
                     sx={{
                       width: "80%",
                       height: "40px",
@@ -177,7 +174,7 @@ export default function Page() {
                             backgroundColor: "white",
                             border: "1px solid rgba(0, 0, 0, 0.12)",
                             borderRadius: "5px",
-                            ...provided.draggableProps.style, // <-- Make sure the draggable props style is applied here
+                            ...provided.draggableProps.style, // <-- Apply draggable props style
                           }}
                         >
                           <Typography variant="subtitle1">

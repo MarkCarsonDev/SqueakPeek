@@ -6,7 +6,7 @@ import { SearchDropdown } from "@/ui/track/SearchDropdown";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import UpdateStatus from "@/ui/track/UpdateStatus";
-import TrackingApplicationStore from "@/lib/store/TrackingApplicaitonStore";
+import TrackingApplicationStore, { Application } from "@/lib/store/TrackingApplicaitonStore";
 // You will import your calendar component here once added
 
 interface NewApplicationModalProps {
@@ -14,13 +14,15 @@ interface NewApplicationModalProps {
   handleClose: () => void;
   defaultStatus: string;
   selectedStageId: string;
+  onSubmit: (application: Application, status: string) => void;
 }
 
 export default function NewApplicationModal({
   open,
   handleClose,
   defaultStatus,
-  selectedStageId
+  selectedStageId,
+  onSubmit,
 
 }: NewApplicationModalProps) {
   const { addApplication } = TrackingApplicationStore(); // Access the addApplication method from Zustand store
@@ -33,6 +35,10 @@ export default function NewApplicationModal({
   const [status, setStatus] = useState(defaultStatus);
 
   const handleAddApplication = () => {
+    if (!status) {
+      alert("Please select a status before submitting");
+      return;
+    }
     const newApplication = {
       id: Date.now().toString(), // Use a timestamp or UUID for a unique ID
       roleTitle,
@@ -45,8 +51,8 @@ export default function NewApplicationModal({
     };
 
     // Add the application to the selected stage
-    addApplication(selectedStageId, newApplication);
-
+    //addApplication(selectedStageId, newApplication);
+    onSubmit(newApplication, status);
     // Close the modal after adding
     handleClose();
   };
