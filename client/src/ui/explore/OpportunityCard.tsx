@@ -18,7 +18,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark as regularBookmark } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { OpportunityTimeline } from "./OpportunityTimeline";
 import { useState } from "react";
 
 interface OpportunityCardProps {
@@ -127,7 +126,7 @@ export function OpportunityCard({
         />
 
         {/* Bookmark button */}
-        <IconButton onClick={handleBookmark}>
+        <IconButton onClick={handleBookmark} sx={{"&:hover":{ background: "none"}}}>
           <FontAwesomeIcon
             icon={bookmarked ? faBookmark : regularBookmark}
             style={{ fontSize: "2.5rem" }}
@@ -198,19 +197,6 @@ export function OpportunityCard({
               }}
             />
           ))}
-        </div>
-
-        {/* Timeline section, displays stats of opportunity within date range */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            margin: 0,
-            padding: "0rem 1rem",
-            width: "auto",
-          }}
-        >
-          <OpportunityTimeline id={1} />
         </div>
 
         {/* Button to threads and button to share Still in progress */}
