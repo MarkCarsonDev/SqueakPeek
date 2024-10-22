@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-interface Application {
+export interface Application {
     id: string;
     roleTitle: string;
     companyName: string;
@@ -10,7 +10,7 @@ interface Application {
     jobURL: string;
 }
 
-interface JobStage {
+export interface JobStage {
     id: string;
     name: string;
     color: string;

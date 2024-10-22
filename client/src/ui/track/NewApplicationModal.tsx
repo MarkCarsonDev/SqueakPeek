@@ -50,6 +50,12 @@ export default function NewApplicationModal({
     // Close the modal after adding
     handleClose();
   };
+
+  // List of options for job types
+  const jobTypeOptions = ["Full-time", "Part-time", "Contract", "Internship"];
+
+  // List of options for companies
+  const companyOptions = ["Google", "Netflix", "Amazon", "Facebook", "Apple"];
   return (
     <Modal
       open={open}
@@ -172,6 +178,7 @@ export default function NewApplicationModal({
                 label="Company"
                 placeholder="Company Name"
                 name="company" // Added name prop
+                options = {companyOptions}
                 required
                 fullWidth
                 style={{ marginBottom: "20px" }}
@@ -181,6 +188,7 @@ export default function NewApplicationModal({
                 label="Job Type"
                 placeholder="Type"
                 name="jobType" // Added name prop
+                options = {jobTypeOptions}
                 required
                 fullWidth
                 style={{ marginBottom: "20px" }}

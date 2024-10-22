@@ -4,12 +4,12 @@ import { Button, Typography } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileCirclePlus } from "@fortawesome/free-solid-svg-icons";
 import NewApplicationModal from "@/ui/track/NewApplicationModal";
-import TrackingApplicationStore from "@/lib/store/TrackingApplicaitonStore";
-import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd"; // Explicit import for DropResult type
+import TrackingApplicationStore, { JobStage, Application } from "@/lib/store/TrackingApplicaitonStore";
+import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 import "./tracking.css";
 
 // Explicit typing for the reorder function
-const reorder = (list: any[], startIndex: number, endIndex: number): any[] => {
+const reorder = (list: Application[], startIndex: number, endIndex: number): Application[] => {
   const result = Array.from(list);
   const [removed] = result.splice(startIndex, 1);
   result.splice(endIndex, 0, removed);
@@ -19,8 +19,8 @@ const reorder = (list: any[], startIndex: number, endIndex: number): any[] => {
 
 export default function Page() {
   const [openModal, setOpenModal] = useState(false);
-  const [selectedStage, setSelectedStage] = useState(""); // Use selectedStage to track the stage
-  const { stages, moveApplication, addApplication } = TrackingApplicationStore(); // Access stages from Zustand
+  const [selectedStage, setSelectedStage] = useState<string>(""); // Use selectedStage to track the stage
+  const { stages, moveApplication} = TrackingApplicationStore(); // Access stages and addApplication from Zustand
 
   // Handle opening the modal with a specific stage
   const handleOpenModal = (stageId: string) => {
@@ -39,7 +39,7 @@ export default function Page() {
     if (!destination) return;
 
     // Reordering within the same stage
-    const sourceStage = stages.find((stage: any) => stage.id === source.droppableId);
+    const sourceStage = stages.find((stage: JobStage) => stage.id === source.droppableId);
     if (!sourceStage) return; // Ensure sourceStage exists
 
     if (source.droppableId === destination.droppableId) {
@@ -60,7 +60,7 @@ export default function Page() {
       );
     } else {
       // Moving between stages
-      const destinationStage = stages.find((stage: any) => stage.id === destination.droppableId);
+      const destinationStage = stages.find((stage: JobStage) => stage.id === destination.droppableId);
       if (!destinationStage) return; // Ensure destinationStage exists
 
       moveApplication(
@@ -102,7 +102,7 @@ export default function Page() {
           open={openModal}
           handleClose={handleCloseModal}
           defaultStatus={
-            stages.find((stage: any) => stage.id === selectedStage)?.name || ""
+            stages.find((stage: JobStage) => stage.id === selectedStage)?.name || ""
           }
           selectedStageId={selectedStage} // Pass the selected stage ID to the modal
         />
@@ -111,7 +111,7 @@ export default function Page() {
       {/* Application stages */}
       <DragDropContext onDragEnd={onDragEnd}>
         <div style={{ display: "flex", gap: "20px" }}>
-          {stages.map((stage: any) => (
+          {stages.map((stage: JobStage) => (
             <Droppable droppableId={stage.id} key={stage.id}>
               {(provided) => (
                 <div
@@ -160,7 +160,7 @@ export default function Page() {
                   </Button>
 
                   {/* Render the applications card within the stage */}
-                  {stage.applications.map((app: any, index: number) => (
+                  {stage.applications.map((app: Application, index: number) => (
                     <Draggable
                       key={app.id}
                       draggableId={app.id}

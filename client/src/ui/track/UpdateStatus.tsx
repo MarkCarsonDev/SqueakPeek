@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { Typography } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 /**
  * This component renders a customizable dropdown for selecting status values.
@@ -27,12 +27,12 @@ export default function UpdateStatus({
   name: string,
   required?: boolean,
   defaultStatus?: string, // Optional prop
-  onChange?: (event: React.ChangeEvent<{ value: unknown }>) => void,
+  onChange?: (event: SelectChangeEvent<string>) => void,
 }) {
   const [selectedStatus, setSelectedStatus] = React.useState(defaultStatus);
 
-  const handleChange = (event: any) => {
-    setSelectedStatus(event.target.value); // Update the selected status
+  const handleChange = (event: SelectChangeEvent<string>) => {
+    setSelectedStatus(event.target.value as string); // Update the selected status
     if (onChange) {
       onChange(event); // Call the parent's onChange if provided
     }
