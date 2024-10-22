@@ -1,9 +1,3 @@
-
-
-export function OpportunityCard () {
-    return(
-        <div>
-            
-        </div>
-    )
+export function OpportunityCard() {
+  return <div></div>;
 }

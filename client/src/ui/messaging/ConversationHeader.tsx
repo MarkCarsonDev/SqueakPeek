@@ -5,12 +5,5 @@ import { CardHeader, CardHeaderProps } from "@mui/material";
  * @param props - Props of the CardHeader MUI component
  */
 export function ConversationHeader(props: CardHeaderProps) {
-  return (
-    <CardHeader
-      sx={{
-        borderBottom: "2px #3C435C solid",
-      }}
-      {...props}
-    />
-  );
+  return <CardHeader {...props} />;
 }
