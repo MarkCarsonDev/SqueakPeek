@@ -25,6 +25,8 @@ export default function Page() {
       </div>
       <div className="card-filter-container">
         <div className="opportunity-column">
+
+          {/* Hard coded card will be repalaced with opportunity list which is connected to filters */}
           <OpportunityCard
             id={1}
             title="Amazon"
