@@ -1,11 +1,6 @@
 "use client";
 import { Typography } from "@mui/material";
-import {
-  PieChart,
-  pieArcLabelClasses,
-  BarChart,
-  LineChart,
-} from "@mui/x-charts";
+import { PieChart, pieArcLabelClasses } from "@mui/x-charts";
 
 export function OpportunityStats() {
   return (
@@ -23,6 +18,7 @@ export function OpportunityStats() {
         Stats
       </Typography>
       <PieChart
+        // TODO: Adjust the data with real data
         series={[
           {
             arcLabel: (item) => `${item.value}`,
@@ -43,14 +39,15 @@ export function OpportunityStats() {
           },
         ]}
         sx={{
-          fontFamily: "",
+          width: "100%",
+          fontFamily: "", // for some reason fontFamily is default to something else. This make font change to inter
+          // TODO Figure out how to fix the font for hover tooltip
           [`& .${pieArcLabelClasses.root}`]: {
             fontWeight: "bold",
             fill: "white",
             color: "white",
           },
         }}
-        width={450}
         height={250}
       />
     </div>
