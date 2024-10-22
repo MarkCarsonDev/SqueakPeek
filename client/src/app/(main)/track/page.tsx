@@ -18,13 +18,13 @@ const reorder = (list: Application[], startIndex: number, endIndex: number): App
 
 export default function Page() {
   const [openModal, setOpenModal] = useState(false);
-  const [selectedStage, setSelectedStage] = useState<string>(""); // Use selectedStage to track the stage
+  //const [selectedStage, setSelectedStage] = useState<string>(""); // Use selectedStage to track the stage
   const [defaultStatus, setDefaultStatus] = useState<string>(""); // Track the default status
   const { stages, moveApplication, addApplication } = TrackingApplicationStore(); // Access stages and addApplication from Zustand
 
   // Handle opening the modal with a specific stage and default status
   const handleOpenModal = (stageId: string) => {
-    setSelectedStage(stageId); // Store the selected stage
+    //setSelectedStage(stageId); // Store the selected stage
     setDefaultStatus(stageId); // Set the default status based on the stage name
     setOpenModal(true); // Open the modal
   };
@@ -100,7 +100,7 @@ export default function Page() {
           open={openModal}
           handleClose={handleCloseModal}
           defaultStatus={defaultStatus} // Pass the default status
-          selectedStageId={selectedStage} // Pass the selected stage ID to the modal
+          //selectedStageId={selectedStage} // Pass the selected stage ID to the modal
           onSubmit={handleAddApplication} // Call a function to add the application
         />
       )}

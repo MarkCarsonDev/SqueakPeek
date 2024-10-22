@@ -6,14 +6,14 @@ import { SearchDropdown } from "@/ui/track/SearchDropdown";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import UpdateStatus from "@/ui/track/UpdateStatus";
-import TrackingApplicationStore, { Application } from "@/lib/store/TrackingApplicaitonStore";
+import  { Application } from "@/lib/store/TrackingApplicaitonStore";
 // You will import your calendar component here once added
 
 interface NewApplicationModalProps {
   open: boolean;
   handleClose: () => void;
   defaultStatus: string;
-  selectedStageId: string;
+  //selectedStageId: string;
   onSubmit: (application: Application, status: string) => void;
 }
 
@@ -21,11 +21,11 @@ export default function NewApplicationModal({
   open,
   handleClose,
   defaultStatus,
-  selectedStageId,
+  //selectedStageId,
   onSubmit,
 
 }: NewApplicationModalProps) {
-  const { addApplication } = TrackingApplicationStore(); // Access the addApplication method from Zustand store
+  //const { addApplication } = TrackingApplicationStore(); // Access the addApplication method from Zustand store
   const [roleTitle, setRoleTitle] = useState('');
   const [location, setLocation] = useState('');
   const [jobType, setJobType] = useState('');
