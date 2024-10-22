@@ -7,6 +7,12 @@ interface oppornityDataProps {
   id: number;
 }
 export function OpportunityTimeline({ id }: oppornityDataProps) {
+  //future function for fetching timeline data
+  const fetchTimelineData = (oppId: number) => {
+    return console.log(oppId);
+  };
+
+  fetchTimelineData(id);
 
   // Hard coded values for content card
   const customContent = [
@@ -31,13 +37,13 @@ export function OpportunityTimeline({ id }: oppornityDataProps) {
       <Typography>Rejected: 25</Typography>
     </div>,
     <div key={5} style={{ textAlign: "center" }}>
-    <Typography>Job Stats</Typography>
-    <Typography>Interviewing: 25</Typography>
-    <Typography>Rejected: 25</Typography>
-  </div>,
+      <Typography>Job Stats</Typography>
+      <Typography>Interviewing: 25</Typography>
+      <Typography>Rejected: 25</Typography>
+    </div>,
   ];
 
-  //Hard coded Point titles 
+  //Hard coded Point titles
   const items = [
     {
       title: <Typography color="white">04/29/24 - 05/7/24</Typography>,

@@ -59,6 +59,7 @@ export function OpportunityCard({
   recentMessages,
   bookmarked: initialBookmarked,
 }: OpportunityCardProps) {
+  // To be replaced with actuall book mark update from DB
   const [bookmarked, setBookmarked] = useState(initialBookmarked);
 
   // Array for mapping the job stats
@@ -110,7 +111,7 @@ export function OpportunityCard({
           justifyContent: "space-between",
           alignItems: "center",
           margin: 0,
-          padding: "1rem 0rem"
+          padding: "1rem 0rem",
         }}
       >
         <CardHeader
@@ -195,19 +196,17 @@ export function OpportunityCard({
       </CardContent>
 
       {/* Timeline section, displays stats of opportunity within date range */}
-
       <CardContent
         style={{
           display: "flex",
           justifyContent: "center",
           margin: 0,
           padding: "0rem 1rem",
-          width: "auto"
+          width: "auto",
         }}
       >
         <OpportunityTimeline id={1} />
       </CardContent>
-
 
       {/* Button to threads and button to share Still in progress */}
       <CardContent
@@ -253,8 +252,6 @@ export function OpportunityCard({
           </Typography>
         </Button>
       </CardContent>
-
-      
     </Card>
   );
 }
