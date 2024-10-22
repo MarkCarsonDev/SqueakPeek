@@ -34,28 +34,30 @@ const TrackingApplicationStore = create<TrackingApplicationStore>((set) => ({
         },
         {
             id: "2",
+            name: "Rejected",
+            color: "#C7253E",
+            applications: [],
+        },
+        {
+            id: "3",
             name: "Online Assessment",
             color: "#EB5B00",
             applications: [],
         },
         {
-            id: "3",
+            id: "4",
             name: "Interviewing",
             color: "#F0A202",
             applications: [],
         },
         {
-            id: "4",
+            id: "5",
             name: "Offer",
             color: "#2E7E33",
             applications: [],
         },
-        {
-            id: "5",
-            name: "Rejected",
-            color: "#C7253E",
-            applications: [],
-        },
+
+
     ],
 
     // Add an application to a specific stage (in 1 out of 5 stages)
@@ -68,7 +70,6 @@ const TrackingApplicationStore = create<TrackingApplicationStore>((set) => ({
             return { ...state };
         }),
 
-    // Move an application from one stage to another
     // Move an application from one stage to another
     moveApplication: (fromStageId: string, toStageId: string, applicationId: string) =>
         set((state) => {

@@ -21,15 +21,3 @@
 
   }
   
-  .application-box {
-    width: 80%;
-    height: 50px;
-    border: 2px dashed #E0E4F2;
-    border-radius: 8px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 24px;
-    color: #b0b0b0;
-    cursor: pointer;
-  }

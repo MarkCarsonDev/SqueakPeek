@@ -1,4 +1,4 @@
-"use client";
+//"use client";
 //import React from "react";
 import { Modal, Typography, Button } from "@mui/material";
 import { InputField } from "@/ui/InputField";
