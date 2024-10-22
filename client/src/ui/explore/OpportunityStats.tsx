@@ -2,6 +2,9 @@
 import { Typography } from "@mui/material";
 import { PieChart, pieArcLabelClasses } from "@mui/x-charts";
 
+/**
+ * Shows stats based on the opportunity
+ */
 export function OpportunityStats() {
   return (
     <div
@@ -18,7 +21,7 @@ export function OpportunityStats() {
         Stats
       </Typography>
       <PieChart
-        // TODO: Adjust the data with real data
+        // TODO: Adjust the data with real data, based on the opportunityID
         series={[
           {
             arcLabel: (item) => `${item.value}`,
