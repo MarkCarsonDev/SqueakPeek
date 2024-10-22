@@ -46,7 +46,6 @@ interface jobStats {
   quantity: number;
 }
 
-
 export function OpportunityCard({
   title,
   dateRangeStart,
@@ -62,7 +61,7 @@ export function OpportunityCard({
   interviewing,
   offered,
   recentMessages,
-  bookmarked : initialBookmarked,
+  bookmarked: initialBookmarked,
 }: OpportunityCardProps) {
   const [bookmarked, setBookmarked] = useState(initialBookmarked);
   const stats: jobStats[] = [
@@ -107,29 +106,37 @@ export function OpportunityCard({
       }}
     >
       {/* Card Header in a div with Bookmark */}
-      <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", margin: 0}}>
-      <CardHeader
-        style={{ margin: 0, padding: ".5rem", height: "2rem" }}
-        avatar={<Avatar src={jobAvatar} style={{margin: 0}}></Avatar>}
-        title={<Typography variant="h5">{title}</Typography>}
-        subheader={
-          <Typography variant="body2">
-            {dateRangeStart} - {dateRangeEnd}
-          </Typography>
-        }
-      />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          margin: 0,
+          padding: "1rem 0rem"
+        }}
+      >
+        <CardHeader
+          style={{ margin: 0, padding: ".5rem", height: "2rem" }}
+          avatar={<Avatar src={jobAvatar} style={{ margin: 0 }}></Avatar>}
+          title={<Typography variant="h5">{title}</Typography>}
+          subheader={
+            <Typography variant="h6">
+              {jobPosition}, {jobType}
+            </Typography>
+          }
+        />
 
-      {/* Bookmark button */}
-      <IconButton onClick={handleBookmark}>
-      <FontAwesomeIcon icon={bookmarked? faBookmark: regularBookmark } style={{fontSize: "2.5rem"}} color="#496FFF"/>
-      </IconButton>
-
+        {/* Bookmark button */}
+        <IconButton onClick={handleBookmark}>
+          <FontAwesomeIcon
+            icon={bookmarked ? faBookmark : regularBookmark}
+            style={{ fontSize: "2.5rem" }}
+            color="#496FFF"
+          />
+        </IconButton>
       </div>
 
       {/* Job postion and job type */}
-      <Typography variant="h5" sx={{ padding: ".5rem .5rem" }}>
-        {jobPosition}, {jobType}
-      </Typography>
 
       {/* Opporunity status and user relative opportunity status */}
       <CardContent
@@ -168,7 +175,6 @@ export function OpportunityCard({
             margin: 0,
           }}
         />
-
       </CardContent>
 
       {/* Opportunity stats */}
@@ -186,18 +192,32 @@ export function OpportunityCard({
             key={stats.status}
             label={`${stats.status} ${stats.quantity}`}
             variant="outlined"
-            style={{ color: stats.color, borderColor: stats.color, margin: 0}}
+            style={{ color: stats.color, borderColor: stats.color, margin: 0 }}
           />
         ))}
       </CardContent>
 
       {/* Timeline section, displays stats of opportunity within date range */}
 
-      <CardContent style={{ display: "flex", justifyContent: "center", margin: 0, padding: "0rem 1rem" }}>
-        <OpportunityTimeline id={1}/>
+      <CardContent
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          margin: 0,
+          padding: "0rem 1rem",
+        }}
+      >
+        <OpportunityTimeline id={1} />
       </CardContent>
 
-      <CardContent style={{display: "flex", gap: "1rem", justifyContent: "flex-start", padding: "0 .5rem"}}>
+      <CardContent
+        style={{
+          display: "flex",
+          gap: "1rem",
+          justifyContent: "flex-start",
+          padding: "0 .5rem",
+        }}
+      >
         <Button
           variant="contained"
           style={{
