@@ -136,121 +136,127 @@ export function OpportunityCard({
         </IconButton>
       </div>
 
-      {/* Opporunity status and user relative opportunity status */}
-      <CardContent
-        style={{
-          display: "flex",
-          margin: 0,
-          padding: "0rem .5rem",
-          gap: "1rem",
-        }}
-      >
-        <Chip
-          label={userPositionStatus ? "Applied" : "Not Applied"}
-          variant="outlined"
+      <CardContent style={{margin: 0, padding: 0}}>
+        {/* Opporunity status and user relative opportunity status */}
+        <div
           style={{
-            color: userPositionStatus ? "green" : "red",
-            borderColor: userPositionStatus ? "green" : "red",
+            display: "flex",
             margin: 0,
+            padding: "0rem .5rem",
+            gap: "1rem",
           }}
-        />
-
-        <Chip
-          icon={
-            <FontAwesomeIcon
-              style={{
-                marginLeft: ".5rem",
-                color: positionStatus ? "green" : "red",
-              }}
-              icon={positionStatus ? faAnglesUp : faAnglesDown}
-            />
-          }
-          label={positionStatus ? "Actively Hiring" : "Not Hiring"}
-          variant="outlined"
-          style={{
-            color: positionStatus ? "green" : "red",
-            borderColor: positionStatus ? "green" : "red",
-            margin: 0,
-          }}
-        />
-      </CardContent>
-
-      {/* Opportunity stats */}
-      <CardContent
-        style={{
-          display: "flex",
-          justifyContent: "end",
-          padding: "0rem 3rem ",
-          gap: "1rem",
-          margin: "0",
-        }}
-      >
-        {stats.map((stats) => (
+        >
           <Chip
-            key={stats.status}
-            label={`${stats.status} ${stats.quantity}`}
+            label={userPositionStatus ? "Applied" : "Not Applied"}
             variant="outlined"
-            style={{ color: stats.color, borderColor: stats.color, margin: 0 }}
+            style={{
+              color: userPositionStatus ? "green" : "red",
+              borderColor: userPositionStatus ? "green" : "red",
+              margin: 0,
+            }}
           />
-        ))}
-      </CardContent>
 
-      {/* Timeline section, displays stats of opportunity within date range */}
-      <CardContent
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          margin: 0,
-          padding: "0rem 1rem",
-          width: "auto",
-        }}
-      >
-        <OpportunityTimeline id={1} />
-      </CardContent>
+          <Chip
+            icon={
+              <FontAwesomeIcon
+                style={{
+                  marginLeft: ".5rem",
+                  color: positionStatus ? "green" : "red",
+                }}
+                icon={positionStatus ? faAnglesUp : faAnglesDown}
+              />
+            }
+            label={positionStatus ? "Actively Hiring" : "Not Hiring"}
+            variant="outlined"
+            style={{
+              color: positionStatus ? "green" : "red",
+              borderColor: positionStatus ? "green" : "red",
+              margin: 0,
+            }}
+          />
+        </div>
 
-      {/* Button to threads and button to share Still in progress */}
-      <CardContent
-        style={{
-          display: "flex",
-          gap: "1rem",
-          justifyContent: "flex-start",
-          padding: "0 .5rem",
-        }}
-      >
-        <Button
-          variant="contained"
+        {/* Opportunity stats */}
+        <div
           style={{
-            backgroundColor: "#496FFF",
-            height: "40px",
-            width: "auto",
-            borderRadius: "20px",
-            boxShadow: "none",
+            display: "flex",
+            justifyContent: "end",
+            padding: "0rem 3rem ",
+            gap: "1rem",
+            margin: "0",
           }}
         >
-          <FontAwesomeIcon icon={faComment} />
-          <Typography style={{ color: "white", marginLeft: ".5rem" }}>
-            {recentMessages}
-          </Typography>
-        </Button>
+          {stats.map((stats) => (
+            <Chip
+              key={stats.status}
+              label={`${stats.status} ${stats.quantity}`}
+              variant="outlined"
+              style={{
+                color: stats.color,
+                borderColor: stats.color,
+                margin: 0,
+              }}
+            />
+          ))}
+        </div>
 
-        <Button
-          variant="contained"
+        {/* Timeline section, displays stats of opportunity within date range */}
+        <div
           style={{
-            backgroundColor: "#496FFF",
-            height: "40px",
+            display: "flex",
+            justifyContent: "center",
+            margin: 0,
+            padding: "0rem 1rem",
             width: "auto",
-            borderRadius: "20px",
-            boxShadow: "none",
           }}
         >
-          <FontAwesomeIcon icon={faReply} />
-          <Typography
-            variant="subtitle1"
-            style={{ color: "white", marginLeft: ".5rem" }}
+          <OpportunityTimeline id={1} />
+        </div>
+
+        {/* Button to threads and button to share Still in progress */}
+        <div
+          style={{
+            display: "flex",
+            gap: "1rem",
+            justifyContent: "flex-start",
+            padding: "0 .5rem",
+          }}
+        >
+          <Button
+            variant="contained"
+            style={{
+              backgroundColor: "#496FFF",
+              height: "40px",
+              width: "auto",
+              borderRadius: "20px",
+              boxShadow: "none",
+            }}
           >
-            Share
-          </Typography>
-        </Button>
+            <FontAwesomeIcon icon={faComment} />
+            <Typography style={{ color: "white", marginLeft: ".5rem" }}>
+              {recentMessages}
+            </Typography>
+          </Button>
+
+          <Button
+            variant="contained"
+            style={{
+              backgroundColor: "#496FFF",
+              height: "40px",
+              width: "auto",
+              borderRadius: "20px",
+              boxShadow: "none",
+            }}
+          >
+            <FontAwesomeIcon icon={faReply} />
+            <Typography
+              variant="subtitle1"
+              style={{ color: "white", marginLeft: ".5rem" }}
+            >
+              Share
+            </Typography>
+          </Button>
+        </div>
       </CardContent>
     </Card>
   );
