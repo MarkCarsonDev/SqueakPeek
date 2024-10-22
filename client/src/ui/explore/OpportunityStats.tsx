@@ -14,7 +14,14 @@ export function OpportunityStats() {
         borderLeft: "3px solid #E0E4F2",
       }}
     >
-      <Typography variant="h3">Stats</Typography>
+      <Typography
+        style={{
+          padding: "30px 0px 30px 30px",
+        }}
+        variant="h3"
+      >
+        Stats
+      </Typography>
       <PieChart
         series={[
           {
