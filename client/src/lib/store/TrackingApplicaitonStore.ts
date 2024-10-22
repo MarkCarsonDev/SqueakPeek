@@ -1,4 +1,4 @@
-import {create} from 'zustand';
+import { create } from 'zustand';
 
 interface Application {
     id: string;
@@ -24,19 +24,48 @@ interface TrackingApplicationStore {
 }
 
 const TrackingApplicationStore = create<TrackingApplicationStore>((set) => ({
-    // 5 stages of the job application process
+    // 5 stages of the job application process with dummy data
     stages: [
         {
             id: "1",
             name: "Applied",
             color: "#769FCD",
-            applications: [],
+            applications: [
+                {
+                    id: '1',
+                    roleTitle: 'Frontend Developer',
+                    companyName: 'Google',
+                    location: 'Mountain View, CA',
+                    jobtype: 'Full-time',
+                    dateApplied: '2024-01-15',
+                    jobURL: 'https://google.com/careers',
+                },
+                {
+                    id: '2',
+                    roleTitle: 'Backend Developer',
+                    companyName: 'Netflix',
+                    location: 'Los Gatos, CA',
+                    jobtype: 'Contract',
+                    dateApplied: '2024-04-20',
+                    jobURL: 'https://netflix.com/careers',
+                },
+            ],
         },
         {
             id: "2",
             name: "Rejected",
             color: "#C7253E",
-            applications: [],
+            applications: [
+                {
+                    id: '3',
+                    roleTitle: 'Data Scientist',
+                    companyName: 'Facebook',
+                    location: 'Menlo Park, CA',
+                    jobtype: 'Full-time',
+                    dateApplied: '2024-02-10',
+                    jobURL: 'https://facebook.com/careers',
+                },
+            ],
         },
         {
             id: "3",
@@ -48,7 +77,17 @@ const TrackingApplicationStore = create<TrackingApplicationStore>((set) => ({
             id: "4",
             name: "Interviewing",
             color: "#F0A202",
-            applications: [],
+            applications: [
+                {
+                    id: '4',
+                    roleTitle: 'Mobile Engineer',
+                    companyName: 'Amazon',
+                    location: 'Seattle, WA',
+                    jobtype: 'Full-time',
+                    dateApplied: '2024-03-25',
+                    jobURL: 'https://amazon.com/careers',
+                },
+            ],
         },
         {
             id: "5",
@@ -56,8 +95,6 @@ const TrackingApplicationStore = create<TrackingApplicationStore>((set) => ({
             color: "#2E7E33",
             applications: [],
         },
-
-
     ],
 
     // Add an application to a specific stage (in 1 out of 5 stages)
@@ -86,9 +123,6 @@ const TrackingApplicationStore = create<TrackingApplicationStore>((set) => ({
 
             return { ...state };
         }),
-
-    
 }));
-
 
 export default TrackingApplicationStore;

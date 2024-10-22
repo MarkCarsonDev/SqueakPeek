@@ -20,17 +20,22 @@ export default function UpdateStatus({
   name,
   required,
   defaultStatus = "", // Default value set to empty string
+  onChange,
 }: {
   options: string[],
   fullWidth?: boolean,
   name: string,
   required?: boolean,
   defaultStatus?: string, // Optional prop
+  onChange?: (event: React.ChangeEvent<{ value: unknown }>) => void,
 }) {
   const [selectedStatus, setSelectedStatus] = React.useState(defaultStatus);
 
   const handleChange = (event: any) => {
     setSelectedStatus(event.target.value); // Update the selected status
+    if (onChange) {
+      onChange(event); // Call the parent's onChange if provided
+    }
   };
 
   return (
