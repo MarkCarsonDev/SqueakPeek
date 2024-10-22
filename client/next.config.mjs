@@ -7,8 +7,13 @@ const nextConfig = {
         hostname: "lh3.googleusercontent.com",
         protocol: "https",
       },
+      {
+        hostname: "www.amazon.com",
+        protocol: "https",
+      },
     ],
   },
+  reactStrictMode: false
 };
 
 export default nextConfig;

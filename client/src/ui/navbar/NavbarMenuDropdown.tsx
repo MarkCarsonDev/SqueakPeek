@@ -11,7 +11,7 @@ import {
   faChevronUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/navigation";
-import { ProfileAvatar } from "./ProfileAvatar";
+import { CurrentProfileAvatar } from "./CurrentProfileAvatar";
 
 export function NavbarMenuDropdown() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -57,7 +57,7 @@ export function NavbarMenuDropdown() {
         onClick={handleClick}
         size="small"
       >
-        <ProfileAvatar />
+        <CurrentProfileAvatar />
       </IconButton>
 
       {/* Menu open arrow */}

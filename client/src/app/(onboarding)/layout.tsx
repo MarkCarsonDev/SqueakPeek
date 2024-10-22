@@ -1,4 +1,5 @@
 import { LandingNavbar } from "@/ui/landingpage/LandingNavBar";
+import { PageFooter } from "@/ui/PageFooter";
 
 /**
  * This layout file affects files in the (onboarding) directory
@@ -9,6 +10,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <>
       <LandingNavbar />
       {children}
+      <PageFooter />
     </>
   );
 }
