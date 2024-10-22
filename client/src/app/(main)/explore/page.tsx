@@ -1,11 +1,4 @@
-import { OpportunityCard } from "@/ui/explore/OpportunityStats"
-
+import { OpportunityCard } from "@/ui/explore/OpportunityCard";
 export default function Page() {
-  return (
-
-
-    <OpportunityCard/>
-
-  )
-  
+  return <OpportunityCard />;
 }
