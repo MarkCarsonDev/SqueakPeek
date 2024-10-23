@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation'; // To handle URL params
+// import { useRouter } from 'next/navigation'; // To handle URL params
 // import { SelectedFilters } from './Filters';
 import { OpportunityCard, OpportunityCardProps } from './OpportunityCard';
 import { createSupabaseClient } from '@/lib/supabase/client';
