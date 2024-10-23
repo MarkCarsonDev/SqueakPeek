@@ -45,8 +45,7 @@ export default function Page() {
             recentMessages={50}
             bookmarked={true}
           />
-          {/* <OpportunityList filters={filters} />
-          <OpportunityList /> */}
+          <OpportunityList />
           <Typography
             variant="h6"
             sx={{ marginBottom: "0.5rem", marginLeft: "0.5rem" }}
