@@ -56,7 +56,7 @@ export const StageColumn: React.FC<StageColumnProps> = ({
           {/* Add New Application button */}
           <Button
             variant="outlined"
-            onClick={() => handleOpenModal(stageName)}
+            onClick={() => handleOpenModal(stageId)}
             sx={{
               width: '80%',
               height: '40px',

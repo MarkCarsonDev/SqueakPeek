@@ -34,11 +34,11 @@ export default function Page() {
   const offerStore = OfferStore();
 
   const stages = [
-    { id: "1", name: "Applied", color: "#769FCD", store: appliedStore },
-    { id: "2", name: "Rejected", color: "#C7253E", store: rejectedStore },
-    { id: "3", name: "Online Assessment", color: "#EB5B00", store: onlineAssessmentStore },
-    { id: "4", name: "Interviewing", color: "#F0A202", store: interviewingStore },
-    { id: "5", name: "Offer", color: "#2E7E33", store: offerStore }
+    { id: "Applied", name: "Applied", color: "#769FCD", store: appliedStore },
+    { id: "Rejected", name: "Rejected", color: "#C7253E", store: rejectedStore },
+    { id: "OA", name: "Online Assessment", color: "#EB5B00", store: onlineAssessmentStore },
+    { id: "Interviewing", name: "Interviewing", color: "#F0A202", store: interviewingStore },
+    { id: "Offer", name: "Offer", color: "#2E7E33", store: offerStore }
   ];
 
   // Handle opening the modal with a specific stage and default status
