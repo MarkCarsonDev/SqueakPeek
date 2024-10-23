@@ -48,6 +48,7 @@ export function SideNav() {
         flexDirection: "column",
         borderRight: "2px solid #E0E4F2",
         height: "100%",
+        padding: "20px",
       }}
     >
       {" "}
@@ -69,9 +70,11 @@ export function SideNav() {
           hidden: true,
         }}
         sx={{
+          display: "flex",
+          justifyContent: "center",
+          justifyItems: "center",
           "&.Mui-selected": {
             color: "yellow",
-            backgroundColor: "yellow",
             opacity: 1,
           },
           "&.Mui-focusVisible": {
@@ -83,6 +86,8 @@ export function SideNav() {
           <Tab
             key={tabPathName}
             sx={{
+              padding: "0px",
+              marginRight: "20px",
               "&.Mui-selected": {
                 color: "#496FFF",
               },
