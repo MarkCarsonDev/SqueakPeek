@@ -28,7 +28,7 @@ export default function Page() {
 
 
           {/* Hard coded card will be repalaced with opportunity list which is connected to filters */}
-          <OpportunityCard
+          {/* <OpportunityCard
             id={"1"}
             conversation_id={"1"}
             title="Amazon"
@@ -44,7 +44,7 @@ export default function Page() {
             offered={25}
             recentMessages={50}
             bookmarked={true}
-          />
+          /> */}
           <OpportunityList />
           <Typography
             variant="h6"
