@@ -22,6 +22,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { OpportunityStackedBarGraph } from "./OpportunityStackedBarGraph";
 import { useRouter } from "next/navigation";
+import { OpportunityStatsModal } from "./OpportunityStatsModal";
 
 export interface OpportunityCardProps {
   id: string;
@@ -173,21 +174,7 @@ export function OpportunityCard({
             </Typography>
           </Button>
 
-          <Button
-            variant="contained"
-            style={{
-              backgroundColor: "#496FFF",
-              height: "40px",
-              width: "auto",
-              borderRadius: "20px",
-              boxShadow: "none",
-            }}
-          >
-            <FontAwesomeIcon icon={faChartColumn} />
-            <Typography style={{ color: "white", marginLeft: ".5rem" }}>
-              Stats
-            </Typography>
-          </Button>
+          <OpportunityStatsModal/>
 
           <Button
             variant="contained"
