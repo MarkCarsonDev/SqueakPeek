@@ -18,15 +18,17 @@ export function NewMessagesNotification({
   return (
     <Snackbar
       open={numNewMessages > 0}
-      anchorOrigin={{ vertical: "top", horizontal: "center" }}
       onClick={() => {
         scrollDown();
         resetNumNewMessages();
       }}
       autoHideDuration={5000}
       onClose={() => resetNumNewMessages()}
+      // anchorOrigin={{horizontal:"center", vertical:"top"}}
       sx={{
-        "&.MuiSnackbar-root": { top: "200px" }, // positions Snackbar within ConversationBody
+        "&.MuiSnackbar-root": { top: "80px", justifyContent: "center" }, // positions Snackbar within ConversationBody
+        position: "sticky",
+        height: "0", // takes the NewMessagesNotification out of the document flow, fixing padding issues with MessageList when this component renders
       }}
     >
       <Chip
