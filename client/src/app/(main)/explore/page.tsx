@@ -2,6 +2,7 @@
 import { Typography } from "@mui/material";
 import "@/app/(main)/explore/explore.css";
 import { OpportunityCard } from "@/ui/explore/OpportunityCard";
+import { OpportunityList } from "@/ui/explore/OpportunityList";
 
 export default function Page() {
 
@@ -26,6 +27,7 @@ export default function Page() {
       <div className="card-filter-container">
         <div className="opportunity-column">
 
+
           {/* Hard coded card will be repalaced with opportunity list which is connected to filters */}
           <OpportunityCard
             id={1}
@@ -44,6 +46,7 @@ export default function Page() {
             bookmarked={true}
           />
           {/* <OpportunityList filters={filters} /> */}
+          <OpportunityList />
         </div>
         <div className="filter-column">
           <Typography
