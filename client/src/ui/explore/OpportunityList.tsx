@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation'; // To handle URL params
-import { SelectedFilters } from './Filters';
+// import { SelectedFilters } from './Filters';
 import { OpportunityCard, OpportunityCardProps } from './OpportunityCard';
 import { createSupabaseClient } from '@/lib/supabase/client';
 import { Database } from '@/lib/types/database.types';
@@ -17,10 +17,13 @@ interface OpportunityRaw {
 const supabase = createSupabaseClient();
 
 interface OpportunityListProps {
-  filters: SelectedFilters;
+    // TODO: Add filters prop
+    // filters: SelectedFilters;
 }
+// TODO: Add filters to the OpportunityList component
+// export const OpportunityList: React.FC<OpportunityListProps> = ({ filters }) => {
+export const OpportunityList: React.FC<OpportunityListProps> = () => {
 
-export const OpportunityList: React.FC<OpportunityListProps> = ({ filters }) => {
   const [allOpportunities, setAllOpportunities] = useState<OpportunityCardProps[]>([]);
   const [filteredOpportunities, setFilteredOpportunities] = useState<OpportunityCardProps[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -63,81 +66,6 @@ export const OpportunityList: React.FC<OpportunityListProps> = ({ filters }) => 
 
     fetchOpportunities();
   }, []);
-
-  // Apply filters whenever they change
-  useEffect(() => {
-    const applyFilters = () => {
-      let filtered = allOpportunities;
-
-      // Apply company filter
-      if (filters.title && filters.title.length > 0) {
-        filtered = filtered.filter((opp) =>
-          (filters.title as string[]).includes(opp.title)
-        );
-      }
-
-      // Apply role title filter
-      if (filters.jobPosition && filters.jobPosition.length > 0) {
-        filtered = filtered.filter((opp) =>
-          (filters.jobPosition as string[]).includes(opp.jobPosition)
-        );
-      }
-
-      // Apply search query filter
-      if (filters.searchQuery) {
-        const searchLower = (filters.searchQuery as string).toLowerCase();
-        filtered = filtered.filter(
-          (opp) =>
-            opp.title.toLowerCase().includes(searchLower) ||
-            opp.jobPosition.toLowerCase().includes(searchLower)
-        );
-      }
-
-      // Apply sorting
-      if (filters.sortOption) {
-        const [column, order] = filters.sortOption.split(':');
-        filtered = filtered.slice().sort((a, b) => {
-          const aValue = (a as any)[column];
-          const bValue = (b as any)[column];
-          if (aValue < bValue) return order === 'asc' ? -1 : 1;
-          if (aValue > bValue) return order === 'asc' ? 1 : -1;
-          return 0;
-        });
-      }
-
-      setFilteredOpportunities(filtered);
-
-      // Update the URL search params based on filters
-      const queryParams = new URLSearchParams();
-
-      // Company filter
-      if (filters.title && filters.title.length > 0) {
-        (filters.title as string[]).forEach((value) => queryParams.append('title', value));
-      }
-
-      // Role title filter
-      if (filters.jobPosition && filters.jobPosition.length > 0) {
-        (filters.jobPosition as string[]).forEach((value) =>
-          queryParams.append('jobPosition', value)
-        );
-      }
-
-      // Search query
-      if (filters.searchQuery) {
-        queryParams.append('search', filters.searchQuery);
-      }
-
-      // Sort option
-      if (filters.sortOption) {
-        queryParams.append('sort', filters.sortOption);
-      }
-
-      // Update the URL with the new query parameters
-      router.replace(`?${queryParams.toString()}`);
-    };
-
-    applyFilters();
-  }, [filters, allOpportunities, router]);
 
   if (loading) {
     return <div>Loading...</div>;
