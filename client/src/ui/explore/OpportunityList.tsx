@@ -7,13 +7,12 @@ import { createSupabaseClient } from '@/lib/supabase/client';
 import { Database } from '@/lib/types/database.types';
 
 interface OpportunityRaw {
-    [key: string]: string
     company_name: string
     created_at: string
     opportunity_id: string
-    conversation_id: string
     role_title: Database["public"]["Enums"]["OpportunityType"]
     type: string
+    conversation: { conversation_id: string } | null;
 }
 
 const supabase = createSupabaseClient();
@@ -43,18 +42,20 @@ export const OpportunityList: React.FC = () => {
       setLoading(true);
       const { data, error } = await supabase
         .from('opportunity')
-        .select('opportunity_id, company_name, role_title, type, created_at, conversation (conversation_id)');
-
+        .select(`
+            *,
+            conversation!left (conversation_id)
+        `);
 
       if (error) {
         console.error('Error fetching opportunities:', error);
       } else if (data) {
         // log the id
-        console.log(data)
+        console.log("Data ", data)
         // Map the data to match the OpportunityCardProps interface
         const mappedData = data.map((opportunity: OpportunityRaw) => ({
             id: opportunity.opportunity_id,
-            conversation_id: opportunity.conversation?.conversation_id,
+            conversation_id: opportunity.conversation?.conversation_id || '', // Flatten the conversation_id manually
             title: opportunity.company_name,
             jobPosition: opportunity.role_title,
             jobType: opportunity.type,
