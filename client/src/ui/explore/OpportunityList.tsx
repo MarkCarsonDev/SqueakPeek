@@ -29,7 +29,8 @@ export const OpportunityList: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   // allOpportunities is not used until filters are implemented, so just to appease TS:
-  allOpportunities;
+    console.log(allOpportunities);
+  // This will be removed once filters are implemented
 
   // Commented out until filters are implemented
   // const router = useRouter();
