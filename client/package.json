@@ -17,6 +17,8 @@
     "@fortawesome/free-regular-svg-icons": "^6.6.0",
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
+    "@hello-pangea/dnd": "^17.0.0",
+    "@mui/icons-material": "^6.1.5",
     "@mui/material": "^6.1.4",
     "@mui/material-nextjs": "^6.1.1",
     "@mui/x-charts": "^7.21.0",
