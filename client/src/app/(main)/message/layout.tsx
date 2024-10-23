@@ -1,5 +1,4 @@
 import { SideNav } from "@/ui/messaging/SideNav";
-
 /**
  * This layout file affects files in the message directory
  * The Sidebar is set to render in each page under the (main directory)

@@ -1,6 +1,8 @@
 "use client";
 import { Typography, Tabs, Tab } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useRouter } from "next/navigation";
+
 import {
   faBuilding as solidBuilding,
   faMessage as solidMessage,
@@ -16,6 +18,7 @@ import { usePathname } from "next/navigation";
  * Allows the user to navigate between company threads or private messages in the message page
  */
 export function SideNav() {
+  const router = useRouter();
   const pathName = usePathname();
   console.log("pathName: ", pathName);
 
@@ -45,9 +48,9 @@ export function SideNav() {
               }
             />
           }
-          href="company"
           label="Company Threads"
           iconPosition="start"
+          onClick={() => router.push("/message/company")}
         />
         <Tab
           icon={
@@ -58,7 +61,7 @@ export function SideNav() {
               }
             />
           }
-          href="private"
+          onClick={() => router.push("/message/private")}
           label="Private Messages"
           iconPosition="start"
         />
