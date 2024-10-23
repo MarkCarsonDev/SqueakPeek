@@ -47,7 +47,6 @@ export function SideNav() {
         display: "flex",
         flexDirection: "column",
         borderRight: "2px solid #E0E4F2",
-        height: "100%",
         padding: "20px",
       }}
     >
