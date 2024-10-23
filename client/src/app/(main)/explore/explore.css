@@ -7,25 +7,11 @@
 }
 
 .card-filter-container{
-    display: flex;
+    display: grid;
     gap: 2rem;
-    div {
-        margin: .5rem;
-    }
+    grid-template-columns: 70% 30%;
 }
 
-.filter-column {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-}
-
-.opportunity-column{
-    display: flex;
-    flex-direction: column;
-    flex: 4;
-}
 
 .header-text{
     display: flex;

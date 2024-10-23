@@ -25,7 +25,6 @@ export default function Page() {
         {/* To Add Later <SortOptions filters={filters} setFilters={setFilters} /> */}
       </div>
       <div className="card-filter-container">
-        <div className="opportunity-column">
 
 
           {/* Hard coded card will be repalaced with opportunity list which is connected to filters */}
@@ -46,10 +45,8 @@ export default function Page() {
             recentMessages={50}
             bookmarked={true}
           />
-          {/* <OpportunityList filters={filters} /> */}
-          <OpportunityList />
-        </div>
-        <div className="filter-column">
+          {/* <OpportunityList filters={filters} />
+          <OpportunityList /> */}
           <Typography
             variant="h6"
             sx={{ marginBottom: "0.5rem", marginLeft: "0.5rem" }}
@@ -57,7 +54,6 @@ export default function Page() {
             Filters
           </Typography>
           {/* <Filters filters={filters} setFilters={setFilters} /> */}
-        </div>
       </div>
     </div>
   );
