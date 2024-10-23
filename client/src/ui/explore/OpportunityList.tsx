@@ -60,15 +60,17 @@ export const OpportunityList: React.FC = () => {
             jobPosition: opportunity.role_title,
             jobType: opportunity.type,
             jobAvatar: '',
-            positionStatus: false,
-            userPositionStatus: false,
+            hiringStatus: false,
+            // TODO: Update these values with the client's data 
+            appliedStatus: false,
+            bookmarked: false,
+            // END TODO
             totalApplied: 0,
             rejected: 0,
             oa: 0,
             interviewing: 0,
             offered: 0,
             recentMessages: 0,
-            bookmarked: false,
         }));
 
         setAllOpportunities(mappedData);

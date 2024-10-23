@@ -30,8 +30,8 @@ export interface OpportunityCardProps {
   jobPosition: string;
   jobType: string;
   jobAvatar: string;
-  positionStatus: boolean;
-  userPositionStatus: boolean;
+  hiringStatus: boolean;
+  appliedStatus: boolean;
   totalApplied: number;
   rejected: number;
   oa: number;
@@ -53,8 +53,8 @@ export function OpportunityCard({
   jobPosition,
   jobType,
   jobAvatar,
-  positionStatus,
-  userPositionStatus,
+  hiringStatus,
+  appliedStatus,
   totalApplied,
   rejected,
   oa,
@@ -244,11 +244,11 @@ export function OpportunityCard({
           }}
         >
           <Chip
-            label={userPositionStatus ? "Applied" : "Not Applied"}
+            label={appliedStatus ? "Applied" : "Not Applied"}
             variant="outlined"
             style={{
-              color: userPositionStatus ? "green" : "red",
-              borderColor: userPositionStatus ? "green" : "red",
+              color: appliedStatus ? "green" : "red",
+              borderColor: appliedStatus ? "green" : "red",
               margin: 0,
             }}
           />
@@ -258,16 +258,16 @@ export function OpportunityCard({
               <FontAwesomeIcon
                 style={{
                   marginLeft: ".5rem",
-                  color: positionStatus ? "green" : "red",
+                  color: hiringStatus ? "green" : "red",
                 }}
-                icon={positionStatus ? faAnglesUp : faAnglesDown}
+                icon={hiringStatus ? faAnglesUp : faAnglesDown}
               />
             }
-            label={positionStatus ? "Actively Hiring" : "Not Hiring"}
+            label={hiringStatus ? "Actively Hiring" : "Not Hiring"}
             variant="outlined"
             style={{
-              color: positionStatus ? "green" : "red",
-              borderColor: positionStatus ? "green" : "red",
+              color: hiringStatus ? "green" : "red",
+              borderColor: hiringStatus ? "green" : "red",
               margin: 0,
             }}
           />
