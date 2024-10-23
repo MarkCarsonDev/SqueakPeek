@@ -3,6 +3,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Typography, Button } from "@mui/material";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/navigation";
+
+/**
+ * Company Threads section in the messages page
+ */
 export default function page() {
   const router = useRouter();
   return (
