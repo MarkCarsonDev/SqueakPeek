@@ -24,10 +24,8 @@ export default function page() {
         size="3x"
         icon={faPaperPlane}
       />
-      <Typography variant="h4">Direct Messages</Typography>
-      <Typography variant="h6">
-        Chat privately with other applicants in the pipeline
-      </Typography>
+      <Typography variant="h4">Private Messages</Typography>
+      <Typography variant="h6">Chat privately with applicants</Typography>
     </div>
   );
 }
