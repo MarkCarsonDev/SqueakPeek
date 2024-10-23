@@ -1,4 +1,4 @@
-import { Typography, Tabs, Tab } from "@mui/material";
+import { SideNav } from "@/ui/messaging/SideNav";
 
 /**
  * This layout file affects files in the message directory
@@ -10,23 +10,14 @@ export default async function Layout({
   children: React.ReactNode;
 }) {
   return (
-    <>
-      <Typography
-        variant="h4"
-        sx={{
-          fontWeight: "bold",
-        }}
-      >
-        Messages
-      </Typography>
-      <Typography>
-        Talk to other applicants in the process, or talk privately
-      </Typography>
-      <Tabs>
-        <Tab href="company" label="Company Threads"></Tab>
-        <Tab href="private" label="Private Messages"></Tab>
-      </Tabs>
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "40% 60%",
+      }}
+    >
+      <SideNav />
       {children}
-    </>
+    </div>
   );
 }
