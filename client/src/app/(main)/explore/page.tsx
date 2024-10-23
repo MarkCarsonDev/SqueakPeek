@@ -36,10 +36,10 @@ export default function Page() {
             positionStatus={true}
             userPositionStatus={false}
             totalApplied={100}
-            rejected={50}
-            oa={50}
-            interviewing={50}
-            offered={50}
+            rejected={25}
+            oa={25}
+            interviewing={25}
+            offered={25}
             recentMessages={50}
             bookmarked={true}
           />

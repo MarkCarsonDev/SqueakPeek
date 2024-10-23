@@ -15,10 +15,13 @@ import {
   faComment,
   faReply,
   faBookmark,
+  faChartColumn,
 } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark as regularBookmark } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
+import { OpportunityStackedBarGraph } from "./OpportunityStackedBarGraph";
+import { useRouter } from "next/navigation";
 
 interface OpportunityCardProps {
   id: number;
@@ -44,6 +47,7 @@ interface jobStats {
 }
 
 export function OpportunityCard({
+  id,
   title,
   jobPosition,
   jobType,
@@ -63,11 +67,6 @@ export function OpportunityCard({
 
   // Array for mapping the job stats
   const stats: jobStats[] = [
-    {
-      status: "Total Applied:",
-      color: "black",
-      quantity: totalApplied,
-    },
     {
       status: "Rejected:",
       color: "red",
@@ -90,8 +89,29 @@ export function OpportunityCard({
     },
   ];
 
+  const router = useRouter();
   const handleBookmark = () => {
     setBookmarked((prev) => !prev); // Toggle the bookmark state
+  };
+
+  const handleChatClick = () => {
+    router.push(`/explore/${id}`)
+  }
+
+  const handleShareClick = () => {
+    if (navigator.share) {
+      navigator
+        .share({
+          title: title,
+          text: `Check out this job opportunity for ${jobPosition} at ${title}.`,
+          url: window.location.href, 
+        })
+        .catch((error) => {
+          console.error("Error sharing:", error);
+        });
+    } else {
+      alert("Web Share API is not supported in your browser.");
+    }
   };
 
   return (
@@ -100,7 +120,7 @@ export function OpportunityCard({
         border: "solid 3px #e0e4f2",
         margin: "1.5rem 0",
         borderRadius: "20px",
-        padding: ".5rem 2rem",
+        padding: ".75rem 2rem",
       }}
     >
       {/* Card Header in a div with Bookmark */}
@@ -110,7 +130,7 @@ export function OpportunityCard({
           justifyContent: "space-between",
           alignItems: "center",
           margin: 0,
-          padding: "1rem 0rem",
+          padding: ".5rem 0rem",
         }}
       >
         <CardHeader
@@ -125,24 +145,101 @@ export function OpportunityCard({
           }
         />
 
-        {/* Bookmark button */}
-        <IconButton onClick={handleBookmark} sx={{"&:hover":{ background: "none"}}}>
-          <FontAwesomeIcon
-            icon={bookmarked ? faBookmark : regularBookmark}
-            style={{ fontSize: "2.5rem" }}
-            color="#496FFF"
-          />
-        </IconButton>
+        {/* Button to threads and button to share Still in progress */}
+        <div
+          style={{
+            display: "flex",
+            gap: "1rem",
+            alignItems: "center",
+            padding: "0 .5rem",
+            margin: 0,
+          }}
+        >
+          <Button
+            variant="contained"
+            style={{
+              backgroundColor: "#496FFF",
+              height: "40px",
+              width: "auto",
+              borderRadius: "20px",
+              boxShadow: "none",
+            }}
+            onClick={handleChatClick}
+          >
+            <FontAwesomeIcon icon={faComment} />
+            <Typography style={{ color: "white", marginLeft: ".5rem" }}>
+              {recentMessages}
+            </Typography>
+          </Button>
+
+          <Button
+            variant="contained"
+            style={{
+              backgroundColor: "#496FFF",
+              height: "40px",
+              width: "auto",
+              borderRadius: "20px",
+              boxShadow: "none",
+            }}
+          >
+            <FontAwesomeIcon icon={faChartColumn} />
+            <Typography style={{ color: "white", marginLeft: ".5rem" }}>
+              Stats
+            </Typography>
+          </Button>
+
+          <Button
+            variant="contained"
+            style={{
+              backgroundColor: "#496FFF",
+              height: "40px",
+              width: "auto",
+              borderRadius: "20px",
+              boxShadow: "none",
+            }}
+            onClick={handleShareClick}
+          >
+            <FontAwesomeIcon icon={faReply} />
+            <Typography
+              variant="subtitle1"
+              style={{ color: "white", marginLeft: ".5rem" }}
+            >
+              Share
+            </Typography>
+          </Button>
+
+          {/* Bookmark button */}
+          <IconButton
+            onClick={handleBookmark}
+            sx={{ "&:hover": { background: "none" } }}
+          >
+            <FontAwesomeIcon
+              icon={bookmarked ? faBookmark : regularBookmark}
+              style={{ fontSize: "2.5rem" }}
+              color="#496FFF"
+            />
+          </IconButton>
+        </div>
       </div>
 
-      <CardContent style={{margin: 0, padding: 0}}>
+      <CardContent
+        style={{
+          margin: 0,
+          padding: 0,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
         {/* Opporunity status and user relative opportunity status */}
         <div
           style={{
             display: "flex",
             margin: 0,
-            padding: "0rem .5rem",
+            padding: ".5rem 0rem",
             gap: "1rem",
+            width: "100%",
+            justifyContent: "flex-start"
           }}
         >
           <Chip
@@ -179,8 +276,8 @@ export function OpportunityCard({
         <div
           style={{
             display: "flex",
-            justifyContent: "end",
-            padding: "0rem 3rem ",
+            justifyContent: "center",
+            padding: "1rem 3rem ",
             gap: "1rem",
             margin: "0",
           }}
@@ -194,55 +291,21 @@ export function OpportunityCard({
                 color: stats.color,
                 borderColor: stats.color,
                 margin: 0,
+                width: "150px"
               }}
             />
           ))}
         </div>
 
-        {/* Button to threads and button to share Still in progress */}
+        {/* Stacked Bar Graph For Stat Visual */}
         <div
-          style={{
-            display: "flex",
-            gap: "1rem",
-            justifyContent: "flex-start",
-            padding: "0 .5rem",
-          }}
+          style={{ height: "4rem", display: "flex", justifyContent: "center", width: "80%"}}
         >
-          <Button
-            variant="contained"
-            style={{
-              backgroundColor: "#496FFF",
-              height: "40px",
-              width: "auto",
-              borderRadius: "20px",
-              boxShadow: "none",
-            }}
-          >
-            <FontAwesomeIcon icon={faComment} />
-            <Typography style={{ color: "white", marginLeft: ".5rem" }}>
-              {recentMessages}
-            </Typography>
-          </Button>
-
-          <Button
-            variant="contained"
-            style={{
-              backgroundColor: "#496FFF",
-              height: "40px",
-              width: "auto",
-              borderRadius: "20px",
-              boxShadow: "none",
-            }}
-          >
-            <FontAwesomeIcon icon={faReply} />
-            <Typography
-              variant="subtitle1"
-              style={{ color: "white", marginLeft: ".5rem" }}
-            >
-              Share
-            </Typography>
-          </Button>
+          <OpportunityStackedBarGraph rejected={rejected} oa={oa} interviewing={interviewing} offered={offered} />
         </div>
+        <Typography variant="h5" sx={{ textAlign: "center" }}>
+          Total Applied: {totalApplied}
+        </Typography>
       </CardContent>
     </Card>
   );
