@@ -7,7 +7,7 @@ interface StageStore {
   removeApplication: (applicationId: string) => void;
 }
 
-export const AppliedStore = create<StageStore>((set) => ({
+export const OnlineAssestmentStore = create<StageStore>((set) => ({
   applications: [],
   addApplication: (application) => set((state) => ({ applications: [...state.applications, application] })),
   removeApplication: (applicationId) =>

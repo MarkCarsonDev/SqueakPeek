@@ -10,7 +10,7 @@ interface StageStore {
 }
 
 // Create Zustand store for Rejected stage
-export const RejectedStore = create<StageStore>((set) => ({
+export const InterviewingStore = create<StageStore>((set) => ({
   applications: [],
 
   // Add application to the stage
