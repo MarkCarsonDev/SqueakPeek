@@ -1,5 +1,4 @@
 import { Typography } from "@mui/material";
-import { OpportunityStackedBarGraph } from "@/ui/explore/OpportunityStackedBarGraph";
 export default function Page() {
   return <Typography variant="h2">Profile</Typography>;
 }
