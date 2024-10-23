@@ -1,7 +1,7 @@
 import React from 'react';
 import { Typography, Button } from '@mui/material';
 import { Droppable, Draggable } from '@hello-pangea/dnd';
-import {Application}  from '@/lib/store/Tracking/Types';
+import { Application } from '@/lib/store/Tracking/Types';
 
 interface StageColumnProps {
   stageId: string;
@@ -56,7 +56,7 @@ export const StageColumn: React.FC<StageColumnProps> = ({
           {/* Add New Application button */}
           <Button
             variant="outlined"
-            onClick={() => handleOpenModal(stageId)}
+            onClick={() => handleOpenModal(stageName)}
             sx={{
               width: '80%',
               height: '40px',
@@ -66,8 +66,8 @@ export const StageColumn: React.FC<StageColumnProps> = ({
             <Typography variant="h6">+</Typography>
           </Button>
 
-          {/* Render the applications in the stage */}
-          {applications.map((app: Application, index: number) => (
+          {/* Render the applications card within the stage */}
+          {applications.map((app, index) => (
             <Draggable key={app.id} draggableId={app.id} index={index}>
               {(provided) => (
                 <div

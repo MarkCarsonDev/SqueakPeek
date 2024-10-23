@@ -14,12 +14,8 @@ import { StageColumn } from "@/ui/track/StageColumn"; // Refactored column compo
 import { Application } from "@/lib/store/Tracking/Types";
 import "./tracking.css";
 
-// Explicit typing for the reorder function (when reordering within the same stage)
-const reorder = (
-  list: Application[],
-  startIndex: number,
-  endIndex: number
-): Application[] => {
+// Explicit typing for the reorder function
+const reorder = (list: Application[], startIndex: number, endIndex: number): Application[] => {
   const result = Array.from(list);
   const [removed] = result.splice(startIndex, 1);
   result.splice(endIndex, 0, removed);
@@ -28,7 +24,7 @@ const reorder = (
 
 export default function Page() {
   const [openModal, setOpenModal] = useState(false);
-  const [defaultStatus, setDefaultStatus] = useState<string>("");
+  const [defaultStatus, setDefaultStatus] = useState<string>(""); // Track the default status
 
   // Connect the store for each stage
   const appliedStore = AppliedStore();
@@ -37,7 +33,7 @@ export default function Page() {
   const interviewingStore = InterviewingStore();
   const offerStore = OfferStore();
 
-  const stores = [
+  const stages = [
     { id: "1", name: "Applied", color: "#769FCD", store: appliedStore },
     { id: "2", name: "Rejected", color: "#C7253E", store: rejectedStore },
     { id: "3", name: "Online Assessment", color: "#EB5B00", store: onlineAssessmentStore },
@@ -45,10 +41,10 @@ export default function Page() {
     { id: "5", name: "Offer", color: "#2E7E33", store: offerStore }
   ];
 
-  // Handle opening the modal for a new application
+  // Handle opening the modal with a specific stage and default status
   const handleOpenModal = (stageId: string) => {
-    setDefaultStatus(stageId); // Set default status based on the stage
-    setOpenModal(true);
+    setDefaultStatus(stageId); // Set the default status based on the stage name
+    setOpenModal(true); // Open the modal
   };
 
   // Close the modal
@@ -57,49 +53,34 @@ export default function Page() {
     setDefaultStatus(""); // Clear default status on modal close
   };
 
-  // Add a new application
+  // Handle adding a new application
   const handleAddApplication = (application: Application, status: string) => {
-    const targetStore = stores.find((store) => store.name === status)?.store;
+    const targetStore = stages.find(stage => stage.name === status)?.store;
     if (targetStore) {
-      targetStore.addApplication(application); // Add to the correct store
+      targetStore.addApplication(application); // Add application to the correct store
     }
   };
 
-  // Handle drag end event
+  // Handle drag end event with DropResult typing
   const onDragEnd = (result: DropResult) => {
     const { source, destination } = result;
     if (!destination) return;
 
-    const sourceStore = stores.find(
-      (store) => store.id === source.droppableId
-    )?.store;
-    const destinationStore = stores.find(
-      (store) => store.id === destination.droppableId
-    )?.store;
+    const sourceStore = stages.find((stage) => stage.id === source.droppableId)?.store;
+    const destinationStore = stages.find((stage) => stage.id === destination.droppableId)?.store;
 
     if (!sourceStore || !destinationStore) return;
 
-    // Reordering within the same stage
-    if (source.droppableId === destination.droppableId) {
-      const reorderedApplications = reorder(
-        sourceStore.applications,
-        source.index,
-        destination.index
-      );
-      sourceStore.applications = reorderedApplications; // Update reordered applications
-    } else {
-      // Moving between stages
-      const movedApp = sourceStore.applications[source.index];
-      sourceStore.removeApplication(movedApp.id); // Remove from the source store
-      destinationStore.addApplication(movedApp); // Add to the destination store
-    }
+    const movedApp = sourceStore.applications[source.index];
+    sourceStore.removeApplication(movedApp.id);
+    destinationStore.addApplication(movedApp);
   };
 
   return (
     <div className="main">
       <Typography variant="h4">Submitted Applications</Typography>
       <Typography variant="subtitle1">
-        Total Applications: {stores.reduce((acc, store) => acc + store.store.applications.length, 0)}
+        Total Applications: {stages.reduce((acc, stage) => acc + stage.store.applications.length, 0)}
       </Typography>
 
       {/* Button to open modal for a new application */}
@@ -117,7 +98,7 @@ export default function Page() {
             boxShadow: "none",
           },
         }}
-        onClick={() => handleOpenModal("")} // Open modal for new application without specific status
+        onClick={() => handleOpenModal("")}
       >
         New Application
       </Button>
@@ -135,7 +116,7 @@ export default function Page() {
       {/* Application stages */}
       <DragDropContext onDragEnd={onDragEnd}>
         <div style={{ display: "flex", gap: "20px" }}>
-          {stores.map((stage) => (
+          {stages.map((stage) => (
             <StageColumn
               key={stage.id}
               stageId={stage.id}
