@@ -1,5 +1,0 @@
-"use client";
-import { Typography } from "@mui/material";
-export default function Page() {
-  return <Typography variant="h2">Message</Typography>;
-}
