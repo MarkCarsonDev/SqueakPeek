@@ -3,35 +3,33 @@ import React, { useState } from "react";
 import { Modal, Typography, Button } from "@mui/material";
 import { InputField } from "@/ui/InputField";
 import { SearchDropdown } from "@/ui/track/SearchDropdown";
-import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import UpdateStatus from "@/ui/track/UpdateStatus";
-import  { Application } from "@/lib/store/TrackingApplicaitonStore";
-// You will import your calendar component here once added
+import { Application } from "@/lib/store/Tracking/Types";
 
 interface NewApplicationModalProps {
   open: boolean;
   handleClose: () => void;
   defaultStatus: string;
-  //selectedStageId: string;
   onSubmit: (application: Application, status: string) => void;
 }
+
+const jobTypeOptions = ["Full-time", "Part-time", "Contract", "Internship"];
+const companyOptions = ["Google", "Netflix", "Amazon", "Facebook", "Apple"];
 
 export default function NewApplicationModal({
   open,
   handleClose,
   defaultStatus,
-  //selectedStageId,
   onSubmit,
-
 }: NewApplicationModalProps) {
-  //const { addApplication } = TrackingApplicationStore(); // Access the addApplication method from Zustand store
-  const [roleTitle, setRoleTitle] = useState('');
-  const [location, setLocation] = useState('');
-  const [jobType, setJobType] = useState('');
-  const [company, setCompany] = useState('');
-  const [dateApplied, setDateApplied] = useState('');
-  const [jobLink, setJobLink] = useState('');
+  const [roleTitle, setRoleTitle] = useState("");
+  const [location, setLocation] = useState("");
+  const [jobType, setJobType] = useState("");
+  const [company, setCompany] = useState("");
+  const [dateApplied, setDateApplied] = useState("");
+  const [jobLink, setJobLink] = useState("");
   const [status, setStatus] = useState(defaultStatus);
 
   const handleAddApplication = () => {
@@ -39,8 +37,9 @@ export default function NewApplicationModal({
       alert("Please select a status before submitting");
       return;
     }
-    const newApplication = {
-      id: Date.now().toString(), // Use a timestamp or UUID for a unique ID
+
+    const newApplication: Application = {
+      id: Date.now().toString(),
       roleTitle,
       location,
       jobtype: jobType,
@@ -50,18 +49,10 @@ export default function NewApplicationModal({
       status,
     };
 
-    // Add the application to the selected stage
-    //addApplication(selectedStageId, newApplication);
     onSubmit(newApplication, status);
-    // Close the modal after adding
     handleClose();
   };
 
-  // List of options for job types
-  const jobTypeOptions = ["Full-time", "Part-time", "Contract", "Internship"];
-
-  // List of options for companies
-  const companyOptions = ["Google", "Netflix", "Amazon", "Facebook", "Apple"];
   return (
     <Modal
       open={open}
@@ -70,7 +61,7 @@ export default function NewApplicationModal({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-      }}    
+      }}
     >
       <form
         style={{
@@ -83,26 +74,22 @@ export default function NewApplicationModal({
           gap: "30px",
         }}
         onSubmit={(e) => {
-          e.preventDefault(); // Prevent default form submission
-          handleAddApplication(); // Trigger adding new application
+          e.preventDefault();
+          handleAddApplication();
         }}
       >
         <Typography
           variant="h4"
-          style={{
+          sx={{
             display: "flex",
             alignItems: "center",
             marginBottom: "10px",
           }}
         >
-          <FontAwesomeIcon
-            icon={faPenToSquare}
-            style={{ marginRight: "10px" }}
-          />
+          <FontAwesomeIcon icon={faPenToSquare} style={{ marginRight: "10px" }} />
           Add New Application
         </Typography>
 
-        {/* Container for the status dropdown and input fields */}
         <div
           style={{
             display: "flex",
@@ -110,7 +97,6 @@ export default function NewApplicationModal({
             gap: "20px",
           }}
         >
-          {/* Status dropdown */}
           <div style={{ width: "150px" }}>
             <UpdateStatus
               required
@@ -121,9 +107,7 @@ export default function NewApplicationModal({
             />
           </div>
 
-          {/* Input Fields in a single flex container */}
           <div style={{ display: "flex", gap: "40px" }}>
-            {/* Left column */}
             <div style={{ flex: 1 }}>
               <InputField
                 label="Role Title"
@@ -131,30 +115,25 @@ export default function NewApplicationModal({
                 name="roleTitle"
                 required
                 fullWidth
-                sx={{ marginBottom: "20px" }}
                 onChange={(e) => setRoleTitle(e.target.value)}
+                sx={{ marginBottom: "20px" }}
               />
               <InputField
                 label="Location"
                 placeholder="Location"
-                name="location" // Added name prop
+                name="location"
                 fullWidth
-                sx={{ marginBottom: "20px" }}
                 onChange={(e) => setLocation(e.target.value)}
+                sx={{ marginBottom: "20px" }}
               />
-
-              {/* TODO:  Calendar component for Date Applied */}
-              {/* Replace this with the actual calendar component */}
               <InputField
                 label="Date Applied"
                 placeholder="mm/dd/yyyy"
-                name="dateApplied" // Added name prop
+                name="dateApplied"
                 fullWidth
-                sx={{ marginBottom: "20px" }}
                 onChange={(e) => setDateApplied(e.target.value)}
+                sx={{ marginBottom: "20px" }}
               />
-
-              {/* Action buttons */}
               <Button
                 variant="contained"
                 onClick={handleClose}
@@ -162,14 +141,13 @@ export default function NewApplicationModal({
                 sx={{
                   marginTop: "20px",
                   color: "#496FFF",
-                  boxShadow: "none",
                   backgroundColor: "white",
+                  boxShadow: "none",
                   height: "53px",
                   border: "1px solid #E0E3EB",
                   borderRadius: "8px",
                   ":hover": {
                     backgroundColor: "white",
-                    boxShadow: "none",
                     border: "1px solid #A6B0C3",
                   },
                 }}
@@ -178,35 +156,34 @@ export default function NewApplicationModal({
               </Button>
             </div>
 
-            {/* Right column */}
             <div style={{ flex: 1 }}>
               <SearchDropdown
                 label="Company"
                 placeholder="Company Name"
-                name="company" // Added name prop
-                options = {companyOptions}
+                name="company"
+                options={companyOptions}
                 required
                 fullWidth
-                style={{ marginBottom: "20px" }}
                 onChange={(e) => setCompany(e.target.value)}
+                style={{ marginBottom: "20px" }}
               />
               <SearchDropdown
                 label="Job Type"
                 placeholder="Type"
-                name="jobType" // Added name prop
-                options = {jobTypeOptions}
+                name="jobType"
+                options={jobTypeOptions}
                 required
                 fullWidth
-                style={{ marginBottom: "20px" }}
                 onChange={(e) => setJobType(e.target.value)}
+                style={{ marginBottom: "20px" }}
               />
               <InputField
                 label="Link to Job Application"
                 placeholder="Link"
-                name="jobLink" // Added name prop
+                name="jobLink"
                 fullWidth
-                style={{ marginBottom: "20px" }}
                 onChange={(e) => setJobLink(e.target.value)}
+                style={{ marginBottom: "20px" }}
               />
               <Button
                 type="submit"
@@ -221,7 +198,6 @@ export default function NewApplicationModal({
                   backgroundColor: "#496FFF",
                   ":hover": {
                     backgroundColor: "#3B5AC6",
-                    boxShadow: "none",
                   },
                 }}
               >

@@ -4,27 +4,52 @@ import { Button, Typography } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileCirclePlus } from "@fortawesome/free-solid-svg-icons";
 import NewApplicationModal from "@/ui/track/NewApplicationModal";
-import TrackingApplicationStore, { JobStage, Application } from "@/lib/store/TrackingApplicaitonStore";
-import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
+import { Application } from "@/lib/store/Tracking/Types"; // Import Application type
+import { DragDropContext,  DropResult } from "@hello-pangea/dnd";
+import  {StageColumn}  from "@/ui/track/StageColumn"; // Refactored column component
 import "./tracking.css";
 
-// Explicit typing for the reorder function
-const reorder = (list: Application[], startIndex: number, endIndex: number): Application[] => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
-  return result;
-};
+// Dummy data for stages
+const stages: { id: string; name: string; color: string; applications: Application[] }[] = [
+  {
+    id: "1",
+    name: "Applied",
+    color: "#769FCD",
+    applications: [],
+  },
+  {
+    id: "2",
+    name: "Rejected",
+    color: "#C7253E",
+    applications: [],
+  },
+  {
+    id: "3",
+    name: "Online Assessment",
+    color: "#EB5B00",
+    applications: [],
+  },
+  {
+    id: "4",
+    name: "Interviewing",
+    color: "#F0A202",
+    applications: [],
+  },
+  {
+    id: "5",
+    name: "Offer",
+    color: "#2E7E33",
+    applications: [],
+  },
+];
 
 export default function Page() {
   const [openModal, setOpenModal] = useState(false);
-  //const [selectedStage, setSelectedStage] = useState<string>(""); // Use selectedStage to track the stage
   const [defaultStatus, setDefaultStatus] = useState<string>(""); // Track the default status
-  const { stages, moveApplication, addApplication } = TrackingApplicationStore(); // Access stages and addApplication from Zustand
+  const [appStages, setAppStages] = useState(stages); // Track stages and their applications
 
   // Handle opening the modal with a specific stage and default status
   const handleOpenModal = (stageId: string) => {
-    //setSelectedStage(stageId); // Store the selected stage
     setDefaultStatus(stageId); // Set the default status based on the stage name
     setOpenModal(true); // Open the modal
   };
@@ -37,43 +62,37 @@ export default function Page() {
 
   // Handle adding a new application
   const handleAddApplication = (application: Application, status: string) => {
-    const targetStage = stages.find(stage => stage.name === status);
-    if (targetStage) {
-      addApplication(targetStage.id, application); // Add application to the correct stage
-    }
+    setAppStages((prevStages) => {
+      return prevStages.map((stage) =>
+        stage.name === status
+          ? { ...stage, applications: [...stage.applications, application] }
+          : stage
+      );
+    });
   };
 
   // Handle drag end event with DropResult typing
   const onDragEnd = (result: DropResult) => {
-    const { source, destination, draggableId } = result;
+    const { source, destination } = result;
+    if (!destination) return; // Dropped outside a valid droppable area
 
-    // Dropped outside a valid droppable area
-    if (!destination) return;
+    const sourceStage = appStages.find((stage) => stage.id === source.droppableId);
+    const destinationStage = appStages.find((stage) => stage.id === destination.droppableId);
+    if (!sourceStage || !destinationStage) return;
 
-    // Reordering within the same stage
-    const sourceStage = stages.find((stage: JobStage) => stage.id === source.droppableId);
-    if (!sourceStage) return;
+    // Reordering or moving between stages
+    const movedApp = sourceStage.applications[source.index];
+    sourceStage.applications.splice(source.index, 1);
+    destinationStage.applications.splice(destination.index, 0, movedApp);
 
-    if (source.droppableId === destination.droppableId) {
-      const reorderedApplications = reorder(
-        sourceStage.applications,
-        source.index,
-        destination.index
-      );
-
-      // Update the stage with the reordered applications
-      sourceStage.applications = reorderedApplications;
-      moveApplication(source.droppableId, destination.droppableId, draggableId);
-    } else {
-      moveApplication(source.droppableId, destination.droppableId, draggableId);
-    }
+    setAppStages([...appStages]);
   };
 
   return (
     <div className="main">
       <Typography variant="h4">Submitted Applications</Typography>
-      <Typography variant="subtitle1">Total Applications: #</Typography> {/* Replace with dynamic data */}
-      
+      <Typography variant="subtitle1">Total Applications: {appStages.reduce((acc, stage) => acc + stage.applications.length, 0)}</Typography>
+
       {/* Button to open modal for a new application */}
       <Button
         variant="contained"
@@ -99,8 +118,7 @@ export default function Page() {
         <NewApplicationModal
           open={openModal}
           handleClose={handleCloseModal}
-          defaultStatus={defaultStatus} // Pass the default status
-          //selectedStageId={selectedStage} // Pass the selected stage ID to the modal
+          defaultStatus={defaultStatus}
           onSubmit={handleAddApplication} // Call a function to add the application
         />
       )}
@@ -108,87 +126,15 @@ export default function Page() {
       {/* Application stages */}
       <DragDropContext onDragEnd={onDragEnd}>
         <div style={{ display: "flex", gap: "20px" }}>
-          {stages.map((stage: JobStage) => (
-            <Droppable droppableId={stage.id} key={stage.id}>
-              {(provided) => (
-                <div
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                  className="stage-column"
-                  style={{
-                    marginTop: "10px",
-                    width: "250px",
-                    backgroundColor: "white",
-                    borderRadius: "8px",
-                  }}
-                >
-                  <Typography
-                    variant="subtitle2"
-                    sx={{
-                      m: 2,
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    <span
-                      style={{
-                        backgroundColor: stage.color,
-                        display: "inline-block",
-                        width: "10px",
-                        height: "10px",
-                        borderRadius: "50%",
-                        marginRight: "8px",
-                      }}
-                    ></span>
-                    {stage.name} ({stage.applications.length})
-                  </Typography>
-
-                  {/* Add New Application button */}
-                  <Button
-                    variant="outlined"
-                    onClick={() => handleOpenModal(stage.name)} // Pass the stage ID and name
-                    sx={{
-                      width: "80%",
-                      height: "40px",
-                      borderStyle: "dashed",
-                    }}
-                  >
-                    <Typography variant="h6">+</Typography>
-                  </Button>
-
-                  {/* Render the applications card within the stage */}
-                  {stage.applications.map((app: Application, index: number) => (
-                    <Draggable
-                      key={app.id}
-                      draggableId={app.id}
-                      index={index} // <-- You were missing this index prop
-                    >
-                      {(provided) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          style={{
-                            padding: "10px",
-                            marginBottom: "10px",
-                            backgroundColor: "white",
-                            border: "1px solid rgba(0, 0, 0, 0.12)",
-                            borderRadius: "5px",
-                            ...provided.draggableProps.style, // <-- Apply draggable props style
-                          }}
-                        >
-                          <Typography variant="subtitle1">
-                            {app.companyName}
-                          </Typography>
-                          <Typography variant="body2">{app.roleTitle}</Typography>
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
+          {appStages.map((stage) => (
+            <StageColumn
+              key={stage.id}
+              stageId={stage.id}
+              stageName={stage.name}
+              stageColor={stage.color}
+              applications={stage.applications}
+              handleOpenModal={handleOpenModal}
+            />
           ))}
         </div>
       </DragDropContext>
