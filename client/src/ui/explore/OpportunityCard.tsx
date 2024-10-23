@@ -23,8 +23,9 @@ import { useState } from "react";
 import { OpportunityStackedBarGraph } from "./OpportunityStackedBarGraph";
 import { useRouter } from "next/navigation";
 
-interface OpportunityCardProps {
-  id: number;
+export interface OpportunityCardProps {
+  id: string;
+  conversation_id: string;
   title: string;
   jobPosition: string;
   jobType: string;

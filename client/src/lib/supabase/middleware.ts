@@ -50,6 +50,13 @@ export async function updateSession(request: NextRequest) {
   } else {
     // console.log("user: ", user);
     console.log("user logged authenticated");
+
+    // refirect user to company route when first navigating to /message route
+    if (request.nextUrl.pathname === "/message") {
+      const url = request.nextUrl.clone();
+      url.pathname = "/message/company";
+      return NextResponse.redirect(url);
+    }
   }
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're
