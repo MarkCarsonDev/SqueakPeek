@@ -16,6 +16,7 @@ import { createSupabaseClient } from "../../../lib/supabase/client";
 export function MessageInput(tableName: any) {
   const { addMessage } = useMessage();
   const { profile } = useProfile();
+  const { conversation } = conversation();
   const [ currentMessage, setCurrentMessage] = useState("");
   
   // TODO: Add this as a server action
