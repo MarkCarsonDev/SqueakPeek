@@ -92,7 +92,7 @@ export const OpportunityList: React.FC = () => {
   return (
     <div>
       {filteredOpportunities.map((opportunity) => (
-        <Link key={opportunity.id} href={`/explore/${opportunity.conversation_id}`} passHref>
+        <Link key={opportunity.id} href={`/explore/${opportunity.conversation_id}`} passHref style={{ textDecoration: 'none' }}>
             <OpportunityCard {...opportunity} />
         </Link>
       ))}
