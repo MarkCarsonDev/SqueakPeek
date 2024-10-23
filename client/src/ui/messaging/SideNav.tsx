@@ -42,7 +42,14 @@ export function SideNav() {
   };
 
   return (
-    <div>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        borderRight: "2px solid #E0E4F2",
+        height: "100%",
+      }}
+    >
       {" "}
       <Typography
         variant="h4"
