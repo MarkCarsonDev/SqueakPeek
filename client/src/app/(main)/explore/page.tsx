@@ -1,7 +1,6 @@
 "use client";
 import { Typography } from "@mui/material";
 import "@/app/(main)/explore/explore.css";
-import { OpportunityCard } from "@/ui/explore/OpportunityCard";
 import { OpportunityList } from "@/ui/explore/OpportunityList";
 
 export default function Page() {
@@ -25,26 +24,7 @@ export default function Page() {
         {/* To Add Later <SortOptions filters={filters} setFilters={setFilters} /> */}
       </div>
       <div className="card-filter-container">
-
-
-          {/* Hard coded card will be repalaced with opportunity list which is connected to filters */}
-          {/* <OpportunityCard
-            id={"1"}
-            conversation_id={"1"}
-            title="Amazon"
-            jobPosition="Lead Software Developer"
-            jobType="Full-Time"
-            jobAvatar="/landingpage/insight.svg"
-            positionStatus={true}
-            userPositionStatus={false}
-            totalApplied={100}
-            rejected={25}
-            oa={25}
-            interviewing={25}
-            offered={25}
-            recentMessages={50}
-            bookmarked={true}
-          /> */}
+         {/* This OpportunityList contains the OpportunityCards */}
           <OpportunityList />
           <Typography
             variant="h6"
