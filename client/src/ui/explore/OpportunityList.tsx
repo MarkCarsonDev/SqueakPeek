@@ -25,13 +25,9 @@ const supabase = createSupabaseClient();
 // export const OpportunityList: React.FC<OpportunityListProps> = ({ filters }) => {
 export const OpportunityList: React.FC = () => {
 
-  const [allOpportunities, setAllOpportunities] = useState<OpportunityCardProps[]>([]);
-  const [filteredOpportunities, setFilteredOpportunities] = useState<OpportunityCardProps[]>([]);
+  const [shownOpportunities, setShownOpportunities] = useState<OpportunityCardProps[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  // allOpportunities is not used until filters are implemented, so just to appease TS:
-  console.log(allOpportunities);
-  // This will be removed once filters are implemented
 
   // Commented out until filters are implemented
   // const router = useRouter();
@@ -73,8 +69,7 @@ export const OpportunityList: React.FC = () => {
             recentMessages: 0,
         }));
 
-        setAllOpportunities(mappedData);
-        setFilteredOpportunities(mappedData); // Initially, all opportunities are shown
+        setShownOpportunities(mappedData); // Initially, all opportunities are shown
       }
 
       setLoading(false);
@@ -87,13 +82,13 @@ export const OpportunityList: React.FC = () => {
     return <div>Loading...</div>;
   }
 
-  if (filteredOpportunities.length === 0) {
-    return <div>No opportunities found.</div>;
+  if (shownOpportunities.length === 0) {
+    return <div>No opportunities found that match your criterion.</div>;
   }
 
   return (
     <div>
-      {filteredOpportunities.map((opportunity) => (
+      {shownOpportunities.map((opportunity) => (
         <Link key={opportunity.id} href={`/explore/${opportunity.conversation_id}`} passHref style={{ textDecoration: 'none' }}>
             <OpportunityCard {...opportunity} />
         </Link>
