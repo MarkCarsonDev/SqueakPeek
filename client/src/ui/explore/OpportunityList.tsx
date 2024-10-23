@@ -6,7 +6,7 @@ import { createSupabaseClient } from '@/lib/supabase/client';
 import { Database } from '@/lib/types/database.types';
 
 interface OpportunityRaw {
-    [key: string]: any; 
+    [key: string]: string
     company_name: string
     created_at: string
     opportunity_id: string
@@ -16,19 +16,23 @@ interface OpportunityRaw {
 
 const supabase = createSupabaseClient();
 
-interface OpportunityListProps {
-    // TODO: Add filters prop
-    // filters: SelectedFilters;
-}
+// interface OpportunityListProps {
+//     filters: SelectedFilters;
+// }
+
 // TODO: Add filters to the OpportunityList component
 // export const OpportunityList: React.FC<OpportunityListProps> = ({ filters }) => {
-export const OpportunityList: React.FC<OpportunityListProps> = () => {
+export const OpportunityList: React.FC = () => {
 
   const [allOpportunities, setAllOpportunities] = useState<OpportunityCardProps[]>([]);
   const [filteredOpportunities, setFilteredOpportunities] = useState<OpportunityCardProps[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const router = useRouter();
+  // allOpportunities is not used until filters are implemented, so just to appease TS:
+  allOpportunities;
+
+  // Commented out until filters are implemented
+  // const router = useRouter();
 
   // Fetch all opportunities once when the component mounts
   useEffect(() => {
