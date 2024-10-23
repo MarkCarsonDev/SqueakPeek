@@ -20,7 +20,7 @@ import { faBookmark as regularBookmark } from "@fortawesome/free-regular-svg-ico
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 
-interface OpportunityCardProps {
+export interface OpportunityCardProps {
   id: number;
   title: string;
   jobPosition: string;
