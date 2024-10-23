@@ -30,7 +30,8 @@ export default function Page() {
 
           {/* Hard coded card will be repalaced with opportunity list which is connected to filters */}
           <OpportunityCard
-            id={1}
+            id={"1"}
+            conversation_id={"1"}
             title="Amazon"
             jobPosition="Lead Software Developer"
             jobType="Full-Time"
