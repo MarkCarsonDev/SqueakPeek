@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 /**
  * Company Threads section in the messages page
  */
-export default function page() {
+export default function Page() {
   const router = useRouter();
   return (
     <div

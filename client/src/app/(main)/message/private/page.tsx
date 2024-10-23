@@ -6,7 +6,7 @@ import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 /**
  * Private Message section in the messages page
  */
-export default function page() {
+export default function Page() {
   return (
     <div
       style={{
