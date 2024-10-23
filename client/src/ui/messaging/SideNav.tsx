@@ -2,6 +2,7 @@
 import { Typography, Tabs, Tab } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 import {
   faBuilding as solidBuilding,
@@ -18,9 +19,27 @@ import { usePathname } from "next/navigation";
  * Allows the user to navigate between company threads or private messages in the message page
  */
 export function SideNav() {
+  const tabs = [
+    {
+      label: "Company Threads",
+      tabPathName: "/company",
+      solidIcon: solidBuilding,
+      regularIcon: regularBuilding,
+    },
+    {
+      label: "Private Messages",
+      tabPathName: "/private",
+      solidIcon: solidMessage,
+      regularIcon: regularMessage,
+    },
+  ];
   const router = useRouter();
   const pathName = usePathname();
-  console.log("pathName: ", pathName);
+  const [currentTab, setCurrentTab] = useState(0);
+
+  const setTab = (event: React.SyntheticEvent, newValue: number) => {
+    setCurrentTab(newValue);
+  };
 
   return (
     <div>
@@ -36,35 +55,46 @@ export function SideNav() {
       <Typography>
         Talk to other applicants in the process, or talk privately
       </Typography>
-      <Tabs>
-        <Tab
-          icon={
-            <FontAwesomeIcon
-              size="2x"
-              icon={
-                pathName === "/message/company"
-                  ? solidBuilding
-                  : regularBuilding
-              }
-            />
-          }
-          label="Company Threads"
-          iconPosition="start"
-          onClick={() => router.push("/message/company")}
-        />
-        <Tab
-          icon={
-            <FontAwesomeIcon
-              size="2x"
-              icon={
-                pathName === "/message/private" ? solidMessage : regularMessage
-              }
-            />
-          }
-          onClick={() => router.push("/message/private")}
-          label="Private Messages"
-          iconPosition="start"
-        />
+      <Tabs
+        value={currentTab}
+        onChange={setTab}
+        TabIndicatorProps={{
+          hidden: true,
+        }}
+        sx={{
+          "&.Mui-selected": {
+            color: "yellow",
+            backgroundColor: "yellow",
+            opacity: 1,
+          },
+          "&.Mui-focusVisible": {
+            backgroundColor: "#d1eaff",
+          },
+        }}
+      >
+        {tabs.map(({ tabPathName, solidIcon, regularIcon, label }) => (
+          <Tab
+            key={tabPathName}
+            sx={{
+              "&.Mui-selected": {
+                color: "#496FFF",
+              },
+            }}
+            icon={
+              <FontAwesomeIcon
+                size="2x"
+                icon={
+                  pathName === `/message${tabPathName}`
+                    ? solidIcon
+                    : regularIcon
+                }
+              />
+            }
+            onClick={() => router.push(`/message${tabPathName}`)}
+            label={label}
+            iconPosition="start"
+          />
+        ))}
       </Tabs>
     </div>
   );
