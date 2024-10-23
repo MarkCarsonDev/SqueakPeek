@@ -21,7 +21,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 
 export interface OpportunityCardProps {
-  id: number;
+  id: string;
+  conversation_id: string;
   title: string;
   jobPosition: string;
   jobType: string;

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link'; // Import Link for navigation
 // import { useRouter } from 'next/navigation'; // To handle URL params
 // import { SelectedFilters } from './Filters';
 import { OpportunityCard, OpportunityCardProps } from './OpportunityCard';
@@ -10,6 +11,7 @@ interface OpportunityRaw {
     company_name: string
     created_at: string
     opportunity_id: string
+    conversation_id: string
     role_title: Database["public"]["Enums"]["OpportunityType"]
     type: string
 }
@@ -29,7 +31,7 @@ export const OpportunityList: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   // allOpportunities is not used until filters are implemented, so just to appease TS:
-    console.log(allOpportunities);
+  console.log(allOpportunities);
   // This will be removed once filters are implemented
 
   // Commented out until filters are implemented
@@ -39,14 +41,20 @@ export const OpportunityList: React.FC = () => {
   useEffect(() => {
     const fetchOpportunities = async () => {
       setLoading(true);
-      const { data, error } = await supabase.from('opportunity').select('*');
+      const { data, error } = await supabase
+        .from('opportunity')
+        .select('opportunity_id, company_name, role_title, type, created_at, conversation (conversation_id)');
+
 
       if (error) {
         console.error('Error fetching opportunities:', error);
       } else if (data) {
+        // log the id
+        console.log(data)
         // Map the data to match the OpportunityCardProps interface
         const mappedData = data.map((opportunity: OpportunityRaw) => ({
-            id: parseInt(opportunity.opportunity_id),
+            id: opportunity.opportunity_id,
+            conversation_id: opportunity.conversation?.conversation_id,
             title: opportunity.company_name,
             jobPosition: opportunity.role_title,
             jobType: opportunity.type,
@@ -83,7 +91,9 @@ export const OpportunityList: React.FC = () => {
   return (
     <div>
       {filteredOpportunities.map((opportunity) => (
-        <OpportunityCard key={opportunity.id} {...opportunity} />
+        <Link key={opportunity.id} href={`/explore/${opportunity.conversation_id}`} passHref>
+            <OpportunityCard {...opportunity} />
+        </Link>
       ))}
     </div>
   );
