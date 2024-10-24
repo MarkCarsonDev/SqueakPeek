@@ -1,28 +1,61 @@
-// import React from "react";
 "use client";
+import React, { useState } from "react";
 import { Modal, Typography, Button } from "@mui/material";
 import { InputField } from "@/ui/InputField";
 import { SearchDropdown } from "@/ui/track/SearchDropdown";
-import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import UpdateStatus from "@/ui/track/UpdateStatus";
-// You will import your calendar component here once added
+
+import { ApplicationStage, useTrack, Application } from "@/lib/store/track";
 
 interface NewApplicationModalProps {
   open: boolean;
   handleClose: () => void;
+  applicationStatus: ApplicationStage;
+  setApplicationStatus: React.Dispatch<React.SetStateAction<ApplicationStage>>;
 }
 
-/**
- * 
- * @param {() => void} open - Renders NewApplicationModal when invoked
- * @param {() => void} handleClose - Closes NewApplicationModal when invoked
- * @returns 
- */
+const jobTypeOptions = ["Full-time", "Part-time", "Contract", "Internship"];
+const companyOptions = ["Google", "Netflix", "Amazon", "Facebook", "Apple"];
+
 export default function NewApplicationModal({
   open,
   handleClose,
+  applicationStatus,
+  setApplicationStatus,
 }: NewApplicationModalProps) {
+  const [roleTitle, setRoleTitle] = useState("");
+  const [location, setLocation] = useState("");
+  const [jobType, setJobType] = useState("");
+  const [company, setCompany] = useState("");
+  const [dateApplied, setDateApplied] = useState("");
+  const [jobLink, setJobLink] = useState("");
+
+  const { addApplication } = useTrack();
+
+  const handleAddApplication = () => {
+    console.log("status: ", applicationStatus);
+    if (!applicationStatus) {
+      alert("Please select a status before submitting");
+      return;
+    }
+
+    const newApplication: Application = {
+      id: Date.now().toString(),
+      roleTitle,
+      location,
+      jobtype: jobType,
+      companyName: company,
+      dateApplied,
+      applicationURL: jobLink,
+      applicationStatus,
+    };
+
+    addApplication(applicationStatus, newApplication);
+    handleClose();
+  };
+
   return (
     <Modal
       open={open}
@@ -43,10 +76,11 @@ export default function NewApplicationModal({
           flexDirection: "column",
           gap: "30px",
         }}
+        onSubmit = {handleAddApplication}
       >
         <Typography
           variant="h4"
-          style={{
+          sx={{
             display: "flex",
             alignItems: "center",
             marginBottom: "10px",
@@ -59,7 +93,6 @@ export default function NewApplicationModal({
           Add New Application
         </Typography>
 
-        {/* Container for the status dropdown and input fields */}
         <div
           style={{
             display: "flex",
@@ -67,18 +100,17 @@ export default function NewApplicationModal({
             gap: "20px",
           }}
         >
-          {/* Status dropdown */}
           <div style={{ width: "150px" }}>
             <UpdateStatus
               required
               name="status"
               options={["Applied", "OA", "Interviewing", "Offer", "Rejected"]}
+              applicationStatus={applicationStatus}
+              setApplicationStage={setApplicationStatus}
             />
           </div>
 
-          {/* Input Fields in a single flex container */}
           <div style={{ display: "flex", gap: "40px" }}>
-            {/* Left column */}
             <div style={{ flex: 1 }}>
               <InputField
                 label="Role Title"
@@ -86,27 +118,25 @@ export default function NewApplicationModal({
                 name="roleTitle"
                 required
                 fullWidth
+                onChange={(e) => setRoleTitle(e.target.value)}
                 sx={{ marginBottom: "20px" }}
               />
               <InputField
                 label="Location"
                 placeholder="Location"
-                name="location" // Added name prop
+                name="location"
                 fullWidth
+                onChange={(e) => setLocation(e.target.value)}
                 sx={{ marginBottom: "20px" }}
               />
-
-              {/* TODO:  Calendar component for Date Applied */}
-              {/* Replace this with the actual calendar component */}
               <InputField
                 label="Date Applied"
                 placeholder="mm/dd/yyyy"
-                name="dateApplied" // Added name prop
+                name="dateApplied"
                 fullWidth
+                onChange={(e) => setDateApplied(e.target.value)}
                 sx={{ marginBottom: "20px" }}
               />
-
-              {/* Action buttons */}
               <Button
                 variant="contained"
                 onClick={handleClose}
@@ -114,15 +144,15 @@ export default function NewApplicationModal({
                 sx={{
                   marginTop: "20px",
                   color: "#496FFF",
-                  boxShadow: "none",
                   backgroundColor: "white",
+                  boxShadow: "none",
                   height: "53px",
                   border: "1px solid #E0E3EB",
                   borderRadius: "8px",
                   ":hover": {
                     backgroundColor: "white",
-                    boxShadow: "none",
                     border: "1px solid #A6B0C3",
+                    boxShadow: "none",
                   },
                 }}
               >
@@ -130,29 +160,33 @@ export default function NewApplicationModal({
               </Button>
             </div>
 
-            {/* Right column */}
             <div style={{ flex: 1 }}>
               <SearchDropdown
                 label="Company"
                 placeholder="Company Name"
-                name="company" // Added name prop
+                name="company"
+                options={companyOptions}
                 required
                 fullWidth
+                onChange={(e) => setCompany(e.target.value)}
                 style={{ marginBottom: "20px" }}
               />
               <SearchDropdown
                 label="Job Type"
                 placeholder="Type"
-                name="jobType" // Added name prop
+                name="jobType"
+                options={jobTypeOptions}
                 required
                 fullWidth
+                onChange={(e) => setJobType(e.target.value)}
                 style={{ marginBottom: "20px" }}
               />
               <InputField
                 label="Link to Job Application"
                 placeholder="Link"
-                name="jobLink" // Added name prop
+                name="jobLink"
                 fullWidth
+                onChange={(e) => setJobLink(e.target.value)}
                 style={{ marginBottom: "20px" }}
               />
               <Button
@@ -181,3 +215,5 @@ export default function NewApplicationModal({
     </Modal>
   );
 }
+
+
