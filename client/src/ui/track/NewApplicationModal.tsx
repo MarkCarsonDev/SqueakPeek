@@ -6,13 +6,14 @@ import { SearchDropdown } from "@/ui/track/SearchDropdown";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import UpdateStatus from "@/ui/track/UpdateStatus";
-import { Application } from "@/lib/store/Tracking/Types";
+
+import { ApplicationStage, useTrack, Application } from "@/lib/store/track";
 
 interface NewApplicationModalProps {
   open: boolean;
   handleClose: () => void;
-  defaultStatus: string;
-  onSubmit: (application: Application, status: string) => void;
+  applicationStatus: ApplicationStage;
+  setApplicationStatus: React.Dispatch<React.SetStateAction<ApplicationStage>>;
 }
 
 const jobTypeOptions = ["Full-time", "Part-time", "Contract", "Internship"];
@@ -21,8 +22,8 @@ const companyOptions = ["Google", "Netflix", "Amazon", "Facebook", "Apple"];
 export default function NewApplicationModal({
   open,
   handleClose,
-  defaultStatus,
-  onSubmit,
+  applicationStatus,
+  setApplicationStatus,
 }: NewApplicationModalProps) {
   const [roleTitle, setRoleTitle] = useState("");
   const [location, setLocation] = useState("");
@@ -30,10 +31,12 @@ export default function NewApplicationModal({
   const [company, setCompany] = useState("");
   const [dateApplied, setDateApplied] = useState("");
   const [jobLink, setJobLink] = useState("");
-  const [status, setStatus] = useState(defaultStatus);
+
+  const { addApplication } = useTrack();
 
   const handleAddApplication = () => {
-    if (!status) {
+    console.log("status: ", applicationStatus);
+    if (!applicationStatus) {
       alert("Please select a status before submitting");
       return;
     }
@@ -45,11 +48,11 @@ export default function NewApplicationModal({
       jobtype: jobType,
       companyName: company,
       dateApplied,
-      jobURL: jobLink,
-      status,
+      applicationURL: jobLink,
+      applicationStatus,
     };
 
-    onSubmit(newApplication, status);
+    addApplication(applicationStatus, newApplication);
     handleClose();
   };
 
@@ -73,10 +76,7 @@ export default function NewApplicationModal({
           flexDirection: "column",
           gap: "30px",
         }}
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleAddApplication();
-        }}
+        onSubmit = {handleAddApplication}
       >
         <Typography
           variant="h4"
@@ -86,7 +86,10 @@ export default function NewApplicationModal({
             marginBottom: "10px",
           }}
         >
-          <FontAwesomeIcon icon={faPenToSquare} style={{ marginRight: "10px" }} />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            style={{ marginRight: "10px" }}
+          />
           Add New Application
         </Typography>
 
@@ -102,8 +105,8 @@ export default function NewApplicationModal({
               required
               name="status"
               options={["Applied", "OA", "Interviewing", "Offer", "Rejected"]}
-              defaultStatus={defaultStatus}
-              onChange={(e) => setStatus(e.target.value as string)}
+              applicationStatus={applicationStatus}
+              setApplicationStage={setApplicationStatus}
             />
           </div>
 
@@ -212,3 +215,5 @@ export default function NewApplicationModal({
     </Modal>
   );
 }
+
+

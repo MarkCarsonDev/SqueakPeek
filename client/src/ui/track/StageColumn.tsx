@@ -1,53 +1,53 @@
-import React from 'react';
-import { Typography, Button } from '@mui/material';
-import { Droppable, Draggable } from '@hello-pangea/dnd';
-import { Application } from '@/lib/store/Tracking/Types';
+import React from "react";
+import { Typography, Button } from "@mui/material";
+import { Droppable, Draggable } from "@hello-pangea/dnd";
+import { Application, ApplicationStage } from "@/lib/store/track";
 
-interface StageColumnProps {
-  stageId: string;
+export interface StageColumnProps {
+  stage: ApplicationStage;
   stageName: string;
   stageColor: string;
   applications: Application[];
-  handleOpenModal: (stageId: string) => void;
+  handleOpenModal?: (stage: ApplicationStage) => void;
 }
 
 export const StageColumn: React.FC<StageColumnProps> = ({
-  stageId,
+  stage,
   stageName,
   stageColor,
   applications,
   handleOpenModal,
 }) => {
   return (
-    <Droppable droppableId={stageId} key={stageId}>
+    <Droppable droppableId={stage} key={stage}>
       {(provided) => (
         <div
           {...provided.droppableProps}
           ref={provided.innerRef}
           className="stage-column"
           style={{
-            marginTop: '10px',
-            width: '250px',
-            backgroundColor: 'white',
-            borderRadius: '8px',
+            marginTop: "10px",
+            width: "250px",
+            backgroundColor: "white",
+            borderRadius: "8px",
           }}
         >
           <Typography
             variant="subtitle2"
             sx={{
               m: 2,
-              display: 'flex',
-              alignItems: 'center',
+              display: "flex",
+              alignItems: "center",
             }}
           >
             <span
               style={{
                 backgroundColor: stageColor,
-                display: 'inline-block',
-                width: '10px',
-                height: '10px',
-                borderRadius: '50%',
-                marginRight: '8px',
+                display: "inline-block",
+                width: "10px",
+                height: "10px",
+                borderRadius: "50%",
+                marginRight: "8px",
               }}
             ></span>
             {stageName} ({applications.length})
@@ -56,11 +56,13 @@ export const StageColumn: React.FC<StageColumnProps> = ({
           {/* Add New Application button */}
           <Button
             variant="outlined"
-            onClick={() => handleOpenModal(stageId)}
+            onClick={() => {
+              if (handleOpenModal) handleOpenModal(stage);
+            }}
             sx={{
-              width: '80%',
-              height: '40px',
-              borderStyle: 'dashed',
+              width: "80%",
+              height: "40px",
+              borderStyle: "dashed",
             }}
           >
             <Typography variant="h6">+</Typography>
@@ -75,11 +77,11 @@ export const StageColumn: React.FC<StageColumnProps> = ({
                   {...provided.draggableProps}
                   {...provided.dragHandleProps}
                   style={{
-                    padding: '10px',
-                    marginBottom: '10px',
-                    backgroundColor: 'white',
-                    border: '1px solid rgba(0, 0, 0, 0.12)',
-                    borderRadius: '5px',
+                    padding: "10px",
+                    marginBottom: "10px",
+                    backgroundColor: "white",
+                    border: "1px solid rgba(0, 0, 0, 0.12)",
+                    borderRadius: "5px",
                     ...provided.draggableProps.style,
                   }}
                 >

@@ -4,83 +4,81 @@ import { Button, Typography } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileCirclePlus } from "@fortawesome/free-solid-svg-icons";
 import NewApplicationModal from "@/ui/track/NewApplicationModal";
-import { AppliedStore } from "@/lib/store/Tracking/AppliedStore";
-import { RejectedStore } from "@/lib/store/Tracking/RejectedStore";
-import { OnlineAssestmentStore } from "@/lib/store/Tracking/OnlineAssestmentStore";
-import { InterviewingStore } from "@/lib/store/Tracking/InterviewingStore";
-import { OfferStore } from "@/lib/store/Tracking/OfferStore";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
-import { StageColumn } from "@/ui/track/StageColumn"; // Refactored column component
-import { Application } from "@/lib/store/Tracking/Types";
+import { StageColumn, StageColumnProps } from "@/ui/track/StageColumn"; // Refactored column component
 import "./tracking.css";
-
-// Explicit typing for the reorder function
-// const reorder = (list: Application[], startIndex: number, endIndex: number): Application[] => {
-//   const result = Array.from(list);
-//   const [removed] = result.splice(startIndex, 1);
-//   result.splice(endIndex, 0, removed);
-//   return result;
-// };
+import { ApplicationStage, useTrack } from "@/lib/store/track";
 
 export default function Page() {
   const [openModal, setOpenModal] = useState(false);
-  const [defaultStatus, setDefaultStatus] = useState<string>(""); // Track the default status
+  const [applicationStatus, setApplicationStatus] =
+    useState<ApplicationStage>("Applied"); // Track the default status
 
   // Connect the store for each stage
-  const appliedStore = AppliedStore();
-  const rejectedStore = RejectedStore();
-  const onlineAssessmentStore = OnlineAssestmentStore();
-  const interviewingStore = InterviewingStore();
-  const offerStore = OfferStore();
+  const { Applied, Rejected, OA, Interviewing, Offer, moveApplication } =
+    useTrack();
 
-  const stages = [
-    { id: "Applied", name: "Applied", color: "#769FCD", store: appliedStore },
-    { id: "Rejected", name: "Rejected", color: "#C7253E", store: rejectedStore },
-    { id: "OA", name: "Online Assessment", color: "#EB5B00", store: onlineAssessmentStore },
-    { id: "Interviewing", name: "Interviewing", color: "#F0A202", store: interviewingStore },
-    { id: "Offer", name: "Offer", color: "#2E7E33", store: offerStore }
+  const stages: StageColumnProps[] = [
+    {
+      stage: "Applied",
+      stageName: "Applied",
+      stageColor: "#769FCD",
+      applications: Applied,
+    },
+    {
+      stage: "Rejected",
+      stageName: "Rejected",
+      stageColor: "#C7253E",
+      applications: Rejected,
+    },
+    {
+      stage: "OA",
+      stageName: "Online Assessment",
+      stageColor: "#EB5B00",
+      applications: OA,
+    },
+    {
+      stage: "Interviewing",
+      stageName: "Interviewing",
+      stageColor: "#F0A202",
+      applications: Interviewing,
+    },
+    {
+      stage: "Offer",
+      stageName: "Offer",
+      stageColor: "#2E7E33",
+      applications: Offer,
+    },
   ];
 
   // Handle opening the modal with a specific stage and default status
-  const handleOpenModal = (stageId: string) => {
-    setDefaultStatus(stageId); // Set the default status based on the stage name
+  const handleOpenModal = (stage: ApplicationStage) => {
+    setApplicationStatus(stage); // Set the default status based on the stage name
     setOpenModal(true); // Open the modal
   };
 
   // Close the modal
   const handleCloseModal = () => {
     setOpenModal(false);
-    setDefaultStatus(""); // Clear default status on modal close
-  };
-
-  // Handle adding a new application
-  const handleAddApplication = (application: Application, status: string) => {
-    const targetStore = stages.find(stage => stage.id === status)?.store;
-    if (targetStore) {
-      targetStore.addApplication(application); // Add application to the correct store
-    }
   };
 
   // Handle drag end event with DropResult typing
   const onDragEnd = (result: DropResult) => {
-    const { source, destination } = result;
-    if (!destination) return;
+    const to = result.destination?.droppableId as ApplicationStage;
 
-    const sourceStore = stages.find((stage) => stage.id === source.droppableId)?.store;
-    const destinationStore = stages.find((stage) => stage.id === destination.droppableId)?.store;
-
-    if (!sourceStore || !destinationStore) return;
-
-    const movedApp = sourceStore.applications[source.index];
-    sourceStore.removeApplication(movedApp.id);
-    destinationStore.addApplication(movedApp);
+    if (to) {
+      const applicationId = result.draggableId;
+      const from = result.source.droppableId as ApplicationStage;
+      moveApplication(from, to, applicationId);
+    }
   };
 
   return (
     <div className="main">
       <Typography variant="h4">Submitted Applications</Typography>
       <Typography variant="subtitle1">
-        Total Applications: {stages.reduce((acc, stage) => acc + stage.store.applications.length, 0)}
+        Total Applications:{" "}
+        {stages.reduce((acc, stage) => acc + stage.applications.length, 0)}
       </Typography>
 
       {/* Button to open modal for a new application */}
@@ -98,7 +96,7 @@ export default function Page() {
             boxShadow: "none",
           },
         }}
-        onClick={() => handleOpenModal("")}
+        onClick={() => handleOpenModal("Applied")}
       >
         New Application
       </Button>
@@ -108,8 +106,8 @@ export default function Page() {
         <NewApplicationModal
           open={openModal}
           handleClose={handleCloseModal}
-          defaultStatus={defaultStatus}
-          onSubmit={handleAddApplication}
+          applicationStatus={applicationStatus}
+          setApplicationStatus={setApplicationStatus}
         />
       )}
 
@@ -118,11 +116,11 @@ export default function Page() {
         <div style={{ display: "flex", gap: "20px" }}>
           {stages.map((stage) => (
             <StageColumn
-              key={stage.id}
-              stageId={stage.id}
-              stageName={stage.name}
-              stageColor={stage.color}
-              applications={stage.store.applications}
+              key={stage.stage}
+              stage={stage.stage}
+              stageName={stage.stageName}
+              stageColor={stage.stageColor}
+              applications={stage.applications}
               handleOpenModal={handleOpenModal}
             />
           ))}

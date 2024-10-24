@@ -1,8 +1,8 @@
 "use client";
-import * as React from 'react';
-import { Typography } from '@mui/material';
-import MenuItem from '@mui/material/MenuItem';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import * as React from "react";
+import MenuItem from "@mui/material/MenuItem";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { ApplicationStage } from "@/lib/store/track";
 
 /**
  * This component renders a customizable dropdown for selecting status values.
@@ -19,74 +19,62 @@ export default function UpdateStatus({
   fullWidth,
   name,
   required,
-  defaultStatus = "", // Default value set to empty string
-  onChange,
+  applicationStatus,
+  setApplicationStage,
 }: {
-  options: string[],
-  fullWidth?: boolean,
-  name: string,
-  required?: boolean,
-  defaultStatus?: string, // Optional prop
-  onChange?: (event: SelectChangeEvent<string>) => void,
+  options: ApplicationStage[];
+  fullWidth?: boolean;
+  name: string;
+  required?: boolean;
+  applicationStatus: ApplicationStage;
+  setApplicationStage: React.Dispatch<React.SetStateAction<ApplicationStage>>;
 }) {
-  const [selectedStatus, setSelectedStatus] = React.useState(defaultStatus);
+  // const [selectedStatus, setSelectedStatus] =
+  //   React.useState<ApplicationStage>("Applied");
 
   const handleChange = (event: SelectChangeEvent<string>) => {
-    setSelectedStatus(event.target.value as string); // Update the selected status
-    if (onChange) {
-      onChange(event); // Call the parent's onChange if provided
-    }
+    setApplicationStage(event.target.value as ApplicationStage); // Update the selected status
   };
 
   return (
     <Select
       name={name} // Use the name prop for form submission
-      value={selectedStatus} // Set the selected status or the default status
+      value={applicationStatus} // Set the selected status or the default status
       onChange={handleChange} // Update the selected value on change
       displayEmpty
       fullWidth={fullWidth}
       required={required}
-      renderValue={(selected) => {
-        if (selected === "") {
-          return <Typography sx={{color: 'white'}}>Status</Typography>; // Only show "Status" in the display area
-        }
-        return selected;
-      }}
       sx={{
-        height: '32px',
-        backgroundColor: "#496FFF",  
-        borderRadius: '15px',
-        border: 'none',
+        height: "32px",
+        backgroundColor: "#496FFF",
+        borderRadius: "15px",
+        border: "none",
         color: "white",
-        padding: '4px 10px',
-        fontSize: '14px', 
+        padding: "4px 10px",
+        fontSize: "14px",
         "& .MuiSelect-icon": {
-          color: "white", 
+          color: "white",
         },
         "&.MuiOutlinedInput-root": {
           "& fieldset": {
-            border: 'none',
+            border: "none",
           },
         },
       }}
       MenuProps={{
         PaperProps: {
           sx: {
-            Width: "auto", 
-            boxShadow: 'none', 
-            border: '1px solid grey',
-            borderRadius: '15px',
-            backgroundColor: "#496FFF", 
+            Width: "auto",
+            boxShadow: "none",
+            border: "1px solid grey",
+            borderRadius: "15px",
+            backgroundColor: "#496FFF",
           },
         },
       }}
     >
       {options.map((option, index) => (
-        <MenuItem 
-          key={index} 
-          value={option}
-          sx={{ color: 'white' }}
-        >
+        <MenuItem key={index} value={option} sx={{ color: "white" }}>
           {option}
         </MenuItem>
       ))}
