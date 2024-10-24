@@ -1,25 +1,25 @@
 import React from "react";
 import { Typography, Button } from "@mui/material";
 import { Droppable, Draggable } from "@hello-pangea/dnd";
-import { Application } from "@/lib/store/track";
+import { Application, ApplicationStage } from "@/lib/store/track";
 
-interface StageColumnProps {
-  stageId: string;
+export interface StageColumnProps {
+  stage: ApplicationStage;
   stageName: string;
   stageColor: string;
   applications: Application[];
-  handleOpenModal: (stageId: string) => void;
+  handleOpenModal?: (stage: ApplicationStage) => void;
 }
 
 export const StageColumn: React.FC<StageColumnProps> = ({
-  stageId,
+  stage,
   stageName,
   stageColor,
   applications,
   handleOpenModal,
 }) => {
   return (
-    <Droppable droppableId={stageId} key={stageId}>
+    <Droppable droppableId={stage} key={stage}>
       {(provided) => (
         <div
           {...provided.droppableProps}
@@ -56,7 +56,9 @@ export const StageColumn: React.FC<StageColumnProps> = ({
           {/* Add New Application button */}
           <Button
             variant="outlined"
-            onClick={() => handleOpenModal(stageId)}
+            onClick={() => {
+              if (handleOpenModal) handleOpenModal(stage);
+            }}
             sx={{
               width: "80%",
               height: "40px",

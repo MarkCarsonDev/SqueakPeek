@@ -6,14 +6,14 @@ import { SearchDropdown } from "@/ui/track/SearchDropdown";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import UpdateStatus from "@/ui/track/UpdateStatus";
-import { Application } from "@/lib/store/Tracking/Types";
-import { ApplicationStage } from "@/lib/store/track";
+
+import { ApplicationStage, useTrack, Application } from "@/lib/store/track";
 
 interface NewApplicationModalProps {
   open: boolean;
   handleClose: () => void;
-  defaultStatus: string;
-  onSubmit: (application: Application, status: ApplicationStage) => void;
+  applicationStatus: ApplicationStage;
+  setApplicationStatus: React.Dispatch<React.SetStateAction<ApplicationStage>>;
 }
 
 const jobTypeOptions = ["Full-time", "Part-time", "Contract", "Internship"];
@@ -22,7 +22,8 @@ const companyOptions = ["Google", "Netflix", "Amazon", "Facebook", "Apple"];
 export default function NewApplicationModal({
   open,
   handleClose,
-  onSubmit,
+  applicationStatus,
+  setApplicationStatus,
 }: NewApplicationModalProps) {
   const [roleTitle, setRoleTitle] = useState("");
   const [location, setLocation] = useState("");
@@ -30,10 +31,13 @@ export default function NewApplicationModal({
   const [company, setCompany] = useState("");
   const [dateApplied, setDateApplied] = useState("");
   const [jobLink, setJobLink] = useState("");
-  const [status, setStatus] = useState<ApplicationStage>();
+  // const [status, setStatus] = useState<ApplicationStage>();
+
+  const { addApplication } = useTrack();
 
   const handleAddApplication = () => {
-    if (!status) {
+    console.log("status: ", applicationStatus);
+    if (!applicationStatus) {
       alert("Please select a status before submitting");
       return;
     }
@@ -45,11 +49,11 @@ export default function NewApplicationModal({
       jobtype: jobType,
       companyName: company,
       dateApplied,
-      jobURL: jobLink,
-      status,
+      applicationURL: jobLink,
+      applicationStatus,
     };
 
-    onSubmit(newApplication, status);
+    addApplication(applicationStatus, newApplication);
     handleClose();
   };
 
@@ -105,7 +109,8 @@ export default function NewApplicationModal({
               required
               name="status"
               options={["Applied", "OA", "Interviewing", "Offer", "Rejected"]}
-              onChange={(e) => setStatus(e.target.value as ApplicationStage)}
+              applicationStatus={applicationStatus}
+              setApplicationStage={setApplicationStatus}
             />
           </div>
 

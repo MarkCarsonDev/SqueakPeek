@@ -41,6 +41,7 @@ export const useTrack = create<TrackState>()((set) => ({
   Offer: [],
   addApplication: (to, application) =>
     set((state) => {
+        console.log("hellow")
       state[to].push(application);
       return { ...state };
     }),

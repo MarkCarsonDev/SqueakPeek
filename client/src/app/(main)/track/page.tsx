@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileCirclePlus } from "@fortawesome/free-solid-svg-icons";
 import NewApplicationModal from "@/ui/track/NewApplicationModal";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
-import { StageColumn } from "@/ui/track/StageColumn"; // Refactored column component
+import { StageColumn, StageColumnProps } from "@/ui/track/StageColumn"; // Refactored column component
 import { Application } from "@/lib/store/Tracking/Types";
 import "./tracking.css";
 import { ApplicationStage, useTrack } from "@/lib/store/track";
@@ -20,54 +20,55 @@ import { ApplicationStage, useTrack } from "@/lib/store/track";
 
 export default function Page() {
   const [openModal, setOpenModal] = useState(false);
-  const [defaultStatus, setDefaultStatus] = useState<string>(""); // Track the default status
+  const [applicationStatus, setApplicationStatus] =
+    useState<ApplicationStage>("Applied"); // Track the default status
 
   // Connect the store for each stage
-  const { Applied, Rejected, OA, Interviewing, Offer } = useTrack();
+  const { Applied, Rejected, OA, Interviewing, Offer, addApplication } =
+    useTrack();
 
-  const stages = [
-    { id: "Applied", name: "Applied", color: "#769FCD", applications: Applied },
+  const stages: StageColumnProps[] = [
     {
-      id: "Rejected",
-      name: "Rejected",
-      color: "#C7253E",
+      stage: "Applied",
+      stageName: "Applied",
+      stageColor: "#769FCD",
+      applications: Applied,
+    },
+    {
+      stage: "Rejected",
+      stageName: "Rejected",
+      stageColor: "#C7253E",
       applications: Rejected,
     },
     {
-      id: "OA",
-      name: "Online Assessment",
-      color: "#EB5B00",
+      stage: "OA",
+      stageName: "Online Assessment",
+      stageColor: "#EB5B00",
       applications: OA,
     },
     {
-      id: "Interviewing",
-      name: "Interviewing",
-      color: "#F0A202",
+      stage: "Interviewing",
+      stageName: "Interviewing",
+      stageColor: "#F0A202",
       applications: Interviewing,
     },
-    { id: "Offer", name: "Offer", color: "#2E7E33", applications: Offer },
+    {
+      stage: "Offer",
+      stageName: "Offer",
+      stageColor: "#2E7E33",
+      applications: Offer,
+    },
   ];
 
   // Handle opening the modal with a specific stage and default status
-  const handleOpenModal = (stageId: string) => {
-    setDefaultStatus(stageId); // Set the default status based on the stage name
+  const handleOpenModal = (stage: ApplicationStage) => {
+    setApplicationStatus(stage); // Set the default status based on the stage name
     setOpenModal(true); // Open the modal
   };
 
   // Close the modal
   const handleCloseModal = () => {
     setOpenModal(false);
-    setDefaultStatus(""); // Clear default status on modal close
-  };
-
-  // TODO refactor
-  // Handle adding a new application
-  const handleAddApplication = (
-    application: Application,
-    status: ApplicationStage
-  ) => {
-    console.log("application: ", application);
-    console.log("status: ", status);
   };
 
   // TODO refactor
@@ -99,7 +100,7 @@ export default function Page() {
             boxShadow: "none",
           },
         }}
-        onClick={() => handleOpenModal("")}
+        onClick={() => handleOpenModal("Applied")}
       >
         New Application
       </Button>
@@ -109,8 +110,8 @@ export default function Page() {
         <NewApplicationModal
           open={openModal}
           handleClose={handleCloseModal}
-          defaultStatus={defaultStatus}
-          onSubmit={handleAddApplication}
+          applicationStatus={applicationStatus}
+          setApplicationStatus={setApplicationStatus}
         />
       )}
 
@@ -119,10 +120,10 @@ export default function Page() {
         <div style={{ display: "flex", gap: "20px" }}>
           {stages.map((stage) => (
             <StageColumn
-              key={stage.id}
-              stageId={stage.id}
-              stageName={stage.name}
-              stageColor={stage.color}
+              key={stage.stage}
+              stage={stage.stage}
+              stageName={stage.stageName}
+              stageColor={stage.stageColor}
               applications={stage.applications}
               handleOpenModal={handleOpenModal}
             />
