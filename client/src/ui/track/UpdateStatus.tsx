@@ -1,9 +1,8 @@
 "use client";
 import * as React from "react";
-import { Typography } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { Application, ApplicationStage } from "@/lib/store/track";
+import { ApplicationStage } from "@/lib/store/track";
 
 /**
  * This component renders a customizable dropdown for selecting status values.
