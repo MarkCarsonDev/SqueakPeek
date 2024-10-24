@@ -36,7 +36,6 @@ export function SideNav() {
   const router = useRouter();
   const pathName = usePathname();
   const [currentTab, setCurrentTab] = useState(0);
-  console.log("pathname: ", pathName.split("/"));
 
   const setTab = (event: React.SyntheticEvent, newValue: number) => {
     setCurrentTab(newValue);
