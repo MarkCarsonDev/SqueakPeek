@@ -4,16 +4,11 @@ import { Button, Typography } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileCirclePlus } from "@fortawesome/free-solid-svg-icons";
 import NewApplicationModal from "@/ui/track/NewApplicationModal";
-import { AppliedStore } from "@/lib/store/Tracking/AppliedStore";
-import { RejectedStore } from "@/lib/store/Tracking/RejectedStore";
-import { OnlineAssestmentStore } from "@/lib/store/Tracking/OnlineAssestmentStore";
-import { InterviewingStore } from "@/lib/store/Tracking/InterviewingStore";
-import { OfferStore } from "@/lib/store/Tracking/OfferStore";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import { StageColumn } from "@/ui/track/StageColumn"; // Refactored column component
 import { Application } from "@/lib/store/Tracking/Types";
 import "./tracking.css";
-import { useTrack } from "@/lib/store/track";
+import { ApplicationStage, useTrack } from "@/lib/store/track";
 
 // Explicit typing for the reorder function
 // const reorder = (list: Application[], startIndex: number, endIndex: number): Application[] => {
@@ -28,30 +23,29 @@ export default function Page() {
   const [defaultStatus, setDefaultStatus] = useState<string>(""); // Track the default status
 
   // Connect the store for each stage
-  const { applied, rejected, onlineAssessment, interviewing, offer } =
-    useTrack();
+  const { Applied, Rejected, OA, Interviewing, Offer } = useTrack();
 
   const stages = [
-    { id: "Applied", name: "Applied", color: "#769FCD", applications: applied },
+    { id: "Applied", name: "Applied", color: "#769FCD", applications: Applied },
     {
       id: "Rejected",
       name: "Rejected",
       color: "#C7253E",
-      applications: rejected,
+      applications: Rejected,
     },
     {
       id: "OA",
       name: "Online Assessment",
       color: "#EB5B00",
-      applications: onlineAssessment,
+      applications: OA,
     },
     {
       id: "Interviewing",
       name: "Interviewing",
       color: "#F0A202",
-      applications: interviewing,
+      applications: Interviewing,
     },
-    { id: "Offer", name: "Offer", color: "#2E7E33", applications: offer },
+    { id: "Offer", name: "Offer", color: "#2E7E33", applications: Offer },
   ];
 
   // Handle opening the modal with a specific stage and default status
@@ -68,14 +62,18 @@ export default function Page() {
 
   // TODO refactor
   // Handle adding a new application
-  const handleAddApplication = (application: Application, status: string) => {
-
+  const handleAddApplication = (
+    application: Application,
+    status: ApplicationStage
+  ) => {
+    console.log("application: ", application);
+    console.log("status: ", status);
   };
 
   // TODO refactor
   // Handle drag end event with DropResult typing
   const onDragEnd = (result: DropResult) => {
-    
+    console.log("result: ", result);
   };
 
   return (
@@ -83,10 +81,7 @@ export default function Page() {
       <Typography variant="h4">Submitted Applications</Typography>
       <Typography variant="subtitle1">
         Total Applications:{" "}
-        {stages.reduce(
-          (acc, stage) => acc + stage.applications.length,
-          0
-        )}
+        {stages.reduce((acc, stage) => acc + stage.applications.length, 0)}
       </Typography>
 
       {/* Button to open modal for a new application */}

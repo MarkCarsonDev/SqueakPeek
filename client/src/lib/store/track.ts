@@ -1,11 +1,11 @@
 import { create } from "zustand";
 
-type ApplicationStage =
-  | "applied"
-  | "rejected"
-  | "onlineAssessment"
-  | "interviewing"
-  | "offer";
+export type ApplicationStage =
+  | "Applied"
+  | "Rejected"
+  | "OA"
+  | "Interviewing"
+  | "Offer";
 
 export interface Application {
   id: string;
@@ -19,11 +19,11 @@ export interface Application {
 }
 
 interface TrackState {
-  applied: Application[];
-  rejected: Application[];
-  onlineAssessment: Application[];
-  interviewing: Application[];
-  offer: Application[];
+  Applied: Application[];
+  Rejected: Application[];
+  OA: Application[];
+  Interviewing: Application[];
+  Offer: Application[];
   addApplication: (to: ApplicationStage, application: Application) => void;
   removeApplication: (from: ApplicationStage, applicationId: string) => void;
   moveApplication: (
@@ -34,11 +34,11 @@ interface TrackState {
 }
 
 export const useTrack = create<TrackState>()((set) => ({
-  applied: [],
-  rejected: [],
-  onlineAssessment: [],
-  interviewing: [],
-  offer: [],
+  Applied: [],
+  Rejected: [],
+  OA: [],
+  Interviewing: [],
+  Offer: [],
   addApplication: (to, application) =>
     set((state) => {
       state[to].push(application);

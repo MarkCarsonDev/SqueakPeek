@@ -7,12 +7,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import UpdateStatus from "@/ui/track/UpdateStatus";
 import { Application } from "@/lib/store/Tracking/Types";
+import { ApplicationStage } from "@/lib/store/track";
 
 interface NewApplicationModalProps {
   open: boolean;
   handleClose: () => void;
   defaultStatus: string;
-  onSubmit: (application: Application, status: string) => void;
+  onSubmit: (application: Application, status: ApplicationStage) => void;
 }
 
 const jobTypeOptions = ["Full-time", "Part-time", "Contract", "Internship"];
@@ -21,7 +22,6 @@ const companyOptions = ["Google", "Netflix", "Amazon", "Facebook", "Apple"];
 export default function NewApplicationModal({
   open,
   handleClose,
-  defaultStatus,
   onSubmit,
 }: NewApplicationModalProps) {
   const [roleTitle, setRoleTitle] = useState("");
@@ -30,7 +30,7 @@ export default function NewApplicationModal({
   const [company, setCompany] = useState("");
   const [dateApplied, setDateApplied] = useState("");
   const [jobLink, setJobLink] = useState("");
-  const [status, setStatus] = useState(defaultStatus);
+  const [status, setStatus] = useState<ApplicationStage>();
 
   const handleAddApplication = () => {
     if (!status) {
@@ -86,7 +86,10 @@ export default function NewApplicationModal({
             marginBottom: "10px",
           }}
         >
-          <FontAwesomeIcon icon={faPenToSquare} style={{ marginRight: "10px" }} />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            style={{ marginRight: "10px" }}
+          />
           Add New Application
         </Typography>
 
@@ -102,8 +105,7 @@ export default function NewApplicationModal({
               required
               name="status"
               options={["Applied", "OA", "Interviewing", "Offer", "Rejected"]}
-              defaultStatus={defaultStatus}
-              onChange={(e) => setStatus(e.target.value as string)}
+              onChange={(e) => setStatus(e.target.value as ApplicationStage)}
             />
           </div>
 
