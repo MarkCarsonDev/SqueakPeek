@@ -27,7 +27,7 @@ export function SideNav() {
       regularIcon: regularBuilding,
     },
     {
-      label: "Private Messages",
+      label: "Private",
       tabPathName: "/private",
       solidIcon: solidMessage,
       regularIcon: regularMessage,

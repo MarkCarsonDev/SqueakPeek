@@ -12,7 +12,7 @@ export default async function Layout({
     <div
       style={{
         display: "grid",
-        gridTemplateColumns: "40% 60%",
+        gridTemplateColumns: "20% 80%",
         height: "calc(100vh - 80px)", // - 80px since that's the height of the (main) navbar
       }}
     >
