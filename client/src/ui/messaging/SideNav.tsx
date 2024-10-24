@@ -22,13 +22,13 @@ export function SideNav() {
   const tabs = [
     {
       label: "Company Threads",
-      tabPathName: "/company",
+      tabPathName: "company",
       solidIcon: solidBuilding,
       regularIcon: regularBuilding,
     },
     {
       label: "Private",
-      tabPathName: "/private",
+      tabPathName: "private",
       solidIcon: solidMessage,
       regularIcon: regularMessage,
     },
@@ -36,6 +36,7 @@ export function SideNav() {
   const router = useRouter();
   const pathName = usePathname();
   const [currentTab, setCurrentTab] = useState(0);
+  console.log("pathname: ", pathName.split("/"));
 
   const setTab = (event: React.SyntheticEvent, newValue: number) => {
     setCurrentTab(newValue);
@@ -95,13 +96,13 @@ export function SideNav() {
               <FontAwesomeIcon
                 size="2x"
                 icon={
-                  pathName === `/message${tabPathName}`
+                  pathName.split("/")[2] === tabPathName // gets the route name after the /message route
                     ? solidIcon
                     : regularIcon
                 }
               />
             }
-            onClick={() => router.push(`/message${tabPathName}`)}
+            onClick={() => router.push(`/message/${tabPathName}`)}
             label={label}
             iconPosition="start"
           />
