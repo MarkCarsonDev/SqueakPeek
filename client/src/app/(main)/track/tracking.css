@@ -3,12 +3,6 @@
     height: 100vh;
   }
   
-  /* .application-stages {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-  } */
-  
   .stage-column {
     background-color: white;
     border: 4px solid #E0E4F2;
