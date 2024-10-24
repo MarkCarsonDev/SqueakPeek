@@ -149,6 +149,7 @@ export default function NewApplicationModal({
                   ":hover": {
                     backgroundColor: "white",
                     border: "1px solid #A6B0C3",
+                    boxShadow: "none",
                   },
                 }}
               >
@@ -198,6 +199,7 @@ export default function NewApplicationModal({
                   backgroundColor: "#496FFF",
                   ":hover": {
                     backgroundColor: "#3B5AC6",
+                    boxShadow: "none",
                   },
                 }}
               >

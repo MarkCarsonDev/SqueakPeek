@@ -55,7 +55,7 @@ export default function Page() {
 
   // Handle adding a new application
   const handleAddApplication = (application: Application, status: string) => {
-    const targetStore = stages.find(stage => stage.name === status)?.store;
+    const targetStore = stages.find(stage => stage.id === status)?.store;
     if (targetStore) {
       targetStore.addApplication(application); // Add application to the correct store
     }
