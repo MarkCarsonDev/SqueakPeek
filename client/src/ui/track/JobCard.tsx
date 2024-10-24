@@ -1,23 +1,22 @@
 "use client";
-import {ButtonProps, Button} from "@mui/material";
+import {Card, Typography} from "@mui/material";
 
-/**
- * A custom version of the TextField component with the label design differently
- * @param props ButtonProps
- */
+interface JobCardProps {
+    Company: string;
+    Role: string;
+}
 
-export function JobCard(props: ButtonProps) {
+export function JobCard({Company, Role} : JobCardProps ) {
     return (
-        <Button
-        variant="contained"
-        sx={{
-            mt: 2,
-            width: "80%",
-            height: "45px",
-            boxShadow: "none",
-            backgroundColor: "#F6F8FF",
-            border: "1px solid #E0E4F2",
+        <Card sx={{
+            margin: "8px",
+            borderRadius: "8px",
+            backgroundColor: "white",
+            height: "100px",
+            width: "90px",
         }}>
-        </Button>
+            <Typography variant="subtitle1">{Company}</Typography>
+            <Typography variant="subtitle2">{Role}</Typography>
+        </Card>
     )
 }
