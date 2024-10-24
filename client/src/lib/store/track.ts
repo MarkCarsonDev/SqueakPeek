@@ -7,7 +7,7 @@ type ApplicationStage =
   | "interviewing"
   | "offer";
 
-interface Application {
+export interface Application {
   id: string;
   roleTitle: string;
   companyName: string;
@@ -39,7 +39,11 @@ export const useTrack = create<TrackState>()((set) => ({
   onlineAssessment: [],
   interviewing: [],
   offer: [],
-  addApplication: () => {},
+  addApplication: (to, application) =>
+    set((state) => {
+      state[to].push(application);
+      return { ...state };
+    }),
   removeApplication: () => {},
   moveApplication: () => {},
 }));

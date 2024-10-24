@@ -13,6 +13,7 @@ import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import { StageColumn } from "@/ui/track/StageColumn"; // Refactored column component
 import { Application } from "@/lib/store/Tracking/Types";
 import "./tracking.css";
+import { useTrack } from "@/lib/store/track";
 
 // Explicit typing for the reorder function
 // const reorder = (list: Application[], startIndex: number, endIndex: number): Application[] => {
@@ -27,18 +28,30 @@ export default function Page() {
   const [defaultStatus, setDefaultStatus] = useState<string>(""); // Track the default status
 
   // Connect the store for each stage
-  const appliedStore = AppliedStore();
-  const rejectedStore = RejectedStore();
-  const onlineAssessmentStore = OnlineAssestmentStore();
-  const interviewingStore = InterviewingStore();
-  const offerStore = OfferStore();
+  const { applied, rejected, onlineAssessment, interviewing, offer } =
+    useTrack();
 
   const stages = [
-    { id: "Applied", name: "Applied", color: "#769FCD", store: appliedStore },
-    { id: "Rejected", name: "Rejected", color: "#C7253E", store: rejectedStore },
-    { id: "OA", name: "Online Assessment", color: "#EB5B00", store: onlineAssessmentStore },
-    { id: "Interviewing", name: "Interviewing", color: "#F0A202", store: interviewingStore },
-    { id: "Offer", name: "Offer", color: "#2E7E33", store: offerStore }
+    { id: "Applied", name: "Applied", color: "#769FCD", applications: applied },
+    {
+      id: "Rejected",
+      name: "Rejected",
+      color: "#C7253E",
+      applications: rejected,
+    },
+    {
+      id: "OA",
+      name: "Online Assessment",
+      color: "#EB5B00",
+      applications: onlineAssessment,
+    },
+    {
+      id: "Interviewing",
+      name: "Interviewing",
+      color: "#F0A202",
+      applications: interviewing,
+    },
+    { id: "Offer", name: "Offer", color: "#2E7E33", applications: offer },
   ];
 
   // Handle opening the modal with a specific stage and default status
@@ -53,34 +66,27 @@ export default function Page() {
     setDefaultStatus(""); // Clear default status on modal close
   };
 
+  // TODO refactor
   // Handle adding a new application
   const handleAddApplication = (application: Application, status: string) => {
-    const targetStore = stages.find(stage => stage.id === status)?.store;
-    if (targetStore) {
-      targetStore.addApplication(application); // Add application to the correct store
-    }
+
   };
 
+  // TODO refactor
   // Handle drag end event with DropResult typing
   const onDragEnd = (result: DropResult) => {
-    const { source, destination } = result;
-    if (!destination) return;
-
-    const sourceStore = stages.find((stage) => stage.id === source.droppableId)?.store;
-    const destinationStore = stages.find((stage) => stage.id === destination.droppableId)?.store;
-
-    if (!sourceStore || !destinationStore) return;
-
-    const movedApp = sourceStore.applications[source.index];
-    sourceStore.removeApplication(movedApp.id);
-    destinationStore.addApplication(movedApp);
+    
   };
 
   return (
     <div className="main">
       <Typography variant="h4">Submitted Applications</Typography>
       <Typography variant="subtitle1">
-        Total Applications: {stages.reduce((acc, stage) => acc + stage.store.applications.length, 0)}
+        Total Applications:{" "}
+        {stages.reduce(
+          (acc, stage) => acc + stage.applications.length,
+          0
+        )}
       </Typography>
 
       {/* Button to open modal for a new application */}
@@ -122,7 +128,7 @@ export default function Page() {
               stageId={stage.id}
               stageName={stage.name}
               stageColor={stage.color}
-              applications={stage.store.applications}
+              applications={stage.applications}
               handleOpenModal={handleOpenModal}
             />
           ))}
