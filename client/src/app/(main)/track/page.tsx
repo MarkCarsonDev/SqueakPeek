@@ -6,7 +6,6 @@ import { faFileCirclePlus } from "@fortawesome/free-solid-svg-icons";
 import NewApplicationModal from "@/ui/track/NewApplicationModal";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import { StageColumn, StageColumnProps } from "@/ui/track/StageColumn"; // Refactored column component
-import { Application } from "@/lib/store/Tracking/Types";
 import "./tracking.css";
 import { ApplicationStage, useTrack } from "@/lib/store/track";
 
@@ -24,7 +23,7 @@ export default function Page() {
     useState<ApplicationStage>("Applied"); // Track the default status
 
   // Connect the store for each stage
-  const { Applied, Rejected, OA, Interviewing, Offer, addApplication } =
+  const { Applied, Rejected, OA, Interviewing, Offer, moveApplication } =
     useTrack();
 
   const stages: StageColumnProps[] = [
@@ -71,10 +70,15 @@ export default function Page() {
     setOpenModal(false);
   };
 
-  // TODO refactor
   // Handle drag end event with DropResult typing
   const onDragEnd = (result: DropResult) => {
-    console.log("result: ", result);
+    const to = result.destination?.droppableId as ApplicationStage;
+
+    if (to) {
+      const applicationId = result.draggableId;
+      const from = result.source.droppableId as ApplicationStage;
+      moveApplication(from, to, applicationId);
+    }
   };
 
   return (

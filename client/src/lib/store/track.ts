@@ -41,10 +41,24 @@ export const useTrack = create<TrackState>()((set) => ({
   Offer: [],
   addApplication: (to, application) =>
     set((state) => {
-        console.log("hellow")
+      console.log("hellow");
       state[to].push(application);
       return { ...state };
     }),
   removeApplication: () => {},
-  moveApplication: () => {},
+  moveApplication: (from, to, applicationId) =>
+    set((state) => {
+      const movedApplication = state[from].find(
+        (application) => application.id === applicationId
+      );
+
+      // removes application
+      state[from] = state[from].filter(
+        (application) => application.id !== applicationId
+      );
+
+      // moves application to new stage
+      state[to] = [movedApplication!, ...state[to]];
+      return { ...state };
+    }),
 }));
