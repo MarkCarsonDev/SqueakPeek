@@ -76,10 +76,7 @@ export default function NewApplicationModal({
           flexDirection: "column",
           gap: "30px",
         }}
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleAddApplication();
-        }}
+        onSubmit = {handleAddApplication}
       >
         <Typography
           variant="h4"
@@ -218,3 +215,5 @@ export default function NewApplicationModal({
     </Modal>
   );
 }
+
+

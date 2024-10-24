@@ -3,11 +3,11 @@
     height: 100vh;
   }
   
-  .application-stages {
+  /* .application-stages {
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
-  }
+  } */
   
   .stage-column {
     background-color: white;
