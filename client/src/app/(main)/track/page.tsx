@@ -9,14 +9,6 @@ import { StageColumn, StageColumnProps } from "@/ui/track/StageColumn"; // Refac
 import "./tracking.css";
 import { ApplicationStage, useTrack } from "@/lib/store/track";
 
-// Explicit typing for the reorder function
-// const reorder = (list: Application[], startIndex: number, endIndex: number): Application[] => {
-//   const result = Array.from(list);
-//   const [removed] = result.splice(startIndex, 1);
-//   result.splice(endIndex, 0, removed);
-//   return result;
-// };
-
 export default function Page() {
   const [openModal, setOpenModal] = useState(false);
   const [applicationStatus, setApplicationStatus] =

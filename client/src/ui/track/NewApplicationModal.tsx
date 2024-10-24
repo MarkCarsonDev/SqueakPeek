@@ -31,7 +31,6 @@ export default function NewApplicationModal({
   const [company, setCompany] = useState("");
   const [dateApplied, setDateApplied] = useState("");
   const [jobLink, setJobLink] = useState("");
-  // const [status, setStatus] = useState<ApplicationStage>();
 
   const { addApplication } = useTrack();
 

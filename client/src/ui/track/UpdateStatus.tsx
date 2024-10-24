@@ -44,12 +44,6 @@ export default function UpdateStatus({
       displayEmpty
       fullWidth={fullWidth}
       required={required}
-      // renderValue={(selected) => {
-      //   if (selected === "") {
-      //     return <Typography sx={{ color: "white" }}>Status</Typography>; // Only show "Status" in the display area
-      //   }
-      //   return selected;
-      // }}
       sx={{
         height: "32px",
         backgroundColor: "#496FFF",
