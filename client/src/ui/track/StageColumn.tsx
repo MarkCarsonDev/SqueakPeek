@@ -9,7 +9,9 @@ export interface StageColumnProps {
   stageColor: string;
   applications: Application[];
   handleOpenModal?: (stage: ApplicationStage) => void;
+  setApplicationStatus: React.Dispatch<React.SetStateAction<ApplicationStage>>; // Add this prop
 }
+
 
 export const StageColumn: React.FC<StageColumnProps> = ({
   stage,
@@ -17,6 +19,7 @@ export const StageColumn: React.FC<StageColumnProps> = ({
   stageColor,
   applications,
   handleOpenModal,
+  setApplicationStatus, // Use this prop to pass it down to JobCard
 }) => {
   return (
     <Droppable droppableId={stage} key={stage}>
@@ -24,12 +27,16 @@ export const StageColumn: React.FC<StageColumnProps> = ({
         <div
           {...provided.droppableProps}
           ref={provided.innerRef}
-          className="stage-column"
           style={{
             marginTop: "10px",
-            width: "250px",
+            width: "18%",
             backgroundColor: "white",
+            border: "4px solid #E0E4F2",
             borderRadius: "8px",
+            height: "70vh",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
           <Typography
@@ -76,11 +83,14 @@ export const StageColumn: React.FC<StageColumnProps> = ({
                   ref={provided.innerRef}
                   {...provided.draggableProps}
                   {...provided.dragHandleProps}
+                  style={{
+                    margin: "8px",
+                    width: "80%",
+                    ...provided.draggableProps.style,
+                  }}
                 >
                   
-                  <JobCard Company={app.companyName} Role={app.roleTitle} />
-                  {/* <Typography variant="subtitle1">{app.companyName}</Typography>
-                  <Typography variant="body2">{app.roleTitle}</Typography> */}
+                  <JobCard Company={app.companyName} Role={app.roleTitle} Status={app.applicationStatus} setStatus={setApplicationStatus} /> {/* Pass the setStatus prop to JobCard */}
                 </div>
               )}
             </Draggable>

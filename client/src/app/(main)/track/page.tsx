@@ -18,7 +18,7 @@ export default function Page() {
   const { Applied, Rejected, OA, Interviewing, Offer, moveApplication } =
     useTrack();
 
-  const stages: StageColumnProps[] = [
+  const stages:  Omit<StageColumnProps, 'setApplicationStatus'>[] = [
     {
       stage: "Applied",
       stageName: "Applied",
@@ -122,6 +122,7 @@ export default function Page() {
               stageColor={stage.stageColor}
               applications={stage.applications}
               handleOpenModal={handleOpenModal}
+              setApplicationStatus={setApplicationStatus}
             />
           ))}
         </div>
