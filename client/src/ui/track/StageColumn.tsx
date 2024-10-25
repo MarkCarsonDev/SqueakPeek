@@ -3,15 +3,15 @@ import { Typography, Button } from "@mui/material";
 import { Droppable, Draggable } from "@hello-pangea/dnd";
 import { Application, ApplicationStage } from "@/lib/store/track";
 import { JobCard } from "./JobCard";
+
 export interface StageColumnProps {
   stage: ApplicationStage;
   stageName: string;
   stageColor: string;
   applications: Application[];
   handleOpenModal?: (stage: ApplicationStage) => void;
-  setApplicationStatus: React.Dispatch<React.SetStateAction<ApplicationStage>>; // Add this prop
+  setApplicationStatus: React.Dispatch<React.SetStateAction<ApplicationStage>>;
 }
-
 
 export const StageColumn: React.FC<StageColumnProps> = ({
   stage,
@@ -19,7 +19,7 @@ export const StageColumn: React.FC<StageColumnProps> = ({
   stageColor,
   applications,
   handleOpenModal,
-  setApplicationStatus, // Use this prop to pass it down to JobCard
+  setApplicationStatus,
 }) => {
   return (
     <Droppable droppableId={stage} key={stage}>
@@ -60,7 +60,6 @@ export const StageColumn: React.FC<StageColumnProps> = ({
             {stageName} ({applications.length})
           </Typography>
 
-          {/* Add New Application button */}
           <Button
             variant="outlined"
             onClick={() => {
@@ -89,8 +88,12 @@ export const StageColumn: React.FC<StageColumnProps> = ({
                     ...provided.draggableProps.style,
                   }}
                 >
-                  
-                  <JobCard Company={app.companyName} Role={app.roleTitle} Status={app.applicationStatus} setStatus={setApplicationStatus} /> {/* Pass the setStatus prop to JobCard */}
+                  <JobCard
+                    applicationId={app.id}
+                    Company={app.companyName}
+                    Role={app.roleTitle}
+                    Status={stage}  // Pass the current stage as the status
+                  />
                 </div>
               )}
             </Draggable>
