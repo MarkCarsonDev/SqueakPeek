@@ -35,11 +35,7 @@ export function SideNav() {
   ];
   const router = useRouter();
   const pathName = usePathname();
-  const [currentTab, setCurrentTab] = useState(0);
-
-  const setTab = (event: React.SyntheticEvent, newValue: number) => {
-    setCurrentTab(newValue);
-  };
+  const currentRoute = pathName.split("/")[2];
 
   return (
     <div
@@ -63,8 +59,7 @@ export function SideNav() {
         Talk to other applicants in the process, or talk privately
       </Typography>
       <Tabs
-        value={currentTab}
-        onChange={setTab}
+        value={currentRoute}
         TabIndicatorProps={{
           hidden: true,
         }}
@@ -83,6 +78,7 @@ export function SideNav() {
       >
         {tabs.map(({ tabPathName, solidIcon, regularIcon, label }) => (
           <Tab
+            value={tabPathName}
             key={tabPathName}
             sx={{
               padding: "0px",
@@ -95,7 +91,7 @@ export function SideNav() {
               <FontAwesomeIcon
                 size="2x"
                 icon={
-                  pathName.split("/")[2] === tabPathName // gets the route name after the /message route
+                  currentRoute === tabPathName // gets the route name after the /message route
                     ? solidIcon
                     : regularIcon
                 }
