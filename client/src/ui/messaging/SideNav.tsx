@@ -2,7 +2,6 @@
 import { Typography, Tabs, Tab } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 import {
   faBuilding as solidBuilding,
@@ -22,24 +21,20 @@ export function SideNav() {
   const tabs = [
     {
       label: "Company Threads",
-      tabPathName: "/company",
+      tabPathName: "company",
       solidIcon: solidBuilding,
       regularIcon: regularBuilding,
     },
     {
-      label: "Private Messages",
-      tabPathName: "/private",
+      label: "Private",
+      tabPathName: "private",
       solidIcon: solidMessage,
       regularIcon: regularMessage,
     },
   ];
   const router = useRouter();
   const pathName = usePathname();
-  const [currentTab, setCurrentTab] = useState(0);
-
-  const setTab = (event: React.SyntheticEvent, newValue: number) => {
-    setCurrentTab(newValue);
-  };
+  const currentRoute = pathName.split("/")[2];
 
   return (
     <div
@@ -63,8 +58,7 @@ export function SideNav() {
         Talk to other applicants in the process, or talk privately
       </Typography>
       <Tabs
-        value={currentTab}
-        onChange={setTab}
+        value={currentRoute}
         TabIndicatorProps={{
           hidden: true,
         }}
@@ -83,6 +77,7 @@ export function SideNav() {
       >
         {tabs.map(({ tabPathName, solidIcon, regularIcon, label }) => (
           <Tab
+            value={tabPathName}
             key={tabPathName}
             sx={{
               padding: "0px",
@@ -95,13 +90,13 @@ export function SideNav() {
               <FontAwesomeIcon
                 size="2x"
                 icon={
-                  pathName === `/message${tabPathName}`
+                  currentRoute === tabPathName // gets the route name after the /message route
                     ? solidIcon
                     : regularIcon
                 }
               />
             }
-            onClick={() => router.push(`/message${tabPathName}`)}
+            onClick={() => router.push(`/message/${tabPathName}`)}
             label={label}
             iconPosition="start"
           />

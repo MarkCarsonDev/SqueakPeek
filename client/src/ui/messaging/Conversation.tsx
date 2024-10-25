@@ -33,7 +33,7 @@ export function Conversation({ conversationId }: { conversationId: string }) {
   return (
     <div
       style={{
-        height: "90vh", // not 100vh since it takes into account the navigation bar
+        height: "calc(100vh - 80px)", // full viewport - height of nav bar
         backgroundColor: "white",
         display: "grid",
         gridTemplateRows: "10% 80% 10%",
