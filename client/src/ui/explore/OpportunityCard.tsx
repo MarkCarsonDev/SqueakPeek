@@ -21,7 +21,7 @@ import { faBookmark as regularBookmark } from "@fortawesome/free-regular-svg-ico
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { OpportunityStackedBarGraph } from "./OpportunityStackedBarGraph";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export interface OpportunityCardProps {
   id: string;
@@ -48,7 +48,6 @@ interface jobStats {
 }
 
 export function OpportunityCard({
-  id,
   title,
   jobPosition,
   jobType,
@@ -61,6 +60,7 @@ export function OpportunityCard({
   interviewing,
   offered,
   recentMessages,
+  conversation_id,
   bookmarked: initialBookmarked,
 }: OpportunityCardProps) {
   // To be replaced with actuall book mark update from DB
@@ -90,14 +90,9 @@ export function OpportunityCard({
     },
   ];
 
-  const router = useRouter();
   const handleBookmark = () => {
     setBookmarked((prev) => !prev); // Toggle the bookmark state
   };
-
-  const handleChatClick = () => {
-    router.push(`/explore/${id}`)
-  }
 
   const handleShareClick = () => {
     if (navigator.share) {
@@ -105,7 +100,7 @@ export function OpportunityCard({
         .share({
           title: title,
           text: `Check out this job opportunity for ${jobPosition} at ${title}.`,
-          url: window.location.href, 
+          url: window.location.href,
         })
         .catch((error) => {
           console.error("Error sharing:", error);
@@ -156,22 +151,23 @@ export function OpportunityCard({
             margin: 0,
           }}
         >
-          <Button
-            variant="contained"
-            style={{
-              backgroundColor: "#496FFF",
-              height: "40px",
-              width: "auto",
-              borderRadius: "20px",
-              boxShadow: "none",
-            }}
-            onClick={handleChatClick}
-          >
-            <FontAwesomeIcon icon={faComment} />
-            <Typography style={{ color: "white", marginLeft: ".5rem" }}>
-              {recentMessages}
-            </Typography>
-          </Button>
+          <Link href={`/message/company/${conversation_id}`}>
+            <Button
+              variant="contained"
+              style={{
+                backgroundColor: "#496FFF",
+                height: "40px",
+                width: "auto",
+                borderRadius: "20px",
+                boxShadow: "none",
+              }}
+            >
+              <FontAwesomeIcon icon={faComment} />
+              <Typography style={{ color: "white", marginLeft: ".5rem" }}>
+                {recentMessages}
+              </Typography>
+            </Button>
+          </Link>
 
           <Button
             variant="contained"
@@ -240,7 +236,7 @@ export function OpportunityCard({
             padding: ".5rem 0rem",
             gap: "1rem",
             width: "100%",
-            justifyContent: "flex-start"
+            justifyContent: "flex-start",
           }}
         >
           <Chip
@@ -292,7 +288,7 @@ export function OpportunityCard({
                 color: stats.color,
                 borderColor: stats.color,
                 margin: 0,
-                width: "150px"
+                width: "150px",
               }}
             />
           ))}
@@ -300,9 +296,19 @@ export function OpportunityCard({
 
         {/* Stacked Bar Graph For Stat Visual */}
         <div
-          style={{ height: "4rem", display: "flex", justifyContent: "center", width: "80%"}}
+          style={{
+            height: "4rem",
+            display: "flex",
+            justifyContent: "center",
+            width: "80%",
+          }}
         >
-          <OpportunityStackedBarGraph rejected={rejected} oa={oa} interviewing={interviewing} offered={offered} />
+          <OpportunityStackedBarGraph
+            rejected={rejected}
+            oa={oa}
+            interviewing={interviewing}
+            offered={offered}
+          />
         </div>
         <Typography variant="h5" sx={{ textAlign: "center" }}>
           Total Applied: {totalApplied}
