@@ -49,6 +49,7 @@ export function JobCard({
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          margin: 1
         }}
       >
         <Image
@@ -59,7 +60,6 @@ export function JobCard({
           style={{
             objectFit: "cover",
             objectPosition: "bottom",
-            margin: "5px",
           }}
         ></Image>
       </Box>

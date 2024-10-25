@@ -29,6 +29,11 @@ export default function UpdateStatus({
     setApplicationStage(event.target.value as ApplicationStage);
   };
 
+  const getDisplayValue = (status: ApplicationStage) => {
+    // Display 'IR' for 'Interviewing', else show the status as is
+    return status === "Interviewing" ? "IR" : status;
+  };
+
   return (
     <Select
       name={name}
@@ -38,20 +43,20 @@ export default function UpdateStatus({
       fullWidth={fullWidth}
       required={required}
       sx={{
-        height: "32px", 
-        backgroundColor: "#496FFF", 
-        borderRadius: "15px", 
-        paddingX: "1px -20px", 
-        minWidth: "fit-content", 
+        height: "32px",
+        backgroundColor: "#496FFF",
+        borderRadius: "15px",
+        paddingX: "1px -20px",
+        minWidth: "fit-content",
         color: "white",
         fontSize: "14px",
- 
+
         "& .MuiSelect-icon": {
-          color: "white", 
+          color: "white",
         },
         "&.MuiOutlinedInput-root": {
           "& fieldset": {
-            border: "none", 
+            border: "none",
           },
         },
         ...customSx, // Apply any custom styles passed via props
@@ -59,11 +64,11 @@ export default function UpdateStatus({
       MenuProps={{
         PaperProps: {
           sx: {
-            width: "auto", 
-            boxShadow: "none", 
-            border: "1px solid grey", 
-            borderRadius: "15px", 
-            backgroundColor: "#496FFF", 
+            width: "auto",
+            boxShadow: "none",
+            border: "1px solid grey",
+            borderRadius: "15px",
+            backgroundColor: "#496FFF",
           },
         },
       }}
@@ -73,13 +78,14 @@ export default function UpdateStatus({
           key={index}
           value={option}
           sx={{
-            color: "white", 
-            fontSize: "14px", 
+            color: "white",
+            fontSize: "14px",
           }}
         >
-          {option}
+          {getDisplayValue(option)} {/* Use the display value function here */}
         </MenuItem>
       ))}
+      {/* Display short status on card */}
     </Select>
   );
 }
