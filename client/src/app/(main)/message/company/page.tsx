@@ -7,11 +7,7 @@ import { useRouter } from "next/navigation";
 /**
  * Company Threads section in the messages page
  */
-export default function Page({
-  conversationId,
-}: {
-  conversationId: string | null;
-}) {
+export default function Page() {
   const router = useRouter();
 
   return (
