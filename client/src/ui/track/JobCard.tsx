@@ -81,7 +81,7 @@ export function JobCard({
           sx={{
             display: "flex",
             alignItems: "center", // Aligns vertically with the company name
-            gap: "8px", // Space between company name and dropdown
+            gap: "4px", // Space between company name and dropdown
             width: "100%",
             overflow: "hidden",
           }}

@@ -19,7 +19,7 @@ export const StageColumn: React.FC<StageColumnProps> = ({
   stageColor,
   applications,
   handleOpenModal,
-  setApplicationStatus,
+  // setApplicationStatus,
 }) => {
   return (
     <Droppable droppableId={stage} key={stage}>
