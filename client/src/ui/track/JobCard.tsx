@@ -1,7 +1,8 @@
 "use client";
 import React, { SetStateAction } from "react";
-import { Card, Typography, Button, Box } from "@mui/material";
-import { faChartColumn, faLink, faBars } from "@fortawesome/free-solid-svg-icons";
+import { Card, Typography, IconButton, Box } from "@mui/material";
+import { faChartColumn, faLink, faBars} from "@fortawesome/free-solid-svg-icons";
+import Image from "next/image";
 import { faFacebookMessenger } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import UpdateStatus from "@/ui/track/UpdateStatus";
@@ -22,6 +23,7 @@ export function JobCard({
 }: JobCardProps) {
   const { moveApplication } = useTrack();
 
+  // Handle status change and update the card's state
   const handleStatusChange = (newStatus: SetStateAction<ApplicationStage>) => {
     const resolvedStatus =
       typeof newStatus === "function" ? newStatus(Status) : newStatus;
@@ -33,66 +35,147 @@ export function JobCard({
   return (
     <Card
       sx={{
-        padding: "12px",
-        borderRadius: "12px",
+        borderRadius: "8px",
         backgroundColor: "#F6F8FF",
-        display: "flex",
-        flexDirection: "column",
-        gap: "8px",
-        width: "100%", // Ensure it takes full width of container
+        display: "grid",
+        gridTemplateColumns: "20% 70% 10%",
+        alignItems: "center",
+        width: "100%",
       }}
     >
-      {/* Row for the company name and status dropdown */}
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        {/* Company and Role Title */}
-        <Box sx={{ display: "flex", flexDirection: "column" }}>
-          <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
+      {/* Column 1: Company Brand (20%) */}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Image
+          src="/landingpage/logo.svg"
+          height={50}
+          width={50}
+          alt="Squeakpeek Logo"
+          style={{
+            objectFit: "cover",
+            objectPosition: "bottom",
+            margin: "5px",
+          }}
+        ></Image>
+      </Box>
+
+      {/* Column 2: Main Content (70%) */}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "flex-start",
+          gap: "1px",
+        //   backgroundColor: "white",
+          ml: 1,
+        }}
+      >
+        {/* Row 1: Company Name and Status */}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center", // Aligns vertically with the company name
+            gap: "8px", // Space between company name and dropdown
+            width: "100%",
+            overflow: "hidden",
+          }}
+        >
+          <Typography variant="subtitle2" sx={{ flexShrink: 0 }}>
             {Company}
           </Typography>
-          <Typography variant="body2" sx={{ color: "#555" }}>
-            {Role}
-          </Typography>
+          <UpdateStatus
+            name="status"
+            options={["Applied", "OA", "Interviewing", "Offer", "Rejected"]}
+            applicationStatus={Status}
+            setApplicationStage={handleStatusChange}
+            customSx={{
+              fontSize: "10px", // Custom font size
+              height: "20px", // Custom height
+            }}
+          />
         </Box>
 
-        {/* Status Dropdown */}
-        <UpdateStatus
-          required
-          name="status"
-          options={["Applied", "OA", "Interviewing", "Offer", "Rejected"]}
-          applicationStatus={Status}
-          setApplicationStage={handleStatusChange}
-        //   customSx={{
-        //     backgroundColor: "#496FFF",
-        //     borderRadius: "8px",
-        //     padding: "4px 8px",
-        //     color: "white",
-        //   }} // Custom styling for the dropdown
-        />
-      </Box>
+        {/* Row 2: Role Title */}
+        <Typography variant="subtitle2">{Role}</Typography>
 
-      {/* Row for action buttons */}
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        {/* Action Icons */}
-        <Box sx={{ display: "flex", gap: "12px" }}>
-          <Button>
-            <FontAwesomeIcon icon={faFacebookMessenger} />
-          </Button>
-          <Button>
-            <FontAwesomeIcon icon={faChartColumn} />
-          </Button>
-          <Button>
-            <FontAwesomeIcon icon={faLink} />
-          </Button>
+        {/* Row 3: Icon Buttons */}
+        <Box sx={{ display: "flex", gap: "5px" }}>
+          <IconButton
+            sx={{
+              padding: "6px", // Controls the button size
+              borderRadius: "50%", // Ensure it's circular
+              ":hover": {
+                backgroundColor: "#D0D4DA",
+              },
+            }}
+          >
+            <FontAwesomeIcon
+              icon={faFacebookMessenger}
+              style={{ fontSize: "10px", color: "#333333" }}
+            />
+          </IconButton>
+          <IconButton
+            sx={{
+              padding: "6px",
+              borderRadius: "50%",
+              ":hover": {
+                backgroundColor: "#D0D4DA",
+              },
+            }}
+          >
+            <FontAwesomeIcon
+              icon={faChartColumn}
+              style={{ fontSize: "10px", color: "#333333" }}
+            />
+          </IconButton>
+          <IconButton
+            sx={{
+              padding: "6px",
+              borderRadius: "50%",
+              ":hover": {
+                backgroundColor: "#D0D4DA",
+              },
+            }}
+          >
+            <FontAwesomeIcon
+              icon={faLink}
+              style={{ fontSize: "10px", color: "#333333" }}
+            />
+          </IconButton>
         </Box>
-
-        {/* Menu Icon */}
-        <FontAwesomeIcon icon={faBars} />
       </Box>
 
-      {/* Date Applied */}
-      <Typography variant="body2" sx={{ textAlign: "right", color: "#999" }}>
-        9/7/24
-      </Typography>
+      {/* Column 3: 3-Bar Icon (10%) */}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "flex-end",
+          alignItems: "flex-start",
+          height: "100%",
+          padding: "5px",
+        }}
+      >
+        <IconButton
+          sx={{
+            padding: "6px",
+            borderRadius: "50%",
+            ":hover": {
+              backgroundColor: "#D0D4DA",
+            },
+          }}
+        >
+          <FontAwesomeIcon
+            icon={faBars}
+            style={{ fontSize: "10px", color: "#333333" }}
+          />
+        </IconButton>
+      </Box>
     </Card>
   );
 }

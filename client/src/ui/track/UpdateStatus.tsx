@@ -2,18 +2,19 @@
 import * as React from "react";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { SxProps } from "@mui/system";
 import { ApplicationStage } from "@/lib/store/track";
 
-/**
- * This component renders a customizable dropdown for selecting status values.
- * It shows a default placeholder ("Status") when no value is selected.
- *
- * @param {string[]} options - Array of options to be displayed in the dropdown menu.
- * @param {boolean} [fullWidth] - Optional prop to allow the Select component to take the full width of its container.
- * @param {string} name - The name of the field to be used in form submissions (useful for FormData extraction).
- * @param {boolean} [required] - Optional prop to make the Select field required.
- * @param {string} [defaultStatus] - Optional prop to set the initial status value.
- */
+interface UpdateStatusProps {
+  options: ApplicationStage[];
+  fullWidth?: boolean;
+  name: string;
+  required?: boolean;
+  applicationStatus: ApplicationStage;
+  setApplicationStage: React.Dispatch<React.SetStateAction<ApplicationStage>>;
+  customSx?: SxProps; // Custom styles prop
+}
+
 export default function UpdateStatus({
   options,
   fullWidth,
@@ -21,60 +22,61 @@ export default function UpdateStatus({
   required,
   applicationStatus,
   setApplicationStage,
-}: {
-  options: ApplicationStage[];
-  fullWidth?: boolean;
-  name: string;
-  required?: boolean;
-  applicationStatus: ApplicationStage;
-  setApplicationStage: React.Dispatch<React.SetStateAction<ApplicationStage>>;
-}) {
-  // const [selectedStatus, setSelectedStatus] =
-  //   React.useState<ApplicationStage>("Applied");
-
+  customSx = {}, // Default to an empty object for custom styles
+}: UpdateStatusProps) {
+  // Handle change event for dropdown
   const handleChange = (event: SelectChangeEvent<string>) => {
-    setApplicationStage(event.target.value as ApplicationStage); // Update the selected status
+    setApplicationStage(event.target.value as ApplicationStage);
   };
 
   return (
     <Select
-      name={name} // Use the name prop for form submission
-      value={applicationStatus} // Set the selected status or the default status
-      onChange={handleChange} // Update the selected value on change
+      name={name}
+      value={applicationStatus}
+      onChange={handleChange}
       displayEmpty
       fullWidth={fullWidth}
       required={required}
       sx={{
-        height: "32px",
-        backgroundColor: "#496FFF",
-        borderRadius: "15px",
-        border: "none",
+        height: "32px", 
+        backgroundColor: "#496FFF", 
+        borderRadius: "15px", 
+        paddingX: "1px -20px", 
+        minWidth: "fit-content", 
         color: "white",
-        padding: "4px 10px",
         fontSize: "14px",
+ 
         "& .MuiSelect-icon": {
-          color: "white",
+          color: "white", 
         },
         "&.MuiOutlinedInput-root": {
           "& fieldset": {
-            border: "none",
+            border: "none", 
           },
         },
+        ...customSx, // Apply any custom styles passed via props
       }}
       MenuProps={{
         PaperProps: {
           sx: {
-            Width: "auto",
-            boxShadow: "none",
-            border: "1px solid grey",
-            borderRadius: "15px",
-            backgroundColor: "#496FFF",
+            width: "auto", 
+            boxShadow: "none", 
+            border: "1px solid grey", 
+            borderRadius: "15px", 
+            backgroundColor: "#496FFF", 
           },
         },
       }}
     >
       {options.map((option, index) => (
-        <MenuItem key={index} value={option} sx={{ color: "white" }}>
+        <MenuItem
+          key={index}
+          value={option}
+          sx={{
+            color: "white", 
+            fontSize: "14px", 
+          }}
+        >
           {option}
         </MenuItem>
       ))}
