@@ -1,10 +1,7 @@
 import { create } from "zustand";
 // import { Tables } from "../types/database.types";
 import { MessageBodyProps } from "@/ui/messaging/MessageCard";
-
-
-// TODO Get the actual types from the database
-// export type MessageType = Tables<"public_message" | "private_message">;
+import { Tables } from "../types/database.types";
 
 // state of the hook
 interface MessageState {

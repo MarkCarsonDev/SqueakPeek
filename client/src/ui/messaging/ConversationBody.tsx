@@ -2,8 +2,10 @@
 import { MessageCard } from "./MessageCard";
 import { MessageInput } from "./MessageInput";
 import { ConversationHeader } from "./ConversationHeader";
+
 import Image from "next/image";
 import { useMessage } from "../../../lib/store/message";
+import { fetchConversationAndSetState } from "../../../lib/store/initConversation";
 
 interface ConversationBodyProps {
   conversationId: string;
@@ -14,8 +16,9 @@ interface ConversationBodyProps {
  * Also allows to send messages to that particular conversation
  */
 export function ConversationBody({ conversationId }: ConversationBodyProps) {
-  console.log("convoID: ", conversationId);
+  conversationId = '14cd0270-2aae-431b-a536-d43002e33560';
   const { messages } = useMessage();
+  fetchConversationAndSetState(conversationId);
 
   return (
     <div
@@ -60,8 +63,9 @@ export function ConversationBody({ conversationId }: ConversationBodyProps) {
           padding: "10px 10px",
         }}
       >
-        <MessageInput tableName = "private_message" />
+        <MessageInput/>
       </div>
     </div>
   );
 }
+
