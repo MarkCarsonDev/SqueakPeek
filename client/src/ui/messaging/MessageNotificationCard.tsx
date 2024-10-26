@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Card, CardHeader, Avatar, CardActionArea } from "@mui/material";
 import { usePathname } from "next/navigation";
 
-interface MessageNotificationCardProps {
+export interface MessageNotificationCardProps {
   avatar: string;
   header: string;
   subHeader: string;
@@ -10,14 +10,13 @@ interface MessageNotificationCardProps {
 }
 
 /**
- *
+ * Card component that shows messages that the current user is involved with.
  * @param avatar - Media that renders the picture of the MessageNotificationCard
  * @param header - Header text
  * @param subheader - Subheader text
  * @param conversation_id - The ID used to navigate the user to the conversation
  */
 export function MessageNotificationCard({
-  avatar,
   header,
   subHeader,
   conversation_id,

@@ -2,6 +2,7 @@
 import { Typography, Tabs, Tab } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 import {
   faBuilding as solidBuilding,
@@ -14,7 +15,8 @@ import {
 } from "@fortawesome/free-regular-svg-icons";
 
 import { usePathname } from "next/navigation";
-import { MessageNotificationCard } from "./MessageNotificationCard";
+import { MessageNotificationCardProps } from "./MessageNotificationCard";
+import { MessageNotificationCardList } from "./MessageNotificationCardList";
 /**
  * Allows the user to navigate between company threads or private messages in the message page
  */
@@ -35,7 +37,22 @@ export function SideNav() {
   ];
   const router = useRouter();
   const pathName = usePathname();
-  const currentTab = pathName.split("/")[2];
+  const currentTab = pathName.split("/")[2]; // tab is either company or private
+  const [messageNotificationsList, setMessageNotificationsList] = useState<
+    MessageNotificationCardProps[]
+  >([]);
+
+  useEffect(() => {
+    // TODO: Add backend logic to fetch conversations for a particular user based on the user's tab
+    setMessageNotificationsList([
+      {
+        avatar: "test",
+        conversation_id: "amazon_conversationid",
+        header: "amazon",
+        subHeader: "engineering",
+      },
+    ]);
+  }, [pathName]);
 
   return (
     <div
@@ -108,18 +125,7 @@ export function SideNav() {
           ))}
         </Tabs>
       </div>
-      <MessageNotificationCard
-        conversation_id="amazon"
-        avatar="h1"
-        header="Header"
-        subHeader="Subheader"
-      />
-      <MessageNotificationCard
-        conversation_id="amazon"
-        avatar="h1"
-        header="Header"
-        subHeader="Subheader"
-      />
+      <MessageNotificationCardList list={messageNotificationsList} />
     </div>
   );
 }
