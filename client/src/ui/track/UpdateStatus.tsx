@@ -30,16 +30,9 @@ export default function UpdateStatus({
   };
 
   const getDisplayValue = (status: ApplicationStage) => {
-    // Display 'IR' for 'Interviewing', else show the status as is
-    if (status === "Interviewing") {
-      return "IR";
-    } else if (status === "OnlineAssessment") {
-      return "OA";
-    } else {
-      return status;
-    }
-
-  };
+    // Display 'OA' for 'Online Assestment', else show the status as is
+    return status === "Online Assesstment" ? "OA" : status;
+  }
 
   return (
     <Select
@@ -68,8 +61,7 @@ export default function UpdateStatus({
         },
         ...customSx, // Apply any custom styles passed via props
       }}
-      renderValue={(selected) => 
-        getDisplayValue(selected as ApplicationStage)}
+      renderValue={(selected) => getDisplayValue(selected as ApplicationStage)}
       MenuProps={{
         PaperProps: {
           sx: {
@@ -91,7 +83,7 @@ export default function UpdateStatus({
             fontSize: "14px",
           }}
         >
-          {option} {/* Use the display value function here */}
+          {option}{/* Use the display value function here */}
         </MenuItem>
       ))}
     </Select>

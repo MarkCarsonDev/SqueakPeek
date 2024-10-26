@@ -15,10 +15,10 @@ export default function Page() {
     useState<ApplicationStage>("Applied"); // Track the default status
 
   // Connect the store for each stage
-  const { Applied, Rejected, OnlineAssessment, Interviewing, Offer, moveApplication } =
+  const { Applied, Rejected, "Online Assesstment": OnlineAssesstment, Interviewing, Offer, moveApplication } =
     useTrack();
 
-  const stages:  Omit<StageColumnProps, 'setApplicationStatus'>[] = [
+  const stages: StageColumnProps[] = [
     {
       stage: "Applied",
       stageName: "Applied",
@@ -32,10 +32,10 @@ export default function Page() {
       applications: Rejected,
     },
     {
-      stage: "OnlineAssessment",
+      stage: "Online Assesstment",
       stageName: "Online Assessment",
       stageColor: "#EB5B00",
-      applications: OnlineAssessment,
+      applications: OnlineAssesstment,
     },
     {
       stage: "Interviewing",
@@ -112,8 +112,8 @@ export default function Page() {
       )}
 
       {/* Application stages */}
-      <DragDropContext onDragEnd={onDragEnd}>
-        <div style={{ display: "flex", gap: "20px" }}>
+      <DragDropContext onDragEnd={onDragEnd}>"
+        <div style={{ display: "flex", gap: "16px", padding: "16px", overflowX: "auto", flexWrap: "nowrap" }}>
           {stages.map((stage) => (
             <StageColumn
               key={stage.stage}
@@ -122,7 +122,6 @@ export default function Page() {
               stageColor={stage.stageColor}
               applications={stage.applications}
               handleOpenModal={handleOpenModal}
-              setApplicationStatus={setApplicationStatus}
             />
           ))}
         </div>

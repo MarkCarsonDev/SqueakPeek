@@ -104,7 +104,7 @@ export default function NewApplicationModal({
             <UpdateStatus
               required
               name="status"
-              options={["Applied", "OnlineAssessment", "Interviewing", "Offer", "Rejected"]}
+              options={["Applied","Rejected",  "Online Assesstment", "Interviewing", "Offer", ]}
               applicationStatus={applicationStatus}
               setApplicationStage={setApplicationStatus}
             />

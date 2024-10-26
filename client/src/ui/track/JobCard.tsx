@@ -48,7 +48,10 @@ export function JobCard({
         display: "grid",
         gridTemplateColumns: "20% 70% 10%",
         alignItems: "center",
-        border: "1px solid #E0E4F2",
+        width: "90%",
+        padding: "8px 10px", // Reduced padding to make it slimmer
+        boxShadow: "none",
+        marginBottom: "10px", // Space between cards
       }}
     >
       {/* Column 1: Company Brand (20%) */}
@@ -57,20 +60,20 @@ export function JobCard({
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          margin: 1,
+          padding: "4px", 
         }}
       >
         <Image
           src="/landingpage/logo.svg"
-          height={50}
-          width={50}
+          height={40} 
+          width={40}  
           alt="Squeakpeek Logo"
           style={{
             objectFit: "cover",
             objectPosition: "bottom",
-            margin: "auto",
+            borderRadius: "8px",
           }}
-        ></Image>
+        />
       </Box>
 
       {/* Column 2: Main Content (70%) */}
@@ -80,10 +83,7 @@ export function JobCard({
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "flex-start",
-          mt: 1,
-          //   width: "100%",
-          gap: "1px",
-          //   backgroundColor: "white",
+          gap: "4px", 
           ml: 1,
         }}
       >
@@ -94,75 +94,61 @@ export function JobCard({
             alignItems: "center",
             gap: "4px",
             width: "100%",
-            overflow: "hidden",
           }}
         >
-          <Typography variant="subtitle2" sx={{ flexShrink: 0 }}>
-            {Company}
-          </Typography>
+          <Typography variant="subtitle2" sx={{ fontSize: "12px" }}>{Company}</Typography>
           <UpdateStatus
+            required
             name="status"
-            options={[
-              "Applied",
-              "OnlineAssessment",
-              "Interviewing",
-              "Offer",
-              "Rejected",
-            ]}
+            options={["Applied","Rejected", "Online Assesstment", "Interviewing", "Offer", ]}
             applicationStatus={Status}
             setApplicationStage={handleStatusChange}
             customSx={{
-              fontSize: "10px", // Custom font size
-              height: "20px", // Custom height
+              height: "18px", 
+              fontSize: "10px",
+              width: "60px", 
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
             }}
           />
         </Box>
 
         {/* Row 2: Role Title */}
-        <Typography variant="subtitle2">{Role}</Typography>
+        <Typography variant="subtitle2" sx={{ fontSize: "12px" }}>{Role}</Typography>
 
         {/* Row 3: Icon Buttons */}
-        <Box sx={{ display: "flex", gap: "5px" }}>
+        <Box sx={{ display: "flex", gap: "4px" }}>
           <IconButton
             sx={{
-              padding: "6px", // Controls the button size
-              borderRadius: "50%", // Ensure it's circular
-              ":hover": {
-                backgroundColor: "#D0D4DA",
-              },
+              padding: "4px", // Reduced padding for smaller button size
+              borderRadius: "50%",
             }}
           >
             <FontAwesomeIcon
               icon={faFacebookMessenger}
-              style={{ fontSize: "10px", color: "#333333" }}
+              style={{ fontSize: "12px", color: "#333333" }} // Smaller icon size
             />
           </IconButton>
           <IconButton
             sx={{
-              padding: "6px",
+              padding: "4px",
               borderRadius: "50%",
-              ":hover": {
-                backgroundColor: "#D0D4DA",
-              },
             }}
           >
             <FontAwesomeIcon
               icon={faChartColumn}
-              style={{ fontSize: "10px", color: "#333333" }}
+              style={{ fontSize: "12px", color: "#333333" }}
             />
           </IconButton>
           <IconButton
             sx={{
-              padding: "6px",
+              padding: "4px",
               borderRadius: "50%",
-              ":hover": {
-                backgroundColor: "#D0D4DA",
-              },
             }}
           >
             <FontAwesomeIcon
               icon={faLink}
-              style={{ fontSize: "10px", color: "#333333" }}
+              style={{ fontSize: "12px", color: "#333333" }}
             />
           </IconButton>
         </Box>
@@ -172,26 +158,15 @@ export function JobCard({
       <Box
         sx={{
           display: "flex",
-          justifyContent: "flex-end",
+          flexDirection: "column",
+          justifyContent: "flex-start",
           alignItems: "flex-start",
           height: "100%",
-          padding: "5px",
-          mt:1
+          mt: "1px",
         }}
       >
-        <IconButton
-          sx={{
-            padding: "6px",
-            borderRadius: "50%",
-            ":hover": {
-              backgroundColor: "#D0D4DA",
-            },
-          }}
-        >
-          <FontAwesomeIcon
-            icon={faBars}
-            style={{ fontSize: "10px", color: "#333333" }}
-          />
+        <IconButton sx={{ padding: "4px", borderRadius: "50%" }}>
+          <FontAwesomeIcon icon={faBars} style={{ fontSize: "12px", color: "#333333" }} />
         </IconButton>
       </Box>
     </Card>

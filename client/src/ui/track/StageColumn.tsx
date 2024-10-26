@@ -12,7 +12,7 @@ export interface StageColumnProps {
   stageColor: string;
   applications: Application[];
   handleOpenModal?: (stage: ApplicationStage) => void;
-  setApplicationStatus: React.Dispatch<React.SetStateAction<ApplicationStage>>;
+  // setApplicationStatus: React.Dispatch<React.SetStateAction<ApplicationStage>>;
 }
 
 export const StageColumn: React.FC<StageColumnProps> = ({
@@ -21,7 +21,6 @@ export const StageColumn: React.FC<StageColumnProps> = ({
   stageColor,
   applications,
   handleOpenModal,
-  // setApplicationStatus,
 }) => {
   return (
     <Droppable droppableId={stage} key={stage}>
@@ -30,8 +29,12 @@ export const StageColumn: React.FC<StageColumnProps> = ({
           {...provided.droppableProps}
           ref={provided.innerRef}
           style={{
-            marginTop: "10px",
-            width: "24%",
+            flexGrow: 1,             
+            flexShrink: 0,           
+            flexBasis: "300px",      
+            minWidth: "250px",       
+            maxWidth: "500px",       
+            marginTop: "10px",      
             backgroundColor: "white",
             border: "4px solid #E0E4F2",
             borderRadius: "8px",
@@ -68,15 +71,15 @@ export const StageColumn: React.FC<StageColumnProps> = ({
               if (handleOpenModal) handleOpenModal(stage);
             }}
             sx={{
-              width: "80%",
+              width: "90%",
               height: "40px",
               borderStyle: "dashed",
+              marginBottom: "10px", // Add spacing below the button
             }}
           >
             <Typography variant="h6">+</Typography>
           </Button>
 
-          {/* Render the applications card within the stage */}
           {applications.map((app, index) => (
             <Draggable key={app.id} draggableId={app.id} index={index}>
               {(provided) => (
@@ -85,7 +88,7 @@ export const StageColumn: React.FC<StageColumnProps> = ({
                   {...provided.draggableProps}
                   {...provided.dragHandleProps}
                   style={{
-                    margin: "4px",
+                    margin: "8px",
                     width: "90%",
                     ...provided.draggableProps.style,
                   }}
@@ -94,7 +97,7 @@ export const StageColumn: React.FC<StageColumnProps> = ({
                     applicationId={app.id}
                     Company={app.companyName}
                     Role={app.roleTitle}
-                    Status={stage}  // Pass the current stage as the status
+                    Status={stage}
                   />
                 </div>
               )}
