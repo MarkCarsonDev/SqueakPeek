@@ -14,6 +14,7 @@ import {
 } from "@fortawesome/free-regular-svg-icons";
 
 import { usePathname } from "next/navigation";
+import { MessageNotificationCard } from "./MessageNotificationCard";
 /**
  * Allows the user to navigate between company threads or private messages in the message page
  */
@@ -34,7 +35,7 @@ export function SideNav() {
   ];
   const router = useRouter();
   const pathName = usePathname();
-  const currentRoute = pathName.split("/")[2];
+  const currentTab = pathName.split("/")[2];
 
   return (
     <div
@@ -42,66 +43,83 @@ export function SideNav() {
         display: "flex",
         flexDirection: "column",
         borderRight: "2px solid #E0E4F2",
-        padding: "20px",
       }}
     >
       {" "}
-      <Typography
-        variant="h4"
-        sx={{
-          fontWeight: "bold",
+      <div
+        style={{
+          padding: "20px",
         }}
       >
-        Messages
-      </Typography>
-      <Typography>
-        Talk to other applicants in the process, or talk privately
-      </Typography>
-      <Tabs
-        value={currentRoute}
-        TabIndicatorProps={{
-          hidden: true,
-        }}
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          justifyItems: "center",
-          "&.Mui-selected": {
-            color: "yellow",
-            opacity: 1,
-          },
-          "&.Mui-focusVisible": {
-            backgroundColor: "#d1eaff",
-          },
-        }}
-      >
-        {tabs.map(({ tabPathName, solidIcon, regularIcon, label }) => (
-          <Tab
-            value={tabPathName}
-            key={tabPathName}
-            sx={{
-              padding: "0px",
-              marginRight: "20px",
-              "&.Mui-selected": {
-                color: "#496FFF",
-              },
-            }}
-            icon={
-              <FontAwesomeIcon
-                size="2x"
-                icon={
-                  currentRoute === tabPathName // gets the route name after the /message route
-                    ? solidIcon
-                    : regularIcon
-                }
-              />
-            }
-            onClick={() => router.push(`/message/${tabPathName}`)}
-            label={label}
-            iconPosition="start"
-          />
-        ))}
-      </Tabs>
+        <Typography
+          variant="h4"
+          sx={{
+            fontWeight: "bold",
+          }}
+        >
+          Messages
+        </Typography>
+        <Typography>
+          Talk to other applicants in the process, or talk privately
+        </Typography>
+        <Tabs
+          value={currentTab}
+          TabIndicatorProps={{
+            hidden: true,
+          }}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            justifyItems: "center",
+            "&.Mui-selected": {
+              color: "yellow",
+              opacity: 1,
+            },
+            "&.Mui-focusVisible": {
+              backgroundColor: "#d1eaff",
+            },
+          }}
+        >
+          {tabs.map(({ tabPathName, solidIcon, regularIcon, label }) => (
+            <Tab
+              value={tabPathName}
+              key={tabPathName}
+              sx={{
+                padding: "0px",
+                marginRight: "20px",
+                "&.Mui-selected": {
+                  color: "#496FFF",
+                },
+              }}
+              icon={
+                <FontAwesomeIcon
+                  size="2x"
+                  icon={
+                    currentTab === tabPathName // gets the route name after the /message route
+                      ? solidIcon
+                      : regularIcon
+                  }
+                />
+              }
+              onClick={() => router.push(`/message/${tabPathName}`)}
+              label={label}
+              iconPosition="start"
+            />
+          ))}
+        </Tabs>
+      </div>
+      <MessageNotificationCard
+        conversation_id="amazon"
+        avatar="h1"
+        header="Header"
+        subHeader="Subheader"
+      />
+      <MessageNotificationCard
+        conversation_id="amazon"
+        avatar="h1"
+        header="Header"
+        subHeader="Subheader"
+      />
     </div>
   );
 }
