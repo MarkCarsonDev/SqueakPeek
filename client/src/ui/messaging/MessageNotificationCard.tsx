@@ -7,6 +7,7 @@ export interface MessageNotificationCardProps {
   header: string;
   subHeader: string;
   conversation_id: string;
+  isSelected?: boolean;
 }
 
 /**
@@ -20,6 +21,7 @@ export function MessageNotificationCard({
   header,
   subHeader,
   conversation_id,
+  isSelected,
 }: MessageNotificationCardProps) {
   const pathName = usePathname();
   const currentTab = pathName.split("/")[2]; // tab is either company or private
@@ -33,7 +35,7 @@ export function MessageNotificationCard({
     >
       <Card
         sx={{
-          backgroundColor: "transparent",
+          backgroundColor: isSelected ? "blue" : "transparent",
           boxShadow: "none",
         }}
       >
