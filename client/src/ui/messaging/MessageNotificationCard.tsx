@@ -1,5 +1,11 @@
 import Link from "next/link";
-import { Card, CardHeader, Avatar, CardActionArea } from "@mui/material";
+import {
+  Card,
+  CardHeader,
+  Avatar,
+  CardActionArea,
+  Typography,
+} from "@mui/material";
 import { usePathname } from "next/navigation";
 
 export interface MessageNotificationCardProps {
@@ -25,6 +31,7 @@ export function MessageNotificationCard({
 }: MessageNotificationCardProps) {
   const pathName = usePathname();
   const currentTab = pathName.split("/")[2]; // tab is either company or private
+  const textColor = isSelected ? "white" : "#3C435C";
   return (
     <Link
       style={{
@@ -35,15 +42,32 @@ export function MessageNotificationCard({
     >
       <Card
         sx={{
-          backgroundColor: isSelected ? "blue" : "transparent",
+          backgroundColor: isSelected ? "#496FFF" : "transparent",
           boxShadow: "none",
         }}
       >
         <CardActionArea>
           <CardHeader
             avatar={<Avatar>R</Avatar>}
-            title={header}
-            subheader={subHeader}
+            title={
+              <Typography
+                sx={{
+                  color: textColor,
+                }}
+              >
+                {header}
+              </Typography>
+            }
+            subheader={
+              <Typography
+                sx={{
+                  color: textColor,
+                }}
+                variant="caption"
+              >
+                {subHeader}
+              </Typography>
+            }
           />
         </CardActionArea>
       </Card>
