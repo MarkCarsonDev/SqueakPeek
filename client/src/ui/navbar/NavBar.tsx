@@ -46,7 +46,7 @@ export function NavBar() {
         display: "flex",
         zIndex: 1,
         position: "sticky",
-        borderBottom: "5px solid #E0E4F2",
+        borderBottom: "3px solid #E0E4F2",
         alignContent: "center",
         justifyContent: "space-between",
       }}
@@ -89,7 +89,7 @@ export function NavBar() {
                 />
                 <Typography
                   sx={{
-                    fontWeight: pathName === links.href ? "bold" : "normal",
+                    fontWeight: pathName.startsWith(links.href) ? "bold" : "normal",
                   }}
                 >
                   {links.name}

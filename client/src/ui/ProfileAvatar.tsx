@@ -1,6 +1,6 @@
 "use client";
 import { Avatar } from "@mui/material";
-
+import { AvatarProps } from "@mui/material";
 export type AvatarTypes =
   | "avatar1"
   | "avatar2"
@@ -12,7 +12,12 @@ export type AvatarTypes =
 /**
  * Returns the Avatar based on the avatar prop
  */
-export function ProfileAvatar({ avatar }: { avatar: AvatarTypes }) {
+export function ProfileAvatar({
+  avatar,
+  ...props
+}: {
+  avatar: AvatarTypes;
+} & AvatarProps) {
   // TODO: Change this to the actual mapping to the correct avatar images
   // TODO (BUG): On page refresh, or any situation that turns profile = null, it defaults to the image, creating a janky look when profile is initialize
   const avatarMaps = {
@@ -28,6 +33,7 @@ export function ProfileAvatar({ avatar }: { avatar: AvatarTypes }) {
         height: "55px",
       }}
       src={avatar ? avatarMaps[avatar] : "/landingpage/track.svg"}
+      {...props}
     />
   );
 }

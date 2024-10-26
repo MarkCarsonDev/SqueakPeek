@@ -1,71 +1,92 @@
 "use client";
-import { MessageCard } from "./MessageCard";
-import { MessageInput } from "./MessageInput";
-import { ConversationHeader } from "./ConversationHeader";
-
-import Image from "next/image";
-import { useMessage } from "../../../lib/store/message";
-import { fetchConversationAndSetState } from "../../../lib/store/initConversation";
-
-interface ConversationBodyProps {
-  conversationId: string;
-}
+import { useRef, memo, useEffect } from "react";
+import { NewMessagesNotification } from "./NewMessagesNotification";
+import { MutableRefObject } from "react";
+import { MessageList } from "./MessageList";
 
 /**
- * This is a UI container that holds all messages for a particular conversation
- * Also allows to send messages to that particular conversation
+ * Renders new message notifications, message list, and the message input
+ * Handles the page scrolling for new messages and message input
+ * @param {number} numNewMessages - The number of new messages received
+ * @param {() => void} resetNumNewMessages - Resets the number of new messages when invoked
+ * @param { MutableRefObject<HTMLDivElement | null>} bottomRef - Used as a reference to be able to scroll down the page when scrollDown is invoked
  */
-export function ConversationBody({ conversationId }: ConversationBodyProps) {
-  conversationId = '14cd0270-2aae-431b-a536-d43002e33560';
-  const { messages } = useMessage();
-  fetchConversationAndSetState(conversationId);
+export const ConversationBody = memo(function ConversationBody({
+  numNewMessages,
+  resetNumNewMessages,
+  bottomRef,
+}: {
+  numNewMessages: number;
+  resetNumNewMessages: () => void;
+  bottomRef: MutableRefObject<HTMLDivElement | null>;
+}) {
+  // Scroll to the bottom of the element
+  const scrollContainerRef = useRef<null | HTMLDivElement>(null);
+
+  const scrollThreshold = 20; // threshold for determining on whether page scrolls down on new messages
+
+  // determines if the scroll page is flushed in the bottom
+  const pageIsBottomFlushed = () => {
+    if (bottomRef.current && scrollContainerRef.current) {
+      const elementRect = bottomRef.current.getBoundingClientRect();
+      const containerRect = scrollContainerRef.current.getBoundingClientRect();
+      // console.log("elementRect: ", elementRect.top);
+      // console.log("containerRect: ", containerRect.top);
+
+      // Calculate if the element is within the visible bounds of the container
+      const isVisible =
+        elementRect.top >= containerRect.top &&
+        elementRect.bottom <= containerRect.bottom + scrollThreshold &&
+        elementRect.left >= containerRect.left &&
+        elementRect.right <= containerRect.right;
+
+      if (isVisible) {
+        console.log("isVisible");
+        // console.log("elementRect: ", elementRect.bottom);
+        // console.log("containerRect: ", containerRect.bottom);
+      }
+      return isVisible;
+    }
+    return false;
+  };
+
+  // scrolls down to the latest message on page mount"
+  function scrollDown() {
+    if (bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }
+
+  // scrolls down on first page render
+  useEffect(() => {
+    scrollDown();
+  }, []);
 
   return (
     <div
       style={{
-        height: "90vh", // not 100vh since it takes into account the navigation bar
-        backgroundColor: "white",
-        display: "grid",
-        gridTemplateRows: "10% 80% 10%",
+        overflowY: "auto", // allows vertical scrolling on the messages
       }}
+      ref={scrollContainerRef}
     >
-      {/* Header */}
-      {/* TODO: Make this consuem the metadata of an opportunity or user */}
-      <ConversationHeader
-        title="Amazon"
-        subheader="Software Engineering, Internship"
-        avatar={
-          <Image
-            alt="Profile of {company}"
-            src="https://www.amazon.com/favicon.ico"
-            width={50}
-            height={50}
-          />
-        }
+      <NewMessagesNotification
+        numNewMessages={numNewMessages}
+        scrollDown={scrollDown}
+        resetNumNewMessages={resetNumNewMessages}
       />
 
-      {/* Messages */}
-      <div
-        style={{
-          overflowY: "auto", // allows scrolling on the messages
-        }}
-      >
-        {messages.map((message) => (
-          <MessageCard key={message.messageId} {...message} />
-        ))}
-      </div>
+      <MessageList
+        isPageBottomFlushed={pageIsBottomFlushed()}
+        scrollDown={scrollDown}
+      />
 
-      {/* Message Input */}
+      {/* Used as a reference to scroll down the page */}
       <div
+        ref={bottomRef}
         style={{
-          display: "flex",
-          justifyContent: "center",
-          padding: "10px 10px",
+          height: `${scrollThreshold}px`,
         }}
-      >
-        <MessageInput/>
-      </div>
+      />
     </div>
   );
-}
-
+});
