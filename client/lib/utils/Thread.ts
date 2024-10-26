@@ -1,4 +1,6 @@
+import { useProfile } from "@/lib/store/profile";
 import { createSupabaseClient } from "../../src/lib/supabase/client";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * Initializes a thread for a conversation, either private or public.
@@ -19,33 +21,29 @@ export async function createPublicThread(
     const { data: existingPublicThread, error: publicThreadError } = await supabase
         .from("public_user_conversation")
         .select("thread_id")
-        .eq("sender_id", senderProfileId)
-        .eq("conversation_id", conversationID);
+        .filter("sender_id", "eq", senderProfileId)
+        .filter("conversation_id", "eq", conversationID);
 
     // Log and return null if there's an error
     if (publicThreadError) {
         console.error("Error checking public thread:", publicThreadError.message);
         return null;
     }
-
-    // If a public thread already exists, return its thread_id
-    if (existingPublicThread && existingPublicThread.length > 0) {
-        console.log("Public thread found:", existingPublicThread[0]);
-        return existingPublicThread[0].thread_id; 
-    }
-
     // If no existing thread, create a new public thread
     const { data, error } = await supabase
         .from("public_user_conversation")
         .insert([
             {
-                sender_id: senderProfileId,
-                conversation_id: conversationID
+                sender_id: senderProfileId.toString(),
+                conversation_id: conversationID.toString(),
+                thread_id: uuidv4()
             }
         ])
         .select("thread_id");
 
     if (error) {
+        console.log(senderProfileId);
+        console.log(conversationID);
         console.error("Error initializing public thread:", error.message);
         return null;
     }

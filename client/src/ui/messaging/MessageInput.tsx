@@ -56,19 +56,19 @@ export const MessageInput = memo(function MessageInput({
         payload: { message: newMessage },
       });
 
-      InsertMessage(message, conversationId, profile);
+      InsertMessage(newMessage, conversationId, profile);
     }
   }
 
-  async function InsertMessage(message: string, conversationId: string, profile: Profile) 
+  async function InsertMessage(newMessage: MessageCardProps, conversationId: string, profile: Profile) 
   {
     // must test with conversation id = '02db3fdc-1561-4d15-b2ac-d2f23e807454'
-    if (conversationId) {
-      console.log("HERE");
+    if (conversationId && newMessage) {
       const { data: publicThreadData, error: publicThreadError } = await supabase
         .from("public_user_conversation")
         .select("thread_id")
-        .eq("conversation_id", '14cd0270-2aae-431b-a536-d43002e33560'); // Test Conversation ID since conversation ID is not set
+        .eq("conversation_id", "14cd0270-2aae-431b-a536-d43002e33560")
+        .eq("sender_id", profile.profile_id); // Test Conversation ID since conversation ID is not set
 
       // Log any errors encountered while checking for public threads
       if (publicThreadError) {
@@ -76,27 +76,27 @@ export const MessageInput = memo(function MessageInput({
         return;
       }
 
-      console.log("HERE");
-
-
       let threadID;
+
+      console.log(profile.profile_id); // Log sender profile ID
+      //console.log(conversationID); // Log conversation ID
 
       if (publicThreadData?.length > 0) {
         console.log("Public thread found:", publicThreadData[0].thread_id);
         threadID = publicThreadData[0].thread_id;
       } 
       else if (publicThreadData?.length === 0) {
-        threadID = createPublicThread(profile.profile_id, conversationId);
+        console.log("Creating public thread..");
+        threadID = await createPublicThread(profile.profile_id, '14cd0270-2aae-431b-a536-d43002e33560');
       }
-
       // If a thread ID is available, send the message
       if (threadID) {
-        console.log(threadID);
         const addMsg = {
           thread_id: threadID.toString(),
-          message: currentMessage
+          message: newMessage.message,
+          message_id: newMessage.messageId
         };
-
+        
         // Insert the public message into the database
         const { data: insertPublicMsg, error: insertPublicMsgError } = await supabase
           .from("public_message")
