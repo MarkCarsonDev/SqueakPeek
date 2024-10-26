@@ -29,7 +29,7 @@ export const StageColumn: React.FC<StageColumnProps> = ({
           ref={provided.innerRef}
           style={{
             marginTop: "10px",
-            width: "18%",
+            width: "24%",
             backgroundColor: "white",
             border: "4px solid #E0E4F2",
             borderRadius: "8px",
@@ -84,7 +84,7 @@ export const StageColumn: React.FC<StageColumnProps> = ({
                   {...provided.dragHandleProps}
                   style={{
                     margin: "4px",
-                    width: "95%",
+                    width: "90%",
                     ...provided.draggableProps.style,
                   }}
                 >

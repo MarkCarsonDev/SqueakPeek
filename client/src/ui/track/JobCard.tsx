@@ -40,7 +40,6 @@ export function JobCard({
         display: "grid",
         gridTemplateColumns: "20% 70% 10%",
         alignItems: "center",
-        width: "100%",
       }}
     >
       {/* Column 1: Company Brand (20%) */}
@@ -60,6 +59,7 @@ export function JobCard({
           style={{
             objectFit: "cover",
             objectPosition: "bottom",
+            margin: "auto",
           }}
         ></Image>
       </Box>
@@ -71,6 +71,7 @@ export function JobCard({
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "flex-start",
+        //   width: "100%",
           gap: "1px",
         //   backgroundColor: "white",
           ml: 1,
