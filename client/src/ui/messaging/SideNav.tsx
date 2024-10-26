@@ -42,7 +42,7 @@ export function SideNav() {
       style={{
         display: "flex",
         flexDirection: "column",
-        borderRight: "2px solid #E0E4F2",
+        borderRight: "3px solid #E0E4F2",
       }}
     >
       {" "}
