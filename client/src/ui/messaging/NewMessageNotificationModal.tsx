@@ -6,7 +6,7 @@ import { Chip, Snackbar } from "@mui/material";
  * @param {() => void} scrollDown: Vertically scrolls down the page when invoked
  * @param {() => void} resetNumNewMessages: Resets the number of new messages when invoked
  */
-export function NewMessagesNotification({
+export function NewMessagesNotificationModal({
   numNewMessages,
   scrollDown,
   resetNumNewMessages,
