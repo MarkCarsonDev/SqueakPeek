@@ -87,7 +87,7 @@ export const StageColumn: React.FC<StageColumnProps> = ({
                   {...provided.draggableProps}
                   {...provided.dragHandleProps}
                   style={{
-                    margin: "8px",
+                    marginTop: "8px",
                     width: "90%",
                     ...provided.draggableProps.style,
                   }}

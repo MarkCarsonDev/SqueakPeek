@@ -44,11 +44,12 @@ export function JobCard({
     <Card
       sx={{
         borderRadius: "8px",
+        border: "2px solid #E0E4F2",
         backgroundColor: "#F6F8FF",
         display: "grid",
         gridTemplateColumns: "20% 70% 10%",
         alignItems: "center",
-        width: "90%",
+        width: "95%",
         padding: "8px 10px", // Reduced padding to make it slimmer
         boxShadow: "none",
         marginBottom: "10px", // Space between cards
