@@ -1,4 +1,4 @@
-import { createSupabaseClient } from "../../src/lib/supabase/client";
+import { createSupabaseClient } from "../supabase/client";
 import { v4 as uuidv4 } from "uuid";
 
 /**
