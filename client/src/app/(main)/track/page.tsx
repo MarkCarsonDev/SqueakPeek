@@ -100,7 +100,6 @@ export default function Page() {
       >
         New Application
       </Button>
-
       {/* The New Application Modal */}
       {openModal && (
         <NewApplicationModal

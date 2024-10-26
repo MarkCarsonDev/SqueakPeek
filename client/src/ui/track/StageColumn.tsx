@@ -12,7 +12,6 @@ export interface StageColumnProps {
   stageColor: string;
   applications: Application[];
   handleOpenModal?: (stage: ApplicationStage) => void;
-  // setApplicationStatus: React.Dispatch<React.SetStateAction<ApplicationStage>>;
 }
 
 export const StageColumn: React.FC<StageColumnProps> = ({
