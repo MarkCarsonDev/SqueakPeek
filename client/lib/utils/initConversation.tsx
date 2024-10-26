@@ -1,4 +1,4 @@
-import { useConversationStore } from "./conversation"; 
+import { useConversationStore } from "../../../lib/utils/conversation"; 
 import { createSupabaseClient } from "../supabase/client";
 
 interface Conversation {

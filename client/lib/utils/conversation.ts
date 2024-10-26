@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { Tables } from "../types/database.types";
+import { Tables } from "../../src/lib/types/database.types";
 
 type Conversation = Tables<"conversation">;
 
