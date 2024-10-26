@@ -3,7 +3,7 @@ import { create } from "zustand";
 export type ApplicationStage =
   | "Applied"
   | "Rejected"
-  | "OA"
+  | "OnlineAssessment"
   | "Interviewing"
   | "Offer";
 
@@ -21,7 +21,7 @@ export interface Application {
 interface TrackState {
   Applied: Application[];
   Rejected: Application[];
-  OA: Application[];
+  OnlineAssessment: Application[];
   Interviewing: Application[];
   Offer: Application[];
   addApplication: (to: ApplicationStage, application: Application) => void;
@@ -36,7 +36,7 @@ interface TrackState {
 export const useTrack = create<TrackState>()((set) => ({
   Applied: [],
   Rejected: [],
-  OA: [],
+  OnlineAssessment: [],
   Interviewing: [],
   Offer: [],
   addApplication: (to, application) =>

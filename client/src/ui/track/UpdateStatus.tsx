@@ -31,7 +31,14 @@ export default function UpdateStatus({
 
   const getDisplayValue = (status: ApplicationStage) => {
     // Display 'IR' for 'Interviewing', else show the status as is
-    return status === "Interviewing" ? "IR" : status;
+    if (status === "Interviewing") {
+      return "IR";
+    } else if (status === "OnlineAssessment") {
+      return "OA";
+    } else {
+      return status;
+    }
+
   };
 
   return (
@@ -61,6 +68,8 @@ export default function UpdateStatus({
         },
         ...customSx, // Apply any custom styles passed via props
       }}
+      renderValue={(selected) => 
+        getDisplayValue(selected as ApplicationStage)}
       MenuProps={{
         PaperProps: {
           sx: {
@@ -82,10 +91,9 @@ export default function UpdateStatus({
             fontSize: "14px",
           }}
         >
-          {getDisplayValue(option)} {/* Use the display value function here */}
+          {option} {/* Use the display value function here */}
         </MenuItem>
       ))}
-      {/* Display short status on card */}
     </Select>
   );
 }

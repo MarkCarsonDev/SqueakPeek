@@ -15,7 +15,7 @@ export default function Page() {
     useState<ApplicationStage>("Applied"); // Track the default status
 
   // Connect the store for each stage
-  const { Applied, Rejected, OA, Interviewing, Offer, moveApplication } =
+  const { Applied, Rejected, OnlineAssessment, Interviewing, Offer, moveApplication } =
     useTrack();
 
   const stages:  Omit<StageColumnProps, 'setApplicationStatus'>[] = [
@@ -32,10 +32,10 @@ export default function Page() {
       applications: Rejected,
     },
     {
-      stage: "OA",
+      stage: "OnlineAssessment",
       stageName: "Online Assessment",
       stageColor: "#EB5B00",
-      applications: OA,
+      applications: OnlineAssessment,
     },
     {
       stage: "Interviewing",

@@ -4,6 +4,8 @@ import { Droppable, Draggable } from "@hello-pangea/dnd";
 import { Application, ApplicationStage } from "@/lib/store/track";
 import { JobCard } from "./JobCard";
 
+
+// TODO: Customize drag and drop functionality for color betweenn stages
 export interface StageColumnProps {
   stage: ApplicationStage;
   stageName: string;

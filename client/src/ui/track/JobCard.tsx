@@ -1,12 +1,20 @@
 "use client";
 import React, { SetStateAction } from "react";
 import { Card, Typography, IconButton, Box } from "@mui/material";
-import { faChartColumn, faLink, faBars} from "@fortawesome/free-solid-svg-icons";
+import {
+  faChartColumn,
+  faLink,
+  faBars,
+} from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import { faFacebookMessenger } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import UpdateStatus from "@/ui/track/UpdateStatus";
 import { ApplicationStage, useTrack } from "@/lib/store/track";
+
+// TODO:
+// Implement the Link for message, chart, stats
+// Implement the Company Brand Logo based on the company name
 
 interface JobCardProps {
   applicationId: string;
@@ -40,6 +48,7 @@ export function JobCard({
         display: "grid",
         gridTemplateColumns: "20% 70% 10%",
         alignItems: "center",
+        border: "1px solid #E0E4F2",
       }}
     >
       {/* Column 1: Company Brand (20%) */}
@@ -48,7 +57,7 @@ export function JobCard({
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          margin: 1
+          margin: 1,
         }}
       >
         <Image
@@ -71,9 +80,9 @@ export function JobCard({
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "flex-start",
-        //   width: "100%",
+          //   width: "100%",
           gap: "1px",
-        //   backgroundColor: "white",
+          //   backgroundColor: "white",
           ml: 1,
         }}
       >
@@ -81,8 +90,8 @@ export function JobCard({
         <Box
           sx={{
             display: "flex",
-            alignItems: "center", // Aligns vertically with the company name
-            gap: "4px", // Space between company name and dropdown
+            alignItems: "center",
+            gap: "4px",
             width: "100%",
             overflow: "hidden",
           }}
@@ -92,7 +101,13 @@ export function JobCard({
           </Typography>
           <UpdateStatus
             name="status"
-            options={["Applied", "OA", "Interviewing", "Offer", "Rejected"]}
+            options={[
+              "Applied",
+              "OnlineAssessment",
+              "Interviewing",
+              "Offer",
+              "Rejected",
+            ]}
             applicationStatus={Status}
             setApplicationStage={handleStatusChange}
             customSx={{
