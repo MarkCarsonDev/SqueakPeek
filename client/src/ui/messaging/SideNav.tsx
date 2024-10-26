@@ -48,8 +48,14 @@ export function SideNav() {
       {
         avatar: "test",
         conversation_id: "amazon_conversationid",
-        header: "amazon",
-        subHeader: "engineering",
+        header: "Amazon",
+        subHeader: "Backend Engineer",
+      },
+      {
+        avatar: "test",
+        conversation_id: "netflix_conversationid",
+        header: "Netflix",
+        subHeader: "Software Engineer Intern",
       },
     ]);
   }, [pathName]);
