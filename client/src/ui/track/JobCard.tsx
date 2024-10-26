@@ -80,6 +80,7 @@ export function JobCard({
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "flex-start",
+          mt: 1,
           //   width: "100%",
           gap: "1px",
           //   backgroundColor: "white",
@@ -175,6 +176,7 @@ export function JobCard({
           alignItems: "flex-start",
           height: "100%",
           padding: "5px",
+          mt:1
         }}
       >
         <IconButton
