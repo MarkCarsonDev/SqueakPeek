@@ -111,7 +111,7 @@ export default function Page() {
       )}
 
       {/* Application stages */}
-      <DragDropContext onDragEnd={onDragEnd}>"
+      <DragDropContext onDragEnd={onDragEnd}>
         <div style={{ display: "flex", gap: "16px", padding: "16px", overflowX: "auto", flexWrap: "nowrap" }}>
           {stages.map((stage) => (
             <StageColumn
