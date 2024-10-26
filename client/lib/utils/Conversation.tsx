@@ -1,5 +1,4 @@
-import { useConversationStore } from "../../../lib/utils/conversation"; 
-import { createSupabaseClient } from "../supabase/client";
+import { createSupabaseClient } from "../../src/lib/supabase/client";
 
 interface Conversation {
     conversation_id: string; 
@@ -37,8 +36,6 @@ export const fetchPublicConversation = async (conversationID: string): Promise<C
                 opportunity_id: data.opportunity_id, 
             };
 
-            // Update the conversation state in the store
-            useConversationStore.getState().initializeConversation(fetchedConversation);
             return fetchedConversation; 
         }
 
@@ -94,8 +91,6 @@ export const createPrivateConversation = async (): Promise<Conversation | null> 
                 opportunity_id: null, 
             };
 
-            // Update the conversation state in the store
-            useConversationStore.getState().initializeConversation(newConversation);
             return newConversation; 
         }
 

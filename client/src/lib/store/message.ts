@@ -17,3 +17,4 @@ export const useMessage = create<MessageState>()((set) => ({
   addMessage: (newMessage) =>
     set((state) => ({ messages: [...state.messages, newMessage] })),
 }));
+
