@@ -2,7 +2,10 @@ import React from "react";
 import { Typography, Button } from "@mui/material";
 import { Droppable, Draggable } from "@hello-pangea/dnd";
 import { Application, ApplicationStage } from "@/lib/store/track";
+import { JobCard } from "./JobCard";
 
+
+// TODO: Customize drag and drop functionality for color betweenn stages
 export interface StageColumnProps {
   stage: ApplicationStage;
   stageName: string;
@@ -24,12 +27,20 @@ export const StageColumn: React.FC<StageColumnProps> = ({
         <div
           {...provided.droppableProps}
           ref={provided.innerRef}
-          className="stage-column"
           style={{
-            marginTop: "10px",
-            width: "250px",
+            flexGrow: 1,             
+            flexShrink: 0,           
+            flexBasis: "300px",      
+            minWidth: "250px",       
+            maxWidth: "500px",       
+            marginTop: "10px",      
             backgroundColor: "white",
+            border: "4px solid #E0E4F2",
             borderRadius: "8px",
+            height: "70vh",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
           <Typography
@@ -53,22 +64,21 @@ export const StageColumn: React.FC<StageColumnProps> = ({
             {stageName} ({applications.length})
           </Typography>
 
-          {/* Add New Application button */}
           <Button
             variant="outlined"
             onClick={() => {
               if (handleOpenModal) handleOpenModal(stage);
             }}
             sx={{
-              width: "80%",
+              width: "90%",
               height: "40px",
               borderStyle: "dashed",
+              marginBottom: "10px", // Add spacing below the button
             }}
           >
             <Typography variant="h6">+</Typography>
           </Button>
 
-          {/* Render the applications card within the stage */}
           {applications.map((app, index) => (
             <Draggable key={app.id} draggableId={app.id} index={index}>
               {(provided) => (
@@ -77,16 +87,17 @@ export const StageColumn: React.FC<StageColumnProps> = ({
                   {...provided.draggableProps}
                   {...provided.dragHandleProps}
                   style={{
-                    padding: "10px",
-                    marginBottom: "10px",
-                    backgroundColor: "white",
-                    border: "1px solid rgba(0, 0, 0, 0.12)",
-                    borderRadius: "5px",
+                    marginTop: "8px",
+                    width: "90%",
                     ...provided.draggableProps.style,
                   }}
                 >
-                  <Typography variant="subtitle1">{app.companyName}</Typography>
-                  <Typography variant="body2">{app.roleTitle}</Typography>
+                  <JobCard
+                    applicationId={app.id}
+                    Company={app.companyName}
+                    Role={app.roleTitle}
+                    Status={stage}
+                  />
                 </div>
               )}
             </Draggable>

@@ -3,15 +3,5 @@
     height: 100vh;
   }
   
-  .stage-column {
-    background-color: white;
-    border: 4px solid #E0E4F2;
-    border-radius: 8px;
-    width: 18%;
-    height: 70vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 
-  }
   
