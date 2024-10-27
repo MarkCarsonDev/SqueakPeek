@@ -7,7 +7,7 @@ import {
   faBars,
 } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
-import { faMessage} from "@fortawesome/free-regular-svg-icons";
+import { faMessage} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import UpdateStatus from "@/ui/track/UpdateStatus";
 import { ApplicationStage, useTrack } from "@/lib/store/track";
