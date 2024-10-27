@@ -36,7 +36,7 @@ export function JobCard({
     const resolvedStatus =
       typeof newStatus === "function" ? newStatus(Status) : newStatus;
     if (resolvedStatus !== Status) {
-      moveApplication(Status, resolvedStatus, applicationId);
+      moveApplication(Status, resolvedStatus, applicationId, 0, 0);
     }
   };
 
@@ -135,7 +135,7 @@ export function JobCard({
           >
             <FontAwesomeIcon
               icon={faMessage}
-              style={{ fontSize: "14px", color: "#333333" }} // Larger icon size
+              style={{ fontSize: "1px", color: "#333333" }} // Larger icon size
             />
           </IconButton>
           <IconButton
