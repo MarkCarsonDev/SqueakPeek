@@ -37,7 +37,7 @@ export const StageColumn: React.FC<StageColumnProps> = ({
             backgroundColor: "white",
             border: "4px solid #E0E4F2",
             borderRadius: "8px",
-            height: "70vh",
+            height: "75vh",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
