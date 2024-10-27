@@ -1,6 +1,6 @@
-import { Card, CardHeader, Typography } from "@mui/material";
+import { Card, CardHeader, Typography, Modal } from "@mui/material";
 import { AvatarTypes, ProfileAvatar } from "../ProfileAvatar";
-import { memo, useEffect } from "react";
+import { memo, useEffect, useState } from "react";
 import { useProfile } from "../../lib/store/profile";
 export interface MessageCardProps {
   avatar: AvatarTypes;
@@ -32,6 +32,10 @@ export const MessageCard = memo(function MessageCard({
   // TODO: Add upVotes and downVotes component
   const { profile } = useProfile();
   const messageDate = new Date(timestamp);
+  const [openModal, setOpenModal] = useState(false);
+
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
 
   // Scrolls down page when the current user sends a
   useEffect(() => {
@@ -44,83 +48,71 @@ export const MessageCard = memo(function MessageCard({
   const messageSenderIsCurrentUser = profile?.username === sender_username;
 
   return (
-    <div
-      style={{
+    <Card
+      sx={{
+        boxShadow: "none",
         width: "100%",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
       }}
     >
-      {/* TODO: Clean this up to make it simpler */}
-
-      <Card
-        sx={{
-          boxShadow: "none",
-          width: "100%",
-        }}
-      >
-        <CardHeader
-          avatar={
-            <ProfileAvatar
-              avatar={avatar}
-              sx={{
-                border: messageSenderIsCurrentUser
-                  ? "3px #496FFF solid"
-                  : "none",
-              }}
-            />
-          }
-          title={
-            <span
-              style={{
-                display: "flex",
-                alignItems: "end",
-              }}
-            >
-              <Typography
-                style={{
-                  color: messageSenderIsCurrentUser ? "#496FFF" : "#3C435C",
-                  fontWeight: "bold",
-                }}
-              >
-                {sender_username}
-              </Typography>
-              {"  "}
-              <Typography
-                variant="caption"
-                style={{
-                  marginLeft: "4px",
-                }}
-              >
-                {messageDate.toLocaleDateString("en-US", {
-                  month: "2-digit",
-                  day: "2-digit",
-                  year: "2-digit",
-                }) +
-                  " " +
-                  messageDate.toLocaleTimeString("en-US")}
-              </Typography>
-            </span>
-          }
-          subheader={
+      <CardHeader
+        avatar={
+          <ProfileAvatar
+            onClick={handleOpenModal}
+            avatar={avatar}
+            sx={{
+              border: messageSenderIsCurrentUser ? "3px #496FFF solid" : "none",
+            }}
+          />
+        }
+        title={
+          <span
+            style={{
+              display: "flex",
+              alignItems: "end",
+            }}
+          >
             <Typography
-              variant="body1"
-              sx={{
-                width: "100%", // Ensures the message container respects its parent's width
-                whiteSpace: "pre-wrap", // Preserves line breaks and wraps the text
-                wordBreak: "break-word", // Breaks long words if needed to wrap within the containerq
-                overflowWrap: "break-word", // Provides compatibility with older browsers
+              style={{
+                color: messageSenderIsCurrentUser ? "#496FFF" : "#3C435C",
+                fontWeight: "bold",
               }}
             >
-              {message}
+              {sender_username}
             </Typography>
-          }
-          sx={{
-            alignItems: "flex-start", // Ensures avatar stays at the top when the message grows
-          }}
-        />
-      </Card>
-    </div>
+            {"  "}
+            <Typography
+              variant="caption"
+              style={{
+                marginLeft: "4px",
+              }}
+            >
+              {messageDate.toLocaleDateString("en-US", {
+                month: "2-digit",
+                day: "2-digit",
+                year: "2-digit",
+              }) +
+                " " +
+                messageDate.toLocaleTimeString("en-US")}
+            </Typography>
+          </span>
+        }
+        subheader={
+          <Typography
+            variant="body1"
+            sx={{
+              width: "100%", // Ensures the message container respects its parent's width
+              whiteSpace: "pre-wrap", // Preserves line breaks and wraps the text
+              wordBreak: "break-word", // Breaks long words if needed to wrap within the containerq
+              overflowWrap: "break-word", // Provides compatibility with older browsers
+            }}
+          >
+            {message}
+          </Typography>
+        }
+        sx={{
+          alignItems: "flex-start", // Ensures avatar stays at the top when the message grows
+        }}
+      />
+    </Card>
   );
 });
