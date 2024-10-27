@@ -7,7 +7,7 @@ import {
   faBars,
 } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
-import { faFacebookMessenger } from "@fortawesome/free-brands-svg-icons";
+import { faMessage} from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import UpdateStatus from "@/ui/track/UpdateStatus";
 import { ApplicationStage, useTrack } from "@/lib/store/track";
@@ -134,7 +134,7 @@ export function JobCard({
             }}
           >
             <FontAwesomeIcon
-              icon={faFacebookMessenger}
+              icon={faMessage}
               style={{ fontSize: "14px", color: "#333333" }} // Larger icon size
             />
           </IconButton>
