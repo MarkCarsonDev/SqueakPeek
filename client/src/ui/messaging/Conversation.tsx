@@ -4,7 +4,7 @@ import { ConversationHeader } from "./ConversationHeader";
 import { ConversationBody } from "./ConversationBody";
 import Image from "next/image";
 import { useMessage } from "../../lib/store/message";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useProfile } from "../../lib/store/profile";
 import { useSubscribeConversation } from "@/lib/hooks/useSubscribeConversation";
 
@@ -13,7 +13,7 @@ import { useSubscribeConversation } from "@/lib/hooks/useSubscribeConversation";
  * @param {string} conversationId - ID used to subscribe users to listen to incoming messages
  */
 export function Conversation({ conversationId }: { conversationId: string }) {
-  const { addMessage } = useMessage();
+  const { addMessage, clearMessages } = useMessage();
   const { profile } = useProfile();
   const [numNewMessages, setNumNewMessages] = useState(0); // used for rendering new message notification
   const bottomRef = useRef<null | HTMLDivElement>(null); // used for scrolling down the page
@@ -29,6 +29,11 @@ export function Conversation({ conversationId }: { conversationId: string }) {
     profile,
     setNumNewMessages
   );
+
+  useEffect(() => {
+    clearMessages();
+    return () => clearMessages();
+  }, [conversationId]);
 
   return (
     <div
