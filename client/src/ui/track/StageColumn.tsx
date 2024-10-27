@@ -4,8 +4,6 @@ import { Droppable, Draggable } from "@hello-pangea/dnd";
 import { Application, ApplicationStage } from "@/lib/store/track";
 import { JobCard } from "./JobCard";
 
-
-// TODO: Customize drag and drop functionality for color betweenn stages
 export interface StageColumnProps {
   stage: ApplicationStage;
   stageName: string;
@@ -23,88 +21,112 @@ export const StageColumn: React.FC<StageColumnProps> = ({
 }) => {
   return (
     <Droppable droppableId={stage} key={stage}>
-      {(provided) => (
-        <div
-          {...provided.droppableProps}
-          ref={provided.innerRef}
-          style={{
-            flexGrow: 1,             
-            flexShrink: 0,           
-            flexBasis: "300px",      
-            minWidth: "250px",       
-            maxWidth: "500px",       
-            marginTop: "10px",      
-            backgroundColor: "white",
-            border: "4px solid #E0E4F2",
-            borderRadius: "8px",
-            height: "70vh",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Typography
-            variant="subtitle2"
-            sx={{
-              m: 2,
+      {(provided, snapshot) => {
+        // Set dynamic border color based on dragging state
+        const borderColor = snapshot.isDraggingOver ? "#496FFF": "#E0E4F2";
+        return (
+          <div
+            style={{
+              flexGrow: 1,
+              flexShrink: 0,
+              flexBasis: "300px",
+              minWidth: "250px",
+              maxWidth: "500px",
+              marginTop: "10px",
+              backgroundColor: "white",
+              border: `4px solid ${borderColor}`, // Apply dynamic border color here
+              borderRadius: "8px",
+              height: "75vh",
               display: "flex",
+              flexDirection: "column",
               alignItems: "center",
             }}
           >
-            <span
-              style={{
-                backgroundColor: stageColor,
-                display: "inline-block",
-                width: "10px",
-                height: "10px",
-                borderRadius: "50%",
-                marginRight: "8px",
+            <Typography
+              variant="subtitle2"
+              sx={{
+                m: 2,
+                display: "flex",
+                alignItems: "center",
               }}
-            ></span>
-            {stageName} ({applications.length})
-          </Typography>
+            >
+              <span
+                style={{
+                  backgroundColor: stageColor,
+                  display: "inline-block",
+                  width: "10px",
+                  height: "10px",
+                  borderRadius: "50%",
+                  marginRight: "8px",
+                }}
+              ></span>
+              {stageName} ({applications.length})
+            </Typography>
 
-          <Button
-            variant="outlined"
-            onClick={() => {
-              if (handleOpenModal) handleOpenModal(stage);
-            }}
-            sx={{
-              width: "90%",
-              height: "40px",
-              borderStyle: "dashed",
-              marginBottom: "10px", // Add spacing below the button
-            }}
-          >
-            <Typography variant="h6">+</Typography>
-          </Button>
+            <Button
+              variant="outlined"
+              onClick={() => {
+                if (handleOpenModal) handleOpenModal(stage);
+              }}
+              sx={{
+                width: "90%",
+                height: "40px",
+                borderStyle: "dashed",
+                marginBottom: "10px",
+              }}
+            >
+              <Typography variant="h6">+</Typography>
+            </Button>
 
-          {applications.map((app, index) => (
-            <Draggable key={app.id} draggableId={app.id} index={index}>
-              {(provided) => (
-                <div
-                  ref={provided.innerRef}
-                  {...provided.draggableProps}
-                  {...provided.dragHandleProps}
-                  style={{
-                    marginTop: "8px",
-                    width: "90%",
-                    ...provided.draggableProps.style,
-                  }}
-                >
-                  <JobCard
-                    applicationId={app.id}
-                    Company={app.companyName}
-                    Role={app.roleTitle}
-                    Status={stage}
-                  />
-                </div>
-              )}
-            </Draggable>
-          ))}
-          {provided.placeholder}
-        </div>
-      )}
+            {/* Droppable Area below Button */}
+            <div
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              style={{
+                width: "90%", 
+                overflowY: "auto",
+                padding: "10px",
+                borderRadius: "8px",
+                flexGrow: 1,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                scrollbarWidth: "none", 
+                marginBottom: "10px",
+              }}
+            >
+              {/* Job Cards */}
+              {applications.map((app, index) => (
+                <Draggable key={app.id} draggableId={app.id} index={index}>
+                  {(provided, snapshot) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      style={{
+                        marginBottom: "8px",
+                        width: "100%",
+                        transition:
+                          "transform 0.15s linear, opacity 0.15s linear",
+                        opacity: snapshot.isDragging ? 0.9 : 1,
+                        ...provided.draggableProps.style,
+                      }}
+                    >
+                      <JobCard
+                        applicationId={app.id}
+                        Company={app.companyName}
+                        Role={app.roleTitle}
+                        Status={stage}
+                      />
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </div>
+          </div>
+        );
+      }}
     </Droppable>
   );
 };

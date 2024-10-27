@@ -15,8 +15,14 @@ export default function Page() {
     useState<ApplicationStage>("Applied"); // Track the default status
 
   // Connect the store for each stage
-  const { Applied, Rejected, "Online Assesstment": OnlineAssesstment, Interviewing, Offer, moveApplication } =
-    useTrack();
+  const {
+    Applied,
+    Rejected,
+    "Online Assesstment": OnlineAssesstment,
+    Interviewing,
+    Offer,
+    moveApplication,
+  } = useTrack();
 
   const stages: StageColumnProps[] = [
     {
@@ -64,13 +70,15 @@ export default function Page() {
 
   // Handle drag end event with DropResult typing
   const onDragEnd = (result: DropResult) => {
-    const to = result.destination?.droppableId as ApplicationStage;
+    if (!result.destination) return;
 
-    if (to) {
-      const applicationId = result.draggableId;
-      const from = result.source.droppableId as ApplicationStage;
-      moveApplication(from, to, applicationId);
-    }
+    const from = result.source.droppableId as ApplicationStage;
+    const to = result.destination.droppableId as ApplicationStage;
+    const applicationId = result.draggableId;
+    const sourceIndex = result.source.index;
+    const destinationIndex = result.destination.index;
+
+    moveApplication(from, to, applicationId, sourceIndex, destinationIndex);
   };
 
   return (
@@ -112,7 +120,15 @@ export default function Page() {
 
       {/* Application stages */}
       <DragDropContext onDragEnd={onDragEnd}>
-        <div style={{ display: "flex", gap: "16px", padding: "16px", overflowX: "auto", flexWrap: "nowrap" }}>
+        <div
+          style={{
+            display: "flex",
+            gap: "16px",
+            overflowX: "auto",
+            flexWrap: "nowrap",
+            marginTop: "16px",
+          }}
+        >
           {stages.map((stage) => (
             <StageColumn
               key={stage.stage}
