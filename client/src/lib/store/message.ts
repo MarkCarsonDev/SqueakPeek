@@ -9,6 +9,7 @@ import { MessageCardProps } from "@/ui/messaging/MessageCard";
 interface MessageState {
   messages: MessageCardProps[];
   addMessage: (newMessage: MessageCardProps) => void;
+  clearMessages: () => void;
 }
 
 // hook that will be access in UI components
@@ -16,4 +17,5 @@ export const useMessage = create<MessageState>()((set) => ({
   messages: [],
   addMessage: (newMessage) =>
     set((state) => ({ messages: [...state.messages, newMessage] })),
+  clearMessages: () => set(() => ({ messages: [] })),
 }));
