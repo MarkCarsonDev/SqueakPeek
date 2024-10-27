@@ -1,11 +1,11 @@
-import React from "react";
+"use client";
+import React, { useRef, useEffect, useState } from "react";
 import { Typography, Button } from "@mui/material";
-import { Droppable, Draggable } from "@hello-pangea/dnd";
+import { Droppable, Draggable, DragUpdate, DragDropContext } from "@hello-pangea/dnd";
 import { Application, ApplicationStage } from "@/lib/store/track";
 import { JobCard } from "./JobCard";
 
-
-// TODO: Customize drag and drop functionality for color betweenn stages
+// Props for StageColumn component
 export interface StageColumnProps {
   stage: ApplicationStage;
   stageName: string;
@@ -14,6 +14,7 @@ export interface StageColumnProps {
   handleOpenModal?: (stage: ApplicationStage) => void;
 }
 
+// Main component
 export const StageColumn: React.FC<StageColumnProps> = ({
   stage,
   stageName,
@@ -21,19 +22,66 @@ export const StageColumn: React.FC<StageColumnProps> = ({
   applications,
   handleOpenModal,
 }) => {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [scrollingDirection, setScrollingDirection] = useState<"up" | "down" | null>(null);
+
+  // Use effect to handle scrolling
+  useEffect(() => {
+    if (scrollingDirection) {
+      const scrollContainer = containerRef.current;
+      if (!scrollContainer) return;
+
+      const scrollAmount = scrollingDirection === "down" ? 10 : -10; // Adjust speed as needed
+      const interval = setInterval(() => {
+        scrollContainer.scrollTop += scrollAmount;
+      }, 20); // Frequency of scrolling (ms)
+
+      return () => clearInterval(interval);
+    }
+  }, [scrollingDirection]);
+
+  // Function to handle auto-scrolling when dragging near boundaries
+  const handleAutoScroll = (update: DragUpdate) => {
+    if (!containerRef.current) return;
+
+    const { destination, source } = update;
+    if (!destination || destination.droppableId !== stage) {
+      setScrollingDirection(null);
+      return;
+    }
+
+    const container = containerRef.current;
+    const { scrollTop, scrollHeight, clientHeight } = container;
+    const offsetY = source.index * 60; // Approximate position of dragged item
+
+    const isNearTop = offsetY < scrollTop + 50;
+    const isNearBottom = offsetY > scrollTop + clientHeight - 50;
+
+    if (isNearTop) {
+      setScrollingDirection("up");
+    } else if (isNearBottom) {
+      setScrollingDirection("down");
+    } else {
+      setScrollingDirection(null); // Stop scrolling if not near edges
+    }
+  };
+
   return (
     <Droppable droppableId={stage} key={stage}>
       {(provided) => (
         <div
           {...provided.droppableProps}
-          ref={provided.innerRef}
+          ref={(ref) => {
+            provided.innerRef(ref);
+            if (ref) containerRef.current = ref; // Assign ref without modifying current directly
+          }}
           style={{
-            flexGrow: 1,             
-            flexShrink: 0,           
-            flexBasis: "300px",      
-            minWidth: "250px",       
-            maxWidth: "500px",       
-            marginTop: "10px",      
+            flexGrow: 1,
+            flexShrink: 0,
+            flexBasis: "300px",
+            minWidth: "250px",
+            maxWidth: "500px",
+            marginTop: "10px",
             backgroundColor: "white",
             border: "4px solid #E0E4F2",
             borderRadius: "8px",
@@ -73,38 +121,55 @@ export const StageColumn: React.FC<StageColumnProps> = ({
               width: "90%",
               height: "40px",
               borderStyle: "dashed",
-              marginBottom: "10px", // Add spacing below the button
+              marginBottom: "10px",
             }}
           >
             <Typography variant="h6">+</Typography>
           </Button>
 
-          {applications.map((app, index) => (
-            <Draggable key={app.id} draggableId={app.id} index={index}>
-              {(provided) => (
-                <div
-                  ref={provided.innerRef}
-                  {...provided.draggableProps}
-                  {...provided.dragHandleProps}
-                  style={{
-                    marginTop: "8px",
-                    width: "90%",
-                    ...provided.draggableProps.style,
-                  }}
-                >
-                  <JobCard
-                    applicationId={app.id}
-                    Company={app.companyName}
-                    Role={app.roleTitle}
-                    Status={stage}
-                  />
-                </div>
-              )}
-            </Draggable>
-          ))}
-          {provided.placeholder}
+          {/* Scrolling container for Job Cards */}
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              overflowY: "auto",
+              marginBottom: "10px",
+              marginTop: "5px",
+              scrollbarWidth: "none",
+            }}
+          >
+            {applications.map((app, index) => (
+              <Draggable key={app.id} draggableId={app.id} index={index}>
+                {(provided) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                    style={{
+                      marginTop: "8px",
+                      width: "90%",
+                      ...provided.draggableProps.style,
+                    }}
+                  >
+                    <JobCard
+                      applicationId={app.id}
+                      Company={app.companyName}
+                      Role={app.roleTitle}
+                      Status={stage}
+                    />
+                  </div>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </div>
         </div>
       )}
     </Droppable>
   );
 };
+
+
+// TODO: Customize drag and drop functionality for color betweenn stages
