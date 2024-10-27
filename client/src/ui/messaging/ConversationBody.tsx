@@ -1,6 +1,6 @@
 "use client";
 import { useRef, memo, useEffect } from "react";
-import { NewMessagesNotification } from "./NewMessagesNotification";
+import { NewMessagesNotificationModal } from "./NewMessageNotificationModal";
 import { MutableRefObject } from "react";
 import { MessageList } from "./MessageList";
 
@@ -69,7 +69,7 @@ export const ConversationBody = memo(function ConversationBody({
       }}
       ref={scrollContainerRef}
     >
-      <NewMessagesNotification
+      <NewMessagesNotificationModal
         numNewMessages={numNewMessages}
         scrollDown={scrollDown}
         resetNumNewMessages={resetNumNewMessages}
