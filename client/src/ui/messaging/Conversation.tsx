@@ -33,7 +33,7 @@ export function Conversation({ conversationId }: { conversationId: string }) {
   useEffect(() => {
     clearMessages();
     return () => clearMessages();
-  }, [conversationId]);
+  }, [conversationId, clearMessages]);
 
   return (
     <div
