@@ -45,8 +45,8 @@ export default function NewApplicationModal({
       id: Date.now().toString(),
       roleTitle,
       location,
-      jobtype: jobType,
-      companyName: company,
+      jobtype: jobType, //can't pull the information
+      companyName: company, //can't pull the information
       dateApplied,
       applicationURL: jobLink,
       applicationStatus,
@@ -76,7 +76,7 @@ export default function NewApplicationModal({
           flexDirection: "column",
           gap: "30px",
         }}
-        onSubmit = {handleAddApplication}
+        onSubmit={handleAddApplication}
       >
         <Typography
           variant="h4"
@@ -104,7 +104,7 @@ export default function NewApplicationModal({
             <UpdateStatus
               required
               name="status"
-              options={["Applied", "OA", "Interviewing", "Offer", "Rejected"]}
+              options={["Applied", "Rejected", "Online Assesstment", "Interviewing", "Offer"]}
               applicationStatus={applicationStatus}
               setApplicationStage={setApplicationStatus}
             />
@@ -166,9 +166,10 @@ export default function NewApplicationModal({
                 placeholder="Company Name"
                 name="company"
                 options={companyOptions}
+                value={company} // Bind value to company state
+                onValueChange={(newValue) => setCompany(newValue || "")} // Update company
                 required
                 fullWidth
-                onChange={(e) => setCompany(e.target.value)}
                 style={{ marginBottom: "20px" }}
               />
               <SearchDropdown
@@ -176,9 +177,10 @@ export default function NewApplicationModal({
                 placeholder="Type"
                 name="jobType"
                 options={jobTypeOptions}
+                value={jobType} // Bind value to jobType state
+                onValueChange={(newValue) => setJobType(newValue || "")} // Update jobType
                 required
                 fullWidth
-                onChange={(e) => setJobType(e.target.value)}
                 style={{ marginBottom: "20px" }}
               />
               <InputField
@@ -215,5 +217,3 @@ export default function NewApplicationModal({
     </Modal>
   );
 }
-
-
