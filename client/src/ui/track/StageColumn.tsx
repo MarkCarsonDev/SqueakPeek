@@ -23,11 +23,7 @@ export const StageColumn: React.FC<StageColumnProps> = ({
     <Droppable droppableId={stage} key={stage}>
       {(provided, snapshot) => {
         // Set dynamic border color based on dragging state
-        const borderColor = snapshot.isDraggingOver
-          ? "#496FFF"
-            : snapshot.draggingFromThisWith
-            ? "#496FFF"
-            : "#E0E4F2";
+        const borderColor = snapshot.isDraggingOver ? "#496FFF": "#E0E4F2";
         return (
           <div
             style={{
