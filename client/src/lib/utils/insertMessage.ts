@@ -1,21 +1,20 @@
 
-import { createPublicThread }  from "../../lib/utils/Thread";
+import { createPublicThread }  from "./createPublicThread";
 import { MessageCardProps } from "../../ui/messaging/MessageCard";
-import { Profile } from "../../lib/store/profile";
+import { Profile } from "../store/profile";
 import { createSupabaseClient } from "../supabase/client"
 
 
-export async function InsertMessage(newMessage: MessageCardProps, conversationId: string, profile: Profile) 
+export async function insertMessage(newMessage: MessageCardProps, conversationId: string, profile: Profile) 
 {
     const supabase = createSupabaseClient()  
 
-    // must test with conversation id = '02db3fdc-1561-4d15-b2ac-d2f23e807454'
     if (conversationId && newMessage) {
       const { data: publicThreadData, error: publicThreadError } = await supabase
         .from("public_user_conversation")
         .select("thread_id")
-        .eq("conversation_id", "14cd0270-2aae-431b-a536-d43002e33560")
-        .eq("sender_id", profile.profile_id); // Test Conversation ID since conversation ID is not set
+        .eq("conversation_id", conversationId)
+        .eq("sender_id", profile.profile_id);
 
       // Log any errors encountered while checking for public threads
       if (publicThreadError) {
@@ -34,7 +33,7 @@ export async function InsertMessage(newMessage: MessageCardProps, conversationId
       } 
       else if (publicThreadData?.length === 0) {
         console.log("Creating public thread..");
-        threadID = await createPublicThread(profile.profile_id, '14cd0270-2aae-431b-a536-d43002e33560');
+        threadID = await createPublicThread(profile.profile_id, conversationId);
       }
       // If a thread ID is available, send the message
       if (threadID) {
