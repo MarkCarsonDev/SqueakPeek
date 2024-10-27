@@ -1,7 +1,7 @@
 "use client";
 import React, { useRef, useEffect, useState } from "react";
 import { Typography, Button } from "@mui/material";
-import { Droppable, Draggable, DragUpdate, DragDropContext } from "@hello-pangea/dnd";
+import { Droppable, Draggable} from "@hello-pangea/dnd";
 import { Application, ApplicationStage } from "@/lib/store/track";
 import { JobCard } from "./JobCard";
 
@@ -23,7 +23,7 @@ export const StageColumn: React.FC<StageColumnProps> = ({
   handleOpenModal,
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const [scrollingDirection, setScrollingDirection] = useState<"up" | "down" | null>(null);
+  const [scrollingDirection] = useState<"up" | "down" | null>(null);
 
   // Use effect to handle scrolling
   useEffect(() => {
@@ -40,31 +40,7 @@ export const StageColumn: React.FC<StageColumnProps> = ({
     }
   }, [scrollingDirection]);
 
-  // Function to handle auto-scrolling when dragging near boundaries
-  const handleAutoScroll = (update: DragUpdate) => {
-    if (!containerRef.current) return;
 
-    const { destination, source } = update;
-    if (!destination || destination.droppableId !== stage) {
-      setScrollingDirection(null);
-      return;
-    }
-
-    const container = containerRef.current;
-    const { scrollTop, scrollHeight, clientHeight } = container;
-    const offsetY = source.index * 60; // Approximate position of dragged item
-
-    const isNearTop = offsetY < scrollTop + 50;
-    const isNearBottom = offsetY > scrollTop + clientHeight - 50;
-
-    if (isNearTop) {
-      setScrollingDirection("up");
-    } else if (isNearBottom) {
-      setScrollingDirection("down");
-    } else {
-      setScrollingDirection(null); // Stop scrolling if not near edges
-    }
-  };
 
   return (
     <Droppable droppableId={stage} key={stage}>

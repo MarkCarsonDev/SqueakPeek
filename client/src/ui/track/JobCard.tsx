@@ -135,7 +135,7 @@ export function JobCard({
           >
             <FontAwesomeIcon
               icon={faMessage}
-              style={{ fontSize: "1px", color: "#333333" }} // Larger icon size
+              style={{ fontSize: "14px", color: "#333333" }} // Larger icon size
             />
           </IconButton>
           <IconButton
