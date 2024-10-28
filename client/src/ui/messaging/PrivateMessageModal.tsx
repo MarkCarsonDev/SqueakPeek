@@ -10,6 +10,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUp } from "@fortawesome/free-solid-svg-icons/faCircleUp";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface PrivateMessageModalProps {
   isOpen: boolean;
@@ -18,7 +19,7 @@ interface PrivateMessageModalProps {
 }
 
 /**
- * A modal that allows the current user to start a conversation with another user
+ * A modal that allows the current user to start a conversation with another user in the company threads
  * @param {boolean} isOpen - A value that determines if the modal is rendered
  * @param {string} receiverUsername - The other user's username that the current user has selected to attempt to start a new conversation with
  * @param {() => void} onClose - A function that closes the PrivateMessageModal when invoked
@@ -30,10 +31,13 @@ export function PrivateMessageModal({
   onClose,
 }: PrivateMessageModalProps) {
   const [currentMessage, setCurrentMessage] = useState("");
+  const router = useRouter();
 
   const handleSendMessage = () => {
-    // add backend logic to send message into conversation table
+    // TODO add backend logic to send message into conversation table, and create a new conversation table if it has not been created yet
     setCurrentMessage("");
+    // TODO Replace hardcoded value with the real conversationID
+    router.push("/message/private/bropharah_conversationID");
   };
   return (
     <Modal open={isOpen} onClose={onClose}>
