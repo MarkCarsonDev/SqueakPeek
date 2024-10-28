@@ -57,7 +57,18 @@ export const useTrack = create<TrackState>()((set) => ({
   
   addApplication: (to, application) =>
     set((state) => {
-      state[to].push(application);
+      const existingApplicationIndex = state[to].findIndex(
+        (app) => app.id === application.id
+      );
+
+      if (existingApplicationIndex >= 0) {
+        // Update existing application
+        state[to][existingApplicationIndex] = application;
+      } else {
+        // Add new application
+        state[to].push(application);
+      }
+
       return { ...state };
     }),
     

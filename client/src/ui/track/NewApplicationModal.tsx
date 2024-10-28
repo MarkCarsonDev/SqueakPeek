@@ -1,6 +1,6 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { Modal, Typography, Button } from "@mui/material";
+import React, { useState } from "react";
+import { Modal, Typography, Button, Box } from "@mui/material";
 import { InputField } from "@/ui/InputField";
 import { SearchDropdown } from "@/ui/track/SearchDropdown";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -33,41 +33,24 @@ export default function NewApplicationModal({
   setApplicationStatus,
   existingApplication
 }: NewApplicationModalProps) {
-  const [roleTitle, setRoleTitle] = useState("");
-  const [location, setLocation] = useState("");
-  const [jobType, setJobType] = useState("");
-  const [company, setCompany] = useState("");
-  const [dateApplied, setDateApplied] = useState("");
-  const [jobLink, setJobLink] = useState("");
+  const [roleTitle, setRoleTitle] = useState(existingApplication?.roleTitle || "");
+  const [location, setLocation] = useState(existingApplication?.location || "");
+  const [jobType, setJobType] = useState(existingApplication?.jobtype || "");
+  const [company, setCompany] = useState(existingApplication?.companyName || "");
+  const [dateApplied, setDateApplied] = useState(existingApplication?.dateApplied || "");
+  const [jobLink, setJobLink] = useState(existingApplication?.applicationURL || "");
 
   // Extra fields for the form
-  const [testProvider, setTestProvider] = useState("");
-  const [currentScore, setCurrentScore] = useState("");
-  const [outOfScore, setOutOfScore] = useState("");
-  const [interviewingRound, setInterviewingRound] = useState("");
+  const [testProvider, setTestProvider] = useState(existingApplication?.testProvider || "");
+  const [currentScore, setCurrentScore] = useState(existingApplication?.currentScore || "");
+  const [outOfScore, setOutOfScore] = useState(existingApplication?.outOfScore || "");
+  const [interviewingRound, setInterviewingRound] = useState(existingApplication?.interviewingRound || "");
 
-  // Condition for extra fields
-  const isExtraFiledVisable =
-    applicationStatus === "Online Assesstment" ||
-    applicationStatus === "Interviewing" ||
-    applicationStatus === "Offer";
+  // Conditions for extra fields
+  const showOAFields = ["Online Assesstment", "Interviewing", "Offer"].includes(applicationStatus);
+  const showInterviewingFields = ["Interviewing", "Offer"].includes(applicationStatus);
   const { addApplication } = useTrack();
 
-  // Populate filed with existing application data
-  useEffect(() => {
-    if (existingApplication) {
-      setRoleTitle(existingApplication.roleTitle || "");
-      setLocation(existingApplication.location || "");
-      setJobType(existingApplication.jobtype || "");
-      setCompany(existingApplication.companyName || "");
-      setDateApplied(existingApplication.dateApplied || "");
-      setJobLink(existingApplication.applicationURL || "");
-      setCurrentScore(existingApplication.currentScore || "");
-      setOutOfScore(existingApplication.outOfScore || "");
-      setInterviewingRound(existingApplication.interviewingRound || "");
-      setTestProvider(existingApplication.testProvider || "");
-    }
-  }, [existingApplication]);
 
   const handleAddApplication = () => {
     console.log("status: ", applicationStatus);
@@ -77,7 +60,7 @@ export default function NewApplicationModal({
     }
 
     const newApplication: Application = {
-      id: Date.now().toString(),
+      id:  existingApplication ? existingApplication.id : Date.now().toString(),
       roleTitle,
       location,
       jobtype: jobType, //can't pull the information
@@ -187,9 +170,8 @@ export default function NewApplicationModal({
               />
 
               {/* Extra fields for the form left side */}
-              {isExtraFiledVisable && (
+              {showOAFields && (
                 <>
-                {/* Online Assesstment Part */}
                   <Typography variant="h5" sx={{ marginBottom: "10px" }}>
                     Online Assesstment
                   </Typography>
@@ -198,29 +180,35 @@ export default function NewApplicationModal({
                     placeholder="Test Provider"
                     name="Test Provider"
                     options={testProviderOptions}
-                    value={testProvider} // Bind value to company state
+                    value={testProvider}
                     onValueChange={(newValue) =>
                       setTestProvider(newValue || "")
-                    } // Update company
+                    }
                     fullWidth
                     style={{ marginBottom: "20px" }}
                   />
+                </>
+              )}
 
-                  {/*Interviewing Part */}
+              {showInterviewingFields && (
+                <>
                   <Typography variant="h5" sx={{ marginBottom: "10px" }}>
                     Interviewing
                   </Typography>
                   <SearchDropdown
                     label="Interviewing Round"
-                    placeholder="Intervewing Round"
+                    placeholder="Interviewing Round"
                     name="Interviewing Round"
                     options={["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]}
-                    value={interviewingRound} // Bind value to company state
-                    onValueChange={(newValue) =>setInterviewingRound(newValue || "")} 
+                    value={interviewingRound}
+                    onValueChange={(newValue) =>
+                      setInterviewingRound(newValue || "")
+                    }
                     style={{ marginBottom: "20px", width: "33%" }}
                   />
                 </>
               )}
+
 
               <Button
                 variant="contained"
@@ -279,9 +267,9 @@ export default function NewApplicationModal({
               />
 
               {/* Extra fields for the form right side */}
-              {isExtraFiledVisable && (
+              {showOAFields && (
                 <>
-                <div style= {{display: "flex", gap: "10px", marginTop:"62px", marginBottom: "140px",width: "50%"}}>
+                <div style= {{display: "flex", gap: "10px", marginTop:"62px", marginBottom: "140px",width: "100%"}}>
                   {/* Online Assesstment Part */}
                   <InputField
                     label="Current Score"
