@@ -1,19 +1,7 @@
 "use client";
 import React, { SetStateAction } from "react";
-import {
-  Card,
-  Typography,
-  IconButton,
-  Box,
-  Select,
-  MenuItem,
-  SelectChangeEvent,
-} from "@mui/material";
-import {
-  faChartColumn,
-  faLink,
-  faBars,
-} from "@fortawesome/free-solid-svg-icons";
+import {Card, Typography,IconButton, Box, Select, MenuItem, SelectChangeEvent} from "@mui/material";
+import { faChartColumn, faLink, faBars,} from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import { faMessage } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -179,7 +167,7 @@ export function JobCard({ application }: JobCardProps) {
                 },
               }}
             >
-              {["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"].map(
+              {["1", "2", "3", "4+"].map(
                 (round) => (
                   <MenuItem
                     key={round}

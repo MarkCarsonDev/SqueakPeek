@@ -101,7 +101,7 @@ export default function NewApplicationModal({
           borderRadius: "8px",
           display: "flex",
           flexDirection: "column",
-          gap: "30px",
+          gap: "0px 30px",
         }}
         onSubmit={handleAddApplication}
       >
@@ -110,7 +110,7 @@ export default function NewApplicationModal({
           sx={{
             display: "flex",
             alignItems: "center",
-            marginBottom: "10px",
+            marginBottom: "20px",
           }}
         >
           <FontAwesomeIcon
@@ -124,10 +124,9 @@ export default function NewApplicationModal({
           style={{
             display: "flex",
             flexDirection: "column",
-            gap: "20px",
           }}
         >
-          <div style={{ width: "150px" }}>
+          <div style={{ width: "150px" , marginBottom: "10px" }}>
             <UpdateStatus
               required
               name="status"
@@ -153,7 +152,7 @@ export default function NewApplicationModal({
                 required
                 fullWidth
                 onChange={(e) => setRoleTitle(e.target.value)}
-                sx={{ marginBottom: "20px" }}
+                sx={{ marginBottom: "10px" }}
               />
               <InputField
                 label="Location"
@@ -162,7 +161,7 @@ export default function NewApplicationModal({
                 value={location}
                 fullWidth
                 onChange={(e) => setLocation(e.target.value)}
-                sx={{ marginBottom: "20px" }}
+                sx={{ marginBottom: "10px" }}
               />
               <InputField
                 label="Date Applied"
@@ -171,7 +170,7 @@ export default function NewApplicationModal({
                 value={dateApplied}
                 fullWidth
                 onChange={(e) => setDateApplied(e.target.value)}
-                sx={{ marginBottom: "20px" }}
+                sx={{ marginBottom: "10px" }}
               />
 
               {/* Extra fields for the form left side */}
@@ -206,7 +205,7 @@ export default function NewApplicationModal({
                 onValueChange={(newValue) => setCompany(newValue || "")} // Update company
                 required
                 fullWidth
-                style={{ marginBottom: "20px" }}
+                style={{ marginBottom: "10px" }}
               />
               <SearchDropdown
                 label="Job Type"
@@ -217,7 +216,7 @@ export default function NewApplicationModal({
                 onValueChange={(newValue) => setJobType(newValue || "")} // Update jobType
                 required
                 fullWidth
-                style={{ marginBottom: "20px" }}
+                style={{ marginBottom: "10px" }}
               />
               <InputField
                 label="Link to Job Application"
@@ -226,7 +225,7 @@ export default function NewApplicationModal({
                 fullWidth
                 value={jobLink}
                 onChange={(e) => setJobLink(e.target.value)}
-                style={{ marginBottom: "20px" }}
+                style={{ marginBottom: "10px" }}
               />
               {/* Extra fields for the form right side */}
               {showOAFields && (
@@ -265,19 +264,19 @@ export default function NewApplicationModal({
 
           {showInterviewingFields && (
             <>
-              <Typography variant="h5" sx={{ marginBottom: "-10px" }}>
+              <Typography variant="h5" sx={{ marginBottom: "10px" }}>
                 Interviewing
               </Typography>
               <SearchDropdown
                 label="Interviewing Round"
                 placeholder="Interviewing Round"
                 name="Interviewing Round"
-                options={["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]}
+                options={["1", "2", "3", "4+"]}
                 value={interviewingRound}
                 onValueChange={(newValue) =>
                   setInterviewingRound(newValue || "")
                 }
-                style={{ marginBottom: "20px", width: "48.5%" }}
+                style={{ marginBottom: "20px", width: "48.1%" }}
               />
             </>
           )}
