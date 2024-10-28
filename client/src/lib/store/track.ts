@@ -38,6 +38,7 @@ interface TrackState {
     destinationIndex: number
   ) => void;
   updateInterviewingRound: (applicationId: string, round: string) => void;
+  updateApplication: (application: Application) => void;
 }
 
 // Helper function to reorder items in a list
@@ -54,7 +55,7 @@ export const useTrack = create<TrackState>()((set) => ({
   "Online Assesstment": [],
   Interviewing: [],
   Offer: [],
-  
+
   addApplication: (to, application) =>
     set((state) => {
       const existingApplicationIndex = state[to].findIndex(
@@ -71,7 +72,7 @@ export const useTrack = create<TrackState>()((set) => ({
 
       return { ...state };
     }),
-    
+
   removeApplication: (from, applicationId) =>
     set((state) => {
       state[from] = state[from].filter(
@@ -104,15 +105,27 @@ export const useTrack = create<TrackState>()((set) => ({
       return { ...state };
     }),
 
-    updateInterviewingRound: (applicationId, round) =>
-      set((state) => {
-        // Search in the Interviewing stage only
-        const application = state.Interviewing.find(
-          (app) => app.id === applicationId
+  updateInterviewingRound: (applicationId, round) =>
+    set((state) => {
+      // Search in the Interviewing stage only
+      const application = state.Interviewing.find(
+        (app) => app.id === applicationId
+      );
+      if (application) {
+        application.interviewingRound = round;
+      }
+      return { ...state };
+    }),
+
+  updateApplication: (updatedApplication) =>
+    set((state) => {
+      // Update the application within the correct stage
+      const stage = updatedApplication.applicationStatus;
+      if (state[stage]) {
+        state[stage] = state[stage].map((app) =>
+          app.id === updatedApplication.id ? updatedApplication : app
         );
-        if (application) {
-          application.interviewingRound = round;
-        }
-        return { ...state };
-      }),
+      }
+      return { ...state };
+    }),
 }));

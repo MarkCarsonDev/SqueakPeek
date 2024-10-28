@@ -43,7 +43,7 @@ export default function NewApplicationModal({
   // Conditions for extra fields
   const showOAFields = ["Online Assesstment", "Interviewing", "Offer"].includes(applicationStatus);
   const showInterviewingFields = ["Interviewing", "Offer"].includes(applicationStatus);
-  const { addApplication } = useTrack();
+  const { updateApplication,addApplication } = useTrack();
 
   const handleAddApplication = () => {
     console.log("status: ", applicationStatus);
@@ -61,13 +61,17 @@ export default function NewApplicationModal({
       dateApplied,
       applicationURL: jobLink,
       applicationStatus,
-      currentScore:applicationStatus === "Online Assesstment" ? currentScore : undefined,
-      outOfScore:applicationStatus === "Online Assesstment" ? outOfScore : undefined,
-      interviewingRound:applicationStatus === "Interviewing" ? interviewingRound : undefined,
-      testProvider:applicationStatus === "Online Assesstment" ? testProvider : undefined,
+      currentScore,
+      outOfScore,
+      interviewingRound,
+      testProvider
     };
-
-    addApplication(applicationStatus, newApplication);
+    if (existingApplication) {
+      updateApplication(newApplication);
+    } else {
+      addApplication(applicationStatus, newApplication);
+    }
+    
     handleClose();
   };
 
