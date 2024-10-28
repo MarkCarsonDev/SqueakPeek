@@ -31,7 +31,7 @@ export default function NewApplicationModal({
   handleClose,
   applicationStatus,
   setApplicationStatus,
-  existingApplication
+  existingApplication,
 }: NewApplicationModalProps) {
   const [roleTitle, setRoleTitle] = useState(existingApplication?.roleTitle || "");
   const [location, setLocation] = useState(existingApplication?.location || "");
@@ -51,7 +51,6 @@ export default function NewApplicationModal({
   const showInterviewingFields = ["Interviewing", "Offer"].includes(applicationStatus);
   const { addApplication } = useTrack();
 
-
   const handleAddApplication = () => {
     console.log("status: ", applicationStatus);
     if (!applicationStatus) {
@@ -60,7 +59,7 @@ export default function NewApplicationModal({
     }
 
     const newApplication: Application = {
-      id:  existingApplication ? existingApplication.id : Date.now().toString(),
+      id: existingApplication ? existingApplication.id : Date.now().toString(),
       roleTitle,
       location,
       jobtype: jobType, //can't pull the information
@@ -68,10 +67,10 @@ export default function NewApplicationModal({
       dateApplied,
       applicationURL: jobLink,
       applicationStatus,
-      currentScore: applicationStatus === "Online Assesstment" ? currentScore : undefined,
-      outOfScore: applicationStatus === "Online Assesstment" ? outOfScore : undefined,
-      interviewingRound: applicationStatus === "Interviewing" ? interviewingRound : undefined,
-      testProvider: applicationStatus === "Online Assesstment" ? testProvider : undefined,
+      currentScore:applicationStatus === "Online Assesstment" ? currentScore : undefined,
+      outOfScore:applicationStatus === "Online Assesstment" ? outOfScore : undefined,
+      interviewingRound:applicationStatus === "Interviewing" ? interviewingRound : undefined,
+      testProvider:applicationStatus === "Online Assesstment" ? testProvider : undefined,
     };
 
     addApplication(applicationStatus, newApplication);
@@ -112,7 +111,7 @@ export default function NewApplicationModal({
             icon={faPenToSquare}
             style={{ marginRight: "10px" }}
           />
-          Add New Application
+          {existingApplication ? "Edit Application" : "Add New Application"}
         </Typography>
 
         <div
@@ -137,14 +136,14 @@ export default function NewApplicationModal({
               setApplicationStage={setApplicationStatus}
             />
           </div>
-
+          {/* Left side column */}
           <div style={{ display: "flex", gap: "40px" }}>
             <div style={{ flex: 1 }}>
               <InputField
                 label="Role Title"
                 placeholder="Title"
                 name="roleTitle"
-                value = {roleTitle}
+                value={roleTitle}
                 required
                 fullWidth
                 onChange={(e) => setRoleTitle(e.target.value)}
@@ -154,7 +153,7 @@ export default function NewApplicationModal({
                 label="Location"
                 placeholder="Location"
                 name="location"
-                value = {location}
+                value={location}
                 fullWidth
                 onChange={(e) => setLocation(e.target.value)}
                 sx={{ marginBottom: "20px" }}
@@ -163,7 +162,7 @@ export default function NewApplicationModal({
                 label="Date Applied"
                 placeholder="mm/dd/yyyy"
                 name="dateApplied"
-                value = {dateApplied}
+                value={dateApplied}
                 fullWidth
                 onChange={(e) => setDateApplied(e.target.value)}
                 sx={{ marginBottom: "20px" }}
@@ -185,54 +184,12 @@ export default function NewApplicationModal({
                       setTestProvider(newValue || "")
                     }
                     fullWidth
-                    style={{ marginBottom: "20px" }}
+                    style={{ marginBottom: "10px" }}
                   />
                 </>
               )}
-
-              {showInterviewingFields && (
-                <>
-                  <Typography variant="h5" sx={{ marginBottom: "10px" }}>
-                    Interviewing
-                  </Typography>
-                  <SearchDropdown
-                    label="Interviewing Round"
-                    placeholder="Interviewing Round"
-                    name="Interviewing Round"
-                    options={["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]}
-                    value={interviewingRound}
-                    onValueChange={(newValue) =>
-                      setInterviewingRound(newValue || "")
-                    }
-                    style={{ marginBottom: "20px", width: "33%" }}
-                  />
-                </>
-              )}
-
-
-              <Button
-                variant="contained"
-                onClick={handleClose}
-                fullWidth
-                sx={{
-                  marginTop: "20px",
-                  color: "#496FFF",
-                  backgroundColor: "white",
-                  boxShadow: "none",
-                  height: "53px",
-                  border: "1px solid #E0E3EB",
-                  borderRadius: "8px",
-                  ":hover": {
-                    backgroundColor: "white",
-                    border: "1px solid #A6B0C3",
-                    boxShadow: "none",
-                  },
-                }}
-              >
-                Cancel
-              </Button>
             </div>
-
+            {/* Right side column */}
             <div style={{ flex: 1 }}>
               <SearchDropdown
                 label="Company"
@@ -261,55 +218,110 @@ export default function NewApplicationModal({
                 placeholder="Link"
                 name="jobLink"
                 fullWidth
-                value = {jobLink}
+                value={jobLink}
                 onChange={(e) => setJobLink(e.target.value)}
                 style={{ marginBottom: "20px" }}
               />
-
               {/* Extra fields for the form right side */}
               {showOAFields && (
                 <>
-                <div style= {{display: "flex", gap: "10px", marginTop:"62px", marginBottom: "140px",width: "100%"}}>
-                  {/* Online Assesstment Part */}
-                  <InputField
-                    label="Current Score"
-                    placeholder="Score"
-                    name="currentScore"
-                    value = {currentScore}
-                    onChange={(e) => setCurrentScore(e.target.value)}
-                    style={{ marginBottom: "20px" }}
-                  />
-                  <InputField
-                    label="Out of "
-                    placeholder=" Out of"
-                    name="outOfScore"
-                    value = {outOfScore}
-                    onChange={(e) => setOutOfScore(e.target.value)}
-                    // style={{ marginBottom: "20px" }}
-                  />
-                </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "10px",
+                      marginTop: "62px",
+                      marginBottom: "0px",
+                      width: "100%",
+                    }}
+                  >
+                    {/* Online Assesstment Part */}
+                    <InputField
+                      label="Current Score"
+                      placeholder="Score"
+                      name="currentScore"
+                      value={currentScore}
+                      onChange={(e) => setCurrentScore(e.target.value)}
+                      style={{ marginBottom: "10px" }}
+                    />
+                    <InputField
+                      label="Out of "
+                      placeholder=" Out of"
+                      name="outOfScore"
+                      value={outOfScore}
+                      onChange={(e) => setOutOfScore(e.target.value)}
+                      // style={{ marginBottom: "20px" }}
+                    />
+                  </div>
                 </>
               )}
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                fullWidth
-                sx={{
-                  marginTop: "20px",
-                  height: "53px",
-                  boxShadow: "none",
-                  borderRadius: "8px",
-                  backgroundColor: "#496FFF",
-                  ":hover": {
-                    backgroundColor: "#3B5AC6",
-                    boxShadow: "none",
-                  },
-                }}
-              >
-                {existingApplication ? "Save Changes" : "Add"}
-              </Button>
             </div>
+          </div>
+
+          {showInterviewingFields && (
+            <>
+              <Typography variant="h5" sx={{ marginBottom: "-10px" }}>
+                Interviewing
+              </Typography>
+              <SearchDropdown
+                label="Interviewing Round"
+                placeholder="Interviewing Round"
+                name="Interviewing Round"
+                options={["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]}
+                value={interviewingRound}
+                onValueChange={(newValue) =>
+                  setInterviewingRound(newValue || "")
+                }
+                style={{ marginBottom: "20px", width: "48.5%" }}
+              />
+            </>
+          )}
+          <div style={{
+            display: "flex",
+            gap: "41px",
+          }}>
+          <Button
+            variant="contained"
+            onClick={handleClose}
+            fullWidth
+            sx={{
+              marginTop: "20px",
+              color: "#496FFF",
+              backgroundColor: "white",
+              boxShadow: "none",
+              height: "53px",
+              border: "1px solid #E0E3EB",
+              borderRadius: "8px",
+              width: "48.5%",
+              ":hover": {
+                backgroundColor: "white",
+                border: "1px solid #A6B0C3",
+                boxShadow: "none",
+              },
+            }}
+          >
+            Cancel
+          </Button>
+
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            sx={{
+              marginTop: "20px",
+              height: "53px",
+              boxShadow: "none",
+              borderRadius: "8px",
+              backgroundColor: "#496FFF",
+              width: "48.5%",
+              ":hover": {
+                backgroundColor: "#3B5AC6",
+                boxShadow: "none",
+              },
+            }}
+          >
+            {existingApplication ? "Save Changes" : "Add"}
+          </Button>
           </div>
         </div>
       </form>
