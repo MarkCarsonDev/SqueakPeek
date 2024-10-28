@@ -2,6 +2,7 @@ import { Card, CardHeader, Typography } from "@mui/material";
 import { AvatarTypes, ProfileAvatar } from "../ProfileAvatar";
 import { memo, useEffect, useState } from "react";
 import { useProfile } from "../../lib/store/profile";
+import { useMessage } from "@/lib/store/message";
 import { PrivateMessageModal } from "./PrivateMessageModal";
 export interface MessageCardProps {
   avatar: AvatarTypes;
@@ -29,9 +30,9 @@ export const MessageCard = memo(function MessageCard({
   message,
   scrollDown,
 }: MessageCardProps) {
-  // TODO: Make CardHeader match the UI in figma file
   // TODO: Add upVotes and downVotes component
   const { profile } = useProfile();
+  const { isPrivateConversation: isPrivateMessage } = useMessage();
   const messageDate = new Date(timestamp);
 
   const [openModal, setOpenModal] = useState(false);
@@ -43,10 +44,9 @@ export const MessageCard = memo(function MessageCard({
     if (scrollDown) scrollDown();
   });
 
-  // TODO: Decouple boolean logic and setting prevDate state
-  // TODO: This needs to get tested
-
   const messageSenderIsCurrentUser = profile?.username === sender_username;
+  const doRenderPrivateMessageModal =
+    messageSenderIsCurrentUser === false && !isPrivateMessage;
 
   return (
     <>
@@ -59,15 +59,15 @@ export const MessageCard = memo(function MessageCard({
         <CardHeader
           avatar={
             <ProfileAvatar
-              onClick={messageSenderIsCurrentUser ? () => {} : handleOpenModal}
+              onClick={doRenderPrivateMessageModal ? handleOpenModal : () => {}}
               avatar={avatar}
               sx={{
                 border: messageSenderIsCurrentUser
                   ? "3px #496FFF solid"
                   : "none",
-                cursor: messageSenderIsCurrentUser ? "default" : "pointer",
+                cursor: doRenderPrivateMessageModal ? "pointer" : "default",
                 "&:hover": {
-                  opacity: messageSenderIsCurrentUser ? "1" : ".5",
+                  opacity: doRenderPrivateMessageModal ? ".5" : "1",
                 },
               }}
             />
