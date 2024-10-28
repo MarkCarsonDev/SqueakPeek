@@ -18,6 +18,12 @@ interface NewApplicationModalProps {
 
 const jobTypeOptions = ["Full-time", "Part-time", "Contract", "Internship"];
 const companyOptions = ["Google", "Netflix", "Amazon", "Facebook", "Apple"];
+const testProviderOptions = [
+  "HackerRank",
+  "Codility",
+  "LeetCode",
+  "HackerEarth",
+];
 
 export default function NewApplicationModal({
   open,
@@ -32,6 +38,17 @@ export default function NewApplicationModal({
   const [dateApplied, setDateApplied] = useState("");
   const [jobLink, setJobLink] = useState("");
 
+  // Extra fields for the form
+  const [testProvider, setTestProvider] = useState("");
+  const [currentScore, setCurrentScore] = useState("");
+  const [outOfScore, setOutOfScore] = useState("");
+  const [interviewingRound, setInterviewingRound] = useState("");
+
+  // Condition for extra fields
+  const isExtraFiledVisable =
+    applicationStatus === "Online Assesstment" ||
+    applicationStatus === "Interviewing" ||
+    applicationStatus === "Offer";
   const { addApplication } = useTrack();
 
   const handleAddApplication = () => {
@@ -104,7 +121,13 @@ export default function NewApplicationModal({
             <UpdateStatus
               required
               name="status"
-              options={["Applied", "Rejected", "Online Assesstment", "Interviewing", "Offer"]}
+              options={[
+                "Applied",
+                "Rejected",
+                "Online Assesstment",
+                "Interviewing",
+                "Offer",
+              ]}
               applicationStatus={applicationStatus}
               setApplicationStage={setApplicationStatus}
             />
@@ -137,6 +160,43 @@ export default function NewApplicationModal({
                 onChange={(e) => setDateApplied(e.target.value)}
                 sx={{ marginBottom: "20px" }}
               />
+
+              {/* Extra fields for the form left side */}
+              {isExtraFiledVisable && (
+                <>
+                {/* Online Assesstment Part */}
+                  <Typography variant="h5" sx={{ marginBottom: "10px" }}>
+                    Online Assesstment
+                  </Typography>
+                  <SearchDropdown
+                    label="Test Provider"
+                    placeholder="Test Provider"
+                    name="Test Provider"
+                    options={testProviderOptions}
+                    value={testProvider} // Bind value to company state
+                    onValueChange={(newValue) =>
+                      setTestProvider(newValue || "")
+                    } // Update company
+                    fullWidth
+                    style={{ marginBottom: "20px" }}
+                  />
+
+                  {/*Interviewing Part */}
+                  <Typography variant="h5" sx={{ marginBottom: "10px" }}>
+                    Interviewing
+                  </Typography>
+                  <SearchDropdown
+                    label="Interviewing Round"
+                    placeholder="Intervewing Round"
+                    name="Interviewing Round"
+                    options={["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]}
+                    value={interviewingRound} // Bind value to company state
+                    onValueChange={(newValue) =>setInterviewingRound(newValue || "")} 
+                    style={{ marginBottom: "20px", width: "33%" }}
+                  />
+                </>
+              )}
+
               <Button
                 variant="contained"
                 onClick={handleClose}
@@ -191,6 +251,29 @@ export default function NewApplicationModal({
                 onChange={(e) => setJobLink(e.target.value)}
                 style={{ marginBottom: "20px" }}
               />
+
+              {/* Extra fields for the form right side */}
+              {isExtraFiledVisable && (
+                <>
+                <div style= {{display: "flex", gap: "10px", marginTop:"62px", marginBottom: "140px",width: "50%"}}>
+                  {/* Online Assesstment Part */}
+                  <InputField
+                    label="Current Score"
+                    placeholder="Score"
+                    name="currentScore"
+                    onChange={(e) => setCurrentScore(e.target.value)}
+                    style={{ marginBottom: "20px" }}
+                  />
+                  <InputField
+                    label="Out of "
+                    placeholder=" Out of"
+                    name="outOfScore"
+                    onChange={(e) => setOutOfScore(e.target.value)}
+                    // style={{ marginBottom: "20px" }}
+                  />
+                </div>
+                </>
+              )}
               <Button
                 type="submit"
                 variant="contained"
