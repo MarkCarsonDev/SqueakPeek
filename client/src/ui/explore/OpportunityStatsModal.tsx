@@ -6,6 +6,9 @@ import { Modal } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChartColumn } from "@fortawesome/free-solid-svg-icons";
 import { BarChart } from "@mui/x-charts";
+import { ToggleButton } from "@mui/material";
+import { ToggleButtonGroup } from "@mui/material";
+import { dataset } from "./OpportunityStatsDataset";
 
 const style = {
   position: "absolute",
@@ -20,13 +23,22 @@ const style = {
   borderRadius: "10px",
   justifyContent: "center",
   alignItems: "center",
-  display: "flex"
+  display: "flex",
+  flexDirection: "column",
 };
 
 export function OpportunityStatsModal() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const [alignment, setAlignment] = React.useState<string | null>("left");
+  const handleAlignment = (
+    event: React.MouseEvent<HTMLElement>,
+    newAlignment: string | null
+  ) => {
+    setAlignment(newAlignment);
+  };
 
   return (
     <div>
@@ -54,17 +66,35 @@ export function OpportunityStatsModal() {
       >
         <Box sx={style}>
           <BarChart
+            dataset={dataset}
             xAxis={[
-              { scaleType: "band", data: ["group A", "group B", "group C"] },
+              { scaleType: "band", dataKey: "month" },
             ]}
             series={[
-              { data: [4, 3, 5] },
-              { data: [1, 6, 3] },
-              { data: [2, 5, 6] },
+              {dataKey: "rejected", label: "Rejected", color: "red"},
+              {dataKey: "oa", label: "OA", color: "orange"},
+              {dataKey: "interviewing", label: "Interviewing", color: "gold"},
+              {dataKey: "offered", label: "Offered", color: "green"},
             ]}
             width={500}
             height={300}
           />
+          <ToggleButtonGroup
+            value={alignment}
+            exclusive
+            onChange={handleAlignment}
+            aria-label="text alignment"
+          >
+            <ToggleButton value="week" aria-label="left aligned">
+              <Typography>Week</Typography>
+            </ToggleButton>
+            <ToggleButton value="month" aria-label="centered">
+              <Typography>Month</Typography>
+            </ToggleButton>
+            <ToggleButton value="year" aria-label="right aligned">
+              <Typography>Year</Typography>
+            </ToggleButton>
+          </ToggleButtonGroup>
         </Box>
       </Modal>
     </div>
