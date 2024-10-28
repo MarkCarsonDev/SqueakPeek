@@ -37,7 +37,7 @@ export function PrivateMessageModal({
     // TODO add backend logic to send message into conversation table, and create a new conversation table if it has not been created yet
     setCurrentMessage("");
     // TODO Replace hardcoded value with the real conversationID
-    router.push("/message/private/bropharah_conversationID");
+    router.push(`/message/private/${receiverUsername}_conversationID`);
   };
   return (
     <Modal open={isOpen} onClose={onClose}>
