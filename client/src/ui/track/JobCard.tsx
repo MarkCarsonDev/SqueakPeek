@@ -77,13 +77,13 @@ export function JobCard({
         border: "2px solid #E0E4F2",
         backgroundColor: "#F6F8FF",
         display: "grid",
-        gridTemplateColumns: "50px auto 30px", // Fixed width for each column
+        gridTemplateColumns: "50px auto 30px", 
         alignItems: "center",
-        padding: "10px", // Consistent padding around the card
+        padding: "10px", 
         marginX: "auto",
         boxShadow: "none",
-        marginBottom: "10px", // Space between cards
-        overflow: "hidden", // Ensures content doesn’t overflow
+        marginBottom: "10px", 
+        overflow: "hidden", 
       }}
     >
       {/* Column 1: Company Brand */}
@@ -145,7 +145,7 @@ export function JobCard({
             customSx={{
               height: "20px",
               fontSize: "10px",
-              width: "70px", // Adjust width for fit
+              width: "70px",
             }}
           />
           {/* Display the score if status is OA */}
@@ -175,7 +175,6 @@ export function JobCard({
                 backgroundColor: "#496FFF",
                 color: "white",
                 borderRadius: "8px",
-                // paddingX: "8px",
                 width: "auto",
                 "& .MuiSelect-icon": {
                   color: "white",

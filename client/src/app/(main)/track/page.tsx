@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileCirclePlus } from "@fortawesome/free-solid-svg-icons";
 import NewApplicationModal from "@/ui/track/NewApplicationModal";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
-import { StageColumn, StageColumnProps } from "@/ui/track/StageColumn"; // Refactored column component
+import { StageColumn, StageColumnProps } from "@/ui/track/StageColumn"; 
 import "./tracking.css";
 import { Application, ApplicationStage, useTrack } from "@/lib/store/track";
 
@@ -59,9 +59,9 @@ export default function Page() {
 
   // Handle opening the modal with a specific stage and default status
   const handleOpenModal = (stage: ApplicationStage, application?: Application) => {
-    setApplicationStatus(stage); // Set the default status based on the stage name
-    setSelectedApplication(application); // Set the selected application for editing
-    setOpenModal(true); // Open the modal
+    setApplicationStatus(stage); 
+    setSelectedApplication(application); 
+    setOpenModal(true); 
   };
 
   // Close the modal

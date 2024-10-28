@@ -1,14 +1,13 @@
 "use client";
 import React, { useState } from "react";
-import { Modal, Typography, Button, Box } from "@mui/material";
+import { Modal, Typography, Button} from "@mui/material";
 import { InputField } from "@/ui/InputField";
 import { SearchDropdown } from "@/ui/track/SearchDropdown";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import UpdateStatus from "@/ui/track/UpdateStatus";
-
 import { ApplicationStage, useTrack, Application } from "@/lib/store/track";
-
+// TODO: Implement the Company Brand Logo based on the company name on when editing the application
 interface NewApplicationModalProps {
   open: boolean;
   handleClose: () => void;
@@ -17,14 +16,9 @@ interface NewApplicationModalProps {
   existingApplication?: Application;
 }
 
-const jobTypeOptions = ["Full-time", "Part-time", "Contract", "Internship"];
+const jobTypeOptions = ["Full-time", "Part-time", "Contract", "Internship"]; // This is temporary
 const companyOptions = ["Google", "Netflix", "Amazon", "Facebook", "Apple"];
-const testProviderOptions = [
-  "HackerRank",
-  "Codility",
-  "LeetCode",
-  "HackerEarth",
-];
+const testProviderOptions = ["HackerRank", "Codility", "LeetCode","HackerEarth",]; // This is also temoporary
 
 export default function NewApplicationModal({
   open,
@@ -62,8 +56,8 @@ export default function NewApplicationModal({
       id: existingApplication ? existingApplication.id : Date.now().toString(),
       roleTitle,
       location,
-      jobtype: jobType, //can't pull the information
-      companyName: company, //can't pull the information
+      jobtype: jobType, 
+      companyName: company, 
       dateApplied,
       applicationURL: jobLink,
       applicationStatus,
