@@ -117,6 +117,10 @@ export const StageColumn: React.FC<StageColumnProps> = ({
                         Company={app.companyName}
                         Role={app.roleTitle}
                         Status={stage}
+                        currentScore={app.currentScore}
+                        outOfScore={app.outOfScore}
+                        interviewingRound={app.interviewingRound}
+
                       />
                     </div>
                   )}

@@ -1,13 +1,21 @@
 "use client";
 import React, { SetStateAction } from "react";
-import { Card, Typography, IconButton, Box } from "@mui/material";
+import {
+  Card,
+  Typography,
+  IconButton,
+  Box,
+  Select,
+  MenuItem,
+  SelectChangeEvent,
+} from "@mui/material";
 import {
   faChartColumn,
   faLink,
   faBars,
 } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
-import { faMessage} from "@fortawesome/free-solid-svg-icons";
+import { faMessage } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import UpdateStatus from "@/ui/track/UpdateStatus";
 import { ApplicationStage, useTrack } from "@/lib/store/track";
@@ -21,6 +29,10 @@ interface JobCardProps {
   Company: string;
   Role: string;
   Status: ApplicationStage;
+  currentScore?: string;
+  outOfScore?: string;
+  interviewingRound?: string;
+  setInterviewRound?: (round: string) => void;
 }
 
 export function JobCard({
@@ -28,8 +40,12 @@ export function JobCard({
   Company,
   Role,
   Status,
+  currentScore,
+  outOfScore,
+  interviewingRound,
+  setInterviewRound,
 }: JobCardProps) {
-  const { moveApplication } = useTrack();
+  const { moveApplication, updateInterviewingRound } = useTrack();
 
   // Handle status change and update the card's state
   const handleStatusChange = (newStatus: SetStateAction<ApplicationStage>) => {
@@ -37,6 +53,18 @@ export function JobCard({
       typeof newStatus === "function" ? newStatus(Status) : newStatus;
     if (resolvedStatus !== Status) {
       moveApplication(Status, resolvedStatus, applicationId, 0, 0);
+    }
+  };
+
+  // Update interviewing round in the store
+  const handleInterviewRoundChange = (
+    event: SelectChangeEvent<string>
+  ): void => {
+    const newRound = event.target.value;
+    if (setInterviewRound) {
+      setInterviewRound(newRound);
+    } else {
+      updateInterviewingRound(applicationId, newRound);
     }
   };
 
@@ -118,6 +146,70 @@ export function JobCard({
               width: "70px", // Adjust width for fit
             }}
           />
+          {/* Display the score if status is OA */}
+          {Status === "Online Assesstment" && currentScore && outOfScore && (
+            <Typography
+              variant="caption"
+              sx={{
+                backgroundColor: "#496FFF",
+                color: "white",
+                borderRadius: "8px",
+                padding: "2px 6px",
+                fontSize: "10px",
+              }}
+            >
+              {currentScore}/{outOfScore}
+            </Typography>
+          )}
+          {/* Display the score if status is OA */}
+          {Status === "Interviewing" && (
+            <Select
+              value={interviewingRound || ""}
+              onChange={handleInterviewRoundChange}
+              renderValue={(selected) => `R: ${selected}`}
+              sx={{
+                height: "20px",
+                fontSize: "10px",
+                backgroundColor: "#496FFF",
+                color: "white",
+                borderRadius: "8px",
+                // paddingX: "8px",
+                width: "auto",
+                "& .MuiSelect-icon": {
+                  color: "white",
+                },
+                "&.MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    border: "none",
+                  },
+                },
+              }}
+              MenuProps={{
+                PaperProps: {
+                  sx: {
+                    borderRadius: "8px",
+                    boxShadow: "none",
+                    backgroundColor: "#496FFF",
+                  },
+                },
+              }}
+            >
+              {["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"].map(
+                (round) => (
+                  <MenuItem
+                    key={round}
+                    value={round}
+                    sx={{
+                      color: "white",
+                      fontSize: "14px",
+                    }}
+                  >
+                    {round}
+                  </MenuItem>
+                )
+              )}
+            </Select>
+          )}
         </Box>
 
         {/* Row 2: Role Title */}
@@ -171,10 +263,12 @@ export function JobCard({
           alignItems: "flex-start",
           height: "100%",
           position: "relative",
-          paddingRight: "8px"
+          paddingRight: "8px",
         }}
       >
-        <IconButton sx={{ padding: "4px", borderRadius: "50%", position: "relative" }}>
+        <IconButton
+          sx={{ padding: "4px", borderRadius: "50%", position: "relative" }}
+        >
           <FontAwesomeIcon
             icon={faBars}
             style={{ fontSize: "12px", color: "#333333" }}

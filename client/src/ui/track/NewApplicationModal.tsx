@@ -67,6 +67,9 @@ export default function NewApplicationModal({
       dateApplied,
       applicationURL: jobLink,
       applicationStatus,
+      currentScore: applicationStatus === "Online Assesstment" ? currentScore : undefined,
+      outOfScore: applicationStatus === "Online Assesstment" ? outOfScore : undefined,
+      interviewingRound: applicationStatus === "Interviewing" ? interviewingRound : undefined,
     };
 
     addApplication(applicationStatus, newApplication);

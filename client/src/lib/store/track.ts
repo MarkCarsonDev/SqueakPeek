@@ -16,6 +16,9 @@ export interface Application {
   dateApplied: string;
   applicationURL: string;
   applicationStatus: ApplicationStage;
+  currentScore?: string;
+  outOfScore?: string;
+  interviewingRound?: string;
 }
 
 interface TrackState {
@@ -33,6 +36,7 @@ interface TrackState {
     sourceIndex: number,
     destinationIndex: number
   ) => void;
+  updateInterviewingRound: (applicationId: string, round: string) => void;
 }
 
 // Helper function to reorder items in a list
@@ -87,4 +91,16 @@ export const useTrack = create<TrackState>()((set) => ({
       }
       return { ...state };
     }),
+
+    updateInterviewingRound: (applicationId, round) =>
+      set((state) => {
+        // Search in the Interviewing stage only
+        const application = state.Interviewing.find(
+          (app) => app.id === applicationId
+        );
+        if (application) {
+          application.interviewingRound = round;
+        }
+        return { ...state };
+      }),
 }));
