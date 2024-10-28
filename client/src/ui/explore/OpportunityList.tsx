@@ -87,7 +87,7 @@ export const OpportunityList: React.FC = () => {
     <div>
       {shownOpportunities.map((opportunity) => (
         
-          <OpportunityCard {...opportunity} />
+          <OpportunityCard key={opportunity.id} {...opportunity} />
       ))}
     </div>
   );
