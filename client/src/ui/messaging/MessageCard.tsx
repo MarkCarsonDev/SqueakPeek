@@ -1,7 +1,8 @@
-import { Card, CardHeader, Typography, Modal, Box } from "@mui/material";
+import { Card, CardHeader, Typography } from "@mui/material";
 import { AvatarTypes, ProfileAvatar } from "../ProfileAvatar";
 import { memo, useEffect, useState } from "react";
 import { useProfile } from "../../lib/store/profile";
+import { PrivateMessageModal } from "./PrivateMessageModal";
 export interface MessageCardProps {
   avatar: AvatarTypes;
   sender_username: string;
@@ -32,8 +33,8 @@ export const MessageCard = memo(function MessageCard({
   // TODO: Add upVotes and downVotes component
   const { profile } = useProfile();
   const messageDate = new Date(timestamp);
-  const [openModal, setOpenModal] = useState(false);
 
+  const [openModal, setOpenModal] = useState(false);
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
 
@@ -58,15 +59,15 @@ export const MessageCard = memo(function MessageCard({
         <CardHeader
           avatar={
             <ProfileAvatar
-              onClick={handleOpenModal}
+              onClick={messageSenderIsCurrentUser ? () => {} : handleOpenModal}
               avatar={avatar}
               sx={{
                 border: messageSenderIsCurrentUser
                   ? "3px #496FFF solid"
                   : "none",
-                cursor: "pointer",
+                cursor: messageSenderIsCurrentUser ? "default" : "pointer",
                 "&:hover": {
-                  opacity: ".5",
+                  opacity: messageSenderIsCurrentUser ? "1" : ".5",
                 },
               }}
             />
@@ -121,9 +122,11 @@ export const MessageCard = memo(function MessageCard({
           }}
         />
       </Card>
-      <Modal open={openModal} onClose={handleCloseModal}>
-        <div>Hello World</div>
-      </Modal>
+      <PrivateMessageModal
+        isOpen={openModal}
+        onClose={handleCloseModal}
+        receiverUsername={sender_username}
+      />
     </>
   );
 });
