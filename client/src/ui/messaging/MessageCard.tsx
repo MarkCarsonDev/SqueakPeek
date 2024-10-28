@@ -1,7 +1,8 @@
 import { Card, CardHeader, Typography } from "@mui/material";
 import { AvatarTypes, ProfileAvatar } from "../ProfileAvatar";
-import { memo, useEffect } from "react";
+import { memo, useEffect, useState } from "react";
 import { useProfile } from "../../lib/store/profile";
+import { PrivateMessageModal } from "./PrivateMessageModal";
 export interface MessageCardProps {
   avatar: AvatarTypes;
   sender_username: string;
@@ -33,6 +34,10 @@ export const MessageCard = memo(function MessageCard({
   const { profile } = useProfile();
   const messageDate = new Date(timestamp);
 
+  const [openModal, setOpenModal] = useState(false);
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
+
   // Scrolls down page when the current user sends a
   useEffect(() => {
     if (scrollDown) scrollDown();
@@ -44,16 +49,7 @@ export const MessageCard = memo(function MessageCard({
   const messageSenderIsCurrentUser = profile?.username === sender_username;
 
   return (
-    <div
-      style={{
-        width: "100%",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
-    >
-      {/* TODO: Clean this up to make it simpler */}
-
+    <>
       <Card
         sx={{
           boxShadow: "none",
@@ -63,11 +59,16 @@ export const MessageCard = memo(function MessageCard({
         <CardHeader
           avatar={
             <ProfileAvatar
+              onClick={messageSenderIsCurrentUser ? () => {} : handleOpenModal}
               avatar={avatar}
               sx={{
                 border: messageSenderIsCurrentUser
                   ? "3px #496FFF solid"
                   : "none",
+                cursor: messageSenderIsCurrentUser ? "default" : "pointer",
+                "&:hover": {
+                  opacity: messageSenderIsCurrentUser ? "1" : ".5",
+                },
               }}
             />
           }
@@ -121,6 +122,11 @@ export const MessageCard = memo(function MessageCard({
           }}
         />
       </Card>
-    </div>
+      <PrivateMessageModal
+        isOpen={openModal}
+        onClose={handleCloseModal}
+        receiverUsername={sender_username}
+      />
+    </>
   );
 });

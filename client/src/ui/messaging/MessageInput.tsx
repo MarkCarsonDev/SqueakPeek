@@ -37,14 +37,15 @@ export const MessageInput = memo(function MessageInput({
     };
   });
 
+  // TODO: This causes a bug when the PrivateMessage modal is rendered, and the user tries to input a message
   // Makes MessageInput always on focus
-  useEffect(() => {
-    function handleFocus() {
-      if (messageInputRef.current) messageInputRef.current.focus();
-    }
-    document.addEventListener("click", handleFocus);
-    return () => document.removeEventListener("click", handleFocus);
-  }, []);
+  // useEffect(() => {
+  //   function handleFocus() {
+  //     if (messageInputRef.current) messageInputRef.current.focus();
+  //   }
+  //   document.addEventListener("click", handleFocus);
+  //   return () => document.removeEventListener("click", handleFocus);
+  // }, []);
 
   function handleSendMessage(message: string) {
     // only allows to add message if profile is made
