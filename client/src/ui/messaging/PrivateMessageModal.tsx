@@ -23,7 +23,6 @@ interface PrivateMessageModalProps {
  * @param {boolean} isOpen - A value that determines if the modal is rendered
  * @param {string} receiverUsername - The other user's username that the current user has selected to attempt to start a new conversation with
  * @param {() => void} onClose - A function that closes the PrivateMessageModal when invoked
- * @returns
  */
 export function PrivateMessageModal({
   isOpen,
