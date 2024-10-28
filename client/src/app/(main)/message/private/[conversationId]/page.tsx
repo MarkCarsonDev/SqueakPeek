@@ -12,7 +12,7 @@ export default function Page({
         display: "grid",
       }}
     >
-      <Conversation conversationId={conversationId} />
+      <Conversation conversationId={conversationId} isPrivateConversation />
     </div>
   );
 }

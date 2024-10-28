@@ -12,8 +12,14 @@ import { useSubscribeConversation } from "@/lib/hooks/useSubscribeConversation";
  * This is a UI container that holds all messages for a particular conversation
  * @param {string} conversationId - ID used to subscribe users to listen to incoming messages
  */
-export function Conversation({ conversationId }: { conversationId: string }) {
-  const { addMessage, clearMessages } = useMessage();
+export function Conversation({
+  conversationId,
+  isPrivateConversation = false,
+}: {
+  conversationId: string;
+  isPrivateConversation?: boolean;
+}) {
+  const { addMessage, clearMessages, setConversationType } = useMessage();
   const { profile } = useProfile();
   const [numNewMessages, setNumNewMessages] = useState(0); // used for rendering new message notification
   const bottomRef = useRef<null | HTMLDivElement>(null); // used for scrolling down the page
@@ -34,6 +40,10 @@ export function Conversation({ conversationId }: { conversationId: string }) {
     clearMessages();
     return () => clearMessages();
   }, [conversationId, clearMessages]);
+
+  useEffect(() => {
+    setConversationType(isPrivateConversation);
+  }, [setConversationType, isPrivateConversation]);
 
   return (
     <div
