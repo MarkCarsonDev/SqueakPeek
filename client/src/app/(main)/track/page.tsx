@@ -7,12 +7,12 @@ import NewApplicationModal from "@/ui/track/NewApplicationModal";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import { StageColumn, StageColumnProps } from "@/ui/track/StageColumn"; // Refactored column component
 import "./tracking.css";
-import { ApplicationStage, useTrack } from "@/lib/store/track";
+import { Application, ApplicationStage, useTrack } from "@/lib/store/track";
 
 export default function Page() {
   const [openModal, setOpenModal] = useState(false);
-  const [applicationStatus, setApplicationStatus] =
-    useState<ApplicationStage>("Applied"); // Track the default status
+  const [applicationStatus, setApplicationStatus] = useState<ApplicationStage>("Applied"); // Track the default status
+  const [selectedApplication, setSelectedApplication] = useState<Application | undefined>(); // Track the application being edited
 
   // Connect the store for each stage
   const {
@@ -58,14 +58,16 @@ export default function Page() {
   ];
 
   // Handle opening the modal with a specific stage and default status
-  const handleOpenModal = (stage: ApplicationStage) => {
+  const handleOpenModal = (stage: ApplicationStage, application?: Application) => {
     setApplicationStatus(stage); // Set the default status based on the stage name
+    setSelectedApplication(application); // Set the selected application for editing
     setOpenModal(true); // Open the modal
   };
 
   // Close the modal
   const handleCloseModal = () => {
     setOpenModal(false);
+    setSelectedApplication(undefined);
   };
 
   // Handle drag end event with DropResult typing
@@ -115,6 +117,7 @@ export default function Page() {
           handleClose={handleCloseModal}
           applicationStatus={applicationStatus}
           setApplicationStatus={setApplicationStatus}
+          existingApplication={selectedApplication}
         />
       )}
 
@@ -137,6 +140,7 @@ export default function Page() {
               stageColor={stage.stageColor}
               applications={stage.applications}
               handleOpenModal={handleOpenModal}
+              onCardDoubleClick={(application) => handleOpenModal(stage.stage, application)}
             />
           ))}
         </div>

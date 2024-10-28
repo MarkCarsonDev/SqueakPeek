@@ -19,6 +19,7 @@ export interface Application {
   currentScore?: string;
   outOfScore?: string;
   interviewingRound?: string;
+  testProvider?: string;
 }
 
 interface TrackState {

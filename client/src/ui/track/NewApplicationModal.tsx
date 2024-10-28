@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Typography, Button } from "@mui/material";
 import { InputField } from "@/ui/InputField";
 import { SearchDropdown } from "@/ui/track/SearchDropdown";
@@ -14,6 +14,7 @@ interface NewApplicationModalProps {
   handleClose: () => void;
   applicationStatus: ApplicationStage;
   setApplicationStatus: React.Dispatch<React.SetStateAction<ApplicationStage>>;
+  existingApplication?: Application;
 }
 
 const jobTypeOptions = ["Full-time", "Part-time", "Contract", "Internship"];
@@ -30,6 +31,7 @@ export default function NewApplicationModal({
   handleClose,
   applicationStatus,
   setApplicationStatus,
+  existingApplication
 }: NewApplicationModalProps) {
   const [roleTitle, setRoleTitle] = useState("");
   const [location, setLocation] = useState("");
@@ -51,6 +53,22 @@ export default function NewApplicationModal({
     applicationStatus === "Offer";
   const { addApplication } = useTrack();
 
+  // Populate filed with existing application data
+  useEffect(() => {
+    if (existingApplication) {
+      setRoleTitle(existingApplication.roleTitle || "");
+      setLocation(existingApplication.location || "");
+      setJobType(existingApplication.jobtype || "");
+      setCompany(existingApplication.companyName || "");
+      setDateApplied(existingApplication.dateApplied || "");
+      setJobLink(existingApplication.applicationURL || "");
+      setCurrentScore(existingApplication.currentScore || "");
+      setOutOfScore(existingApplication.outOfScore || "");
+      setInterviewingRound(existingApplication.interviewingRound || "");
+      setTestProvider(existingApplication.testProvider || "");
+    }
+  }, [existingApplication]);
+
   const handleAddApplication = () => {
     console.log("status: ", applicationStatus);
     if (!applicationStatus) {
@@ -70,6 +88,7 @@ export default function NewApplicationModal({
       currentScore: applicationStatus === "Online Assesstment" ? currentScore : undefined,
       outOfScore: applicationStatus === "Online Assesstment" ? outOfScore : undefined,
       interviewingRound: applicationStatus === "Interviewing" ? interviewingRound : undefined,
+      testProvider: applicationStatus === "Online Assesstment" ? testProvider : undefined,
     };
 
     addApplication(applicationStatus, newApplication);
@@ -142,6 +161,7 @@ export default function NewApplicationModal({
                 label="Role Title"
                 placeholder="Title"
                 name="roleTitle"
+                value = {roleTitle}
                 required
                 fullWidth
                 onChange={(e) => setRoleTitle(e.target.value)}
@@ -151,6 +171,7 @@ export default function NewApplicationModal({
                 label="Location"
                 placeholder="Location"
                 name="location"
+                value = {location}
                 fullWidth
                 onChange={(e) => setLocation(e.target.value)}
                 sx={{ marginBottom: "20px" }}
@@ -159,6 +180,7 @@ export default function NewApplicationModal({
                 label="Date Applied"
                 placeholder="mm/dd/yyyy"
                 name="dateApplied"
+                value = {dateApplied}
                 fullWidth
                 onChange={(e) => setDateApplied(e.target.value)}
                 sx={{ marginBottom: "20px" }}
@@ -251,6 +273,7 @@ export default function NewApplicationModal({
                 placeholder="Link"
                 name="jobLink"
                 fullWidth
+                value = {jobLink}
                 onChange={(e) => setJobLink(e.target.value)}
                 style={{ marginBottom: "20px" }}
               />
@@ -264,6 +287,7 @@ export default function NewApplicationModal({
                     label="Current Score"
                     placeholder="Score"
                     name="currentScore"
+                    value = {currentScore}
                     onChange={(e) => setCurrentScore(e.target.value)}
                     style={{ marginBottom: "20px" }}
                   />
@@ -271,6 +295,7 @@ export default function NewApplicationModal({
                     label="Out of "
                     placeholder=" Out of"
                     name="outOfScore"
+                    value = {outOfScore}
                     onChange={(e) => setOutOfScore(e.target.value)}
                     // style={{ marginBottom: "20px" }}
                   />
@@ -294,7 +319,7 @@ export default function NewApplicationModal({
                   },
                 }}
               >
-                Add
+                {existingApplication ? "Save Changes" : "Add"}
               </Button>
             </div>
           </div>

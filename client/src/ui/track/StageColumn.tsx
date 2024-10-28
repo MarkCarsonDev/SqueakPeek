@@ -10,6 +10,7 @@ export interface StageColumnProps {
   stageColor: string;
   applications: Application[];
   handleOpenModal?: (stage: ApplicationStage) => void;
+  onCardDoubleClick?: (application: Application) => void;
 }
 
 export const StageColumn: React.FC<StageColumnProps> = ({
@@ -18,6 +19,7 @@ export const StageColumn: React.FC<StageColumnProps> = ({
   stageColor,
   applications,
   handleOpenModal,
+  onCardDoubleClick
 }) => {
   return (
     <Droppable droppableId={stage} key={stage}>
@@ -111,6 +113,7 @@ export const StageColumn: React.FC<StageColumnProps> = ({
                         opacity: snapshot.isDragging ? 0.9 : 1,
                         ...provided.draggableProps.style,
                       }}
+                      onDoubleClick={() => onCardDoubleClick?.(app)}
                     >
                       <JobCard
                         applicationId={app.id}
@@ -120,7 +123,7 @@ export const StageColumn: React.FC<StageColumnProps> = ({
                         currentScore={app.currentScore}
                         outOfScore={app.outOfScore}
                         interviewingRound={app.interviewingRound}
-
+                        
                       />
                     </div>
                   )}

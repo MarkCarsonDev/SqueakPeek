@@ -33,6 +33,7 @@ interface JobCardProps {
   outOfScore?: string;
   interviewingRound?: string;
   setInterviewRound?: (round: string) => void;
+
 }
 
 export function JobCard({
@@ -44,6 +45,7 @@ export function JobCard({
   outOfScore,
   interviewingRound,
   setInterviewRound,
+
 }: JobCardProps) {
   const { moveApplication, updateInterviewingRound } = useTrack();
 
