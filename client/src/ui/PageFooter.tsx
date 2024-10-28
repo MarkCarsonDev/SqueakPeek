@@ -45,7 +45,7 @@ export const PageFooter = () => {
         >
           <Image
             alt="company logo"
-            src={"/landingpage/logo.svg"}
+            src={"/general/website_logo.svg"}
             width={50}
             height={50}
           />
