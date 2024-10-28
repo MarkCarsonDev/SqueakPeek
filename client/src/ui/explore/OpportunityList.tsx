@@ -87,14 +87,8 @@ export const OpportunityList: React.FC = () => {
   return (
     <div>
       {shownOpportunities.map((opportunity) => (
-        <Link
-          key={opportunity.id}
-          href={`/message/company/${opportunity.conversation_id}`}
-          passHref
-          style={{ textDecoration: "none" }}
-        >
+      
           <OpportunityCard {...opportunity} />
-        </Link>
       ))}
     </div>
   );
