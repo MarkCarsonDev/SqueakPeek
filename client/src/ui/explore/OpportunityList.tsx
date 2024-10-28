@@ -87,7 +87,7 @@ export const OpportunityList: React.FC = () => {
   return (
     <div>
       {shownOpportunities.map((opportunity) => (
-      
+        
           <OpportunityCard {...opportunity} />
       ))}
     </div>
