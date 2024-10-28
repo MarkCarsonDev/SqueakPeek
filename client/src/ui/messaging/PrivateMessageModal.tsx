@@ -39,7 +39,13 @@ export function PrivateMessageModal({
     router.push(`/message/private/private_conversationID`);
   };
   return (
-    <Modal open={isOpen} onClose={onClose}>
+    <Modal
+      sx={{
+        zIndex: 2,
+      }}
+      open={isOpen}
+      onClose={onClose}
+    >
       <Box
         sx={{
           position: "absolute",

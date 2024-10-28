@@ -29,6 +29,7 @@ export function NewMessagesNotificationModal({
         "&.MuiSnackbar-root": { top: "80px", justifyContent: "center" }, // positions Snackbar within ConversationBody
         position: "sticky",
         height: "0", // takes the NewMessagesNotification out of the document flow, fixing padding issues with MessageList when this component renders
+        zIndex: 1,
       }}
     >
       <Chip
