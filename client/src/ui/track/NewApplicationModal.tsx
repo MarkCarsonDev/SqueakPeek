@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Modal, Typography, Button} from "@mui/material";
+import { Modal, Typography, Button } from "@mui/material";
 import { InputField } from "@/ui/InputField";
 import { SearchDropdown } from "@/ui/track/SearchDropdown";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,7 +18,12 @@ interface NewApplicationModalProps {
 
 const jobTypeOptions = ["Full-time", "Part-time", "Contract", "Internship"]; // This is temporary
 const companyOptions = ["Google", "Netflix", "Amazon", "Facebook", "Apple"];
-const testProviderOptions = ["HackerRank", "Codility", "LeetCode","HackerEarth",]; // This is also temoporary
+const testProviderOptions = [
+  "HackerRank",
+  "Codility",
+  "LeetCode",
+  "HackerEarth",
+]; // This is also temoporary
 
 export default function NewApplicationModal({
   open,
@@ -43,7 +48,7 @@ export default function NewApplicationModal({
   // Conditions for extra fields
   const showOAFields = ["Online Assesstment", "Interviewing", "Offer"].includes(applicationStatus);
   const showInterviewingFields = ["Interviewing", "Offer"].includes(applicationStatus);
-  const { updateApplication,addApplication } = useTrack();
+  const { updateApplication, addApplication } = useTrack();
 
   const handleAddApplication = () => {
     console.log("status: ", applicationStatus);
@@ -52,26 +57,29 @@ export default function NewApplicationModal({
       return;
     }
 
-    const newApplication: Application = {
+    const updatedFields: Partial<Application> = {
       id: existingApplication ? existingApplication.id : Date.now().toString(),
-      roleTitle,
-      location,
-      jobtype: jobType, 
-      companyName: company, 
-      dateApplied,
+      roleTitle: roleTitle, // Ensure non-null value for required fields
+      location: location,
+      jobtype: jobType,
+      companyName: company,
+      dateApplied: dateApplied,
       applicationURL: jobLink,
       applicationStatus,
-      currentScore,
-      outOfScore,
-      interviewingRound,
-      testProvider
+      currentScore: currentScore,
+      outOfScore: outOfScore,
+      interviewingRound: interviewingRound,
+      testProvider: testProvider,
     };
+
     if (existingApplication) {
-      updateApplication(newApplication);
+      // Call updateApplication with application ID and partial updates
+      updateApplication(existingApplication.id, updatedFields);
     } else {
-      addApplication(applicationStatus, newApplication);
+      // If it's a new application, call addApplication as before
+      addApplication(applicationStatus, updatedFields as Application);
     }
-    
+
     handleClose();
   };
 
@@ -273,53 +281,55 @@ export default function NewApplicationModal({
               />
             </>
           )}
-          <div style={{
-            display: "flex",
-            gap: "41px",
-          }}>
-          <Button
-            variant="contained"
-            onClick={handleClose}
-            fullWidth
-            sx={{
-              marginTop: "20px",
-              color: "#496FFF",
-              backgroundColor: "white",
-              boxShadow: "none",
-              height: "53px",
-              border: "1px solid #E0E3EB",
-              borderRadius: "8px",
-              width: "48.5%",
-              ":hover": {
+          <div
+            style={{
+              display: "flex",
+              gap: "41px",
+            }}
+          >
+            <Button
+              variant="contained"
+              onClick={handleClose}
+              fullWidth
+              sx={{
+                marginTop: "20px",
+                color: "#496FFF",
                 backgroundColor: "white",
-                border: "1px solid #A6B0C3",
                 boxShadow: "none",
-              },
-            }}
-          >
-            Cancel
-          </Button>
+                height: "53px",
+                border: "1px solid #E0E3EB",
+                borderRadius: "8px",
+                width: "48.5%",
+                ":hover": {
+                  backgroundColor: "white",
+                  border: "1px solid #A6B0C3",
+                  boxShadow: "none",
+                },
+              }}
+            >
+              Cancel
+            </Button>
 
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
-            sx={{
-              marginTop: "20px",
-              height: "53px",
-              boxShadow: "none",
-              borderRadius: "8px",
-              backgroundColor: "#496FFF",
-              width: "48.5%",
-              ":hover": {
-                backgroundColor: "#3B5AC6",
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              fullWidth
+              sx={{
+                marginTop: "20px",
+                height: "53px",
                 boxShadow: "none",
-              },
-            }}
-          >
-            {existingApplication ? "Save Changes" : "Add"}
-          </Button>
+                borderRadius: "8px",
+                backgroundColor: "#496FFF",
+                width: "48.5%",
+                ":hover": {
+                  backgroundColor: "#3B5AC6",
+                  boxShadow: "none",
+                },
+              }}
+            >
+              {existingApplication ? "Save Changes" : "Add"}
+            </Button>
           </div>
         </div>
       </form>

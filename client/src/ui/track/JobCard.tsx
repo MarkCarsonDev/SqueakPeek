@@ -18,56 +18,40 @@ import Image from "next/image";
 import { faMessage } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import UpdateStatus from "@/ui/track/UpdateStatus";
-import { ApplicationStage, useTrack } from "@/lib/store/track";
+import { Application, useTrack, ApplicationStage } from "@/lib/store/track";
 
 // TODO:
 // Implement the Link for message, chart, stats
 // Implement the Company Brand Logo based on the company name
 
 interface JobCardProps {
-  applicationId: string;
-  Company: string;
-  Role: string;
-  Status: ApplicationStage;
-  currentScore?: string;
-  outOfScore?: string;
-  interviewingRound?: string;
-  setInterviewRound?: (round: string) => void;
-
+  application: Application;
 }
 
-export function JobCard({
-  applicationId,
-  Company,
-  Role,
-  Status,
-  currentScore,
-  outOfScore,
-  interviewingRound,
-  setInterviewRound,
+export function JobCard({ application }: JobCardProps) {
+  const { moveApplication, updateApplication } = useTrack();
 
-}: JobCardProps) {
-  const { moveApplication, updateInterviewingRound } = useTrack();
+  const {
+    id: applicationId,
+    companyName,
+    roleTitle,
+    applicationStatus: Status,
+    currentScore,
+    outOfScore,
+    interviewingRound,
+  } = application;
 
-  // Handle status change and update the card's state
-  const handleStatusChange = (newStatus: SetStateAction<ApplicationStage>) => {
-    const resolvedStatus =
-      typeof newStatus === "function" ? newStatus(Status) : newStatus;
-    if (resolvedStatus !== Status) {
-      moveApplication(Status, resolvedStatus, applicationId, 0, 0);
+  const handleStatusChange = (value: SetStateAction<ApplicationStage>) => {
+    const newStatus = typeof value === "function" ? value(Status) : value;
+    if (newStatus !== Status) {
+      moveApplication(Status, newStatus, applicationId, 0, 0);
+      updateApplication( applicationId, {...application,applicationStatus: newStatus});
     }
   };
 
-  // Update interviewing round in the store
-  const handleInterviewRoundChange = (
-    event: SelectChangeEvent<string>
-  ): void => {
+  const handleInterviewRoundChange = (event: SelectChangeEvent<string>) => {
     const newRound = event.target.value;
-    if (setInterviewRound) {
-      setInterviewRound(newRound);
-    } else {
-      updateInterviewingRound(applicationId, newRound);
-    }
+    updateApplication( applicationId, { ...application, interviewingRound: newRound });
   };
 
   return (
@@ -128,7 +112,7 @@ export function JobCard({
           }}
         >
           <Typography variant="subtitle2" sx={{ fontSize: "12px" }}>
-            {Company}
+            {companyName}
           </Typography>
           <UpdateStatus
             required
@@ -215,7 +199,7 @@ export function JobCard({
 
         {/* Row 2: Role Title */}
         <Typography variant="subtitle2" sx={{ fontSize: "12px" }}>
-          {Role}
+          {roleTitle}
         </Typography>
 
         {/* Row 3: Icon Buttons */}

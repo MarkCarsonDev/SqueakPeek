@@ -32,7 +32,7 @@ export const StageColumn: React.FC<StageColumnProps> = ({
               flexGrow: 1,
               flexShrink: 0,
               flexBasis: "300px",
-              minWidth: "250px",
+              minWidth: "370px",
               maxWidth: "500px",
               marginTop: "10px",
               backgroundColor: "white",
@@ -116,14 +116,7 @@ export const StageColumn: React.FC<StageColumnProps> = ({
                       onDoubleClick={() => onCardDoubleClick?.(app)}
                     >
                       <JobCard
-                        applicationId={app.id}
-                        Company={app.companyName}
-                        Role={app.roleTitle}
-                        Status={stage}
-                        currentScore={app.currentScore}
-                        outOfScore={app.outOfScore}
-                        interviewingRound={app.interviewingRound}
-                        
+                        application= {app}   
                       />
                     </div>
                   )}

@@ -37,8 +37,7 @@ interface TrackState {
     sourceIndex: number,
     destinationIndex: number
   ) => void;
-  updateInterviewingRound: (applicationId: string, round: string) => void;
-  updateApplication: (application: Application) => void;
+  updateApplication: (applicationId: string, updates: Partial<Application>) => void;
 }
 
 // Helper function to reorder items in a list
@@ -105,27 +104,20 @@ export const useTrack = create<TrackState>()((set) => ({
       return { ...state };
     }),
 
-  updateInterviewingRound: (applicationId, round) =>
-    set((state) => {
-      // Search in the Interviewing stage only
-      const application = state.Interviewing.find(
-        (app) => app.id === applicationId
-      );
-      if (application) {
-        application.interviewingRound = round;
-      }
-      return { ...state };
-    }),
 
-  updateApplication: (updatedApplication) =>
-    set((state) => {
-      // Update the application within the correct stage
-      const stage = updatedApplication.applicationStatus;
-      if (state[stage]) {
-        state[stage] = state[stage].map((app) =>
-          app.id === updatedApplication.id ? updatedApplication : app
-        );
-      }
-      return { ...state };
-    }),
+
+    updateApplication: (applicationId, updates) =>
+      set((state) => {
+        // Find the application across all stages
+        for (const stage in state) {
+          const applications = state[stage as ApplicationStage];
+          const appIndex = applications.findIndex((app) => app.id === applicationId);
+          if (appIndex !== -1) {
+            // Update the application in place
+            applications[appIndex] = { ...applications[appIndex], ...updates };
+            break;
+          }
+        }
+        return { ...state };
+      }),
 }));

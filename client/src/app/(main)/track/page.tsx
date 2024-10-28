@@ -22,6 +22,7 @@ export default function Page() {
     Interviewing,
     Offer,
     moveApplication,
+    updateApplication
   } = useTrack();
 
   const stages: StageColumnProps[] = [
@@ -73,14 +74,25 @@ export default function Page() {
   // Handle drag end event with DropResult typing
   const onDragEnd = (result: DropResult) => {
     if (!result.destination) return;
-
+  
     const from = result.source.droppableId as ApplicationStage;
     const to = result.destination.droppableId as ApplicationStage;
     const applicationId = result.draggableId;
     const sourceIndex = result.source.index;
     const destinationIndex = result.destination.index;
-
-    moveApplication(from, to, applicationId, sourceIndex, destinationIndex);
+  
+    // Retrieve the application being moved
+    const draggedApplication = [...useTrack.getState()[from]].find(
+      (app) => app.id === applicationId
+    );
+  
+    if (draggedApplication) {
+      // Move application to a new stage
+      moveApplication(from, to, applicationId, sourceIndex, destinationIndex);
+  
+      // Update application status in the store
+      updateApplication(applicationId, {...draggedApplication,applicationStatus: to});
+    }
   };
 
   return (
