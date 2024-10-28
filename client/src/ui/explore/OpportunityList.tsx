@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Link from "next/link"; // Import Link for navigation
 // import { useRouter } from 'next/navigation'; // To handle URL params
 // import { SelectedFilters } from './Filters';
 import { OpportunityCard, OpportunityCardProps } from "./OpportunityCard";
