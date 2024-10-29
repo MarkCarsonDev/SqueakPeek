@@ -136,12 +136,11 @@ export function OpportunityCard({
               style={{ margin: 0 }}
             ></Avatar>
           }
-          title={<Typography variant="h5">{company_name}</Typography>}
+          title={company_name}
           subheader={
             // Job Postion and Job Type in header
-            <Typography variant="h6">
-              {role_title}, {type}
-            </Typography>
+
+            role_title + " " + type
           }
         />
 
