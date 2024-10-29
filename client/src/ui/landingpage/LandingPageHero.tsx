@@ -6,7 +6,7 @@ export function LandingPageHero() {
   return (
     <div
       style={{
-        height: "90vh",
+        height: "625git px",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -16,11 +16,8 @@ export function LandingPageHero() {
         style={{
           display: "flex",
           flexDirection: "column",
-          width: "90%",
-          height: "90%",
-          backgroundColor: "white",
-          border: "10px solid #E0E4F2",
-          boxShadow: "#6d6d6d 0px 0px 10px",
+          width: "100%",
+          height: "100%",
           borderRadius: "20px",
           alignItems: "center",
           justifyContent: "center",
@@ -31,8 +28,8 @@ export function LandingPageHero() {
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
-            justifyContent: "space-between",
-            width: "80%",
+            justifyContent: "center",
+            width: "100%",
           }}
         >
           <TextCarousel />
@@ -46,14 +43,14 @@ export function LandingPageHero() {
           >
             <Image
               src="/general/website_logo.svg"
-              width={225}
-              height={225}
+              width={300}
+              height={300}
               alt="SqueakPeek Logo"
               style={{ objectFit: "cover", objectPosition: "bottom" }}
             />
             <Typography
               variant="h4"
-              sx={{ marginBottom: "2%", fontWeight: "bold" }}
+              sx={{ marginBottom: "5px", fontWeight: "bold" }}
             >
               Job hunting is hard...
             </Typography>
