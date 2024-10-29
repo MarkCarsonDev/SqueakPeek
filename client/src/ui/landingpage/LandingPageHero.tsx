@@ -6,7 +6,7 @@ export function LandingPageHero() {
   return (
     <div
       style={{
-        height: "625git px",
+        height: "625px",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
