@@ -313,7 +313,7 @@ export function OpportunityCard({
             offered={offered}
           />
         </div>
-        <Typography variant="h5" sx={{ textAlign: "center" }}>
+        <Typography variant="h6" sx={{ textAlign: "center" }}>
           Total Applied: {totalApplied}
         </Typography>
       </CardContent>
