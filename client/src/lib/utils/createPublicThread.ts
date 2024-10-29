@@ -11,7 +11,7 @@ import { v4 as uuidv4 } from "uuid";
  */
 export async function createPublicThread(
     senderProfileId: string,
-    conversationID: string): Promise<string | null> {
+    conversationID: string) {
     const supabase = createSupabaseClient(); // Create a Supabase client instance
 
     console.log(senderProfileId); // Log sender profile ID
@@ -33,10 +33,10 @@ export async function createPublicThread(
         console.log(senderProfileId);
         console.log(conversationID);
         console.error("Error initializing public thread:", error.message);
-        return null;
+        return;
     }
 
     console.log("Public thread initialized:", data);
  
-    return data[0]?.thread_id || null; 
+    return data[0].thread_id; 
 }

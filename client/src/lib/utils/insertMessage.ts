@@ -19,7 +19,7 @@ export async function insertMessage(newMessage: MessageCardProps, conversationId
       // Log any errors encountered while checking for public threads
       if (publicThreadError) {
         console.error("Error checking public thread:", publicThreadError.message);
-        return;
+        return publicThreadError;
       }
 
       let threadID;
@@ -32,9 +32,10 @@ export async function insertMessage(newMessage: MessageCardProps, conversationId
         threadID = publicThreadData[0].thread_id;
       } 
       else if (publicThreadData?.length === 0) {
-        console.log("Creating public thread..");
-        threadID = await createPublicThread(profile.profile_id, conversationId);
+          console.log("Creating public thread..");
+          threadID = await createPublicThread(profile.profile_id, conversationId);
       }
+      
       // If a thread ID is available, send the message
       if (threadID) {
         const addMsg = {
@@ -56,7 +57,7 @@ export async function insertMessage(newMessage: MessageCardProps, conversationId
         // Log any errors encountered while inserting the public message
         if (insertPublicMsgError) {
           console.error("Error inserting public msg:", insertPublicMsgError.message);
-          return;
+          return insertPublicMsgError;
         }
       }
     }
