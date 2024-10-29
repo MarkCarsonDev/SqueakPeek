@@ -4,7 +4,7 @@ import { ConversationHeader } from "./ConversationHeader";
 import { ConversationBody } from "./ConversationBody";
 import Image from "next/image";
 import { useMessage } from "../../lib/store/message";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useProfile } from "../../lib/store/profile";
 import { useSubscribeConversation } from "@/lib/hooks/useSubscribeConversation";
 
@@ -12,8 +12,14 @@ import { useSubscribeConversation } from "@/lib/hooks/useSubscribeConversation";
  * This is a UI container that holds all messages for a particular conversation
  * @param {string} conversationId - ID used to subscribe users to listen to incoming messages
  */
-export function Conversation({ conversationId }: { conversationId: string }) {
-  const { addMessage } = useMessage();
+export function Conversation({
+  conversationId,
+  isPrivateConversation = false,
+}: {
+  conversationId: string;
+  isPrivateConversation?: boolean;
+}) {
+  const { addMessage, clearMessages, setConversationType } = useMessage();
   const { profile } = useProfile();
   const [numNewMessages, setNumNewMessages] = useState(0); // used for rendering new message notification
   const bottomRef = useRef<null | HTMLDivElement>(null); // used for scrolling down the page
@@ -30,10 +36,19 @@ export function Conversation({ conversationId }: { conversationId: string }) {
     setNumNewMessages
   );
 
+  useEffect(() => {
+    clearMessages();
+    return () => clearMessages();
+  }, [conversationId, clearMessages]);
+
+  useEffect(() => {
+    setConversationType(isPrivateConversation);
+  }, [setConversationType, isPrivateConversation]);
+
   return (
     <div
       style={{
-        height: "90vh", // not 100vh since it takes into account the navigation bar
+        height: "calc(100vh - 80px)", // full viewport - height of nav bar
         backgroundColor: "white",
         display: "grid",
         gridTemplateRows: "10% 80% 10%",

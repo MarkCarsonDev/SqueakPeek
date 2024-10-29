@@ -12,15 +12,17 @@ const textItems = [
 ];
 
 export const TextCarousel = () => {
-  const itemHeight = 50;
+  const itemHeight = 80;
   const numVisibleItems = 5;
-  const transitionDuration = 500; 
+  const transitionDuration = 500;
   const intervalDuration = 3000;
 
   const [displayItems, setDisplayItems] = useState(
     textItems.slice(0, Math.min(numVisibleItems, textItems.length))
   );
-  const [currentIndex, setCurrentIndex] = useState(numVisibleItems % textItems.length);
+  const [currentIndex, setCurrentIndex] = useState(
+    numVisibleItems % textItems.length
+  );
   const [translateY, setTranslateY] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
@@ -70,7 +72,9 @@ export const TextCarousel = () => {
           display: "flex",
           flexDirection: "column",
           transform: `translateY(${translateY}px)`,
-          transition: isTransitioning ? `transform ${transitionDuration}ms` : "none",
+          transition: isTransitioning
+            ? `transform ${transitionDuration}ms`
+            : "none",
         }}
       >
         {displayItems.map((item, index) => (
@@ -82,7 +86,6 @@ export const TextCarousel = () => {
               height: `${itemHeight}px`,
               lineHeight: `${itemHeight}px`,
               whiteSpace: "nowrap",
-              fontSize: "clamp(0.5vw, 2vw, 2.125rem)",
               color: "#3C435C",
             }}
           >
@@ -99,7 +102,7 @@ export const TextCarousel = () => {
           width: "100%",
           height: "100%",
           pointerEvents: "none",
-          background: `linear-gradient(to bottom, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.75) 35%, rgba(255, 255, 255, 0) 45%, rgba(255, 255, 255, 0) 55%, rgba(255, 255, 255, 0.75) 65%, rgba(255, 255, 255, 1))`,
+          background: `linear-gradient(to bottom, rgba(246,248,255, 1), rgba(246,248,255, 0.75) 35%, rgba(246,248,255, 0) 45%, rgba(246,248,255, 0) 55%, rgba(246,248,255, 0.75) 65%, rgba(246,248,255, 1))`,
         }}
       />
       <Box
@@ -110,7 +113,6 @@ export const TextCarousel = () => {
           width: "100%",
           height: "100%",
           pointerEvents: "none",
-          background: `linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0) 5%, rgba(255, 255, 255, 0) 95%, rgba(255, 255, 255, 1))`,
         }}
       />
     </Box>

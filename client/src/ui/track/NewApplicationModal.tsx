@@ -1,28 +1,88 @@
-// import React from "react";
 "use client";
+import React, { useState } from "react";
 import { Modal, Typography, Button } from "@mui/material";
 import { InputField } from "@/ui/InputField";
 import { SearchDropdown } from "@/ui/track/SearchDropdown";
-import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import UpdateStatus from "@/ui/track/UpdateStatus";
-// You will import your calendar component here once added
-
+import { ApplicationStage, useTrack, Application } from "@/lib/store/track";
+// TODO: Implement the Company Brand Logo based on the company name on when editing the application
 interface NewApplicationModalProps {
   open: boolean;
   handleClose: () => void;
+  applicationStatus: ApplicationStage;
+  setApplicationStatus: React.Dispatch<React.SetStateAction<ApplicationStage>>;
+  existingApplication?: Application;
 }
 
-/**
- * 
- * @param {() => void} open - Renders NewApplicationModal when invoked
- * @param {() => void} handleClose - Closes NewApplicationModal when invoked
- * @returns 
- */
+const jobTypeOptions = ["Full-time", "Part-time", "Contract", "Internship"]; // This is temporary
+const companyOptions = ["Google", "Netflix", "Amazon", "Facebook", "Apple"];
+const testProviderOptions = [
+  "HackerRank",
+  "Codility",
+  "LeetCode",
+  "HackerEarth",
+]; // This is also temoporary
+
 export default function NewApplicationModal({
   open,
   handleClose,
+  applicationStatus,
+  setApplicationStatus,
+  existingApplication,
 }: NewApplicationModalProps) {
+  const [roleTitle, setRoleTitle] = useState(existingApplication?.roleTitle || "");
+  const [location, setLocation] = useState(existingApplication?.location || "");
+  const [jobType, setJobType] = useState(existingApplication?.jobtype || "");
+  const [company, setCompany] = useState(existingApplication?.companyName || "");
+  const [dateApplied, setDateApplied] = useState(existingApplication?.dateApplied || "");
+  const [jobLink, setJobLink] = useState(existingApplication?.applicationURL || "");
+
+  // Extra fields for the form
+  const [testProvider, setTestProvider] = useState(existingApplication?.testProvider || "");
+  const [currentScore, setCurrentScore] = useState(existingApplication?.currentScore || "");
+  const [outOfScore, setOutOfScore] = useState(existingApplication?.outOfScore || "");
+  const [interviewingRound, setInterviewingRound] = useState(existingApplication?.interviewingRound || "");
+
+  // Conditions for extra fields
+  const showOAFields = ["Online Assesstment", "Interviewing", "Offer"].includes(applicationStatus);
+  const showInterviewingFields = ["Interviewing", "Offer"].includes(applicationStatus);
+  const { updateApplication, addApplication } = useTrack();
+
+  const handleAddApplication = () => {
+    console.log("status: ", applicationStatus);
+    if (!applicationStatus) {
+      alert("Please select a status before submitting");
+      return;
+    }
+
+    const updatedFields: Partial<Application> = {
+      id: existingApplication ? existingApplication.id : Date.now().toString(),
+      roleTitle: roleTitle, // Ensure non-null value for required fields
+      location: location,
+      jobtype: jobType,
+      companyName: company,
+      dateApplied: dateApplied,
+      applicationURL: jobLink,
+      applicationStatus,
+      currentScore: currentScore,
+      outOfScore: outOfScore,
+      interviewingRound: interviewingRound,
+      testProvider: testProvider,
+    };
+
+    if (existingApplication) {
+      // Call updateApplication with application ID and partial updates
+      updateApplication(existingApplication.id, updatedFields);
+    } else {
+      // If it's a new application, call addApplication as before
+      addApplication(applicationStatus, updatedFields as Application);
+    }
+
+    handleClose();
+  };
+
   return (
     <Modal
       open={open}
@@ -41,140 +101,234 @@ export default function NewApplicationModal({
           borderRadius: "8px",
           display: "flex",
           flexDirection: "column",
-          gap: "30px",
+          gap: "0px 30px",
         }}
+        onSubmit={handleAddApplication}
       >
         <Typography
           variant="h4"
-          style={{
+          sx={{
             display: "flex",
             alignItems: "center",
-            marginBottom: "10px",
+            marginBottom: "20px",
           }}
         >
           <FontAwesomeIcon
             icon={faPenToSquare}
             style={{ marginRight: "10px" }}
           />
-          Add New Application
+          {existingApplication ? "Edit Application" : "Add New Application"}
         </Typography>
 
-        {/* Container for the status dropdown and input fields */}
         <div
           style={{
             display: "flex",
             flexDirection: "column",
-            gap: "20px",
           }}
         >
-          {/* Status dropdown */}
-          <div style={{ width: "150px" }}>
+          <div style={{ width: "150px" , marginBottom: "10px" }}>
             <UpdateStatus
               required
               name="status"
-              options={["Applied", "OA", "Interviewing", "Offer", "Rejected"]}
+              options={[
+                "Applied",
+                "Rejected",
+                "Online Assesstment",
+                "Interviewing",
+                "Offer",
+              ]}
+              applicationStatus={applicationStatus}
+              setApplicationStage={setApplicationStatus}
             />
           </div>
-
-          {/* Input Fields in a single flex container */}
+          {/* Left side column */}
           <div style={{ display: "flex", gap: "40px" }}>
-            {/* Left column */}
             <div style={{ flex: 1 }}>
               <InputField
                 label="Role Title"
                 placeholder="Title"
                 name="roleTitle"
+                value={roleTitle}
                 required
                 fullWidth
-                sx={{ marginBottom: "20px" }}
+                onChange={(e) => setRoleTitle(e.target.value)}
+                sx={{ marginBottom: "10px" }}
               />
               <InputField
                 label="Location"
                 placeholder="Location"
-                name="location" // Added name prop
+                name="location"
+                value={location}
                 fullWidth
-                sx={{ marginBottom: "20px" }}
+                onChange={(e) => setLocation(e.target.value)}
+                sx={{ marginBottom: "10px" }}
               />
-
-              {/* TODO:  Calendar component for Date Applied */}
-              {/* Replace this with the actual calendar component */}
               <InputField
                 label="Date Applied"
                 placeholder="mm/dd/yyyy"
-                name="dateApplied" // Added name prop
+                name="dateApplied"
+                value={dateApplied}
                 fullWidth
-                sx={{ marginBottom: "20px" }}
+                onChange={(e) => setDateApplied(e.target.value)}
+                sx={{ marginBottom: "10px" }}
               />
 
-              {/* Action buttons */}
-              <Button
-                variant="contained"
-                onClick={handleClose}
-                fullWidth
-                sx={{
-                  marginTop: "20px",
-                  color: "#496FFF",
-                  boxShadow: "none",
-                  backgroundColor: "white",
-                  height: "53px",
-                  border: "1px solid #E0E3EB",
-                  borderRadius: "8px",
-                  ":hover": {
-                    backgroundColor: "white",
-                    boxShadow: "none",
-                    border: "1px solid #A6B0C3",
-                  },
-                }}
-              >
-                Cancel
-              </Button>
+              {/* Extra fields for the form left side */}
+              {showOAFields && (
+                <>
+                  <Typography variant="h5" sx={{ marginBottom: "10px" }}>
+                    Online Assesstment
+                  </Typography>
+                  <SearchDropdown
+                    label="Test Provider"
+                    placeholder="Test Provider"
+                    name="Test Provider"
+                    options={testProviderOptions}
+                    value={testProvider}
+                    onValueChange={(newValue) =>
+                      setTestProvider(newValue || "")
+                    }
+                    fullWidth
+                    style={{ marginBottom: "10px" }}
+                  />
+                </>
+              )}
             </div>
-
-            {/* Right column */}
+            {/* Right side column */}
             <div style={{ flex: 1 }}>
               <SearchDropdown
                 label="Company"
                 placeholder="Company Name"
-                name="company" // Added name prop
+                name="company"
+                options={companyOptions}
+                value={company} // Bind value to company state
+                onValueChange={(newValue) => setCompany(newValue || "")} // Update company
                 required
                 fullWidth
-                style={{ marginBottom: "20px" }}
+                style={{ marginBottom: "10px" }}
               />
               <SearchDropdown
                 label="Job Type"
                 placeholder="Type"
-                name="jobType" // Added name prop
+                name="jobType"
+                options={jobTypeOptions}
+                value={jobType} // Bind value to jobType state
+                onValueChange={(newValue) => setJobType(newValue || "")} // Update jobType
                 required
                 fullWidth
-                style={{ marginBottom: "20px" }}
+                style={{ marginBottom: "10px" }}
               />
               <InputField
                 label="Link to Job Application"
                 placeholder="Link"
-                name="jobLink" // Added name prop
+                name="jobLink"
                 fullWidth
-                style={{ marginBottom: "20px" }}
+                value={jobLink}
+                onChange={(e) => setJobLink(e.target.value)}
+                style={{ marginBottom: "10px" }}
               />
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                fullWidth
-                sx={{
-                  marginTop: "20px",
-                  height: "53px",
-                  boxShadow: "none",
-                  borderRadius: "8px",
-                  backgroundColor: "#496FFF",
-                  ":hover": {
-                    backgroundColor: "#3B5AC6",
-                    boxShadow: "none",
-                  },
-                }}
-              >
-                Add
-              </Button>
+              {/* Extra fields for the form right side */}
+              {showOAFields && (
+                <>
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "10px",
+                      marginTop: "62px",
+                      marginBottom: "0px",
+                      width: "100%",
+                    }}
+                  >
+                    {/* Online Assesstment Part */}
+                    <InputField
+                      label="Current Score"
+                      placeholder="Score"
+                      name="currentScore"
+                      value={currentScore}
+                      onChange={(e) => setCurrentScore(e.target.value)}
+                      style={{ marginBottom: "10px" }}
+                    />
+                    <InputField
+                      label="Out of "
+                      placeholder=" Out of"
+                      name="outOfScore"
+                      value={outOfScore}
+                      onChange={(e) => setOutOfScore(e.target.value)}
+                      // style={{ marginBottom: "20px" }}
+                    />
+                  </div>
+                </>
+              )}
             </div>
+          </div>
+
+          {showInterviewingFields && (
+            <>
+              <Typography variant="h5" sx={{ marginBottom: "10px" }}>
+                Interviewing
+              </Typography>
+              <SearchDropdown
+                label="Interviewing Round"
+                placeholder="Interviewing Round"
+                name="Interviewing Round"
+                options={["1", "2", "3", "4+"]}
+                value={interviewingRound}
+                onValueChange={(newValue) =>
+                  setInterviewingRound(newValue || "")
+                }
+                style={{ marginBottom: "20px", width: "48.1%" }}
+              />
+            </>
+          )}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <Button
+              variant="contained"
+              onClick={handleClose}
+              fullWidth
+              sx={{
+                marginTop: "20px",
+                color: "#496FFF",
+                backgroundColor: "white",
+                boxShadow: "none",
+                height: "53px",
+                border: "1px solid #E0E3EB",
+                borderRadius: "8px",
+                width: "48.5%",
+                ":hover": {
+                  backgroundColor: "white",
+                  border: "1px solid #A6B0C3",
+                  boxShadow: "none",
+                },
+              }}
+            >
+              Cancel
+            </Button>
+
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              fullWidth
+              sx={{
+                marginTop: "20px",
+                height: "53px",
+                boxShadow: "none",
+                borderRadius: "8px",
+                backgroundColor: "#496FFF",
+                width: "48.5%",
+                ":hover": {
+                  backgroundColor: "#3B5AC6",
+                  boxShadow: "none",
+                },
+              }}
+            >
+              {existingApplication ? "Save Changes" : "Add"}
+            </Button>
           </div>
         </div>
       </form>

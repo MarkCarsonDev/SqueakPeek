@@ -5,10 +5,12 @@ import { faCircleUp } from "@fortawesome/free-solid-svg-icons/faCircleUp";
 import { MessageCardProps } from "./MessageCard";
 import { useProfile } from "../../lib/store/profile";
 import { AvatarTypes } from "../ProfileAvatar";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { createSupabaseClient } from "../../lib/supabase/client";
 import { v4 as uuidv4 } from "uuid";
 import { memo, useMemo } from "react";
+import { insertMessage } from "../../lib/utils/insertMessage"
+
 /**
  * Allows user to send a message into a conversation, and broadcasts the message based on the conversationId
   * @param {string} conversationId - ID used to broadcast messages to subscribed users
@@ -21,6 +23,7 @@ export const MessageInput = memo(function MessageInput({
 }) {
   const { profile } = useProfile();
   const [currentMessage, setCurrentMessage] = useState("");
+  const messageInputRef = useRef<null | HTMLDivElement>(null);
 
   // Memoize the Supabase client and the sender channel to prevent changing it's value when MessageInput re-renders
   const supabase = useMemo(() => createSupabaseClient(), []);
@@ -35,6 +38,16 @@ export const MessageInput = memo(function MessageInput({
       senderChannel.unsubscribe();
     };
   });
+
+  // TODO: This causes a bug when the PrivateMessage modal is rendered, and the user tries to input a message
+  // Makes MessageInput always on focus
+  // useEffect(() => {
+  //   function handleFocus() {
+  //     if (messageInputRef.current) messageInputRef.current.focus();
+  //   }
+  //   document.addEventListener("click", handleFocus);
+  //   return () => document.removeEventListener("click", handleFocus);
+  // }, []);
 
   function handleSendMessage(message: string) {
     // only allows to add message if profile is made
@@ -54,12 +67,14 @@ export const MessageInput = memo(function MessageInput({
         payload: { message: newMessage },
       });
 
-      // TODO: Insert message into the message table
+      insertMessage(newMessage, conversationId, profile);
     }
   }
 
   return (
     <TextField
+      autoFocus
+      inputRef={messageInputRef}
       value={currentMessage}
       placeholder="Message..."
       fullWidth
@@ -94,3 +109,4 @@ export const MessageInput = memo(function MessageInput({
     />
   );
 });
+

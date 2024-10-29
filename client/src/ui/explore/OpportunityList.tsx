@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 // import { useRouter } from 'next/navigation'; // To handle URL params
 // import { SelectedFilters } from './Filters';
-import { OpportunityCard, OpportunityCardProps } from './OpportunityCard';
-import { createSupabaseClient } from '@/lib/supabase/client';
-import { Database } from '@/lib/types/database.types';
+import { OpportunityCard, OpportunityCardProps } from "./OpportunityCard";
+import { createSupabaseClient } from "@/lib/supabase/client";
+import { Database } from "@/lib/types/database.types";
 
 interface OpportunityRaw {
-    company_name: string
-    created_at: string
-    opportunity_id: string
-    role_title: Database["public"]["Enums"]["OpportunityType"]
-    type: string
-    conversation: { conversation_id: string } | null;
+  company_name: string;
+  created_at: string;
+  opportunity_id: string;
+  role_title: Database["public"]["Enums"]["OpportunityType"];
+  type: string;
+  conversation: { conversation_id: string } | null;
 }
 
 const supabase = createSupabaseClient();
@@ -23,14 +23,10 @@ const supabase = createSupabaseClient();
 // TODO: Add filters to the OpportunityList component
 // export const OpportunityList: React.FC<OpportunityListProps> = ({ filters }) => {
 export const OpportunityList: React.FC = () => {
-
-  const [allOpportunities, setAllOpportunities] = useState<OpportunityCardProps[]>([]);
-  const [filteredOpportunities, setFilteredOpportunities] = useState<OpportunityCardProps[]>([]);
+  const [shownOpportunities, setShownOpportunities] = useState<
+    OpportunityCardProps[]
+  >([]);
   const [loading, setLoading] = useState<boolean>(false);
-
-  // allOpportunities is not used until filters are implemented, so just to appease TS:
-  console.log(allOpportunities);
-  // This will be removed once filters are implemented
 
   // Commented out until filters are implemented
   // const router = useRouter();
@@ -39,39 +35,38 @@ export const OpportunityList: React.FC = () => {
   useEffect(() => {
     const fetchOpportunities = async () => {
       setLoading(true);
-      const { data, error } = await supabase
-        .from('opportunity')
-        .select(`
+      const { data, error } = await supabase.from("opportunity").select(`
             *,
             conversation!left (conversation_id)
         `);
 
       if (error) {
-        console.error('Error fetching opportunities:', error);
+        console.error("Error fetching opportunities:", error);
       } else if (data) {
         // log the id
-        console.log("Data ", data)
+        console.log("Data ", data);
         // Map the data to match the OpportunityCardProps interface
         const mappedData = data.map((opportunity: OpportunityRaw) => ({
-            id: opportunity.opportunity_id,
-            conversation_id: opportunity.conversation?.conversation_id || '', // Flatten the conversation_id manually
-            title: opportunity.company_name,
-            jobPosition: opportunity.role_title,
-            jobType: opportunity.type,
-            jobAvatar: '',
-            positionStatus: true,
-            userPositionStatus: false,
-            totalApplied: 100,
-            rejected: 25,
-            oa: 50,
-            interviewing: 20,
-            offered: 25,
-            recentMessages: 0,
-            bookmarked: false,
+          id: opportunity.opportunity_id,
+          conversation_id: opportunity.conversation?.conversation_id || "test", // TODO: Change later, Flatten the conversation_id manually
+          title: opportunity.company_name,
+          jobPosition: opportunity.role_title,
+          jobType: opportunity.type,
+          jobAvatar: "",
+          hiringStatus: false,
+          // TODO: Update these values with the client's data
+          appliedStatus: false,
+          bookmarked: false,
+          // END TODO
+          totalApplied: 0,
+          rejected: 0,
+          oa: 0,
+          interviewing: 0,
+          offered: 0,
+          recentMessages: 0,
         }));
 
-        setAllOpportunities(mappedData);
-        setFilteredOpportunities(mappedData); // Initially, all opportunities are shown
+        setShownOpportunities(mappedData); // Initially, all opportunities are shown
       }
 
       setLoading(false);
@@ -84,15 +79,15 @@ export const OpportunityList: React.FC = () => {
     return <div>Loading...</div>;
   }
 
-  if (filteredOpportunities.length === 0) {
-    return <div>No opportunities found.</div>;
+  if (shownOpportunities.length === 0) {
+    return <div>No opportunities found that match your criterion.</div>;
   }
 
   return (
     <div>
-      {filteredOpportunities.map((opportunity) => (
-            <OpportunityCard key={opportunity.id} {...opportunity} />
-
+      {shownOpportunities.map((opportunity) => (
+        
+          <OpportunityCard key={opportunity.id} {...opportunity} />
       ))}
     </div>
   );

@@ -89,7 +89,7 @@ export function NavBar() {
                 />
                 <Typography
                   sx={{
-                    fontWeight: pathName === links.href ? "bold" : "normal",
+                    fontWeight: pathName.startsWith(links.href) ? "bold" : "normal",
                   }}
                 >
                   {links.name}

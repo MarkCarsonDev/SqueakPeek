@@ -21,7 +21,7 @@ import { faBookmark as regularBookmark } from "@fortawesome/free-regular-svg-ico
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { OpportunityStackedBarGraph } from "./OpportunityStackedBarGraph";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { OpportunityStatsModal } from "./OpportunityStatsModal";
 
 export interface OpportunityCardProps {
@@ -31,8 +31,8 @@ export interface OpportunityCardProps {
   jobPosition: string;
   jobType: string;
   jobAvatar: string;
-  positionStatus: boolean;
-  userPositionStatus: boolean;
+  hiringStatus: boolean;
+  appliedStatus: boolean;
   totalApplied: number;
   rejected: number;
   oa: number;
@@ -49,19 +49,19 @@ interface jobStats {
 }
 
 export function OpportunityCard({
-  id,
   title,
   jobPosition,
   jobType,
   jobAvatar,
-  positionStatus,
-  userPositionStatus,
+  hiringStatus,
+  appliedStatus,
   totalApplied,
   rejected,
   oa,
   interviewing,
   offered,
   recentMessages,
+  conversation_id,
   bookmarked: initialBookmarked,
 }: OpportunityCardProps) {
   // To be replaced with actuall book mark update from DB
@@ -91,14 +91,9 @@ export function OpportunityCard({
     },
   ];
 
-  const router = useRouter();
   const handleBookmark = () => {
     setBookmarked((prev) => !prev); // Toggle the bookmark state
   };
-
-  const handleChatClick = () => {
-    router.push(`/explore/${id}`)
-  }
 
   const handleShareClick = () => {
     if (navigator.share) {
@@ -106,7 +101,7 @@ export function OpportunityCard({
         .share({
           title: title,
           text: `Check out this job opportunity for ${jobPosition} at ${title}.`,
-          url: window.location.href, 
+          url: window.location.href,
         })
         .catch((error) => {
           console.error("Error sharing:", error);
@@ -157,22 +152,23 @@ export function OpportunityCard({
             margin: 0,
           }}
         >
-          <Button
-            variant="contained"
-            style={{
-              backgroundColor: "#496FFF",
-              height: "40px",
-              width: "auto",
-              borderRadius: "20px",
-              boxShadow: "none",
-            }}
-            onClick={handleChatClick}
-          >
-            <FontAwesomeIcon icon={faComment} />
-            <Typography style={{ color: "white", marginLeft: ".5rem" }}>
-              {recentMessages}
-            </Typography>
-          </Button>
+          <Link href={`/message/company/${conversation_id}`}>
+            <Button
+              variant="contained"
+              style={{
+                backgroundColor: "#496FFF",
+                height: "40px",
+                width: "auto",
+                borderRadius: "20px",
+                boxShadow: "none",
+              }}
+            >
+              <FontAwesomeIcon icon={faComment} />
+              <Typography style={{ color: "white", marginLeft: ".5rem" }}>
+                {recentMessages}
+              </Typography>
+            </Button>
+          </Link>
 
           <OpportunityStatsModal/>
 
@@ -227,15 +223,15 @@ export function OpportunityCard({
             padding: ".5rem 0rem",
             gap: "1rem",
             width: "100%",
-            justifyContent: "flex-start"
+            justifyContent: "flex-start",
           }}
         >
           <Chip
-            label={userPositionStatus ? "Applied" : "Not Applied"}
+            label={appliedStatus ? "Applied" : "Not Applied"}
             variant="outlined"
             style={{
-              color: userPositionStatus ? "green" : "red",
-              borderColor: userPositionStatus ? "green" : "red",
+              color: appliedStatus ? "green" : "red",
+              borderColor: appliedStatus ? "green" : "red",
               margin: 0,
             }}
           />
@@ -245,16 +241,16 @@ export function OpportunityCard({
               <FontAwesomeIcon
                 style={{
                   marginLeft: ".5rem",
-                  color: positionStatus ? "green" : "red",
+                  color: hiringStatus ? "green" : "red",
                 }}
-                icon={positionStatus ? faAnglesUp : faAnglesDown}
+                icon={hiringStatus ? faAnglesUp : faAnglesDown}
               />
             }
-            label={positionStatus ? "Actively Hiring" : "Not Hiring"}
+            label={hiringStatus ? "Actively Hiring" : "Not Hiring"}
             variant="outlined"
             style={{
-              color: positionStatus ? "green" : "red",
-              borderColor: positionStatus ? "green" : "red",
+              color: hiringStatus ? "green" : "red",
+              borderColor: hiringStatus ? "green" : "red",
               margin: 0,
             }}
           />
@@ -279,7 +275,7 @@ export function OpportunityCard({
                 color: stats.color,
                 borderColor: stats.color,
                 margin: 0,
-                width: "150px"
+                width: "150px",
               }}
             />
           ))}
@@ -287,9 +283,19 @@ export function OpportunityCard({
 
         {/* Stacked Bar Graph For Stat Visual */}
         <div
-          style={{ height: "4rem", display: "flex", justifyContent: "center", width: "80%"}}
+          style={{
+            height: "4rem",
+            display: "flex",
+            justifyContent: "center",
+            width: "80%",
+          }}
         >
-          <OpportunityStackedBarGraph rejected={rejected} oa={oa} interviewing={interviewing} offered={offered} />
+          <OpportunityStackedBarGraph
+            rejected={rejected}
+            oa={oa}
+            interviewing={interviewing}
+            offered={offered}
+          />
         </div>
         <Typography variant="h5" sx={{ textAlign: "center" }}>
           Total Applied: {totalApplied}

@@ -282,7 +282,6 @@ export type Database = {
         Insert: {
           conversation_id: string
           created_at?: string
-          reciever_id: string
           sender_id: string
           thread_id?: string
         }
