@@ -55,7 +55,7 @@ export function LandingPageHero() {
               Job hunting is hard...
             </Typography>
             <Typography variant="h5">
-              That's why we&apos;re here to help.
+              That&lsquo;s why we&lsquo;re here here to help.
             </Typography>
           </div>
         </div>
