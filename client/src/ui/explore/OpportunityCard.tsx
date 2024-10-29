@@ -203,7 +203,7 @@ export function OpportunityCard({
           >
             <FontAwesomeIcon
               icon={bookmarked ? faBookmark : regularBookmark}
-              style={{ fontSize: "2.5rem" }}
+              style={{ fontSize: "2rem" }}
               color="#496FFF"
             />
           </IconButton>

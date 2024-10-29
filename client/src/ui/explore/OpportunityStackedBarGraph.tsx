@@ -47,7 +47,7 @@ export function OpportunityStackedBarGraph({
         borderSkipped: false,
       },
       {
-        label: "QA",
+        label: "OA",
         data: [oa],
         backgroundColor: "orange",
       },

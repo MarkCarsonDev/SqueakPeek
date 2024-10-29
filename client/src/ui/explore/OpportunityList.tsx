@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import Link from 'next/link'; // Import Link for navigation
 // import { useRouter } from 'next/navigation'; // To handle URL params
 // import { SelectedFilters } from './Filters';
 import { OpportunityCard, OpportunityCardProps } from './OpportunityCard';
@@ -60,11 +59,11 @@ export const OpportunityList: React.FC = () => {
             jobPosition: opportunity.role_title,
             jobType: opportunity.type,
             jobAvatar: '',
-            positionStatus: false,
+            positionStatus: true,
             userPositionStatus: false,
             totalApplied: 100,
             rejected: 25,
-            oa: 30,
+            oa: 50,
             interviewing: 20,
             offered: 25,
             recentMessages: 0,
@@ -92,9 +91,8 @@ export const OpportunityList: React.FC = () => {
   return (
     <div>
       {filteredOpportunities.map((opportunity) => (
-        <Link key={opportunity.id} href={`/explore/${opportunity.conversation_id}`} passHref style={{ textDecoration: 'none' }}>
-            <OpportunityCard {...opportunity} />
-        </Link>
+            <OpportunityCard key={opportunity.id} {...opportunity} />
+
       ))}
     </div>
   );
