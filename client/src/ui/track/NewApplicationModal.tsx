@@ -283,7 +283,7 @@ export default function NewApplicationModal({
           <div
             style={{
               display: "flex",
-              gap: "41px",
+              justifyContent: "space-between",
             }}
           >
             <Button

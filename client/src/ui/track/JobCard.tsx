@@ -98,6 +98,7 @@ export function JobCard({ application }: JobCardProps) {
             gap: "4px",
             width: "100%",
           }}
+          onClick={(e) => e.stopPropagation()}
         >
           <Typography variant="subtitle2" sx={{ fontSize: "12px" }}>
             {companyName}
@@ -141,6 +142,7 @@ export function JobCard({ application }: JobCardProps) {
               value={interviewingRound || ""}
               onChange={handleInterviewRoundChange}
               renderValue={(selected) => `R: ${selected}`}
+              onClick={(e) => e.stopPropagation()}
               sx={{
                 height: "20px",
                 fontSize: "10px",

@@ -152,7 +152,7 @@ export default function Page() {
               stageColor={stage.stageColor}
               applications={stage.applications}
               handleOpenModal={handleOpenModal}
-              onCardDoubleClick={(application) => handleOpenModal(stage.stage, application)}
+              onCardClick={(application) => handleOpenModal(stage.stage, application)}
             />
           ))}
         </div>
