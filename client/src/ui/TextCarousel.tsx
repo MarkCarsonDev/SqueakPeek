@@ -12,7 +12,7 @@ const textItems = [
 ];
 
 export const TextCarousel = () => {
-  const itemHeight = 50;
+  const itemHeight = 80;
   const numVisibleItems = 5;
   const transitionDuration = 500;
   const intervalDuration = 3000;

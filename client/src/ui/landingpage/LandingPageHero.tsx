@@ -6,7 +6,7 @@ export function LandingPageHero() {
   return (
     <div
       style={{
-        height: "625px",
+        height: "calc(100vh - 80px)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -54,7 +54,9 @@ export function LandingPageHero() {
             >
               Job hunting is hard...
             </Typography>
-            <Typography variant="h5">That's why we’re here to help.</Typography>
+            <Typography variant="h5">
+              That's why we&apos;re here to help.
+            </Typography>
           </div>
         </div>
       </div>
