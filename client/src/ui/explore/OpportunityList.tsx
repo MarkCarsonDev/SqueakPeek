@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Link from "next/link"; // Import Link for navigation
 // import { useRouter } from 'next/navigation'; // To handle URL params
 // import { SelectedFilters } from './Filters';
 import { OpportunityCard, OpportunityCardProps } from "./OpportunityCard";
@@ -87,14 +86,8 @@ export const OpportunityList: React.FC = () => {
   return (
     <div>
       {shownOpportunities.map((opportunity) => (
-        <Link
-          key={opportunity.id}
-          href={`/message/company/${opportunity.conversation_id}`}
-          passHref
-          style={{ textDecoration: "none" }}
-        >
-          <OpportunityCard {...opportunity} />
-        </Link>
+        
+          <OpportunityCard key={opportunity.id} {...opportunity} />
       ))}
     </div>
   );
