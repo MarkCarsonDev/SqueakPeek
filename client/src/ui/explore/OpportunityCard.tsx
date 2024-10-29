@@ -25,7 +25,7 @@ import Link from "next/link";
 import { OpportunityStatsModal } from "./OpportunityStatsModal";
 
 export interface OpportunityCardProps {
-  id: string;
+  opp_id: string;
   conversation_id: string;
   title: string;
   jobPosition: string;
@@ -49,6 +49,7 @@ interface jobStats {
 }
 
 export function OpportunityCard({
+  opp_id,
   title,
   jobPosition,
   jobType,
@@ -291,6 +292,7 @@ export function OpportunityCard({
           }}
         >
           <OpportunityStackedBarGraph
+            opp_id={opp_id}
             rejected={rejected}
             oa={oa}
             interviewing={interviewing}

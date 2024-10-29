@@ -22,12 +22,14 @@ ChartJS.register(
 );
 
 interface jobStats {
+    opp_id: string,
     rejected: number,
     oa: number,
     interviewing: number,
     offered: number,
 }
 export function OpportunityStackedBarGraph({
+    opp_id,
     rejected,
     oa,
     interviewing,

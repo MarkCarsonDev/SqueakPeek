@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { OpportunityCard, OpportunityCardProps } from "./OpportunityCard";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { Database } from "@/lib/types/database.types";
+import { Typography } from "@mui/material";
 
 interface OpportunityRaw {
   company_name: string;
@@ -47,7 +48,7 @@ export const OpportunityList: React.FC = () => {
         console.log("Data ", data);
         // Map the data to match the OpportunityCardProps interface
         const mappedData = data.map((opportunity: OpportunityRaw) => ({
-          id: opportunity.opportunity_id,
+          opp_id: opportunity.opportunity_id,
           conversation_id: opportunity.conversation?.conversation_id || "test", // TODO: Change later, Flatten the conversation_id manually
           title: opportunity.company_name,
           jobPosition: opportunity.role_title,
@@ -76,18 +77,39 @@ export const OpportunityList: React.FC = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignContent: "center",
+        }}
+      >
+        <Typography variant="h3">Loading...</Typography>
+      </div>
+    );
   }
 
   if (shownOpportunities.length === 0) {
-    return <div>No opportunities found that match your criterion.</div>;
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignContent: "center",
+        }}
+      >
+        <Typography variant="h4">
+          No opportunities found that match your criterion.
+        </Typography>
+      </div>
+    );
   }
 
   return (
     <div>
       {shownOpportunities.map((opportunity) => (
-        
-          <OpportunityCard key={opportunity.id} {...opportunity} />
+        <OpportunityCard key={opportunity.opp_id} {...opportunity} />
       ))}
     </div>
   );
