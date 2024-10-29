@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Typography } from "@mui/material";
 
-export function LogoNameLink({ href = "/"}) {
+export function LogoNameLink({ href = "/" }) {
   return (
     <Link
       href={href}
@@ -14,14 +14,14 @@ export function LogoNameLink({ href = "/"}) {
       }}
     >
       <Image
-        src="/landingpage/logo.svg"
+        src="/general/website_logo.svg"
         height={60}
         width={60}
         alt="Squeakpeek Logo"
         style={{
           objectFit: "cover",
           objectPosition: "bottom",
-          margin: "5px"
+          margin: "5px",
         }}
       />
 
