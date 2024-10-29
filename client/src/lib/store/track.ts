@@ -16,6 +16,10 @@ export interface Application {
   dateApplied: string;
   applicationURL: string;
   applicationStatus: ApplicationStage;
+  currentScore?: string;
+  outOfScore?: string;
+  interviewingRound?: string;
+  testProvider?: string;
 }
 
 interface TrackState {
@@ -33,6 +37,7 @@ interface TrackState {
     sourceIndex: number,
     destinationIndex: number
   ) => void;
+  updateApplication: (applicationId: string, updates: Partial<Application>) => void;
 }
 
 // Helper function to reorder items in a list
@@ -49,13 +54,24 @@ export const useTrack = create<TrackState>()((set) => ({
   "Online Assesstment": [],
   Interviewing: [],
   Offer: [],
-  
+
   addApplication: (to, application) =>
     set((state) => {
-      state[to].push(application);
+      const existingApplicationIndex = state[to].findIndex(
+        (app) => app.id === application.id
+      );
+
+      if (existingApplicationIndex >= 0) {
+        // Update existing application
+        state[to][existingApplicationIndex] = application;
+      } else {
+        // Add new application
+        state[to].push(application);
+      }
+
       return { ...state };
     }),
-    
+
   removeApplication: (from, applicationId) =>
     set((state) => {
       state[from] = state[from].filter(
@@ -87,4 +103,21 @@ export const useTrack = create<TrackState>()((set) => ({
       }
       return { ...state };
     }),
+
+
+
+    updateApplication: (applicationId, updates) =>
+      set((state) => {
+        // Find the application across all stages
+        for (const stage in state) {
+          const applications = state[stage as ApplicationStage];
+          const appIndex = applications.findIndex((app) => app.id === applicationId);
+          if (appIndex !== -1) {
+            // Update the application in place
+            applications[appIndex] = { ...applications[appIndex], ...updates };
+            break;
+          }
+        }
+        return { ...state };
+      }),
 }));
