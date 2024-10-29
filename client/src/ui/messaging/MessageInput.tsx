@@ -67,7 +67,7 @@ export const MessageInput = memo(function MessageInput({
         payload: { message: newMessage },
       });
 
-      const error = insertMessage(newMessage, conversationId, profile);
+      insertMessage(newMessage, conversationId, profile);
     }
   }
 
