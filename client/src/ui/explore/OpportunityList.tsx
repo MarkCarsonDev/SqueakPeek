@@ -1,70 +1,50 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 // import { useRouter } from 'next/navigation'; // To handle URL params
 // import { SelectedFilters } from './Filters';
 import { OpportunityCard, OpportunityCardProps } from "./OpportunityCard";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { Database } from "@/lib/types/database.types";
 
-interface OpportunityRaw {
-  company_name: string;
-  created_at: string;
-  opportunity_id: string;
-  role_title: Database["public"]["Enums"]["OpportunityType"];
-  type: string;
-  conversation: { conversation_id: string } | null;
-}
-
-const supabase = createSupabaseClient();
-
-// interface OpportunityListProps {
-//     filters: SelectedFilters;
-// }
-
 // TODO: Add filters to the OpportunityList component
-// export const OpportunityList: React.FC<OpportunityListProps> = ({ filters }) => {
-export const OpportunityList: React.FC = () => {
+export function OpportunityList() {
   const [shownOpportunities, setShownOpportunities] = useState<
     OpportunityCardProps[]
   >([]);
   const [loading, setLoading] = useState<boolean>(false);
-
-  // Commented out until filters are implemented
-  // const router = useRouter();
+  const supabase = useMemo(() => createSupabaseClient(), []); // only creates it once when the OpportunityList components mounts
 
   // Fetch all opportunities once when the component mounts
   useEffect(() => {
     const fetchOpportunities = async () => {
       setLoading(true);
-      const { data, error } = await supabase.from("opportunity").select(`
-            *,
-            conversation!left (conversation_id)
-        `);
+      const { data, error } = await supabase.from("conversation").select(`
+        *,
+        opportunity:opportunity_id (*)
+      `);
 
       if (error) {
         console.error("Error fetching opportunities:", error);
       } else if (data) {
-        // log the id
-        console.log("Data ", data);
-        // Map the data to match the OpportunityCardProps interface
-        const mappedData = data.map((opportunity: OpportunityRaw) => ({
-          id: opportunity.opportunity_id,
-          conversation_id: opportunity.conversation?.conversation_id || "test", // TODO: Change later, Flatten the conversation_id manually
-          title: opportunity.company_name,
-          jobPosition: opportunity.role_title,
-          jobType: opportunity.type,
-          jobAvatar: "",
-          hiringStatus: false,
-          // TODO: Update these values with the client's data
-          appliedStatus: false,
-          bookmarked: false,
-          // END TODO
-          totalApplied: 0,
-          rejected: 0,
-          oa: 0,
-          interviewing: 0,
-          offered: 0,
-          recentMessages: 0,
-        }));
+        const mappedData: OpportunityCardProps[] = data.map((item) => {
+          const { conversation_id } = item;
+          const opportunity =
+            item.opportunity as unknown as Database["public"]["Tables"]["opportunity"]["Row"]; // converts opportunity of the type as listed in the database
+
+          // TODO: Replace aggregate with real data
+          return {
+            conversation_id,
+            opportunity,
+            aggregate: {
+              totalApplied: 200,
+              interviewing: 12,
+              oa: 12,
+              offered: 12,
+              rejected: 12,
+              messages: 12,
+            },
+          };
+        });
+        console.log("mappedData: ", mappedData);
 
         setShownOpportunities(mappedData); // Initially, all opportunities are shown
       }
@@ -85,10 +65,9 @@ export const OpportunityList: React.FC = () => {
 
   return (
     <div>
-      {shownOpportunities.map((opportunity) => (
-        
-          <OpportunityCard key={opportunity.id} {...opportunity} />
+      {shownOpportunities.map((item) => (
+        <OpportunityCard key={item.opportunity.opportunity_id} {...item} />
       ))}
     </div>
   );
-};
+}
