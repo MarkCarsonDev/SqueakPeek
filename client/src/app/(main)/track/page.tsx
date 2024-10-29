@@ -5,18 +5,25 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileCirclePlus } from "@fortawesome/free-solid-svg-icons";
 import NewApplicationModal from "@/ui/track/NewApplicationModal";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
-import { StageColumn, StageColumnProps } from "@/ui/track/StageColumn"; // Refactored column component
+import { StageColumn, StageColumnProps } from "@/ui/track/StageColumn"; 
 import "./tracking.css";
-import { ApplicationStage, useTrack } from "@/lib/store/track";
+import { Application, ApplicationStage, useTrack } from "@/lib/store/track";
 
 export default function Page() {
   const [openModal, setOpenModal] = useState(false);
-  const [applicationStatus, setApplicationStatus] =
-    useState<ApplicationStage>("Applied"); // Track the default status
+  const [applicationStatus, setApplicationStatus] = useState<ApplicationStage>("Applied"); // Track the default status
+  const [selectedApplication, setSelectedApplication] = useState<Application | undefined>(); // Track the application being edited
 
   // Connect the store for each stage
-  const { Applied, Rejected, "Online Assesstment": OnlineAssesstment, Interviewing, Offer, moveApplication } =
-    useTrack();
+  const {
+    Applied,
+    Rejected,
+    "Online Assesstment": OnlineAssesstment,
+    Interviewing,
+    Offer,
+    moveApplication,
+    updateApplication
+  } = useTrack();
 
   const stages: StageColumnProps[] = [
     {
@@ -52,24 +59,39 @@ export default function Page() {
   ];
 
   // Handle opening the modal with a specific stage and default status
-  const handleOpenModal = (stage: ApplicationStage) => {
-    setApplicationStatus(stage); // Set the default status based on the stage name
-    setOpenModal(true); // Open the modal
+  const handleOpenModal = (stage: ApplicationStage, application?: Application) => {
+    setApplicationStatus(stage); 
+    setSelectedApplication(application); 
+    setOpenModal(true); 
   };
 
   // Close the modal
   const handleCloseModal = () => {
     setOpenModal(false);
+    setSelectedApplication(undefined);
   };
 
   // Handle drag end event with DropResult typing
   const onDragEnd = (result: DropResult) => {
-    const to = result.destination?.droppableId as ApplicationStage;
-
-    if (to) {
-      const applicationId = result.draggableId;
-      const from = result.source.droppableId as ApplicationStage;
-      moveApplication(from, to, applicationId);
+    if (!result.destination) return;
+  
+    const from = result.source.droppableId as ApplicationStage;
+    const to = result.destination.droppableId as ApplicationStage;
+    const applicationId = result.draggableId;
+    const sourceIndex = result.source.index;
+    const destinationIndex = result.destination.index;
+  
+    // Retrieve the application being moved
+    const draggedApplication = [...useTrack.getState()[from]].find(
+      (app) => app.id === applicationId
+    );
+  
+    if (draggedApplication) {
+      // Move application to a new stage
+      moveApplication(from, to, applicationId, sourceIndex, destinationIndex);
+  
+      // Update application status in the store
+      updateApplication(applicationId, {...draggedApplication,applicationStatus: to});
     }
   };
 
@@ -107,12 +129,21 @@ export default function Page() {
           handleClose={handleCloseModal}
           applicationStatus={applicationStatus}
           setApplicationStatus={setApplicationStatus}
+          existingApplication={selectedApplication}
         />
       )}
 
       {/* Application stages */}
       <DragDropContext onDragEnd={onDragEnd}>
-        <div style={{ display: "flex", gap: "16px", padding: "16px", overflowX: "auto", flexWrap: "nowrap" }}>
+        <div
+          style={{
+            display: "flex",
+            gap: "16px",
+            overflowX: "auto",
+            flexWrap: "nowrap",
+            marginTop: "16px",
+          }}
+        >
           {stages.map((stage) => (
             <StageColumn
               key={stage.stage}
@@ -121,6 +152,7 @@ export default function Page() {
               stageColor={stage.stageColor}
               applications={stage.applications}
               handleOpenModal={handleOpenModal}
+              onCardClick={(application) => handleOpenModal(stage.stage, application)}
             />
           ))}
         </div>

@@ -1,7 +1,9 @@
 import { Card, CardHeader, Typography } from "@mui/material";
 import { AvatarTypes, ProfileAvatar } from "../ProfileAvatar";
-import { memo, useEffect } from "react";
+import { memo, useEffect, useState } from "react";
 import { useProfile } from "../../lib/store/profile";
+import { useMessage } from "@/lib/store/message";
+import { PrivateMessageModal } from "./PrivateMessageModal";
 export interface MessageCardProps {
   avatar: AvatarTypes;
   sender_username: string;
@@ -29,32 +31,26 @@ export const MessageCard = memo(function MessageCard({
   message,
   scrollDown,
 }: MessageCardProps) {
-  // TODO: Make CardHeader match the UI in figma file
   // TODO: Add upVotes and downVotes component
   const { profile } = useProfile();
+  const { isPrivateConversation: isPrivateMessage } = useMessage();
   const messageDate = new Date(timestamp);
+
+  const [openModal, setOpenModal] = useState(false);
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
 
   // Scrolls down page when the current user sends a
   useEffect(() => {
     if (scrollDown) scrollDown();
   });
 
-  // TODO: Decouple boolean logic and setting prevDate state
-  // TODO: This needs to get tested
-
   const messageSenderIsCurrentUser = profile?.username === sender_username;
+  const doRenderPrivateMessageModal =
+    messageSenderIsCurrentUser === false && !isPrivateMessage;
 
   return (
-    <div
-      style={{
-        width: "100%",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
-    >
-      {/* TODO: Clean this up to make it simpler */}
-
+    <>
       <Card
         sx={{
           boxShadow: "none",
@@ -64,11 +60,16 @@ export const MessageCard = memo(function MessageCard({
         <CardHeader
           avatar={
             <ProfileAvatar
+              onClick={doRenderPrivateMessageModal ? handleOpenModal : () => {}}
               avatar={avatar}
               sx={{
                 border: messageSenderIsCurrentUser
                   ? "3px #496FFF solid"
                   : "none",
+                cursor: doRenderPrivateMessageModal ? "pointer" : "default",
+                "&:hover": {
+                  opacity: doRenderPrivateMessageModal ? ".5" : "1",
+                },
               }}
             />
           }
@@ -122,6 +123,11 @@ export const MessageCard = memo(function MessageCard({
           }}
         />
       </Card>
-    </div>
+      <PrivateMessageModal
+        isOpen={openModal}
+        onClose={handleCloseModal}
+        receiverUsername={sender_username}
+      />
+    </>
   );
 });
