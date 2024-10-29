@@ -15,6 +15,7 @@ export interface MessageCardProps {
   scrollDown?: () => void;
 }
 
+
 /**
  * UI that contains the metadata of a message
  * @param {AvatarTypes} avatar: Used to render a particular profile avatar

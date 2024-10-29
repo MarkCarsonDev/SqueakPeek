@@ -22,3 +22,4 @@ export const useMessage = create<MessageState>()((set) => ({
     set((state) => ({ ...state, isPrivateConversation: conversationType }));
   },
 }));
+

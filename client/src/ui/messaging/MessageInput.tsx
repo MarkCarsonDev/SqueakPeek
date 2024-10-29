@@ -9,6 +9,8 @@ import { useEffect, useState, useRef } from "react";
 import { createSupabaseClient } from "../../lib/supabase/client";
 import { v4 as uuidv4 } from "uuid";
 import { memo, useMemo } from "react";
+import { insertMessage } from "../../lib/utils/insertMessage"
+
 /**
  * Allows user to send a message into a conversation, and broadcasts the message based on the conversationId
   * @param {string} conversationId - ID used to broadcast messages to subscribed users
@@ -65,7 +67,7 @@ export const MessageInput = memo(function MessageInput({
         payload: { message: newMessage },
       });
 
-      // TODO: Insert message into the message table
+      insertMessage(newMessage, conversationId, profile);
     }
   }
 
@@ -107,3 +109,4 @@ export const MessageInput = memo(function MessageInput({
     />
   );
 });
+
