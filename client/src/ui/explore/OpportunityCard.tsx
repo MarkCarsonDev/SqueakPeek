@@ -1,4 +1,6 @@
 "use client";
+
+import { Database } from "@/lib/types/database.types";
 import {
   Card,
   CardHeader,
@@ -23,72 +25,68 @@ import { useState } from "react";
 import { OpportunityStackedBarGraph } from "./OpportunityStackedBarGraph";
 import Link from "next/link";
 
-export interface OpportunityCardProps {
-  id: string;
-  conversation_id: string;
-  title: string;
-  jobPosition: string;
-  jobType: string;
-  jobAvatar: string;
-  hiringStatus: boolean;
-  appliedStatus: boolean;
-  totalApplied: number;
-  rejected: number;
-  oa: number;
-  interviewing: number;
-  offered: number;
-  recentMessages: number;
-  bookmarked: boolean;
-}
-
 interface jobStats {
   status: string;
   color: string;
   quantity: number;
 }
 
-export function OpportunityCard({
-  title,
-  jobPosition,
-  jobType,
-  jobAvatar,
-  hiringStatus,
-  appliedStatus,
-  totalApplied,
-  rejected,
-  oa,
-  interviewing,
-  offered,
-  recentMessages,
-  conversation_id,
-  bookmarked: initialBookmarked,
-}: OpportunityCardProps) {
-  // To be replaced with actuall book mark update from DB
-  const [bookmarked, setBookmarked] = useState(initialBookmarked);
+// TODO: Replace this with the actual database type
+interface Aggregate {
+  rejected: number;
+  interviewing: number;
+  offered: number;
+  totalApplied: number;
+  oa: number;
+  messages: number;
+}
 
+export interface OpportunityCardProps {
+  conversation_id: string;
+  opportunity: Database["public"]["Tables"]["opportunity"]["Row"];
+  aggregate: Aggregate;
+}
+
+export function OpportunityCard({
+  conversation_id,
+  opportunity,
+  aggregate,
+}: OpportunityCardProps) {
+  // TODO: Replace this with real status from props
+  const appliedStatus = false;
+  const hiringStatus = false;
+
+  // TODO: Add real quantity
   // Array for mapping the job stats
   const stats: jobStats[] = [
     {
       status: "Rejected:",
       color: "red",
-      quantity: rejected,
+      quantity: 12,
     },
     {
       status: "OA:",
       color: "orange",
-      quantity: oa,
+      quantity: 12,
     },
     {
       status: "Interviewing:",
       color: "gold",
-      quantity: interviewing,
+      quantity: 12,
     },
     {
       status: "Offered:",
       color: "green",
-      quantity: offered,
+      quantity: 12,
     },
   ];
+
+  const { company_name, role_title, type } = opportunity;
+  const { rejected, interviewing, offered, totalApplied, oa, messages } =
+    aggregate;
+  const [bookmarked, setBookmarked] = useState(false);
+  const isAppliedColor = appliedStatus ? "green" : "red";
+  const isHiringColor = hiringStatus ? "green" : "red";
 
   const handleBookmark = () => {
     setBookmarked((prev) => !prev); // Toggle the bookmark state
@@ -98,8 +96,8 @@ export function OpportunityCard({
     if (navigator.share) {
       navigator
         .share({
-          title: title,
-          text: `Check out this job opportunity for ${jobPosition} at ${title}.`,
+          title: role_title,
+          text: `Check out this job opportunity for ${role_title} at ${company_name}.`,
           url: window.location.href,
         })
         .catch((error) => {
@@ -129,15 +127,20 @@ export function OpportunityCard({
           padding: ".5rem 0rem",
         }}
       >
+        {/* TODO: Add real header */}
         <CardHeader
           style={{ margin: 0, padding: ".5rem", height: "2rem" }}
-          avatar={<Avatar src={jobAvatar} style={{ margin: 0 }}></Avatar>}
-          title={<Typography variant="h5">{title}</Typography>}
+          avatar={
+            <Avatar
+              src={"https://www.amazon.com/favicon.ico"}
+              style={{ margin: 0 }}
+            ></Avatar>
+          }
+          title={company_name}
           subheader={
             // Job Postion and Job Type in header
-            <Typography variant="h6">
-              {jobPosition}, {jobType}
-            </Typography>
+
+            role_title + " " + type
           }
         />
 
@@ -164,7 +167,7 @@ export function OpportunityCard({
             >
               <FontAwesomeIcon icon={faComment} />
               <Typography style={{ color: "white", marginLeft: ".5rem" }}>
-                {recentMessages}
+                {messages}
               </Typography>
             </Button>
           </Link>
@@ -243,8 +246,8 @@ export function OpportunityCard({
             label={appliedStatus ? "Applied" : "Not Applied"}
             variant="outlined"
             style={{
-              color: appliedStatus ? "green" : "red",
-              borderColor: appliedStatus ? "green" : "red",
+              color: isAppliedColor,
+              borderColor: isAppliedColor,
               margin: 0,
             }}
           />
@@ -254,7 +257,7 @@ export function OpportunityCard({
               <FontAwesomeIcon
                 style={{
                   marginLeft: ".5rem",
-                  color: hiringStatus ? "green" : "red",
+                  color: isHiringColor,
                 }}
                 icon={hiringStatus ? faAnglesUp : faAnglesDown}
               />
@@ -262,8 +265,8 @@ export function OpportunityCard({
             label={hiringStatus ? "Actively Hiring" : "Not Hiring"}
             variant="outlined"
             style={{
-              color: hiringStatus ? "green" : "red",
-              borderColor: hiringStatus ? "green" : "red",
+              color: isHiringColor,
+              borderColor: isHiringColor,
               margin: 0,
             }}
           />
@@ -310,7 +313,7 @@ export function OpportunityCard({
             offered={offered}
           />
         </div>
-        <Typography variant="h5" sx={{ textAlign: "center" }}>
+        <Typography variant="h6" sx={{ textAlign: "center" }}>
           Total Applied: {totalApplied}
         </Typography>
       </CardContent>
