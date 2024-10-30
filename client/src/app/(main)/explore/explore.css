@@ -9,7 +9,8 @@
 .card-filter-container{
     display: grid;
     gap: 2rem;
-    grid-template-columns: 70% 30%;
+    grid-template-columns: 70% 28%;
+    width: 100%;
 }
 
 
@@ -17,3 +18,4 @@
     display: flex;
     flex-direction: column;
 }
+

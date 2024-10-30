@@ -6,8 +6,6 @@ import { Modal } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChartColumn } from "@fortawesome/free-solid-svg-icons";
 import { BarChart } from "@mui/x-charts";
-import { ToggleButton } from "@mui/material";
-import { ToggleButtonGroup } from "@mui/material";
 import { dataset } from "./OpportunityStatsDataset";
 
 const style = {
@@ -32,13 +30,6 @@ export function OpportunityStatsModal() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const [alignment, setAlignment] = React.useState<string | null>("left");
-  const handleAlignment = (
-    event: React.MouseEvent<HTMLElement>,
-    newAlignment: string | null
-  ) => {
-    setAlignment(newAlignment);
-  };
 
   return (
     <div>
@@ -76,25 +67,9 @@ export function OpportunityStatsModal() {
               {dataKey: "interviewing", label: "Interviewing", color: "gold"},
               {dataKey: "offered", label: "Offered", color: "green"},
             ]}
-            width={500}
-            height={300}
+            width={600}
+            height={400}
           />
-          <ToggleButtonGroup
-            value={alignment}
-            exclusive
-            onChange={handleAlignment}
-            aria-label="text alignment"
-          >
-            <ToggleButton value="week" aria-label="left aligned">
-              <Typography>Week</Typography>
-            </ToggleButton>
-            <ToggleButton value="month" aria-label="centered">
-              <Typography>Month</Typography>
-            </ToggleButton>
-            <ToggleButton value="year" aria-label="right aligned">
-              <Typography>Year</Typography>
-            </ToggleButton>
-          </ToggleButtonGroup>
         </Box>
       </Modal>
     </div>
