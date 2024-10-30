@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import {InsertApplicationToSupabase, UpdateApplicationToSupabase} from "@/lib/utils/ApplicationAction";
 
 export type ApplicationStage =
   | "Applied"
@@ -67,6 +68,7 @@ export const useTrack = create<TrackState>()((set) => ({
       } else {
         // Add new application
         state[to].push(application);
+        // call the server to insert the application
       }
 
       return { ...state };

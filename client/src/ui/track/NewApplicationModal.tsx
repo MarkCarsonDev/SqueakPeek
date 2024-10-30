@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import UpdateStatus from "@/ui/track/UpdateStatus";
 import { ApplicationStage, useTrack, Application } from "@/lib/store/track";
+import { v4 as uuidv4 } from 'uuid';
 // TODO: Implement the Company Brand Logo based on the company name on when editing the application
 interface NewApplicationModalProps {
   open: boolean;
@@ -58,7 +59,7 @@ export default function NewApplicationModal({
     }
 
     const updatedFields: Partial<Application> = {
-      id: existingApplication ? existingApplication.id : Date.now().toString(),
+      id: existingApplication ? existingApplication.id : uuidv4(),
       roleTitle: roleTitle, // Ensure non-null value for required fields
       location: location,
       jobtype: jobType,
