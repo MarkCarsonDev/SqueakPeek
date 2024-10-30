@@ -46,9 +46,7 @@ export function OpportunityList() {
         });
         console.log("mappedData: ", mappedData);
 
-        // TODO set opportunities to mappedData, this is done to prevent build issues
-        setShownOpportunities([]);
-        // setShownOpportunities(mappedData); // Initially, all opportunities are shown
+        setShownOpportunities(mappedData); // Initially, all opportunities are shown
       }
 
       setLoading(false);
