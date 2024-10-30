@@ -76,7 +76,7 @@ export function Conversation({
         setMessages(mappedData);
       }
     });
-  }, []);
+  }, [supabase, conversationId, setMessages]);
 
   return (
     <div

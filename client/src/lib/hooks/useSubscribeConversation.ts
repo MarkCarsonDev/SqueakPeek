@@ -40,5 +40,5 @@ export const useSubscribeConversation = (
     return () => {
       listenerChannel.unsubscribe();
     };
-  }, [addMessage, conversationId, profile, setNumNewMessages]);
+  }, [addMessage, conversationId, profile, setNumNewMessages, supabase]);
 };
