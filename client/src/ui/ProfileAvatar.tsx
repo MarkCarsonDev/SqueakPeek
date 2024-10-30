@@ -1,14 +1,9 @@
 "use client";
 import { Avatar } from "@mui/material";
 import { AvatarProps } from "@mui/material";
-export type AvatarTypes =
-  | "avatar1"
-  | "avatar2"
-  | "avatar3"
-  | "avatar4"
-  | null
-  | undefined;
+import { Database } from "@/lib/types/database.types";
 
+export type AvatarTypes = Database["public"]["Enums"]["Avatar"];
 /**
  * Returns the Avatar based on the avatar prop
  */
