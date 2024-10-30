@@ -8,6 +8,7 @@ import { useState, useRef, useEffect, useMemo } from "react";
 import { useProfile } from "../../lib/store/profile";
 import { useSubscribeConversation } from "@/lib/hooks/useSubscribeConversation";
 import { createSupabaseClient } from "@/lib/supabase/client";
+import { fetchMessages } from "@/lib/utils/fetchMessages";
 
 /**
  * This is a UI container that holds all messages for a particular conversation
@@ -47,6 +48,12 @@ export function Conversation({
   useEffect(() => {
     setConversationType(isPrivateConversation);
   }, [setConversationType, isPrivateConversation]);
+
+  useEffect(() => {
+    fetchMessages(supabase, conversationId).then((res) => {
+      const { data, error } = res;
+    });
+  }, []);
 
   return (
     <div

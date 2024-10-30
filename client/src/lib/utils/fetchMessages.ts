@@ -7,13 +7,19 @@ export async function fetchMessages(
     .from("public_message")
     .select(
       `
-    *,
-    ...public_user_conversation!inner(
-      ...conversation!inner()
-    )
+      *,
+      public_user_conversation!inner(
+        conversation!inner()
+      )
     `
     )
-    .eq("conversation.conversation_id", conversation_id);
+    .eq(
+      "public_user_conversation.conversation.conversation_id",
+      conversation_id
+    );
 
+  if (error) {
+    console.error(error);
+  }
   return { data, error };
 }
