@@ -4,9 +4,10 @@ import { ConversationHeader } from "./ConversationHeader";
 import { ConversationBody } from "./ConversationBody";
 import Image from "next/image";
 import { useMessage } from "../../lib/store/message";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { useProfile } from "../../lib/store/profile";
 import { useSubscribeConversation } from "@/lib/hooks/useSubscribeConversation";
+import { createSupabaseClient } from "@/lib/supabase/client";
 
 /**
  * This is a UI container that holds all messages for a particular conversation
@@ -23,6 +24,7 @@ export function Conversation({
   const { profile } = useProfile();
   const [numNewMessages, setNumNewMessages] = useState(0); // used for rendering new message notification
   const bottomRef = useRef<null | HTMLDivElement>(null); // used for scrolling down the page
+  const supabase = useMemo(() => createSupabaseClient(), []);
 
   // Resets numNewMessages to 0
   function resetNumNewMessages() {
@@ -30,6 +32,7 @@ export function Conversation({
   }
 
   useSubscribeConversation(
+    supabase,
     conversationId,
     addMessage,
     profile,

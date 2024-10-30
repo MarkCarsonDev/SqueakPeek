@@ -3,6 +3,7 @@ import { createSupabaseClient } from "../supabase/client";
 import { MessageCardProps } from "../../ui/message/MessageCard";
 import { Profile } from "../store/profile";
 import { Dispatch, SetStateAction } from "react";
+import { SupabaseClient } from "@supabase/supabase-js";
 
 /**
  * Subscribes the client to messages based on the conversationId
@@ -12,14 +13,13 @@ import { Dispatch, SetStateAction } from "react";
  * @param {Dispatch<SetStateAction<number>>} setNumNewMessages  - Resets the number of new messages to 0
  */
 export const useSubscribeConversation = (
+  supabase: SupabaseClient,
   conversationId: string,
   addMessage: (newMessage: MessageCardProps) => void,
   profile: Profile | null,
   setNumNewMessages: Dispatch<SetStateAction<number>>
 ) => {
   useEffect(() => {
-    const supabase = createSupabaseClient();
-
     // Client joins conversation, and listens to messages
     const listenerChannel = supabase.channel(conversationId);
 
