@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { createSupabaseClient } from "../supabase/client";
 import { MessageCardProps } from "../../ui/message/MessageCard";
 import { Profile } from "../store/profile";
 import { Dispatch, SetStateAction } from "react";

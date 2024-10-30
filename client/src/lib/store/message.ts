@@ -8,6 +8,7 @@ interface MessageState {
   addMessage: (newMessage: MessageCardProps) => void;
   clearMessages: () => void;
   setConversationType: (conversationType: boolean) => void;
+  setMessages: (newMessages: MessageCardProps[]) => void;
 }
 
 // hook that will be access in UI components
@@ -19,5 +20,8 @@ export const useMessage = create<MessageState>()((set) => ({
   clearMessages: () => set(() => ({ messages: [] })),
   setConversationType: (conversationType) => {
     set((state) => ({ ...state, isPrivateConversation: conversationType }));
+  },
+  setMessages: (newMessages) => {
+    set((state) => ({ ...state, messages: newMessages }));
   },
 }));

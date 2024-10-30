@@ -9,6 +9,7 @@ import { useProfile } from "../../lib/store/profile";
 import { useSubscribeConversation } from "@/lib/hooks/useSubscribeConversation";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { fetchMessages } from "@/lib/utils/fetchMessages";
+import { MessageCardProps } from "./MessageCard";
 
 /**
  * This is a UI container that holds all messages for a particular conversation
@@ -21,7 +22,8 @@ export function Conversation({
   conversationId: string;
   isPrivateConversation?: boolean;
 }) {
-  const { addMessage, clearMessages, setConversationType } = useMessage();
+  const { addMessage, clearMessages, setConversationType, setMessages } =
+    useMessage();
   const { profile } = useProfile();
   const [numNewMessages, setNumNewMessages] = useState(0); // used for rendering new message notification
   const bottomRef = useRef<null | HTMLDivElement>(null); // used for scrolling down the page
@@ -51,7 +53,22 @@ export function Conversation({
 
   useEffect(() => {
     fetchMessages(supabase, conversationId).then((res) => {
-      const { data, error } = res;
+      const { error, data } = res;
+      const mappedData: MessageCardProps[] = data.map(
+        ({
+          created_at,
+          sender_avatar,
+          sender_username,
+          message,
+          message_id,
+        }) => ({
+          avatar: sender_avatar,
+          sender_username,
+          timestamp: created_at,
+          message,
+          messageId: message_id,
+        })
+      );
     });
   }, []);
 

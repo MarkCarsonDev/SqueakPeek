@@ -1,9 +1,10 @@
 import { SupabaseClient } from "@supabase/supabase-js";
+import { Database } from "../types/database.types";
 export async function fetchMessages(
   supabase: SupabaseClient,
   conversation_id: string
 ) {
-  const { data, error } = await supabase
+  const res = await supabase
     .from("public_message")
     .select(
       `
@@ -18,6 +19,9 @@ export async function fetchMessages(
       conversation_id
     );
 
+  const { error } = res;
+  const data =
+    res.data as Database["public"]["Tables"]["public_message"]["Row"][];
   if (error) {
     console.error(error);
   }
