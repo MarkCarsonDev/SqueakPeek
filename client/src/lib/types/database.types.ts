@@ -295,26 +295,26 @@ export type Database = {
       public_message: {
         Row: {
           created_at: string
-          message: string | null
+          message: string
           message_id: string
-          sender_avatar: string | null
-          sender_username: string | null
+          sender_avatar: Database["public"]["Enums"]["Avatar"]
+          sender_username: string
           thread_id: string | null
         }
         Insert: {
           created_at?: string
-          message?: string | null
+          message: string
           message_id?: string
-          sender_avatar?: string | null
-          sender_username?: string | null
+          sender_avatar?: Database["public"]["Enums"]["Avatar"]
+          sender_username: string
           thread_id?: string | null
         }
         Update: {
           created_at?: string
-          message?: string | null
+          message?: string
           message_id?: string
-          sender_avatar?: string | null
-          sender_username?: string | null
+          sender_avatar?: Database["public"]["Enums"]["Avatar"]
+          sender_username?: string
           thread_id?: string | null
         }
         Relationships: [

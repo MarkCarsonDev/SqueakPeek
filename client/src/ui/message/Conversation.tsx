@@ -54,21 +54,27 @@ export function Conversation({
   useEffect(() => {
     fetchMessages(supabase, conversationId).then((res) => {
       const { error, data } = res;
-      const mappedData: MessageCardProps[] = data.map(
-        ({
-          created_at,
-          sender_avatar,
-          sender_username,
-          message,
-          message_id,
-        }) => ({
-          avatar: sender_avatar,
-          sender_username,
-          timestamp: created_at,
-          message,
-          messageId: message_id,
-        })
-      );
+
+      if (error) {
+        // do something on the UI
+      } else {
+        const mappedData: MessageCardProps[] = data.map(
+          ({
+            created_at,
+            sender_avatar,
+            sender_username,
+            message,
+            message_id,
+          }) => ({
+            avatar: sender_avatar,
+            sender_username,
+            timestamp: created_at,
+            message,
+            messageId: message_id,
+          })
+        );
+        setMessages(mappedData);
+      }
     });
   }, []);
 
