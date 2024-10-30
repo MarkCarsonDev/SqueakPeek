@@ -1,5 +1,13 @@
-import { Typography } from "@mui/material";
+import "@/app/(main)/profile/profile.css"
 export default function Page() {
-  return <Typography variant="h2">Profile</Typography>;
+  return (
+
+    <div className="profile_page_container">
+      <div className="edit_profile">
+
+      </div>
+    </div>
+  );
+
 }
 
