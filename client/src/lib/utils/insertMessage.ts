@@ -2,7 +2,7 @@ import { createPublicThread } from "./createPublicThread";
 import { MessageCardProps } from "../../ui/messaging/MessageCard";
 import { Profile } from "../store/profile";
 import { SupabaseClient } from "@supabase/supabase-js";
-
+import { Database } from "../types/database.types";
 export async function insertMessage(
   supabase: SupabaseClient,
   newMessage: MessageCardProps,
@@ -41,10 +41,13 @@ export async function insertMessage(
 
     // If a thread ID is available, send the message
     if (threadID) {
-      const addMsg = {
+      const addMsg: Database["public"]["Tables"]["public_message"]["Row"] = {
         thread_id: threadID.toString(),
         message: newMessage.message,
         message_id: newMessage.messageId,
+        sender_username: newMessage.sender_username,
+        sender_avatar: newMessage.avatar,
+        created_at: new Date().toISOString(),
       };
 
       // Insert the public message into the database
