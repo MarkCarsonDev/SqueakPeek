@@ -1,6 +1,5 @@
 import { create } from "zustand";
-import { MessageCardProps } from "@/ui/messaging/MessageCard";
-
+import { MessageCardProps } from "@/ui/message/MessageCard";
 
 // state of the hook
 interface MessageState {
@@ -22,4 +21,3 @@ export const useMessage = create<MessageState>()((set) => ({
     set((state) => ({ ...state, isPrivateConversation: conversationType }));
   },
 }));
-
