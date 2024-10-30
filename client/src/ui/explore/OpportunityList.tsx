@@ -1,18 +1,7 @@
 import React, { useEffect, useState } from "react";
-// import { useRouter } from 'next/navigation'; // To handle URL params
-// import { SelectedFilters } from './Filters';
+
 import { OpportunityCard, OpportunityCardProps } from "./OpportunityCard";
 import { createSupabaseClient } from "@/lib/supabase/client";
-import { Database } from "@/lib/types/database.types";
-
-interface OpportunityRaw {
-  company_name: string;
-  created_at: string;
-  opportunity_id: string;
-  role_title: Database["public"]["Enums"]["OpportunityType"];
-  type: string;
-  conversation: { conversation_id: string } | null;
-}
 
 const supabase = createSupabaseClient();
 
@@ -68,6 +57,8 @@ export const OpportunityList: React.FC = () => {
         //   recentMessages: 0,
         // }));
 
+        // TODO set opportunities to mappedData, this is done to prevent build issues
+        setShownOpportunities([]);
         // setShownOpportunities(mappedData); // Initially, all opportunities are shown
       }
 
