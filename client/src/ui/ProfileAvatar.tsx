@@ -16,10 +16,10 @@ export function ProfileAvatar({
   // TODO: Change this to the actual mapping to the correct avatar images
   // TODO (BUG): On page refresh, or any situation that turns profile = null, it defaults to the image, creating a janky look when profile is initialize
   const avatarMaps = {
-    avatar1: "/landingpage/track.svg",
-    avatar2: "/landingpage/insight.svg",
-    avatar3: "/landingpage/message.svg",
-    avatar4: "/landingpage/track.svg",
+    avatar1: "/avatars/cool_rat.svg",
+    avatar2: "/avatars/incognito_rat.svg",
+    avatar3: "/avatars/peephole_rat.svg",
+    avatar4: "/avatars/professional_rat.svg",
   };
   return (
     <Avatar
