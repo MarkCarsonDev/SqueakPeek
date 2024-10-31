@@ -13,29 +13,44 @@ export type Database = {
         Row: {
           application_id: string
           created_at: string
+          currentScore: number | null
+          interviewing_round: string | null
           link: string | null
           location: string | null
           opportunity_id: string
+          outOfScore: number | null
           profile_id: string
           status: Database["public"]["Enums"]["ApplicationStatus"] | null
+          status_update_date: string | null
+          test_provider: string | null
         }
         Insert: {
           application_id?: string
           created_at?: string
+          currentScore?: number | null
+          interviewing_round?: string | null
           link?: string | null
           location?: string | null
           opportunity_id: string
+          outOfScore?: number | null
           profile_id: string
           status?: Database["public"]["Enums"]["ApplicationStatus"] | null
+          status_update_date?: string | null
+          test_provider?: string | null
         }
         Update: {
           application_id?: string
           created_at?: string
+          currentScore?: number | null
+          interviewing_round?: string | null
           link?: string | null
           location?: string | null
           opportunity_id?: string
+          outOfScore?: number | null
           profile_id?: string
           status?: Database["public"]["Enums"]["ApplicationStatus"] | null
+          status_update_date?: string | null
+          test_provider?: string | null
         }
         Relationships: [
           {
@@ -295,26 +310,26 @@ export type Database = {
       public_message: {
         Row: {
           created_at: string
-          message: string | null
+          message: string
           message_id: string
-          sender_avatar: string | null
-          sender_username: string | null
+          sender_avatar: Database["public"]["Enums"]["Avatar"]
+          sender_username: string
           thread_id: string | null
         }
         Insert: {
           created_at?: string
-          message?: string | null
+          message: string
           message_id?: string
-          sender_avatar?: string | null
-          sender_username?: string | null
+          sender_avatar?: Database["public"]["Enums"]["Avatar"]
+          sender_username: string
           thread_id?: string | null
         }
         Update: {
           created_at?: string
-          message?: string | null
+          message?: string
           message_id?: string
-          sender_avatar?: string | null
-          sender_username?: string | null
+          sender_avatar?: Database["public"]["Enums"]["Avatar"]
+          sender_username?: string
           thread_id?: string | null
         }
         Relationships: [
@@ -331,25 +346,19 @@ export type Database = {
         Row: {
           conversation_id: string
           created_at: string
-          sender_avatar: Database["public"]["Enums"]["Avatar"] | null
           sender_id: string
-          sender_username: string | null
           thread_id: string
         }
         Insert: {
           conversation_id: string
           created_at?: string
-          sender_avatar?: Database["public"]["Enums"]["Avatar"] | null
           sender_id: string
-          sender_username?: string | null
           thread_id?: string
         }
         Update: {
           conversation_id?: string
           created_at?: string
-          sender_avatar?: Database["public"]["Enums"]["Avatar"] | null
           sender_id?: string
-          sender_username?: string | null
           thread_id?: string
         }
         Relationships: [
@@ -384,7 +393,13 @@ export type Database = {
         | "Interviewing"
         | "Offer"
       Avatar: "avatar1" | "avatar2" | "avatar3" | "avatar4"
-      OpportunityType: "Internship" | "New Grad" | "Co-Op"
+      OpportunityType:
+        | "Internship"
+        | "New Grad"
+        | "Co-Op"
+        | "Full-time"
+        | "Part-Time"
+        | "Contract"
     }
     CompositeTypes: {
       [_ in never]: never
