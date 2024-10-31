@@ -1,5 +1,8 @@
 import { create } from "zustand";
 import { Database} from "@/lib/types/database.types"
+import {InsertApplication} from "@/lib/utils/InsertApplication"
+import { v4 as uuidv4 } from "uuid";
+
 export type ApplicationStage =
   | "Applied"
   | "Rejected"
@@ -9,7 +12,7 @@ export type ApplicationStage =
 
 
 
- export type Application = Database["public"]["Tables"]["application"]["Row"];
+export type Application = Database["public"]["Tables"]["application"]["Row"];
 
 interface TrackState {
   Applied: Application[];
@@ -44,23 +47,50 @@ export const useTrack = create<TrackState>()((set) => ({
   Interviewing: [],
   Offer: [],
 
-  addApplication: (to, application) =>
-    set((state) => {
-      const existingApplicationIndex = state[to].findIndex(
-        (app) => app.application_id === application.application_id
-      );
+  // addApplication: (to, application) =>
+  //   set((state) => {
+  //     const existingApplicationIndex = state[to].findIndex(
+  //       (app) => app.application_id === application.application_id
+  //     );
 
-      if (existingApplicationIndex >= 0) {
-        // Update existing application
-        state[to][existingApplicationIndex] = application;
-      } else {
-        // Add new application
-        state[to].push(application);
-        // call the server to insert the application
-      };
+  //     if (existingApplicationIndex >= 0) {
+  //       // Update existing application
+  //       state[to][existingApplicationIndex] = application;
+  //     } else {
+  //       // Add new application
+  //       state[to].push(application);
+  //       // call the server to insert the application
+  //     };
 
-      return { ...state };
-    }),
+  //     return { ...state };
+  //   }),
+
+  addApplication: async (to, application) => {
+    try {
+      
+      const insertedApplication = await InsertApplication(application);
+      if (insertedApplication) {
+        set((state) => {
+          const existingApplicationIndex = state[to].findIndex(
+            (app) => app.application_id === insertedApplication.application_id
+          );
+
+          if (existingApplicationIndex >= 0) {
+            // Update existing application
+            state[to][existingApplicationIndex] = insertedApplication;
+          } else {
+            // Add new application to the local state
+            state[to].push(insertedApplication);
+          }
+
+          return { ...state };
+        });
+      } 
+    } catch (error) {
+      console.error("Error inserting application:", error);
+    }
+
+  },
 
   removeApplication: (from, applicationId) =>
     set((state) => {
