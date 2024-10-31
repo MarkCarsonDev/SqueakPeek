@@ -69,7 +69,8 @@ export const useTrack = create<TrackState>()((set) => ({
       );
       return { ...state };
     }),
-
+  
+  // TODO: Call the server to update the card position also?
   moveApplication: (from, to, applicationId, sourceIndex, destinationIndex) =>
     set((state) => {
       if (from === to) {
@@ -105,6 +106,7 @@ export const useTrack = create<TrackState>()((set) => ({
           if (appIndex !== -1) {
             // Update the application in place
             applications[appIndex] = { ...applications[appIndex], ...updates };
+            // Todo: call the server to update the application
             break;
           }
         }
