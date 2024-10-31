@@ -99,7 +99,7 @@ export const StageColumn: React.FC<StageColumnProps> = ({
             >
               {/* Job Cards */}
               {applications.map((app, index) => (
-                <Draggable key={app.id} draggableId={app.id} index={index}>
+                <Draggable key={app.application_id} draggableId={app.application_id} index={index}>
                   {(provided, snapshot) => (
                     <div
                       ref={provided.innerRef}

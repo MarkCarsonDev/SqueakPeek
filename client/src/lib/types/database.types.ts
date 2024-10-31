@@ -12,30 +12,54 @@ export type Database = {
       application: {
         Row: {
           application_id: string
+          company_name: string
           created_at: string
+          currentScore: number | null
+          interviewing_round: string | null
           link: string | null
           location: string | null
           opportunity_id: string
+          outOfScore: number | null
           profile_id: string
-          status: Database["public"]["Enums"]["ApplicationStatus"] | null
+          role_title: string
+          status: Database["public"]["Enums"]["ApplicationStatus"]
+          status_update_date: string | null
+          test_provider: string | null
+          type: string
         }
         Insert: {
           application_id?: string
+          company_name: string
           created_at?: string
+          currentScore?: number | null
+          interviewing_round?: string | null
           link?: string | null
           location?: string | null
           opportunity_id: string
+          outOfScore?: number | null
           profile_id: string
-          status?: Database["public"]["Enums"]["ApplicationStatus"] | null
+          role_title: string
+          status?: Database["public"]["Enums"]["ApplicationStatus"]
+          status_update_date?: string | null
+          test_provider?: string | null
+          type: string
         }
         Update: {
           application_id?: string
+          company_name?: string
           created_at?: string
+          currentScore?: number | null
+          interviewing_round?: string | null
           link?: string | null
           location?: string | null
           opportunity_id?: string
+          outOfScore?: number | null
           profile_id?: string
-          status?: Database["public"]["Enums"]["ApplicationStatus"] | null
+          role_title?: string
+          status?: Database["public"]["Enums"]["ApplicationStatus"]
+          status_update_date?: string | null
+          test_provider?: string | null
+          type?: string
         }
         Relationships: [
           {
@@ -331,25 +355,19 @@ export type Database = {
         Row: {
           conversation_id: string
           created_at: string
-          sender_avatar: Database["public"]["Enums"]["Avatar"] | null
           sender_id: string
-          sender_username: string | null
           thread_id: string
         }
         Insert: {
           conversation_id: string
           created_at?: string
-          sender_avatar?: Database["public"]["Enums"]["Avatar"] | null
           sender_id: string
-          sender_username?: string | null
           thread_id?: string
         }
         Update: {
           conversation_id?: string
           created_at?: string
-          sender_avatar?: Database["public"]["Enums"]["Avatar"] | null
           sender_id?: string
-          sender_username?: string | null
           thread_id?: string
         }
         Relationships: [
@@ -378,13 +396,19 @@ export type Database = {
     }
     Enums: {
       ApplicationStatus:
-        | "Initial Screen"
+        | "Applied"
         | "Rejected"
         | "Online Assessment"
         | "Interviewing"
         | "Offer"
       Avatar: "avatar1" | "avatar2" | "avatar3" | "avatar4"
-      OpportunityType: "Internship" | "New Grad" | "Co-Op"
+      OpportunityType:
+        | "Internship"
+        | "New Grad"
+        | "Co-Op"
+        | "Full-time"
+        | "Part-Time"
+        | "Contract"
     }
     CompositeTypes: {
       [_ in never]: never
