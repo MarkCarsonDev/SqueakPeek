@@ -2,5 +2,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 90vh;
 }
 
+.edit_profile{
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+    height:700px;
+    background-color: white;
+    border: solid 3px #e0e4f2;
+    border-radius: 20px;
+}
