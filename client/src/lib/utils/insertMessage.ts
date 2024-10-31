@@ -1,5 +1,5 @@
 import { createPublicThread } from "./createPublicThread";
-import { MessageCardProps } from "../../ui/messaging/MessageCard";
+import { MessageCardProps } from "../../ui/message/MessageCard";
 import { Profile } from "../store/profile";
 import { SupabaseClient, PostgrestError } from "@supabase/supabase-js";
 import { Database } from "../types/database.types";

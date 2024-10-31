@@ -53,7 +53,7 @@ export function OpportunityList() {
     };
 
     fetchOpportunities();
-  }, []);
+  }, [supabase]);
 
   if (loading) {
     return <div>Loading...</div>;

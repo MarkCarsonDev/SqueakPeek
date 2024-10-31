@@ -4,9 +4,12 @@ import { ConversationHeader } from "./ConversationHeader";
 import { ConversationBody } from "./ConversationBody";
 import Image from "next/image";
 import { useMessage } from "../../lib/store/message";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { useProfile } from "../../lib/store/profile";
 import { useSubscribeConversation } from "@/lib/hooks/useSubscribeConversation";
+import { createSupabaseClient } from "@/lib/supabase/client";
+import { fetchPublicMessages } from "@/lib/utils/fetchPublicMessages";
+import { MessageCardProps } from "./MessageCard";
 
 /**
  * This is a UI container that holds all messages for a particular conversation
@@ -19,10 +22,12 @@ export function Conversation({
   conversationId: string;
   isPrivateConversation?: boolean;
 }) {
-  const { addMessage, clearMessages, setConversationType } = useMessage();
+  const { addMessage, clearMessages, setConversationType, setMessages } =
+    useMessage();
   const { profile } = useProfile();
   const [numNewMessages, setNumNewMessages] = useState(0); // used for rendering new message notification
   const bottomRef = useRef<null | HTMLDivElement>(null); // used for scrolling down the page
+  const supabase = useMemo(() => createSupabaseClient(), []);
 
   // Resets numNewMessages to 0
   function resetNumNewMessages() {
@@ -30,6 +35,7 @@ export function Conversation({
   }
 
   useSubscribeConversation(
+    supabase,
     conversationId,
     addMessage,
     profile,
@@ -44,6 +50,33 @@ export function Conversation({
   useEffect(() => {
     setConversationType(isPrivateConversation);
   }, [setConversationType, isPrivateConversation]);
+
+  useEffect(() => {
+    fetchPublicMessages(supabase, conversationId).then((res) => {
+      const { error, data } = res;
+
+      if (error) {
+        // do something on the UI
+      } else {
+        const mappedData: MessageCardProps[] = data.map(
+          ({
+            created_at,
+            sender_avatar,
+            sender_username,
+            message,
+            message_id,
+          }) => ({
+            avatar: sender_avatar,
+            sender_username,
+            timestamp: created_at,
+            message,
+            messageId: message_id,
+          })
+        );
+        setMessages(mappedData);
+      }
+    });
+  }, [supabase, conversationId, setMessages]);
 
   return (
     <div
