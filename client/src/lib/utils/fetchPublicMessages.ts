@@ -1,6 +1,13 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "../types/database.types";
-export async function fetchMessages(
+
+/**
+ * Fetches messages from a conversation
+ * @param supabase - supabase client
+ * @param conversation_id - ID of the conversation which the
+ * @returns
+ */
+export async function fetchPublicMessages(
   supabase: SupabaseClient,
   conversation_id: string
 ) {

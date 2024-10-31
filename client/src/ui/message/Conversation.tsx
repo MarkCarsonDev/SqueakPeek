@@ -8,7 +8,7 @@ import { useState, useRef, useEffect, useMemo } from "react";
 import { useProfile } from "../../lib/store/profile";
 import { useSubscribeConversation } from "@/lib/hooks/useSubscribeConversation";
 import { createSupabaseClient } from "@/lib/supabase/client";
-import { fetchMessages } from "@/lib/utils/fetchMessages";
+import { fetchPublicMessages } from "@/lib/utils/fetchPublicMessages";
 import { MessageCardProps } from "./MessageCard";
 
 /**
@@ -52,7 +52,7 @@ export function Conversation({
   }, [setConversationType, isPrivateConversation]);
 
   useEffect(() => {
-    fetchMessages(supabase, conversationId).then((res) => {
+    fetchPublicMessages(supabase, conversationId).then((res) => {
       const { error, data } = res;
 
       if (error) {
