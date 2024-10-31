@@ -1,85 +1,90 @@
+// ApplicationAction.ts
 "use server";
 import { createSupabaseClient } from "@/lib/supabase/client";
-import { createSupabaseServer } from "@/lib/supabase/server";
 
-interface Application {
-  application_id: string;
-  opportunity_id: string;
-  profile_id: string;
-  // Other fields for the Application
-}
-
-// Function to check if an application already exists for a specific opportunity and user
-export async function applicationExists(
-  opportunity_id: string,
-  profile_id: string
-): Promise<boolean> {
+// This function checks for an existing opportunity and creates a new one if it doesn't exist
+export async function findOrCreateOpportunity(
+  role_title: string,
+  company_name: string,
+  type: "Internship" | "New Grad" | "Co-Op" // Use specific string union type
+): Promise<string | null> {
   const supabase = createSupabaseClient();
-  const { data, error } = await supabase
-    .from("application")
-    .select("application_id")
-    .eq("opportunity_id", opportunity_id)
-    .eq("profile_id", profile_id)
+
+  // Validate that `type` is one of the expected values
+  const validTypes = ["Internship", "New Grad", "Co-Op"];
+  if (!validTypes.includes(type)) {
+    console.error("Invalid opportunity type:", type);
+    return null;
+  }
+
+  // Check if the opportunity exists
+  const { data: opportunityData, error: opportunityError } = await supabase
+    .from("opportunity")
+    .select("opportunity_id")
+    .eq("role_title", role_title)
+    .eq("company_name", company_name)
+    .eq("type", type)
     .single();
 
-  if (error && error.code !== "PGRST116") {
-    // PGRST116: no rows returned, meaning no application exists
-    console.error("Error checking existing application:", error);
-    throw error;
-  }
-
-  return !!data; // Returns true if an application exists, false otherwise
-}
-
-// Insert a new application only if it doesn’t already exist
-export async function InsertApplicationToSupabase(
-  application: Application
-): Promise<Application[] | null> {
-  const { opportunity_id, profile_id } = application;
-
-  // Step 1: Check if the application already exists
-  const exists = await applicationExists(opportunity_id, profile_id);
-  if (exists) {
-    console.warn("Application already exists for this opportunity and user.");
+  if (opportunityError && opportunityError.code !== "PGRST116") {
+    console.error("Error querying opportunity:", opportunityError);
     return null;
   }
 
-  // Step 2: Insert the application if it doesn’t exist
+  if (opportunityData) {
+    return opportunityData.opportunity_id;
+  }
+
+  // Insert new opportunity if not found
+  const { data: newOpportunityData, error: newOpportunityError } = await supabase
+    .from("opportunity")
+    .insert([{ role_title, company_name, type }])
+    .select("opportunity_id")
+    .single();
+
+  if (newOpportunityError) {
+    console.error("Error creating new opportunity:", newOpportunityError);
+    return null;
+  }
+
+  return newOpportunityData.opportunity_id;
+}
+
+// ApplicationAction.ts
+export async function addApplicationWithOpportunityValidation(
+  role_title: string,
+  company_name: string,
+  type: "Internship" | "New Grad" | "Co-Op", // Use specific string union type
+  applicationData: any
+): Promise<void> {
+  // Ensure type is a valid opportunity type
+  const validTypes = ["Internship", "New Grad", "Co-Op"];
+  if (!validTypes.includes(type)) {
+    console.error("Invalid opportunity type:", type);
+    return;
+  }
+
+  // Find or create the opportunity
+  const opportunity_id = await findOrCreateOpportunity(role_title, company_name, type);
+
+  if (!opportunity_id) {
+    console.error("Unable to find or create opportunity for the application.");
+    return;
+  }
+
+  // Add the application with the found opportunity_id
   const supabase = createSupabaseClient();
-  const { data, error } = await supabase
-    .from("application")
-    .insert([application]);
-  if (error) {
-    console.error("Error adding application to database:", error);
-    return null;
-  }
-  return data;
-}
+  const { data, error } = await supabase.from("application").insert([
+    {
+      ...applicationData,
+      opportunity_id,
+      status: applicationData.status, // or default status if not provided
+    },
+  ]);
 
-export async function UpdateApplicationToSupabase(
-  application: Application
-): Promise<Application[] | null> {
-  const supabase = createSupabaseClient();
-  const { data, error } = await supabase
-    .from("application")
-    .update(application)
-    .eq("application_id", application.application_id);
   if (error) {
-    console.error("Error updating application in database:", error);
-    return null;
+    console.error("Error adding application:", error);
+  } else {
+    console.log("Application added successfully:", data);
   }
-  return data;
-}
-
-export async function fetchingApplications(application_id: string) {
-  const supabase = createSupabaseServer();
-  const { data, error } = await supabase
-    .from("application")
-    .select("*")
-    .eq("application_id", application_id);
-  if (error) {
-    console.error("Error fetching applications from database:", error);
-    return null;
-  }
-  return data;
 }

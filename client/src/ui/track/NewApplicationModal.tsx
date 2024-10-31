@@ -17,7 +17,7 @@ interface NewApplicationModalProps {
   existingApplication?: Application;
 }
 
-const jobTypeOptions = ["Full-time", "Part-time", "Contract", "Internship"]; // This is temporary
+const jobTypeOptions = ["Full-time", "Part-time", "Contract", "Internship", "Co-Op", "New Grad"]; // This is temporary
 const companyOptions = ["Google", "Netflix", "Amazon", "Facebook", "Apple"];
 const testProviderOptions = [
   "HackerRank",

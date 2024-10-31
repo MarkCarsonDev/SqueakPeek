@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import {InsertApplicationToSupabase, UpdateApplicationToSupabase} from "@/lib/utils/ApplicationAction";
+import { addApplicationWithOpportunityValidation } from "@/lib/utils/ApplicationAction";
 
 export type ApplicationStage =
   | "Applied"
@@ -69,7 +69,15 @@ export const useTrack = create<TrackState>()((set) => ({
         // Add new application
         state[to].push(application);
         // call the server to insert the application
-      }
+        addApplicationWithOpportunityValidation(
+          application.roleTitle,
+          application.companyName,
+          application.jobtype as "Internship" | "New Grad" | "Co-Op",
+          application
+        ).catch((error) => {
+          console.error("Error adding application:", error);
+        })
+      };
 
       return { ...state };
     }),
