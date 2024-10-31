@@ -33,22 +33,22 @@ export default function NewApplicationModal({
   setApplicationStatus,
   existingApplication,
 }: NewApplicationModalProps) {
-  const [roleTitle, setRoleTitle] = useState(existingApplication?.roleTitle || "");
+  const [role_title, setRoleTitle] = useState(existingApplication?.role_title || "");
   const [location, setLocation] = useState(existingApplication?.location || "");
-  const [jobType, setJobType] = useState(existingApplication?.jobtype || "");
-  const [company, setCompany] = useState(existingApplication?.companyName || "");
-  const [dateApplied, setDateApplied] = useState(existingApplication?.dateApplied || "");
-  const [jobLink, setJobLink] = useState(existingApplication?.applicationURL || "");
+  const [type, setJobType] = useState(existingApplication?.type || "");
+  const [company_name, setCompany] = useState(existingApplication?.company_name || "");
+  const [dateApplied, setDateApplied] = useState(existingApplication?.created_at || "");
+  const [jobLink, setJobLink] = useState(existingApplication?.link || "");
 
   // Extra fields for the form
-  const [testProvider, setTestProvider] = useState(existingApplication?.testProvider || "");
+  const [testProvider, setTestProvider] = useState(existingApplication?.test_provider || "");
   const [currentScore, setCurrentScore] = useState(existingApplication?.currentScore || "");
   const [outOfScore, setOutOfScore] = useState(existingApplication?.outOfScore || "");
-  const [interviewingRound, setInterviewingRound] = useState(existingApplication?.interviewingRound || "");
+  const [interviewingRound, setInterviewingRound] = useState(existingApplication?.interviewing_round || "");
 
   // Conditions for extra fields
-  const showOAFields = ["Online Assesstment", "Interviewing", "Offer"].includes(applicationStatus);
-  const showInterviewingFields = ["Interviewing", "Offer"].includes(applicationStatus);
+  const showOAFields = ["Online Assessment", "Interviewing", "Offer"].includes(applicationStatus as string);
+  const showInterviewingFields = ["Interviewing", "Offer"].includes(applicationStatus as string);
   const { updateApplication, addApplication } = useTrack();
 
   const handleAddApplication = () => {
@@ -59,23 +59,23 @@ export default function NewApplicationModal({
     }
 
     const updatedFields: Partial<Application> = {
-      id: existingApplication ? existingApplication.id : uuidv4(),
-      roleTitle: roleTitle, // Ensure non-null value for required fields
+      application_id: existingApplication ? existingApplication.application_id : uuidv4(),
+      role_title: role_title, // Ensure non-null value for required fields
       location: location,
-      jobtype: jobType,
-      companyName: company,
-      dateApplied: dateApplied,
-      applicationURL: jobLink,
-      applicationStatus,
-      currentScore: currentScore,
-      outOfScore: outOfScore,
-      interviewingRound: interviewingRound,
-      testProvider: testProvider,
+      type: type,
+      company_name: company_name,
+      created_at: dateApplied,
+      link: jobLink,
+      status: applicationStatus as "Rejected" | "Interviewing" | "Offer" | "Applied" | "Online Assessment" ,
+      currentScore: currentScore ? Number(currentScore) : undefined,
+      outOfScore: outOfScore ? Number(outOfScore) : undefined,
+      interviewing_round: interviewingRound,
+      test_provider: testProvider,
     };
 
     if (existingApplication) {
       // Call updateApplication with application ID and partial updates
-      updateApplication(existingApplication.id, updatedFields);
+      updateApplication(existingApplication.application_id, updatedFields);
     } else {
       // If it's a new application, call addApplication as before
       addApplication(applicationStatus, updatedFields as Application);
@@ -134,7 +134,7 @@ export default function NewApplicationModal({
               options={[
                 "Applied",
                 "Rejected",
-                "Online Assesstment",
+                "Online Assessment",
                 "Interviewing",
                 "Offer",
               ]}
@@ -149,7 +149,7 @@ export default function NewApplicationModal({
                 label="Role Title"
                 placeholder="Title"
                 name="roleTitle"
-                value={roleTitle}
+                value={role_title}
                 required
                 fullWidth
                 onChange={(e) => setRoleTitle(e.target.value)}
@@ -202,7 +202,7 @@ export default function NewApplicationModal({
                 placeholder="Company Name"
                 name="company"
                 options={companyOptions}
-                value={company} // Bind value to company state
+                value={company_name} // Bind value to company state
                 onValueChange={(newValue) => setCompany(newValue || "")} // Update company
                 required
                 fullWidth
@@ -213,7 +213,7 @@ export default function NewApplicationModal({
                 placeholder="Type"
                 name="jobType"
                 options={jobTypeOptions}
-                value={jobType} // Bind value to jobType state
+                value={type} // Bind value to jobType state
                 onValueChange={(newValue) => setJobType(newValue || "")} // Update jobType
                 required
                 fullWidth

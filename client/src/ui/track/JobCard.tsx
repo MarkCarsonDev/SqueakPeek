@@ -20,26 +20,26 @@ export function JobCard({ application }: JobCardProps) {
   const { moveApplication, updateApplication } = useTrack();
 
   const {
-    id: applicationId,
-    companyName,
-    roleTitle,
-    applicationStatus: Status,
+    application_id: applicationId,
+    company_name,
+    role_title,
+    status: status,
     currentScore,
     outOfScore,
-    interviewingRound,
+    interviewing_round,
   } = application;
 
   const handleStatusChange = (value: SetStateAction<ApplicationStage>) => {
-    const newStatus = typeof value === "function" ? value(Status) : value;
-    if (newStatus !== Status) {
-      moveApplication(Status, newStatus, applicationId, 0, 0);
-      updateApplication( applicationId, {...application,applicationStatus: newStatus});
+    const newStatus = typeof value === "function" ? value(status) : value;
+    if (newStatus !== status) {
+      moveApplication(status, newStatus, applicationId, 0, 0);
+      updateApplication( applicationId, {...application,status: newStatus});
     }
   };
 
   const handleInterviewRoundChange = (event: SelectChangeEvent<string>) => {
     const newRound = event.target.value;
-    updateApplication( applicationId, { ...application, interviewingRound: newRound });
+    updateApplication( applicationId, { ...application, interviewing_round: newRound });
   };
 
   return (
@@ -101,7 +101,7 @@ export function JobCard({ application }: JobCardProps) {
           onClick={(e) => e.stopPropagation()}
         >
           <Typography variant="subtitle2" sx={{ fontSize: "12px" }}>
-            {companyName}
+            {company_name}
           </Typography>
           <UpdateStatus
             required
@@ -109,11 +109,11 @@ export function JobCard({ application }: JobCardProps) {
             options={[
               "Applied",
               "Rejected",
-              "Online Assesstment",
+              "Online Assessment",
               "Interviewing",
               "Offer",
             ]}
-            applicationStatus={Status}
+            applicationStatus={status}
             setApplicationStage={handleStatusChange}
             customSx={{
               height: "20px",
@@ -122,7 +122,7 @@ export function JobCard({ application }: JobCardProps) {
             }}
           />
           {/* Display the score if status is OA */}
-          {Status === "Online Assesstment" && currentScore && outOfScore && (
+          {status === "Online Assessment" && currentScore && outOfScore && (
             <Typography
               variant="caption"
               sx={{
@@ -137,9 +137,9 @@ export function JobCard({ application }: JobCardProps) {
             </Typography>
           )}
           {/* Display the score if status is OA */}
-          {Status === "Interviewing" && (
+          {status === "Interviewing" && (
             <Select
-              value={interviewingRound || ""}
+              value={interviewing_round || ""}
               onChange={handleInterviewRoundChange}
               renderValue={(selected) => `R: ${selected}`}
               onClick={(e) => e.stopPropagation()}
@@ -189,7 +189,7 @@ export function JobCard({ application }: JobCardProps) {
 
         {/* Row 2: Role Title */}
         <Typography variant="subtitle2" sx={{ fontSize: "12px" }}>
-          {roleTitle}
+          {role_title}
         </Typography>
 
         {/* Row 3: Icon Buttons */}

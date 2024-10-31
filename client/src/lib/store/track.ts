@@ -1,31 +1,20 @@
 import { create } from "zustand";
-
+import { Database} from "@/lib/types/database.types"
 export type ApplicationStage =
   | "Applied"
   | "Rejected"
-  | "Online Assesstment"
+  | "Online Assessment"
   | "Interviewing"
   | "Offer";
 
-export interface Application {
-  id: string;
-  roleTitle: string;
-  companyName: string;
-  location: string;
-  jobtype: string;
-  dateApplied: string;
-  applicationURL: string;
-  applicationStatus: ApplicationStage;
-  currentScore?: string;
-  outOfScore?: string;
-  interviewingRound?: string;
-  testProvider?: string;
-}
+
+
+ export type Application = Database["public"]["Tables"]["application"]["Row"];
 
 interface TrackState {
   Applied: Application[];
   Rejected: Application[];
-  "Online Assesstment": Application[];
+  "Online Assessment": Application[];
   Interviewing: Application[];
   Offer: Application[];
   addApplication: (to: ApplicationStage, application: Application) => void;
@@ -51,14 +40,14 @@ const reorder = (list: Application[], startIndex: number, endIndex: number) => {
 export const useTrack = create<TrackState>()((set) => ({
   Applied: [],
   Rejected: [],
-  "Online Assesstment": [],
+  "Online Assessment": [],
   Interviewing: [],
   Offer: [],
 
   addApplication: (to, application) =>
     set((state) => {
       const existingApplicationIndex = state[to].findIndex(
-        (app) => app.id === application.id
+        (app) => app.application_id === application.application_id
       );
 
       if (existingApplicationIndex >= 0) {
@@ -76,7 +65,7 @@ export const useTrack = create<TrackState>()((set) => ({
   removeApplication: (from, applicationId) =>
     set((state) => {
       state[from] = state[from].filter(
-        (application) => application.id !== applicationId
+        (app) => app.application_id !== applicationId
       );
       return { ...state };
     }),
@@ -89,12 +78,12 @@ export const useTrack = create<TrackState>()((set) => ({
       } else {
         // Move application to a different stage
         const movedApplication = state[from].find(
-          (application) => application.id === applicationId
+          (app) => app.application_id === applicationId
         );
         if (movedApplication) {
           // Remove from the old stage
           state[from] = state[from].filter(
-            (application) => application.id !== applicationId
+            (app) => app.application_id !== applicationId
           );
           // Insert into the new stage at the destination index
           const updatedToList = Array.from(state[to]);
@@ -112,7 +101,7 @@ export const useTrack = create<TrackState>()((set) => ({
         // Find the application across all stages
         for (const stage in state) {
           const applications = state[stage as ApplicationStage];
-          const appIndex = applications.findIndex((app) => app.id === applicationId);
+          const appIndex = applications.findIndex((app) => app.application_id === applicationId);
           if (appIndex !== -1) {
             // Update the application in place
             applications[appIndex] = { ...applications[appIndex], ...updates };

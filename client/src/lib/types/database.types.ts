@@ -12,6 +12,7 @@ export type Database = {
       application: {
         Row: {
           application_id: string
+          company_name: string
           created_at: string
           currentScore: number | null
           interviewing_round: string | null
@@ -20,12 +21,15 @@ export type Database = {
           opportunity_id: string
           outOfScore: number | null
           profile_id: string
-          status: Database["public"]["Enums"]["ApplicationStatus"] | null
+          role_title: string
+          status: Database["public"]["Enums"]["ApplicationStatus"]
           status_update_date: string | null
           test_provider: string | null
+          type: string
         }
         Insert: {
           application_id?: string
+          company_name: string
           created_at?: string
           currentScore?: number | null
           interviewing_round?: string | null
@@ -34,12 +38,15 @@ export type Database = {
           opportunity_id: string
           outOfScore?: number | null
           profile_id: string
-          status?: Database["public"]["Enums"]["ApplicationStatus"] | null
+          role_title: string
+          status?: Database["public"]["Enums"]["ApplicationStatus"]
           status_update_date?: string | null
           test_provider?: string | null
+          type: string
         }
         Update: {
           application_id?: string
+          company_name?: string
           created_at?: string
           currentScore?: number | null
           interviewing_round?: string | null
@@ -48,9 +55,11 @@ export type Database = {
           opportunity_id?: string
           outOfScore?: number | null
           profile_id?: string
-          status?: Database["public"]["Enums"]["ApplicationStatus"] | null
+          role_title?: string
+          status?: Database["public"]["Enums"]["ApplicationStatus"]
           status_update_date?: string | null
           test_provider?: string | null
+          type?: string
         }
         Relationships: [
           {
@@ -387,7 +396,7 @@ export type Database = {
     }
     Enums: {
       ApplicationStatus:
-        | "Initial Screen"
+        | "Applied"
         | "Rejected"
         | "Online Assessment"
         | "Interviewing"

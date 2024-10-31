@@ -18,7 +18,7 @@ export default function Page() {
   const {
     Applied,
     Rejected,
-    "Online Assesstment": OnlineAssesstment,
+    "Online Assessment": OnlineAssesstment,
     Interviewing,
     Offer,
     moveApplication,
@@ -28,7 +28,7 @@ export default function Page() {
   const stages: StageColumnProps[] = [
     {
       stage: "Applied",
-      stageName: "Applied",
+      stageName: "Inital Screen",
       stageColor: "#769FCD",
       applications: Applied,
     },
@@ -39,7 +39,7 @@ export default function Page() {
       applications: Rejected,
     },
     {
-      stage: "Online Assesstment",
+      stage: "Online Assessment",
       stageName: "Online Assessment",
       stageColor: "#EB5B00",
       applications: OnlineAssesstment,
@@ -83,7 +83,7 @@ export default function Page() {
   
     // Retrieve the application being moved
     const draggedApplication = [...useTrack.getState()[from]].find(
-      (app) => app.id === applicationId
+      (app) => app.application_id === applicationId
     );
   
     if (draggedApplication) {
@@ -91,7 +91,7 @@ export default function Page() {
       moveApplication(from, to, applicationId, sourceIndex, destinationIndex);
   
       // Update application status in the store
-      updateApplication(applicationId, {...draggedApplication,applicationStatus: to});
+      updateApplication(applicationId, {...draggedApplication,status: to});
     }
   };
 
