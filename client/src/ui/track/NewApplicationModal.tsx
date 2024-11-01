@@ -7,7 +7,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import UpdateStatus from "@/ui/track/UpdateStatus";
 import { ApplicationStage, useTrack, Application } from "@/lib/store/track";
-import { v4 as uuidv4 } from 'uuid';
 import { useProfile } from "@/lib/store/profile";
 // TODO: Implement the Company Brand Logo based on the company name on when editing the application
 interface NewApplicationModalProps {
