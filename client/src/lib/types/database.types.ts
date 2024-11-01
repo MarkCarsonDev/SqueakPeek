@@ -114,25 +114,25 @@ export type Database = {
           },
         ]
       }
-      conversation: {
+      company_thread: {
         Row: {
-          conversation_id: string
           created_at: string
           opportunity_id: string | null
+          thread_id: string
         }
         Insert: {
-          conversation_id?: string
           created_at?: string
           opportunity_id?: string | null
+          thread_id?: string
         }
         Update: {
-          conversation_id?: string
           created_at?: string
           opportunity_id?: string | null
+          thread_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "conversation_opportunity_id_fkey"
+            foreignKeyName: "public_user_conversation_opportunity_id_fkey"
             columns: ["opportunity_id"]
             isOneToOne: true
             referencedRelation: "opportunity"
@@ -140,11 +140,22 @@ export type Database = {
           },
         ]
       }
+      conversation: {
+        Row: {
+          conversation_id: string
+        }
+        Insert: {
+          conversation_id?: string
+        }
+        Update: {
+          conversation_id?: string
+        }
+        Relationships: []
+      }
       opportunity: {
         Row: {
           company_name: string
           created_at: string
-          date_posted: string | null
           opportunity_id: string
           role_title: string
           type: Database["public"]["Enums"]["OpportunityType"]
@@ -152,7 +163,6 @@ export type Database = {
         Insert: {
           company_name: string
           created_at?: string
-          date_posted?: string | null
           opportunity_id?: string
           role_title: string
           type: Database["public"]["Enums"]["OpportunityType"]
@@ -160,7 +170,6 @@ export type Database = {
         Update: {
           company_name?: string
           created_at?: string
-          date_posted?: string | null
           opportunity_id?: string
           role_title?: string
           type?: Database["public"]["Enums"]["OpportunityType"]
@@ -322,6 +331,7 @@ export type Database = {
           message: string
           message_id: string
           sender_avatar: Database["public"]["Enums"]["Avatar"]
+          sender_id: string | null
           sender_username: string
           thread_id: string | null
         }
@@ -330,6 +340,7 @@ export type Database = {
           message: string
           message_id?: string
           sender_avatar?: Database["public"]["Enums"]["Avatar"]
+          sender_id?: string | null
           sender_username: string
           thread_id?: string | null
         }
@@ -338,6 +349,7 @@ export type Database = {
           message?: string
           message_id?: string
           sender_avatar?: Database["public"]["Enums"]["Avatar"]
+          sender_id?: string | null
           sender_username?: string
           thread_id?: string | null
         }
@@ -346,44 +358,8 @@ export type Database = {
             foreignKeyName: "public_message_thread_id_fkey"
             columns: ["thread_id"]
             isOneToOne: false
-            referencedRelation: "public_user_conversation"
+            referencedRelation: "company_thread"
             referencedColumns: ["thread_id"]
-          },
-        ]
-      }
-      public_user_conversation: {
-        Row: {
-          conversation_id: string
-          created_at: string
-          sender_id: string
-          thread_id: string
-        }
-        Insert: {
-          conversation_id: string
-          created_at?: string
-          sender_id: string
-          thread_id?: string
-        }
-        Update: {
-          conversation_id?: string
-          created_at?: string
-          sender_id?: string
-          thread_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "public_user_conversation_conversation_id_fkey1"
-            columns: ["conversation_id"]
-            isOneToOne: false
-            referencedRelation: "conversation"
-            referencedColumns: ["conversation_id"]
-          },
-          {
-            foreignKeyName: "public_user_conversation_sender_id_fkey"
-            columns: ["sender_id"]
-            isOneToOne: false
-            referencedRelation: "profile"
-            referencedColumns: ["profile_id"]
           },
         ]
       }

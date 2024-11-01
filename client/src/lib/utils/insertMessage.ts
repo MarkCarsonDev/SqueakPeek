@@ -47,6 +47,7 @@ export async function insertMessage(
       sender_username: newMessage.sender_username,
       sender_avatar: newMessage.avatar,
       created_at: new Date().toISOString(),
+      sender_id: "random id for now", // TODO FIX THIS TO BE REAL ID
     };
 
     // Insert the public message into the database
