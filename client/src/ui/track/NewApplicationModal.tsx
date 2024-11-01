@@ -8,6 +8,7 @@ import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import UpdateStatus from "@/ui/track/UpdateStatus";
 import { ApplicationStage, useTrack, Application } from "@/lib/store/track";
 import { v4 as uuidv4 } from 'uuid';
+import { useProfile } from "@/lib/store/profile";
 // TODO: Implement the Company Brand Logo based on the company name on when editing the application
 interface NewApplicationModalProps {
   open: boolean;
@@ -17,7 +18,7 @@ interface NewApplicationModalProps {
   existingApplication?: Application;
 }
 
-const jobTypeOptions = ["Full-time", "Part-time", "Contract", "Internship", "Co-Op", "New Grad"]; // This is temporary
+const jobTypeOptions = ["Internship", "New Grad", "Co-Op", "Full-time", "Part-Time", "Contract"]; // This is temporary
 const companyOptions = ["Google", "Netflix", "Amazon", "Facebook", "Apple"];
 const testProviderOptions = [
   "HackerRank",
@@ -50,11 +51,17 @@ export default function NewApplicationModal({
   const showOAFields = ["Online Assessment", "Interviewing", "Offer"].includes(applicationStatus as string);
   const showInterviewingFields = ["Interviewing", "Offer"].includes(applicationStatus as string);
   const { updateApplication, addApplication } = useTrack();
-
-  const handleAddApplication = () => {
+  const { profile } = useProfile();
+  const handleAddApplication = (e: React.FormEvent) => {
+    e.preventDefault(); // Prevent default form submission
     console.log("status: ", applicationStatus);
     if (!applicationStatus) {
       alert("Please select a status before submitting");
+      return;
+    }
+
+    if (!profile) {
+      console.error("User must be authenticated to add an application");
       return;
     }
 
@@ -78,7 +85,7 @@ export default function NewApplicationModal({
       updateApplication(existingApplication.application_id, updatedFields);
     } else {
       // If it's a new application, call addApplication as before
-      addApplication(applicationStatus, updatedFields as Application);
+      addApplication(applicationStatus, updatedFields as Application, profile);
     }
 
     handleClose();
@@ -104,6 +111,7 @@ export default function NewApplicationModal({
           flexDirection: "column",
           gap: "0px 30px",
         }}
+        
         onSubmit={handleAddApplication}
       >
         <Typography

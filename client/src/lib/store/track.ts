@@ -1,5 +1,7 @@
 import { create } from "zustand";
 import { Database} from "@/lib/types/database.types"
+import { InsertApplication } from "@/lib/utils/InsertApplication";
+import {Profile} from "@/lib/store/profile";
 export type ApplicationStage =
   | "Applied"
   | "Rejected"
@@ -17,7 +19,7 @@ interface TrackState {
   "Online Assessment": Application[];
   Interviewing: Application[];
   Offer: Application[];
-  addApplication: (to: ApplicationStage, application: Application) => void;
+  addApplication: (to: ApplicationStage, application: Application, profile: Profile) => void;
   removeApplication: (from: ApplicationStage, applicationId: string) => void;
   moveApplication: (
     from: ApplicationStage,
@@ -44,7 +46,7 @@ export const useTrack = create<TrackState>()((set) => ({
   Interviewing: [],
   Offer: [],
 
-  addApplication: (to, application) =>
+  addApplication: (to, application, profile) =>
     set((state) => {
       const existingApplicationIndex = state[to].findIndex(
         (app) => app.application_id === application.application_id
@@ -57,6 +59,7 @@ export const useTrack = create<TrackState>()((set) => ({
         // Add new application
         state[to].push(application);
         // call the server to insert the application
+        InsertApplication(application, profile);
       };
 
       return { ...state };

@@ -144,7 +144,7 @@ export type Database = {
         Row: {
           company_name: string
           created_at: string
-          date_posted: string | null
+          // date_posted: string | null
           opportunity_id: string
           role_title: string
           type: Database["public"]["Enums"]["OpportunityType"]
@@ -152,7 +152,7 @@ export type Database = {
         Insert: {
           company_name: string
           created_at?: string
-          date_posted?: string | null
+          // date_posted?: string | null
           opportunity_id?: string
           role_title: string
           type: Database["public"]["Enums"]["OpportunityType"]
@@ -160,7 +160,7 @@ export type Database = {
         Update: {
           company_name?: string
           created_at?: string
-          date_posted?: string | null
+          // date_posted?: string | null
           opportunity_id?: string
           role_title?: string
           type?: Database["public"]["Enums"]["OpportunityType"]
