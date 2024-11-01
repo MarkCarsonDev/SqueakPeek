@@ -54,6 +54,7 @@ export const MessageInput = memo(function MessageInput({
       const newMessage: MessageCardProps = {
         avatar: profile.avatar as AvatarTypes,
         sender_username: profile.username!,
+        sender_id: profile.profile_id,
         timestamp: new Date().toUTCString(),
         messageId: uuidv4(),
         message,

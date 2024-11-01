@@ -11,10 +11,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUp } from "@fortawesome/free-solid-svg-icons/faCircleUp";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { insertPrivateConversation } from "@/lib/utils/insertPrivateConversation";
+import { useProfile } from "@/lib/store/profile";
 
 interface PrivateMessageModalProps {
   isOpen: boolean;
-  receiverUsername: string;
+  receiver_username: string;
+  receiver_id: string;
   onClose: () => void;
 }
 
@@ -26,17 +29,26 @@ interface PrivateMessageModalProps {
  */
 export function PrivateMessageModal({
   isOpen,
-  receiverUsername,
+  receiver_username,
+  receiver_id,
   onClose,
 }: PrivateMessageModalProps) {
   const [currentMessage, setCurrentMessage] = useState("");
+  const { profile } = useProfile();
   const router = useRouter();
 
-  const handleSendMessage = () => {
-    // TODO add backend logic to send message into conversation table, and create a new conversation table if it has not been created yet
-    setCurrentMessage("");
-    // TODO Replace hardcoded value with the real conversationID
-    router.push(`/message/private/private_conversationID`);
+  const handleSendMessage = async () => {
+    if (profile) {
+      const { data, error } = await insertPrivateConversation(
+        profile.profile_id,
+        receiver_id
+      );
+
+      console.log("data: ", data);
+      console.log("error: ", error);
+    }
+    // // TODO Replace hardcoded value with the real conversationID
+    // router.push(`/message/private/private_conversationID`);
   };
   return (
     <Modal
@@ -70,7 +82,7 @@ export function PrivateMessageModal({
             fontWeight: "bold",
           }}
         >
-          Direct Message {receiverUsername}?
+          Direct Message {receiver_username}?
         </Typography>
         <TextField
           sx={{

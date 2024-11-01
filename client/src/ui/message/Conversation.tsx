@@ -65,12 +65,14 @@ export function Conversation({
             sender_username,
             message,
             message_id,
+            sender_id,
           }) => ({
             avatar: sender_avatar,
             sender_username,
             timestamp: created_at,
             message,
             messageId: message_id,
+            sender_id: sender_id!,
           })
         );
         setMessages(mappedData);
