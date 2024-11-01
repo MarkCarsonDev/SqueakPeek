@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import { Database} from "@/lib/types/database.types"
 import { InsertApplication } from "@/lib/utils/InsertApplication";
+// import { SupabaseClient } from '@supabase/supabase-js';
+import { createSupabaseClient } from '@/lib/supabase/client';
 import {Profile} from "@/lib/store/profile";
 export type ApplicationStage =
   | "Applied"
@@ -46,7 +48,24 @@ export const useTrack = create<TrackState>()((set) => ({
   Interviewing: [],
   Offer: [],
 
-  addApplication: (to, application, profile) =>
+  addApplication: async (to, application, profile) => {
+    const supabase = createSupabaseClient();
+    // Call the server to insert the application
+    try {
+      const error = await InsertApplication(supabase, profile, application);
+      if (error) {
+        console.error("Error inserting application:", error.message);
+      } else {
+        console.log("Application inserted successfully");
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Error inserting application:", error.message);
+      } else {
+        console.error("Unknown error inserting application");
+      }
+    }
+
     set((state) => {
       const existingApplicationIndex = state[to].findIndex(
         (app) => app.application_id === application.application_id
@@ -58,12 +77,11 @@ export const useTrack = create<TrackState>()((set) => ({
       } else {
         // Add new application
         state[to].push(application);
-        // call the server to insert the application
-        InsertApplication(application, profile);
-      };
+      }
 
       return { ...state };
-    }),
+    });
+  },
 
   removeApplication: (from, applicationId) =>
     set((state) => {

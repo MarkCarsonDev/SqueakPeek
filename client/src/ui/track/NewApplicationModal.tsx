@@ -52,7 +52,7 @@ export default function NewApplicationModal({
   const showInterviewingFields = ["Interviewing", "Offer"].includes(applicationStatus as string);
   const { updateApplication, addApplication } = useTrack();
   const { profile } = useProfile();
-  const handleAddApplication = (e: React.FormEvent) => {
+  const handleAddApplication = async (e: React.FormEvent) => {
     e.preventDefault(); // Prevent default form submission
     console.log("status: ", applicationStatus);
     if (!applicationStatus) {
@@ -66,7 +66,7 @@ export default function NewApplicationModal({
     }
 
     const updatedFields: Partial<Application> = {
-      application_id: existingApplication ? existingApplication.application_id : uuidv4(),
+      //application_id: existingApplication ? existingApplication.application_id : uuidv4(),
       role_title: role_title, // Ensure non-null value for required fields
       location: location,
       type: type,
@@ -85,7 +85,11 @@ export default function NewApplicationModal({
       updateApplication(existingApplication.application_id, updatedFields);
     } else {
       // If it's a new application, call addApplication as before
-      addApplication(applicationStatus, updatedFields as Application, profile);
+      try {
+        await addApplication(applicationStatus, updatedFields as Application, profile);
+      } catch (error) {
+        console.error("Error adding application:", error);
+      }
     }
 
     handleClose();
