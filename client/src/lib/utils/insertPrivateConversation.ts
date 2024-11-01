@@ -1,3 +1,8 @@
+// create the conversation table
+// create two records in private_user_conversation, where the conversation_id is based on the recently created conversation record:
+// 1. One for the user that initiated the conversation
+// 2. One for the receiving user
+
 import { v4 as uuidv4 } from "uuid";
 import { SupabaseClient } from "@supabase/supabase-js";
 
@@ -9,7 +14,7 @@ import { SupabaseClient } from "@supabase/supabase-js";
  * @param recieverProfileId - The optional ID of the receiver's profile (only for private threads).
  * @returns A promise that resolves to the thread ID or null if an error occurs or no thread is found.
  */
-export async function createPublicThread(
+export async function createPrivateConversation(
   supabase: SupabaseClient,
   senderProfileId: string,
   conversationID: string
