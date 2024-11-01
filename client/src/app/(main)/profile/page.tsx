@@ -1,8 +1,13 @@
 "use client"
 import "@/app/(main)/profile/profile.css"
 import { InputField } from "@/ui/InputField";
-import { useState } from "react";
+import { useEffect, useState, useMemo} from "react";
 import { Button, Avatar, Typography } from "@mui/material";
+import { createSupabaseClient } from "@/lib/supabase/client";
+import { useProfile } from "@/lib/store/profile";
+
+
+
 export default function Page() {
 
   const avatars = [
@@ -25,7 +30,56 @@ export default function Page() {
     },
   ];
 
-  const [chosenAvatar, setAvatar] = useState("");
+  //Gets profile data using useProfile function
+  const { profile } = useProfile(); 
+  const [profileData, setProfileData] = useState<
+    { profile_id: string; username: string | null; email: string | null; avatar: "avatar1" | "avatar2" | "avatar3" | "avatar4"; school: string | null; }[] | null
+  >(null);
+
+  // Creates Supabase Client
+  const supabase = useMemo(() => createSupabaseClient(), []);
+
+  // Creats chosenAvatar, username 
+  const [chosenAvatar, setAvatar] = useState<string | null>(null);
+  const [username, setUsername] = useState<string | null>(null);
+  const [school, setSchool] = useState<string | null>(null);
+
+  // checks if profile is null then calls fetchUserprofile
+  useEffect(() => {
+    if (profile && profile.profile_id) {
+      fetchUserProfile(profile);
+    }
+  }, [profile?.profile_id]);
+
+  // Checks if data is not null then sets username, school, and avater to values from profile table
+  useEffect(() => {
+    if (profileData && profileData.length > 0) {
+      setUsername(profileData[0].username);
+      setSchool(profileData[0].school);
+      setAvatar(profileData[0].avatar);
+    }
+  }, [profileData]);
+
+  // Fetches user profile data
+  async function fetchUserProfile(user: typeof profile) {
+    if (!user) return; // Early return if user is null, to satisfy TypeScript
+    try {
+      // Query the profile table using the user's profile_id
+      const { data, error } = await supabase
+        .from("profile")
+        .select("profile_id, username, email, avatar, school")
+        .eq("profile_id", user.profile_id);
+
+      if (error) {
+        console.error("Error fetching profile:", error);
+      } else {
+        setProfileData(data);
+      }
+    } catch (error) {
+      console.error("An unexpected error occurred:", error);
+    }
+  }
+
 
   return (
 
@@ -56,8 +110,8 @@ export default function Page() {
             />
           ))}
         </div>
-        <InputField required label="Full Name"/>
-        <InputField required label="Username"/>
+        <InputField required label="Username" defaultValue={username} fullWidth/>
+        <InputField required label="School" defaultValue={school} fullWidth/>
       </div>
     </div>
   );
