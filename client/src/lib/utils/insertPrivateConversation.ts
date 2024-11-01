@@ -1,47 +1,22 @@
-// create the conversation table
-// create two records in private_user_conversation, where the conversation_id is based on the recently created conversation record:
-// 1. One for the user that initiated the conversation
-// 2. One for the receiving user
-
-import { v4 as uuidv4 } from "uuid";
 import { SupabaseClient } from "@supabase/supabase-js";
+import { createSupabaseClient } from "../supabase/client";
 
 /**
- * Initializes a thread for a conversation, either private or public.
+ * Initializes a private conversation between two users
  *
- * @param senderProfileId - The ID of the sender's profile.
- * @param conversationID - The ID of the conversation to which the thread belongs.
- * @param recieverProfileId - The optional ID of the receiver's profile (only for private threads).
- * @returns A promise that resolves to the thread ID or null if an error occurs or no thread is found.
+ * @param senderId - The ID of the sender's profile.
+ * @param recieverId - The optional ID of the receiver's profile (only for private threads).
  */
-export async function createPrivateConversation(
-  supabase: SupabaseClient,
-  senderProfileId: string,
-  conversationID: string
+export async function insertPrivateConversation(
+  senderId: string,
+  receiverId: string,
+  supabase: SupabaseClient = createSupabaseClient()
 ) {
-  console.log(senderProfileId); // Log sender profile ID
-  console.log(conversationID); // Log conversation ID
+  // Invokes a insert_private_conversation transaction in the database
+  const { data, error } = await supabase.rpc("insert_private_conversation", {
+    sender_id: senderId,
+    receiver_id: receiverId,
+  });
 
-  // If no existing thread, create a new public thread
-  const { data, error } = await supabase
-    .from("public_user_conversation")
-    .insert([
-      {
-        sender_id: senderProfileId.toString(),
-        conversation_id: conversationID.toString(),
-        thread_id: uuidv4(),
-      },
-    ])
-    .select("thread_id");
-
-  if (error) {
-    console.log(senderProfileId);
-    console.log(conversationID);
-    console.error("Error initializing public thread:", error.message);
-    return;
-  }
-
-  console.log("Public thread initialized:", data);
-
-  return data[0].thread_id;
+  return { data, error };
 }
