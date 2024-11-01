@@ -13,4 +13,10 @@
     background-color: white;
     border: solid 3px #e0e4f2;
     border-radius: 20px;
+    align-items: center;
+    justify-content: center;
+}
+
+.avatar-container{
+    display: flex;
 }

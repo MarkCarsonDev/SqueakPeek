@@ -58,7 +58,6 @@ export default function Page() {
         </div>
         <InputField required label="Full Name"/>
         <InputField required label="Username"/>
-        <InputField required label="Full Name"/>
       </div>
     </div>
   );
