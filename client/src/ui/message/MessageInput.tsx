@@ -48,25 +48,33 @@ export const MessageInput = memo(function MessageInput({
   //   return () => document.removeEventListener("click", handleFocus);
   // }, []);
 
-  function handleSendMessage(message: string) {
+  async function handleSendMessage(message: string) {
     // only allows to add message if profile is made
     if (profile) {
       const newMessage: MessageCardProps = {
-        avatar: (profile.avatar as AvatarTypes),
+        avatar: profile.avatar as AvatarTypes,
         sender_username: profile.username!,
         timestamp: new Date().toUTCString(),
         messageId: uuidv4(),
         message,
       };
 
-      // TODO: need to check state of channel before sending message
-      senderChannel.send({
-        type: "broadcast",
-        event: "conversation",
-        payload: { message: newMessage },
-      });
+      // TODO: Do something if inserting to the database fails
+      const error = await insertMessage(
+        supabase,
+        newMessage,
+        conversationId,
+        profile
+      );
 
-      insertMessage(supabase, newMessage, conversationId, profile);
+      // TODO: need to check state of channel before sending message
+      if (!error) {
+        senderChannel.send({
+          type: "broadcast",
+          event: "conversation",
+          payload: { message: newMessage },
+        });
+      }
     }
   }
 
