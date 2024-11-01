@@ -2,29 +2,24 @@ import { SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "../types/database.types";
 
 /**
- * Fetches messages from a conversation
+ * Fetches messages from a company thread
  * @param supabase - supabase client
- * @param conversation_id - ID of the conversation which the
+ * @param thread_id - ID of the conversation which the
  * @returns
  */
-export async function fetchPublicMessages(
+export async function fetchCompanyThreadMessages(
   supabase: SupabaseClient,
-  conversation_id: string
+  thread_id: string
 ) {
   const res = await supabase
     .from("public_message")
     .select(
       `
       *,
-      public_user_conversation!inner(
-        conversation!inner()
-      )
+      company_thread!inner()
     `
     )
-    .eq(
-      "public_user_conversation.conversation.conversation_id",
-      conversation_id
-    );
+    .eq("company_thread.thread_id", thread_id);
 
   const { error } = res;
   const data =
