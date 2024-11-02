@@ -8,7 +8,7 @@ import { useState, useRef, useEffect, useMemo } from "react";
 import { useProfile } from "../../lib/store/profile";
 import { useSubscribeConversation } from "@/lib/hooks/useSubscribeConversation";
 import { createSupabaseClient } from "@/lib/supabase/client";
-import { fetchCompanyThreadMessages } from "@/lib/utils/fetchCompanyThreadMessages";
+import { fetchMessages } from "@/lib/utils/fetchMessages";
 import { MessageCardProps } from "./MessageCard";
 
 /**
@@ -52,7 +52,11 @@ export function Conversation({
   }, [setConversationType, isPrivateConversation]);
 
   useEffect(() => {
-    fetchCompanyThreadMessages(supabase, conversationId).then((res) => {
+    fetchMessages(
+      conversationId,
+      isPrivateConversation,
+      supabase
+    ).then((res) => {
       const { error, data } = res;
 
       if (error) {
@@ -65,18 +69,20 @@ export function Conversation({
             sender_username,
             message,
             message_id,
+            sender_id,
           }) => ({
             avatar: sender_avatar,
             sender_username,
             timestamp: created_at,
             message,
             messageId: message_id,
+            sender_id: sender_id!,
           })
         );
         setMessages(mappedData);
       }
     });
-  }, [supabase, conversationId, setMessages]);
+  }, [supabase, conversationId, setMessages, isPrivateConversation]);
 
   return (
     <div
