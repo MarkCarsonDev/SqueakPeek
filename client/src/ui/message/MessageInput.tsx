@@ -12,7 +12,7 @@ import { insertMessage } from "../../lib/utils/insertMessage";
 import { AvatarTypes } from "../ProfileAvatar";
 import { useMessage } from "@/lib/store/message";
 /**
- * Allows user to send a message into a conversation, and broadcasts the message based on the conversationId
+ * Allows user to send a message into a private conversation or a company thread, and broadcasts the message based on the conversationId
   * @param {string} conversationId - ID used to broadcast messages to subscribed users
 
  */

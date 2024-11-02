@@ -11,7 +11,7 @@ import { createSupabaseClient } from "../supabase/client";
  * @param profile - The sender's profile metadata
  * @param isPrivateConversation - Either private or company. Determines where the message is inserted
  * @param supabase - Supabase client to make queries to the database
- * @return - An Postgrest error value determining if the insertion was successful
+ * @return {error PostgrestError}
  */
 export async function insertMessage(
   newMessage: MessageCardProps,

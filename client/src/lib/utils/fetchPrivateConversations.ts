@@ -5,7 +5,7 @@ import { SupabaseClient } from "@supabase/supabase-js";
  * Fetches private conversations of the current user
  * @param profile_id - The current user's profile id
  * @param supabase - The Supabase client to make queries
- * @returns An object containing data and error. Data contains the new conversation ID created
+ * @returns {data: An array of private conversations from a particular user, error: PostgrestError}
  */
 export async function fetchPrivateConversations(
   profile_id: string,

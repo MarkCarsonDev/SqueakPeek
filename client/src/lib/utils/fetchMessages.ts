@@ -8,7 +8,7 @@ import { createSupabaseClient } from "../supabase/client";
  * @param isPrivateConversation - Boolean value used to determine which conversation type the message is inserted into
  * @param supabase - supabase client to make supabase queries
 
- * @returns
+ * @returns {data: messages, error: Postgress error} - data contains the messages from the conversation
  */
 export async function fetchMessages(
   conversation_id: string,
