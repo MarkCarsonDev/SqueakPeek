@@ -10,6 +10,7 @@ import { v4 as uuidv4 } from "uuid";
 import { memo, useMemo } from "react";
 import { insertMessage } from "../../lib/utils/insertMessage";
 import { AvatarTypes } from "../ProfileAvatar";
+import { useMessage } from "@/lib/store/message";
 /**
  * Allows user to send a message into a conversation, and broadcasts the message based on the conversationId
   * @param {string} conversationId - ID used to broadcast messages to subscribed users
@@ -23,6 +24,7 @@ export const MessageInput = memo(function MessageInput({
   const { profile } = useProfile();
   const [currentMessage, setCurrentMessage] = useState("");
   const messageInputRef = useRef<null | HTMLDivElement>(null);
+  const { isPrivateConversation } = useMessage();
 
   // Memoize the Supabase client and the sender channel to prevent changing it's value when MessageInput re-renders
   const supabase = useMemo(() => createSupabaseClient(), []);
@@ -62,10 +64,11 @@ export const MessageInput = memo(function MessageInput({
 
       // TODO: Do something if inserting to the database fails
       const error = await insertMessage(
-        supabase,
         newMessage,
         conversationId,
-        profile
+        profile,
+        isPrivateConversation ? "private" : "company",
+        supabase
       );
 
       // TODO: need to check state of channel before sending message

@@ -13,6 +13,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { insertPrivateConversation } from "@/lib/utils/insertPrivateConversation";
 import { useProfile } from "@/lib/store/profile";
+import { insertMessage } from "@/lib/utils/insertMessage";
+import { MessageCardProps } from "./MessageCard";
+import { v4 as uuidv4 } from "uuid";
 
 interface PrivateMessageModalProps {
   isOpen: boolean;
@@ -39,16 +42,34 @@ export function PrivateMessageModal({
 
   const handleSendMessage = async () => {
     if (profile) {
-      const { data, error } = await insertPrivateConversation(
-        profile.profile_id,
-        receiver_id
-      );
+      const { data: new_conversation_id, error } =
+        await insertPrivateConversation(profile.profile_id, receiver_id);
 
-      console.log("data: ", data);
-      console.log("error: ", error);
+      if (error) {
+        // TODO do something
+      } else if (new_conversation_id) {
+        const newMessage: MessageCardProps = {
+          avatar: profile.avatar,
+          sender_username: profile.username,
+          sender_id: profile.username,
+          timestamp: new Date().toUTCString(),
+          messageId: uuidv4(),
+          message: currentMessage,
+        };
+        const insertMessageError = await insertMessage(
+          newMessage,
+          new_conversation_id,
+          profile,
+          "private"
+        );
+        if (insertMessageError) {
+          // TODO: Do something
+        } else {
+          // // TODO Replace hardcoded value with the real conversationID
+          router.push(`/message/private/private_conversationID`);
+        }
+      }
     }
-    // // TODO Replace hardcoded value with the real conversationID
-    // router.push(`/message/private/private_conversationID`);
   };
   return (
     <Modal

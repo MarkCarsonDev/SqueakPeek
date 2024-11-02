@@ -2,6 +2,7 @@ import { MessageCardProps } from "../../ui/message/MessageCard";
 import { Profile } from "../store/profile";
 import { SupabaseClient, PostgrestError } from "@supabase/supabase-js";
 import { Database } from "../types/database.types";
+import { createSupabaseClient } from "../supabase/client";
 
 // TODO Take into account for inserting private messages
 /**
@@ -12,22 +13,38 @@ import { Database } from "../types/database.types";
  * @param profile - The sender's profile metadata
  */
 export async function insertMessage(
-  supabase: SupabaseClient,
   newMessage: MessageCardProps,
   conversationId: string,
-  profile: Profile
+  profile: Profile,
+  conversationType: "private" | "company",
+  supabase: SupabaseClient = createSupabaseClient(),
+
 ): Promise<PostgrestError | null> {
-  // If a thread ID is available, send the message
-  const addMsg: Database["public"]["Tables"]["public_message"]["Row"] = {
-    thread_id: conversationId,
-    message: newMessage.message,
-    message_id: newMessage.messageId,
-    sender_username: newMessage.sender_username,
-    sender_avatar: newMessage.avatar,
-    created_at: new Date().toISOString(),
-    sender_id: profile.profile_id,
-  };
-  // Insert the public message into the database
-  const { error } = await supabase.from("public_message").insert(addMsg);
-  return error;
+  if (conversationType === "company") {
+    const addMsg: Database["public"]["Tables"]["public_message"]["Row"] = {
+      thread_id: conversationId,
+      message: newMessage.message,
+      message_id: newMessage.messageId,
+      sender_username: newMessage.sender_username,
+      sender_avatar: newMessage.avatar,
+      created_at: new Date().toISOString(),
+      sender_id: profile.profile_id,
+    };
+    // Insert the public message into the database
+    const { error } = await supabase.from("public_message").insert(addMsg);
+    return error;
+  } else {
+    // conversation type is private
+    const addMsg: Database["public"]["Tables"]["private_message"]["Row"] = {
+      conversation_id: conversationId,
+      message: newMessage.message,
+      message_id: newMessage.messageId,
+      sender_username: newMessage.sender_username,
+      sender_avatar: newMessage.avatar,
+      created_at: new Date().toISOString(),
+    };
+    // Insert the public message into the database
+    const { error } = await supabase.from("private_message").insert(addMsg);
+    return error;
+  }
 }
