@@ -12,10 +12,12 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/navigation";
 import { CurrentProfileAvatar } from "./CurrentProfileAvatar";
+import { createSupabaseClient } from "@/lib/supabase/client";
 
 export function NavbarMenuDropdown() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const supabase = createSupabaseClient();
 
   //function to open menu
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -36,8 +38,19 @@ export function NavbarMenuDropdown() {
   };
 
   // Dummy function to handle login logic
-  const handleLogout = () => {
-    console.log("logout");
+  const handleLogout = async () => {
+    
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.error("Error signing out:", error.message);
+      } else {
+        // Redirect to the login page or homepage after signing out
+        router.push("/"); // Adjust the route as needed
+      }
+    } catch (error) {
+      console.error("Unexpected error during sign-out:", error);
+    }
   };
 
   return (
