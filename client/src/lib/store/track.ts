@@ -1,9 +1,9 @@
 import { create } from "zustand";
 import { Database} from "@/lib/types/database.types"
-import { InsertApplication } from "@/lib/utils/InsertApplication";
+// import { InsertApplication } from "@/lib/utils/InsertApplication";
 // import { SupabaseClient } from '@supabase/supabase-js';
-import { createSupabaseClient } from '@/lib/supabase/client';
-import {Profile} from "@/lib/store/profile";
+// import { createSupabaseClient } from '@/lib/supabase/client';
+// import {Profile} from "@/lib/store/profile";
 export type ApplicationStage =
   | "Applied"
   | "Rejected"
@@ -21,7 +21,7 @@ interface TrackState {
   "Online Assessment": Application[];
   Interviewing: Application[];
   Offer: Application[];
-  addApplication: (to: ApplicationStage, application: Application, profile: Profile) => void;
+  addApplication: (to: ApplicationStage, application: Application) => void;
   removeApplication: (from: ApplicationStage, applicationId: string) => void;
   moveApplication: (
     from: ApplicationStage,
@@ -48,23 +48,23 @@ export const useTrack = create<TrackState>()((set) => ({
   Interviewing: [],
   Offer: [],
 
-  addApplication: async (to, application, profile) => {
-    const supabase = createSupabaseClient();
-    // Call the server to insert the application
-    try {
-      const error = await InsertApplication(supabase, profile, application);
-      if (error) {
-        console.error("Error inserting application:", error.message);
-      } else {
-        console.log("Application inserted successfully");
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error("Error inserting application:", error.message);
-      } else {
-        console.error("Unknown error inserting application");
-      }
-    }
+  addApplication: async (to, application) => {
+    // const supabase = createSupabaseClient();
+    // // Call the server to insert the application
+    // try {
+    //   const error = await InsertApplication(supabase, profile, application);
+    //   if (error) {
+    //     console.error("Error inserting application:", error.message);
+    //   } else {
+    //     console.log("Application inserted successfully");
+    //   }
+    // } catch (error) {
+    //   if (error instanceof Error) {
+    //     console.error("Error inserting application:", error.message);
+    //   } else {
+    //     console.error("Unknown error inserting application");
+    //   }
+    // }
 
     set((state) => {
       const existingApplicationIndex = state[to].findIndex(
