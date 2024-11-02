@@ -66,7 +66,7 @@ export function PrivateMessageModal({
         if (insertMessageError) {
           // TODO: Do something to handle error
         } else {
-          router.push(`/message/private/private_conversationID`);
+          router.push(`/message/private/${new_conversation_id}`);
         }
       }
     }
