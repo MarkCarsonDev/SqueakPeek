@@ -37,7 +37,7 @@ export function NavbarMenuDropdown() {
     router.push("/profile");
   };
 
-  // Dummy function to handle login logic
+  // function to handle login logic
   const handleLogout = async () => {
     
     try {
