@@ -3,6 +3,7 @@ import { Typography, Button } from "@mui/material";
 import { Droppable, Draggable } from "@hello-pangea/dnd";
 import { Application, ApplicationStage } from "@/lib/store/track";
 import { JobCard } from "./JobCard";
+import { useProfile } from "@/lib/store/profile";
 
 export interface StageColumnProps {
   stage: ApplicationStage;
@@ -19,8 +20,9 @@ export const StageColumn: React.FC<StageColumnProps> = ({
   stageColor,
   applications,
   handleOpenModal,
-  onCardClick
+  onCardClick,
 }) => {
+  const { profile } = useProfile(); // Retrieve profile data
   return (
     <Droppable droppableId={stage} key={stage}>
       {(provided, snapshot) => {
@@ -115,7 +117,7 @@ export const StageColumn: React.FC<StageColumnProps> = ({
                       }}
                       onClick={() => onCardClick?.(app)}
                     >
-                      <JobCard application= {app}/>
+                      {profile && <JobCard application={app} profile={profile} />}
                     </div>
                   )}
                 </Draggable>

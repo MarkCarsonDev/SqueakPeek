@@ -59,11 +59,6 @@ export default function NewApplicationModal({
   const handleAddApplication = async (e: React.FormEvent) => {
     e.preventDefault(); // Prevent default form submission
     console.log("status: ", applicationStatus);
-    if (!applicationStatus) {
-      alert("Please select a status before submitting");
-      return;
-    }
-
     if (!profile) {
       console.error("User must be authenticated to add an application");
       return;
