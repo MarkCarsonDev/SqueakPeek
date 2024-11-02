@@ -59,12 +59,16 @@ export const useTrack = create<TrackState>()((set) => ({
     const supabase = createSupabaseClient();
 
     // Call the InsertApplication function
-    const error = await InsertApplication(supabase, profile, application);
-    if (error) {
-      console.error("Error inserting application:", error.message);
-      return error;
+    const result = await InsertApplication(supabase, profile, application);
+    if (result && typeof result !== "string") {
+      console.error("Error inserting application:", (result as PostgrestError).message);
+      return result as PostgrestError;
     }
 
+    if (result && typeof result === "string") {
+      application.application_id = result;
+    }
+    
     set((state) => {
       const existingApplicationIndex = state[to].findIndex(
         (app) => app.application_id === application.application_id

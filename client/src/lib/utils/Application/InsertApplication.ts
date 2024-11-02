@@ -8,7 +8,7 @@ export async function InsertApplication(
   supabase: SupabaseClient,
   profile: Profile,
   application: Application
-): Promise<PostgrestError | undefined> {
+): Promise<string | PostgrestError | undefined> {
   const { data: opportunityData, error: opportunityError } = await supabase
     .from("opportunity")
     .select("opportunity_id")

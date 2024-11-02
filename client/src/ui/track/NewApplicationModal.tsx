@@ -75,7 +75,6 @@ export default function NewApplicationModal({
       location: location,
       type: type,
       company_name: company_name,
-      created_at: dateApplied,
       link: jobLink,
       status: applicationStatus as "Applied" | "Rejected" | "Online Assessment" | "Interviewing" | "Offer",
       currentScore: currentScore ? Number(currentScore) : undefined,

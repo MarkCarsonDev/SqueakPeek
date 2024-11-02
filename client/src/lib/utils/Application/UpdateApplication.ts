@@ -18,7 +18,7 @@ export async function UpdateApplication(
       .eq("profile_id", profile.profile_id);
 
   if (existingApplicationError) {
-    console.error(applicationId, profile.profile_id);
+    console.error(updatedFields.application_id, profile.profile_id);
     console.error(
       "Error checking existing application:",
       existingApplicationError.message
