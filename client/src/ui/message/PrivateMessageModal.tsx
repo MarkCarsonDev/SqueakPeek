@@ -27,7 +27,8 @@ interface PrivateMessageModalProps {
 /**
  * A modal that allows the current user to start a conversation with another user in the company threads
  * @param {boolean} isOpen - A value that determines if the modal is rendered
- * @param {string} receiverUsername - The other user's username that the current user has selected to attempt to start a new conversation with
+ * @param {string} receiver_username - The other user's username that the current user has selected to attempt to start a new conversation with
+ * @param {string} receiver_id - The ID of the receiver
  * @param {() => void} onClose - A function that closes the PrivateMessageModal when invoked
  */
 export function PrivateMessageModal({
@@ -60,12 +61,11 @@ export function PrivateMessageModal({
           newMessage,
           new_conversation_id,
           profile,
-          "private"
+          true
         );
         if (insertMessageError) {
-          // TODO: Do something
+          // TODO: Do something to handle error
         } else {
-          // // TODO Replace hardcoded value with the real conversationID
           router.push(`/message/private/private_conversationID`);
         }
       }

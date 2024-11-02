@@ -67,7 +67,7 @@ export const MessageInput = memo(function MessageInput({
         newMessage,
         conversationId,
         profile,
-        isPrivateConversation ? "private" : "company",
+        isPrivateConversation,
         supabase
       );
 
