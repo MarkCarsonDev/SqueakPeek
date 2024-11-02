@@ -72,6 +72,7 @@ export function SideNav() {
           }
         });
       } else {
+        //TODO: Fetch bookmarked opportunities here
         setMessageNotificationsList([
           {
             avatar: "test",
