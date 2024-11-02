@@ -45,8 +45,8 @@ export function NavbarMenuDropdown() {
       if (error) {
         console.error("Error signing out:", error.message);
       } else {
-        // Redirect to the login page or homepage after signing out
-        router.push("/"); // Adjust the route as needed
+        // Redirect homepage after signing out
+        router.push("/");
       }
     } catch (error) {
       console.error("Unexpected error during sign-out:", error);
