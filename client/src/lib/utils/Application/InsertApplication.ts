@@ -1,7 +1,7 @@
 import { SupabaseClient, PostgrestError } from "@supabase/supabase-js";
-import { Database } from "../types/database.types";
-import { createOpportunity } from "@/lib/utils/createOpportunity";
-import { Profile } from "../store/profile";
+import { Database } from "../../types/database.types";
+import { createOpportunity } from "@/lib/utils/Application/createOpportunity";
+import { Profile } from "../../store/profile";
 import { Application } from "@/lib/store/track";
 
 export async function InsertApplication(
@@ -54,7 +54,7 @@ export async function InsertApplication(
     location: application.location,
     created_at: new Date().toISOString(),
     outOfScore: application.outOfScore,
-    status_update_date: null,
+    status_update_date: new Date().toISOString(),
     test_provider: application.test_provider,
   };
 
@@ -90,5 +90,6 @@ export async function InsertApplication(
 
   if (insertApplication && insertApplication.length > 0) {
     console.log("Application inserted:", insertApplication[0].application_id);
+    return insertApplication[0].application_id;
   }
 }

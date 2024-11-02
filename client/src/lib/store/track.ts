@@ -1,9 +1,10 @@
 import { create } from "zustand";
-import { Database} from "@/lib/types/database.types"
-// import { InsertApplication } from "@/lib/utils/InsertApplication";
-// import { SupabaseClient } from '@supabase/supabase-js';
-// import { createSupabaseClient } from '@/lib/supabase/client';
-// import {Profile} from "@/lib/store/profile";
+import { PostgrestError } from "@supabase/supabase-js";
+import { Database } from "@/lib/types/database.types";
+import { InsertApplication } from "@/lib/utils/Application/InsertApplication";
+import { UpdateApplication } from "@/lib/utils/Application/UpdateApplication";
+import { createSupabaseClient } from "@/lib/supabase/client";
+import { Profile } from "@/lib/store/profile";
 export type ApplicationStage =
   | "Applied"
   | "Rejected"
@@ -11,9 +12,7 @@ export type ApplicationStage =
   | "Interviewing"
   | "Offer";
 
-
-
- export type Application = Database["public"]["Tables"]["application"]["Row"];
+export type Application = Database["public"]["Tables"]["application"]["Row"];
 
 interface TrackState {
   Applied: Application[];
@@ -21,7 +20,11 @@ interface TrackState {
   "Online Assessment": Application[];
   Interviewing: Application[];
   Offer: Application[];
-  addApplication: (to: ApplicationStage, application: Application) => void;
+  addApplication: (
+    to: ApplicationStage,
+    application: Application,
+    profile: Profile
+  ) => void;
   removeApplication: (from: ApplicationStage, applicationId: string) => void;
   moveApplication: (
     from: ApplicationStage,
@@ -30,7 +33,11 @@ interface TrackState {
     sourceIndex: number,
     destinationIndex: number
   ) => void;
-  updateApplication: (applicationId: string, updates: Partial<Application>) => void;
+  updateApplication: (
+    applicationId: string,
+    updates: Application,
+    profile: Profile
+  ) => void;
 }
 
 // Helper function to reorder items in a list
@@ -48,23 +55,15 @@ export const useTrack = create<TrackState>()((set) => ({
   Interviewing: [],
   Offer: [],
 
-  addApplication: async (to, application) => {
-    // const supabase = createSupabaseClient();
-    // // Call the server to insert the application
-    // try {
-    //   const error = await InsertApplication(supabase, profile, application);
-    //   if (error) {
-    //     console.error("Error inserting application:", error.message);
-    //   } else {
-    //     console.log("Application inserted successfully");
-    //   }
-    // } catch (error) {
-    //   if (error instanceof Error) {
-    //     console.error("Error inserting application:", error.message);
-    //   } else {
-    //     console.error("Unknown error inserting application");
-    //   }
-    // }
+  addApplication: async (to, application, profile) => {
+    const supabase = createSupabaseClient();
+
+    // Call the InsertApplication function
+    const error = await InsertApplication(supabase, profile, application);
+    if (error) {
+      console.error("Error inserting application:", error.message);
+      return error;
+    }
 
     set((state) => {
       const existingApplicationIndex = state[to].findIndex(
@@ -90,7 +89,7 @@ export const useTrack = create<TrackState>()((set) => ({
       );
       return { ...state };
     }),
-  
+
   // TODO: Call the server to update the card position also?
   moveApplication: (from, to, applicationId, sourceIndex, destinationIndex) =>
     set((state) => {
@@ -116,21 +115,41 @@ export const useTrack = create<TrackState>()((set) => ({
       return { ...state };
     }),
 
+    updateApplication: async (applicationId, updates, profile) => {
+      const supabase = createSupabaseClient();
 
-
-    updateApplication: (applicationId, updates) =>
+      // Ensure profile is defined and has profile_id
+    if (!profile || !profile.profile_id) {
+      console.error("Profile is not defined or missing profile_id");
+      return {
+        message: "Profile is not defined or missing profile_id",
+        details: "",
+        hint: "",
+        code: "profile_not_found",
+      } as PostgrestError;
+    }
+  
+      // Call the UpdateApplication function
+      const error = await UpdateApplication(supabase, profile, applicationId, updates);
+      if (error) {
+        console.error("Error updating application:", error.message);
+        return error;
+      }
+  
       set((state) => {
         // Find the application across all stages
         for (const stage in state) {
           const applications = state[stage as ApplicationStage];
-          const appIndex = applications.findIndex((app) => app.application_id === applicationId);
+          const appIndex = applications.findIndex(
+            (app) => app.application_id === applicationId
+          );
           if (appIndex !== -1) {
             // Update the application in place
             applications[appIndex] = { ...applications[appIndex], ...updates };
-            // Todo: call the server to update the application
             break;
           }
         }
         return { ...state };
-      }),
+      });
+    },
 }));

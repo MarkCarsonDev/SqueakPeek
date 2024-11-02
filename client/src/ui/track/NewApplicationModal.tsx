@@ -8,8 +8,8 @@ import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import UpdateStatus from "@/ui/track/UpdateStatus";
 import { ApplicationStage, useTrack, Application } from "@/lib/store/track";
 import { useProfile } from "@/lib/store/profile";
-import { createSupabaseClient } from "@/lib/supabase/client";
-import { InsertApplication } from "@/lib/utils/InsertApplication";
+// import { createSupabaseClient } from "@/lib/supabase/client";
+
 
 interface NewApplicationModalProps {
   open: boolean;
@@ -69,9 +69,8 @@ export default function NewApplicationModal({
       return;
     }
 
-    const supabase = createSupabaseClient();
-
     const updatedFields: Partial<Application> = {
+      application_id: existingApplication?.application_id,
       role_title: role_title, // Ensure non-null value for required fields
       location: location,
       type: type,
@@ -88,15 +87,10 @@ export default function NewApplicationModal({
 
     if (existingApplication) {
       // Call updateApplication with application ID and partial updates
-      updateApplication(existingApplication.application_id, updatedFields);
+      updateApplication(existingApplication.application_id, updatedFields as Application, profile);
     } else {
       // If it's a new application, call InsertApplication directly
-      addApplication(applicationStatus as ApplicationStage, updatedFields as Application);
-      try {
-        await InsertApplication(supabase, profile, updatedFields as Application);
-      } catch (error) {
-        console.error("Error adding application:", error);
-      }
+      addApplication(applicationStatus as ApplicationStage, updatedFields as Application, profile);
     }
 
     handleClose();

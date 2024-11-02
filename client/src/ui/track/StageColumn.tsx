@@ -115,9 +115,7 @@ export const StageColumn: React.FC<StageColumnProps> = ({
                       }}
                       onClick={() => onCardClick?.(app)}
                     >
-                      <JobCard
-                        application= {app}   
-                      />
+                      <JobCard application= {app}/>
                     </div>
                   )}
                 </Draggable>
