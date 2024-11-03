@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Typography } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileCirclePlus } from "@fortawesome/free-solid-svg-icons";
@@ -23,9 +23,15 @@ export default function Page() {
     Interviewing,
     Offer,
     moveApplication,
-    updateApplication
+    updateApplication,
+    fetchApplications
   } = useTrack();
   const { profile } = useProfile(); // Retrieve profile data
+  useEffect(() => {
+    if (profile) {
+      fetchApplications(profile);
+    }
+  }, [profile, fetchApplications]);
 
   const stages: StageColumnProps[] = [
     {

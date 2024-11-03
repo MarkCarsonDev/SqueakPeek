@@ -19,6 +19,7 @@ export type Database = {
           link: string | null
           location: string | null
           opportunity_id: string
+          order: number | null
           outOfScore: number | null
           profile_id: string
           role_title: string
@@ -36,6 +37,7 @@ export type Database = {
           link?: string | null
           location?: string | null
           opportunity_id: string
+          order?: number | null
           outOfScore?: number | null
           profile_id: string
           role_title: string
@@ -53,6 +55,7 @@ export type Database = {
           link?: string | null
           location?: string | null
           opportunity_id?: string
+          order?: number | null
           outOfScore?: number | null
           profile_id?: string
           role_title?: string
@@ -65,14 +68,14 @@ export type Database = {
           {
             foreignKeyName: "application_opportunity_id_fkey"
             columns: ["opportunity_id"]
-            isOneToOne: true
+            isOneToOne: false
             referencedRelation: "opportunity"
             referencedColumns: ["opportunity_id"]
           },
           {
             foreignKeyName: "application_profile_id_fkey"
             columns: ["profile_id"]
-            isOneToOne: true
+            isOneToOne: false
             referencedRelation: "profile"
             referencedColumns: ["profile_id"]
           },

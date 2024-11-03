@@ -3,6 +3,7 @@ import { PostgrestError } from "@supabase/supabase-js";
 import { Database } from "@/lib/types/database.types";
 import { InsertApplication } from "@/lib/utils/Application/InsertApplication";
 import { UpdateApplication } from "@/lib/utils/Application/UpdateApplication";
+import { FetchApplication } from "@/lib/utils/Application/FetchApplication";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { Profile } from "@/lib/store/profile";
 export type ApplicationStage =
@@ -38,6 +39,8 @@ interface TrackState {
     updates: Application,
     profile: Profile
   ) => void;
+
+  fetchApplications: (profile: Profile) => void;
 }
 
 // Helper function to reorder items in a list
@@ -95,29 +98,53 @@ export const useTrack = create<TrackState>()((set) => ({
     }),
 
   // TODO: Call the server to update the card position also?
-  moveApplication: (from, to, applicationId, sourceIndex, destinationIndex) =>
-    set((state) => {
-      if (from === to) {
-        // Reorder within the same stage
-        state[to] = reorder(state[to], sourceIndex, destinationIndex);
-      } else {
-        // Move application to a different stage
-        const movedApplication = state[from].find(
-          (app) => app.application_id === applicationId
-        );
-        if (movedApplication) {
-          // Remove from the old stage
-          state[from] = state[from].filter(
-            (app) => app.application_id !== applicationId
+  moveApplication: async (from, to, applicationId, sourceIndex, destinationIndex) => {
+      const supabase = createSupabaseClient();
+  
+      set((state) => {
+        if (from === to) {
+          // Reorder within the same stage
+          state[to] = reorder(state[to], sourceIndex, destinationIndex);
+        } else {
+          // Move application to a different stage
+          const movedApplication = state[from].find(
+            (app) => app.application_id === applicationId
           );
-          // Insert into the new stage at the destination index
-          const updatedToList = Array.from(state[to]);
-          updatedToList.splice(destinationIndex, 0, movedApplication);
-          state[to] = updatedToList;
+          if (movedApplication) {
+            // Remove from the old stage
+            state[from] = state[from].filter(
+              (app) => app.application_id !== applicationId
+            );
+            // Insert into the new stage at the destination index
+            state[to].splice(destinationIndex, 0, movedApplication);
+          }
         }
-      }
-      return { ...state };
-    }),
+  
+        // Update the order field for all applications in the destination stage
+        state[to].forEach((app, index) => {
+          app.order = index;
+        });
+  
+        return { ...state };
+      });
+  
+      // Update the order field in the database
+      set((state) => {
+        const updates = state[to].map((app, index) => ({
+          application_id: app.application_id,
+          order: index,
+        }));
+  
+        updates.forEach(async (update) => {
+          await supabase
+            .from("application")
+            .update({ order: update.order })
+            .eq("application_id", update.application_id);
+        });
+  
+        return { ...state };
+      });
+    },
 
     updateApplication: async (applicationId, updates, profile) => {
       const supabase = createSupabaseClient();
@@ -155,5 +182,28 @@ export const useTrack = create<TrackState>()((set) => ({
         }
         return { ...state };
       });
+    },
+
+    fetchApplications: async (profile) => {
+      const supabase = createSupabaseClient();
+      const applications = await FetchApplication(supabase, profile);
+
+      if (!applications) {
+        console.error("Error fetching applications or no existing applications");
+        return;
+      }
+      const groupedApplications = applications.reduce((acc, application) => {
+        acc[application.status].push(application);
+        return acc;
+      }, {
+        Applied: [],
+        Rejected: [],
+        "Online Assessment": [],
+        Interviewing: [],
+        Offer: [],
+      } as Record<ApplicationStage, Application[]>);
+  
+      set(groupedApplications);
+
     },
 }));
