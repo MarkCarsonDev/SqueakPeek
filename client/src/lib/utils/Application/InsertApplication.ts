@@ -56,6 +56,7 @@ export async function InsertApplication(
     outOfScore: application.outOfScore,
     status_update_date: new Date().toISOString(),
     test_provider: application.test_provider,
+    order: 0,
   };
 
   // Check if an application with the same role_title, company_name, type, and profile_id already exists
