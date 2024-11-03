@@ -13,7 +13,7 @@ export async function fetchPrivateConversations(
 ) {
   const { data, error } = await supabase
     .from("private_user_conversation")
-    .select("*, profile:profile!sender_id(profile_id, avatar, username)")
+    .select("*, profile:profile!receiver_id(profile_id, avatar, username)")
     .eq("sender_id", profile_id);
   return { data, error };
 }
