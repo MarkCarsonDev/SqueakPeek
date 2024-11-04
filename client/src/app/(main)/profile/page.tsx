@@ -6,9 +6,23 @@ import { Button, Avatar, Typography } from "@mui/material";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { useProfile } from "@/lib/store/profile";
 import { useRouter } from "next/navigation";
+import { SearchDropdown } from "@/ui/track/SearchDropdown";
 
 export default function Page() {
-  const avatars: { profile: string; avatarType: "avatar1" | "avatar2" | "avatar3" | "avatar4" }[] = [
+  //Router Creation
+  const router = useRouter();
+
+  // Creates Supabase Client
+  const supabase = useMemo(() => createSupabaseClient(), []);
+
+  //TODO replace with API data
+  const companyOptions = ["Google", "Netflix", "Amazon", "Facebook", "Apple"];
+
+  //Avatar data
+  const avatars: {
+    profile: string;
+    avatarType: "avatar1" | "avatar2" | "avatar3" | "avatar4";
+  }[] = [
     {
       profile: "/landingpage/track.svg",
       avatarType: "avatar1",
@@ -27,9 +41,7 @@ export default function Page() {
     },
   ];
 
-  const router = useRouter();
-
-  //Gets profile types using useProfile function
+  //Gets user profile using useProfile function
   const { profile } = useProfile();
   const [profileData, setProfileData] = useState<
     | {
@@ -42,11 +54,10 @@ export default function Page() {
     | null
   >(null);
 
-  // Creates Supabase Client
-  const supabase = useMemo(() => createSupabaseClient(), []);
-
-  // Creats chosenAvatar, username
-   const [chosenAvatar, setAvatar] = useState<"avatar1" | "avatar2" | "avatar3" | "avatar4" | undefined>(undefined);
+  // Creates chosenAvatar, username, school, and Profile ID Constants
+  const [chosenAvatar, setAvatar] = useState<
+    "avatar1" | "avatar2" | "avatar3" | "avatar4" | undefined
+  >(undefined);
   const [profileUsername, setUsername] = useState<string | null>(null);
   const [profileSchool, setSchool] = useState<string | null>(null);
   const [profileId, setProfileId] = useState<string | null>(null);
@@ -88,15 +99,18 @@ export default function Page() {
     }
   }
 
+  //Update profile table with new data using their profile ID
   const handleSubmit = async () => {
-    console.log(profileUsername)
-    console.log(profileId)
     if (profileUsername !== null && profileId) {
       const { data, error } = await supabase
         .from("profile")
-        .update({ username: profileUsername, school: profileSchool, avatar: chosenAvatar })
+        .update({
+          username: profileUsername,
+          school: profileSchool,
+          avatar: chosenAvatar,
+        })
         .eq("profile_id", profileId);
-  
+
       if (error) {
         console.error("Error updating profile:", error);
       } else {
@@ -106,123 +120,123 @@ export default function Page() {
       console.warn("Profile username or profile ID is missing.");
     }
   };
-  
 
   return (
     <div className="profile_page_container">
-
       <form onSubmit={handleSubmit}>
-      <div className="edit_profile">
-        <Typography
-          variant="h5"
-          sx={{ marginBottom: "20px", fontWeight: "bold" }}
-        >
-          Edit Profile
-        </Typography>
+        <div className="edit_profile">
+          <Typography
+            variant="h5"
+            sx={{ marginBottom: "20px", fontWeight: "bold" }}
+          >
+            Edit Profile
+          </Typography>
 
-        <div className="avatar-container">
-          {avatars.map(({ profile, avatarType }) => (
-            <Avatar
-              key={avatarType}
-              src={profile}
+          <div className="avatar-container">
+            {avatars.map(({ profile, avatarType }) => (
+              <Avatar
+                key={avatarType}
+                src={profile}
+                sx={{
+                  width: 80,
+                  height: 80,
+                  cursor: "pointer",
+                  margin: "0 10px",
+                  border:
+                    avatarType === chosenAvatar
+                      ? "4px solid #496FFF" 
+                      : "4px solid #E0E4F2", 
+                  opacity: avatarType === chosenAvatar ? 1 : 0.85,
+                  ":hover": {
+                    opacity: 1,
+                  },
+                }}
+                onClick={() => setAvatar(avatarType)} 
+              />
+            ))}
+          </div>
+
+          <Typography
+            variant="h6"
+            sx={{
+              marginTop: "10px",
+              marginBottom: "20px",
+              fontWeight: "bold",
+              alignSelf: "center",
+            }}
+          >
+            Select an avatar
+          </Typography>
+
+          {/* Username */}
+          <InputField
+            fullWidth
+            label="Username"
+            placeholder="Enter your username"
+            variant="outlined"
+            name="username"
+            required
+            defaultValue={profileUsername}
+            onChange={(e) => setUsername(e.target.value)}
+            sx={{ marginBottom: "15px" }}
+          />
+
+          {/* School */}
+          <SearchDropdown
+            label="School"
+            placeholder="Enter your username"
+            name="School"
+            options={companyOptions}
+            value={profileSchool || ""}
+            defaultValue={profileSchool}
+            onValueChange={(newValue) =>
+              setSchool(newValue || "")
+            }
+            fullWidth
+            style={{ marginBottom: "10px" }}
+          />
+
+          {/* Button container */}
+          <div className="button-links">
+            <Button
+              className="borderline"
+              variant="outlined"
+              onClick={() => router.back()}
               sx={{
-                width: 80,
-                height: 80,
-                cursor: "pointer",
-                margin: "0 10px",
-                border:
-                  avatarType === chosenAvatar
-                    ? "4px solid #496FFF" // Highlight selected avatar
-                    : "4px solid #E0E4F2", // Default border for unselected avatars
-                opacity: avatarType === chosenAvatar ? 1 : 0.85,
+                mt: 2,
+                width: "200px",
+                boxShadow: "none",
+                borderRadius: "8px",
                 ":hover": {
-                  opacity: 1,
+                  backgroundColor: "#3B5AC6",
+                  boxShadow: "none",
+                  color: "white",
                 },
               }}
-              onClick={() => setAvatar(avatarType)} // Select avatar on click
-            />
-          ))}
-        </div>
+            >
+              Cancel
+            </Button>
 
-        <Typography
-          variant="h6"
-          sx={{
-            marginTop: "10px",
-            marginBottom: "20px",
-            fontWeight: "bold",
-            alignSelf: "center",
-          }}
-        >
-          Select an avatar
-        </Typography>
-
-        {/* Username */}
-        <InputField
-          fullWidth
-          label="Username"
-          placeholder="Enter your username"
-          variant="outlined"
-          name="username"
-          required
-          defaultValue={profileUsername}
-          onChange={(e) => setUsername(e.target.value)}
-          sx={{ marginBottom: "15px" }}
-        />
-
-        {/* School */}
-        <InputField
-          fullWidth
-          label="School"
-          placeholder="Enter your school"
-          variant="outlined"
-          name="school"
-          defaultValue={profileSchool}
-          onChange={(e) => setSchool(e.target.value)}
-          sx={{ marginBottom: "15px" }}
-        />
-
-        {/* Button container */}
-        <div className="button-links">
-          <Button
-            className="borderline"
-            variant="outlined"
-            onClick={() => router.back()}
-            sx={{
-              mt: 2,
-              width: "200px",
-              boxShadow: "none",
-              borderRadius: "8px",
-              ":hover": {
-                backgroundColor: "#3B5AC6",
+            <Button
+              className="borderline"
+              variant="contained"
+              type="submit"
+              sx={{
+                mt: 2,
+                width: "200px",
                 boxShadow: "none",
-                color: "white"
-              },
-            }}
-          >
-            Cancel
-          </Button>
-
-          <Button
-            className="borderline"
-            variant="contained"
-            type="submit"
-            sx={{
-              mt: 2,
-              width: "200px",
-              boxShadow: "none",
-              backgroundColor: "#496FFF",
-              borderRadius: "8px",
-              ":hover": {
-                backgroundColor: "#3B5AC6",
-                boxShadow: "none",
-              },
-            }}
-          >
-            Save Changes
-          </Button>
+                backgroundColor: "#496FFF",
+                borderRadius: "8px",
+                ":hover": {
+                  backgroundColor: "#3B5AC6",
+                  boxShadow: "none",
+                },
+              }}
+            >
+              Save Changes
+            </Button>
+          </div>
         </div>
-
-      </div>
       </form>
     </div>
   );
