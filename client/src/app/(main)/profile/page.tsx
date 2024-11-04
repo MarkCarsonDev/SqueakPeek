@@ -184,7 +184,7 @@ export default function Page() {
           {/* School */}
           <SearchDropdown
             label="School"
-            placeholder="Enter your username"
+            placeholder="Enter your school"
             name="School"
             options={companyOptions}
             value={profileSchool || ""}
