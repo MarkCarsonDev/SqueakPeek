@@ -2,7 +2,7 @@ import { SupabaseClient, PostgrestError } from "@supabase/supabase-js";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { Profile } from "@/lib/store/profile";
 import { Application } from "@/lib/store/track";
-import { Database } from "@/lib/types/database.types";
+
 
 export async function UpdateApplication(
   profile: Profile,
