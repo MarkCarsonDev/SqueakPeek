@@ -48,6 +48,7 @@ export function ConversationHeader({
         if (data) {
           const opportunityMetaData =
             data.opportunity as unknown as Database["public"]["Tables"]["opportunity"]["Row"];
+          // TODO set CardHeader for company thread
           setHeader(opportunityMetaData.company_name);
           setSubHeader(
             opportunityMetaData.role_title + ", " + opportunityMetaData.type
