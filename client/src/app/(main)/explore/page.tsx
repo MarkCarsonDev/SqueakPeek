@@ -2,8 +2,14 @@
 import { Typography } from "@mui/material";
 import "@/app/(main)/explore/explore.css";
 import { OpportunityList } from "@/ui/explore/OpportunityList";
+import { Filters, SelectedFilters } from "@/ui/explore/Filters";
+import { useState } from "react";
 
 export default function Page() {
+  const [filters, setFilters] = useState<SelectedFilters>({
+    searchQuery: "",
+    sortOption: "recent",
+  })
 
   return (
     <div className="page-container">
@@ -31,9 +37,11 @@ export default function Page() {
             sx={{ marginBottom: "0.5rem", marginLeft: "0.5rem" }}
           >
             Filters
+            <Filters filters={filters} setFilters={setFilters} />
+
           </Typography>
-          {/* <Filters filters={filters} setFilters={setFilters} /> */}
       </div>
     </div>
+    
   );
 }
