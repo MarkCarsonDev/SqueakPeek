@@ -169,6 +169,7 @@ export default function NewApplicationModal({
                 fullWidth
                 onChange={handleInputChange}
                 sx={{ marginBottom: "10px" }}
+                disabled={!!existingApplication}
               />
               <InputField
                 label="Location"
@@ -230,6 +231,7 @@ export default function NewApplicationModal({
                 required
                 fullWidth
                 style={{ marginBottom: "10px" }}
+                disabled={!!existingApplication}
               />
               <SearchDropdown
                 label="Job Type"
@@ -246,6 +248,7 @@ export default function NewApplicationModal({
                 required
                 fullWidth
                 style={{ marginBottom: "10px" }}
+                disabled={!!existingApplication}
               />
               <InputField
                 label="Link to Job Application"
