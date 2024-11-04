@@ -1,18 +1,25 @@
 import React, { useEffect, useState, useMemo } from "react";
-// import { useRouter } from 'next/navigation'; // To handle URL params
-// import { SelectedFilters } from './Filters';
+import { useRouter } from 'next/navigation'; // To handle URL params
+import { SelectedFilters } from './Filters';
 import { OpportunityCard, OpportunityCardProps } from "./OpportunityCard";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { Database } from "@/lib/types/database.types";
 import { fetchOpportunities } from "@/lib/utils/fetchOpportunities";
 
-// TODO: Add filters to the OpportunityList component
-export function OpportunityList() {
+
+
+interface OpportunityListProps {
+    filters: SelectedFilters;
+}
+
+export function OpportunityList({ filters }: OpportunityListProps) {
   const [shownOpportunities, setShownOpportunities] = useState<
     OpportunityCardProps[]
   >([]);
   const [loading, setLoading] = useState<boolean>(false);
   const supabase = useMemo(() => createSupabaseClient(), []); // only creates it once when the OpportunityList components mounts
+
+  const router = useRouter();
 
   // Fetch all opportunities once when the component mounts
   useEffect(() => {
@@ -67,4 +74,4 @@ export function OpportunityList() {
       ))}
     </div>
   );
-}
+};
