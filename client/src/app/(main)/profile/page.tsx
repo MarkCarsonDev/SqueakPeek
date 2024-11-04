@@ -62,7 +62,7 @@ export default function Page() {
 
   // Fetches user profile data
   async function fetchUserProfile(user: typeof profile) {
-    if (!user) return; // Early return if user is null, to satisfy TypeScript
+    if (!user) return; // return if user is null
     try {
       // Query the profile table using the user's profile_id
       const { data, error } = await supabase
@@ -87,6 +87,7 @@ export default function Page() {
 
     <div className="profile_page_container">
       <div className="edit_profile">
+        
         <div className="avatar-container">
           {avatars.map(({ profile, avatarType }) => (
             <Avatar
@@ -110,8 +111,29 @@ export default function Page() {
             />
           ))}
         </div>
-        <InputField required label="Username" defaultValue={username} fullWidth/>
-        <InputField required label="School" defaultValue={school} fullWidth/>
+
+        {/* Username */}
+        <InputField
+          fullWidth
+          label="Username"
+          placeholder="Enter your username"
+          variant="outlined"
+          name="username"
+          required
+          defaultValue={username} // Display first username error
+          sx={{ marginBottom: "15px" }}
+        />
+
+        {/* School */}
+        <InputField
+          fullWidth
+          label="School"
+          placeholder="Enter your school"
+          variant="outlined"
+          name="school"
+          defaultValue={school} // Display first school error
+          sx={{ marginBottom: "15px" }}
+        />
       </div>
     </div>
   );
