@@ -8,7 +8,7 @@ import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import UpdateStatus from "@/ui/track/UpdateStatus";
 import { ApplicationStage, useTrack, Application } from "@/lib/store/track";
 import { useProfile } from "@/lib/store/profile";
-// import { createSupabaseClient } from "@/lib/supabase/client";
+import {Database} from "@/lib/types/database.types";
 
 
 interface NewApplicationModalProps {
@@ -17,9 +17,10 @@ interface NewApplicationModalProps {
   applicationStatus: ApplicationStage;
   setApplicationStatus: React.Dispatch<React.SetStateAction<ApplicationStage>>;
   existingApplication?: Application;
-}
+};
 
-const jobTypeOptions = ["Internship", "New Grad", "Co-Op", "Full-time", "Part-Time", "Contract"];
+const jobTypeOptions: Database["public"]["Enums"]["OpportunityType"][] = ["Internship", "New Grad", "Co-Op", "Full-time", "Part-Time", "Contract"];
+
 const companyOptions = ["Google", "Netflix", "Amazon", "Facebook", "Apple"];
 const testProviderOptions = [
   "HackerRank",
