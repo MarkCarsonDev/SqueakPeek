@@ -157,27 +157,29 @@ export const useTrack = create<TrackState>()((set) => ({
     }
   
       // Call the UpdateApplication function
-      const error = await UpdateApplication(profile, applicationId, updates);
-      if (error) {
-        console.error("Error updating application:", error.message);
-        return error;
-      }
-  
-      set((state) => {
-        // Find the application across all stages
-        for (const stage in state) {
-          const applications = state[stage as ApplicationStage];
-          const appIndex = applications.findIndex(
-            (app) => app.application_id === applicationId
-          );
-          if (appIndex !== -1) {
-            // Update the application in place
-            applications[appIndex] = { ...applications[appIndex], ...updates };
-            break;
-          }
+    const { data, error } = await UpdateApplication(profile, applicationId, updates);
+    if (error) {
+      console.error("Error updating application:", error.message);
+      return { data: null, error };
+    }
+
+    set((state) => {
+      // Find the application across all stages
+      for (const stage in state) {
+        const applications = state[stage as ApplicationStage];
+        const appIndex = applications.findIndex(
+          (app) => app.application_id === applicationId
+        );
+        if (appIndex !== -1) {
+          // Update the application in place
+          applications[appIndex] = { ...applications[appIndex], ...updates };
+          break;
         }
-        return { ...state };
-      });
+      }
+      return { ...state };
+    });
+
+    return { data, error: null };
     },
 
     fetchApplications: async (profile) => {

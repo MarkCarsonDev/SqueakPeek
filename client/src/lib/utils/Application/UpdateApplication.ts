@@ -2,13 +2,14 @@ import { SupabaseClient, PostgrestError } from "@supabase/supabase-js";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { Profile } from "@/lib/store/profile";
 import { Application } from "@/lib/store/track";
+import { Database } from "@/lib/types/database.types";
 
 export async function UpdateApplication(
   profile: Profile,
   applicationId: string,
-  updatedFields: Application,
-  supabase: SupabaseClient = createSupabaseClient(),
-): Promise<PostgrestError | undefined> {
+  updatedFields: Partial<Application>,
+  supabase: SupabaseClient = createSupabaseClient()
+): Promise<{ data: string | null; error: PostgrestError | null }> {
   // Ensure the application belongs to the profile
   const { data: existingApplicationData, error: existingApplicationError } =
     await supabase
@@ -23,17 +24,20 @@ export async function UpdateApplication(
       "Error checking existing application:",
       existingApplicationError.message
     );
-    return existingApplicationError;
+    return { data: null, error: existingApplicationError };
   }
 
   if (!existingApplicationData || existingApplicationData.length === 0) {
     console.error("Application not found or does not belong to the profile");
     return {
-      message: "Application not found or does not belong to the profile",
-      details: "",
-      hint: "",
-      code: "application_not_found",
-    } as PostgrestError;
+      data: null,
+      error: {
+        message: "Application not found or does not belong to the profile",
+        details: "",
+        hint: "",
+        code: "application_not_found",
+      } as PostgrestError,
+    };
   }
 
   // Update the application with the provided changes
@@ -49,10 +53,13 @@ export async function UpdateApplication(
       "Error updating application:",
       updateApplicationError.message
     );
-    return updateApplicationError;
+    return { data: null, error: updateApplicationError };
   }
 
   if (updateApplication && updateApplication.length > 0) {
     console.log("Application updated:", updateApplication[0].application_id);
+    return { data: updateApplication[0].application_id, error: null };
   }
+
+  return { data: null, error: { message: "Unknown error occurred" } as PostgrestError };
 }
