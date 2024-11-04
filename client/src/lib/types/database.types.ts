@@ -81,7 +81,7 @@ export type Database = {
           },
         ]
       }
-      bookmark: {
+      bookmark_opportunity: {
         Row: {
           bookmark_id: string
           created_at: string
