@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Typography } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileCirclePlus } from "@fortawesome/free-solid-svg-icons";
@@ -8,6 +8,7 @@ import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import { StageColumn, StageColumnProps } from "@/ui/track/StageColumn"; 
 import "./tracking.css";
 import { Application, ApplicationStage, useTrack } from "@/lib/store/track";
+import { useProfile } from "@/lib/store/profile";
 
 export default function Page() {
   const [openModal, setOpenModal] = useState(false);
@@ -22,8 +23,15 @@ export default function Page() {
     Interviewing,
     Offer,
     moveApplication,
-    updateApplication
+    updateApplication,
+    fetchApplications
   } = useTrack();
+  const { profile } = useProfile(); // Retrieve profile data
+  useEffect(() => {
+    if (profile) {
+      fetchApplications(profile);
+    }
+  }, [profile, fetchApplications]);
 
   const stages: StageColumnProps[] = [
     {
@@ -91,7 +99,9 @@ export default function Page() {
       moveApplication(from, to, applicationId, sourceIndex, destinationIndex);
   
       // Update application status in the store
-      updateApplication(applicationId, {...draggedApplication,status: to});
+      if (profile) {
+        updateApplication(applicationId, {...draggedApplication, status: to}, profile);
+      }
     }
   };
 

@@ -7,24 +7,27 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import UpdateStatus from "@/ui/track/UpdateStatus";
 import { ApplicationStage, useTrack, Application } from "@/lib/store/track";
-import { v4 as uuidv4 } from 'uuid';
-// TODO: Implement the Company Brand Logo based on the company name on when editing the application
+import { useProfile } from "@/lib/store/profile";
+import {Database} from "@/lib/types/database.types";
+
+
 interface NewApplicationModalProps {
   open: boolean;
   handleClose: () => void;
   applicationStatus: ApplicationStage;
   setApplicationStatus: React.Dispatch<React.SetStateAction<ApplicationStage>>;
   existingApplication?: Application;
-}
+};
 
-const jobTypeOptions = ["Full-time", "Part-time", "Contract", "Internship", "Co-Op", "New Grad"]; // This is temporary
+const jobTypeOptions: Database["public"]["Enums"]["OpportunityType"][] = ["Internship", "New Grad", "Co-Op", "Full-time", "Part-Time", "Contract"];
+
 const companyOptions = ["Google", "Netflix", "Amazon", "Facebook", "Apple"];
 const testProviderOptions = [
   "HackerRank",
   "Codility",
   "LeetCode",
   "HackerEarth",
-]; // This is also temoporary
+]; // This is also temporary
 
 export default function NewApplicationModal({
   open,
@@ -33,55 +36,67 @@ export default function NewApplicationModal({
   setApplicationStatus,
   existingApplication,
 }: NewApplicationModalProps) {
-  const [role_title, setRoleTitle] = useState(existingApplication?.role_title || "");
-  const [location, setLocation] = useState(existingApplication?.location || "");
-  const [type, setJobType] = useState(existingApplication?.type || "");
-  const [company_name, setCompany] = useState(existingApplication?.company_name || "");
-  const [dateApplied, setDateApplied] = useState(existingApplication?.created_at || "");
-  const [jobLink, setJobLink] = useState(existingApplication?.link || "");
+  const [formFields, setFormFields] = useState({
+    role_title: existingApplication?.role_title || "",
+    location: existingApplication?.location || "",
+    type: existingApplication?.type || "",
+    company_name: existingApplication?.company_name || "",
+    dateApplied: existingApplication?.created_at || "",
+    jobLink: existingApplication?.link || "",
+    testProvider: existingApplication?.test_provider || "",
+    currentScore: existingApplication?.currentScore || "",
+    outOfScore: existingApplication?.outOfScore || "",
+    interviewingRound: existingApplication?.interviewing_round || "",
+  });
 
-  // Extra fields for the form
-  const [testProvider, setTestProvider] = useState(existingApplication?.test_provider || "");
-  const [currentScore, setCurrentScore] = useState(existingApplication?.currentScore || "");
-  const [outOfScore, setOutOfScore] = useState(existingApplication?.outOfScore || "");
-  const [interviewingRound, setInterviewingRound] = useState(existingApplication?.interviewing_round || "");
+  const { role_title, location, type, company_name, dateApplied, jobLink, testProvider, currentScore, outOfScore, interviewingRound } = formFields;
 
   // Conditions for extra fields
   const showOAFields = ["Online Assessment", "Interviewing", "Offer"].includes(applicationStatus as string);
   const showInterviewingFields = ["Interviewing", "Offer"].includes(applicationStatus as string);
   const { updateApplication, addApplication } = useTrack();
+  const { profile } = useProfile(); // Retrieve profile data
 
-  const handleAddApplication = () => {
+  const handleAddApplication = async (e: React.FormEvent) => {
+    e.preventDefault(); // Prevent default form submission
     console.log("status: ", applicationStatus);
-    if (!applicationStatus) {
-      alert("Please select a status before submitting");
+    if (!profile) {
+      console.error("User must be authenticated to add an application");
       return;
     }
 
     const updatedFields: Partial<Application> = {
-      application_id: existingApplication ? existingApplication.application_id : uuidv4(),
+      application_id: existingApplication?.application_id,
       role_title: role_title, // Ensure non-null value for required fields
       location: location,
       type: type,
       company_name: company_name,
-      created_at: dateApplied,
       link: jobLink,
-      status: applicationStatus as "Rejected" | "Interviewing" | "Offer" | "Applied" | "Online Assessment" ,
+      status: applicationStatus as "Applied" | "Rejected" | "Online Assessment" | "Interviewing" | "Offer",
       currentScore: currentScore ? Number(currentScore) : undefined,
       outOfScore: outOfScore ? Number(outOfScore) : undefined,
       interviewing_round: interviewingRound,
       test_provider: testProvider,
+      profile_id: profile.profile_id, // Ensure profile_id is set
     };
 
     if (existingApplication) {
       // Call updateApplication with application ID and partial updates
-      updateApplication(existingApplication.application_id, updatedFields);
+      updateApplication(existingApplication.application_id, updatedFields as Application, profile);
     } else {
-      // If it's a new application, call addApplication as before
-      addApplication(applicationStatus, updatedFields as Application);
+      // If it's a new application, call InsertApplication directly
+      addApplication(applicationStatus as ApplicationStage, updatedFields as Application, profile);
     }
 
     handleClose();
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormFields((prevFields) => ({
+      ...prevFields,
+      [name]: value,
+    }));
   };
 
   return (
@@ -104,7 +119,7 @@ export default function NewApplicationModal({
           flexDirection: "column",
           gap: "0px 30px",
         }}
-        onSubmit={handleAddApplication}
+        onSubmit={handleAddApplication} // Ensure form submission is handled
       >
         <Typography
           variant="h4"
@@ -148,11 +163,11 @@ export default function NewApplicationModal({
               <InputField
                 label="Role Title"
                 placeholder="Title"
-                name="roleTitle"
+                name="role_title"
                 value={role_title}
                 required
                 fullWidth
-                onChange={(e) => setRoleTitle(e.target.value)}
+                onChange={handleInputChange}
                 sx={{ marginBottom: "10px" }}
               />
               <InputField
@@ -161,7 +176,7 @@ export default function NewApplicationModal({
                 name="location"
                 value={location}
                 fullWidth
-                onChange={(e) => setLocation(e.target.value)}
+                onChange={handleInputChange}
                 sx={{ marginBottom: "10px" }}
               />
               <InputField
@@ -170,7 +185,7 @@ export default function NewApplicationModal({
                 name="dateApplied"
                 value={dateApplied}
                 fullWidth
-                onChange={(e) => setDateApplied(e.target.value)}
+                onChange={handleInputChange}
                 sx={{ marginBottom: "10px" }}
               />
 
@@ -183,11 +198,14 @@ export default function NewApplicationModal({
                   <SearchDropdown
                     label="Test Provider"
                     placeholder="Test Provider"
-                    name="Test Provider"
+                    name="testProvider"
                     options={testProviderOptions}
                     value={testProvider}
                     onValueChange={(newValue) =>
-                      setTestProvider(newValue || "")
+                      setFormFields((prevFields) => ({
+                        ...prevFields,
+                        testProvider: newValue || "",
+                      }))
                     }
                     fullWidth
                     style={{ marginBottom: "10px" }}
@@ -200,10 +218,15 @@ export default function NewApplicationModal({
               <SearchDropdown
                 label="Company"
                 placeholder="Company Name"
-                name="company"
+                name="company_name" // Bind value to company state
                 options={companyOptions}
-                value={company_name} // Bind value to company state
-                onValueChange={(newValue) => setCompany(newValue || "")} // Update company
+                value={company_name}
+                onValueChange={(newValue) =>
+                  setFormFields((prevFields) => ({
+                    ...prevFields,
+                    company_name: newValue || "",
+                  }))
+                }
                 required
                 fullWidth
                 style={{ marginBottom: "10px" }}
@@ -211,10 +234,15 @@ export default function NewApplicationModal({
               <SearchDropdown
                 label="Job Type"
                 placeholder="Type"
-                name="jobType"
+                name="type" // Bind value to jobType state
                 options={jobTypeOptions}
-                value={type} // Bind value to jobType state
-                onValueChange={(newValue) => setJobType(newValue || "")} // Update jobType
+                value={type}
+                onValueChange={(newValue) =>
+                  setFormFields((prevFields) => ({
+                    ...prevFields,
+                    type: newValue || "",
+                  }))
+                }
                 required
                 fullWidth
                 style={{ marginBottom: "10px" }}
@@ -225,7 +253,7 @@ export default function NewApplicationModal({
                 name="jobLink"
                 fullWidth
                 value={jobLink}
-                onChange={(e) => setJobLink(e.target.value)}
+                onChange={handleInputChange}
                 style={{ marginBottom: "10px" }}
               />
               {/* Extra fields for the form right side */}
@@ -246,7 +274,7 @@ export default function NewApplicationModal({
                       placeholder="Score"
                       name="currentScore"
                       value={currentScore}
-                      onChange={(e) => setCurrentScore(e.target.value)}
+                      onChange={handleInputChange}
                       style={{ marginBottom: "10px" }}
                     />
                     <InputField
@@ -254,7 +282,7 @@ export default function NewApplicationModal({
                       placeholder=" Out of"
                       name="outOfScore"
                       value={outOfScore}
-                      onChange={(e) => setOutOfScore(e.target.value)}
+                      onChange={handleInputChange}
                       // style={{ marginBottom: "20px" }}
                     />
                   </div>
@@ -271,11 +299,14 @@ export default function NewApplicationModal({
               <SearchDropdown
                 label="Interviewing Round"
                 placeholder="Interviewing Round"
-                name="Interviewing Round"
+                name="interviewingRound"
                 options={["1", "2", "3", "4+"]}
                 value={interviewingRound}
                 onValueChange={(newValue) =>
-                  setInterviewingRound(newValue || "")
+                  setFormFields((prevFields) => ({
+                    ...prevFields,
+                    interviewingRound: newValue || "",
+                  }))
                 }
                 style={{ marginBottom: "20px", width: "48.1%" }}
               />

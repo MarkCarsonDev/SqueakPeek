@@ -7,6 +7,7 @@ import { faMessage } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import UpdateStatus from "@/ui/track/UpdateStatus";
 import { Application, useTrack, ApplicationStage } from "@/lib/store/track";
+import { Profile } from "@/lib/store/profile";
 
 // TODO:
 // Implement the Link for message, chart, stats
@@ -14,9 +15,10 @@ import { Application, useTrack, ApplicationStage } from "@/lib/store/track";
 
 interface JobCardProps {
   application: Application;
+  profile: Profile;
 }
 
-export function JobCard({ application }: JobCardProps) {
+export function JobCard({ application, profile }: JobCardProps) {
   const { moveApplication, updateApplication } = useTrack();
 
   const {
@@ -33,13 +35,13 @@ export function JobCard({ application }: JobCardProps) {
     const newStatus = typeof value === "function" ? value(status) : value;
     if (newStatus !== status) {
       moveApplication(status, newStatus, applicationId, 0, 0);
-      updateApplication( applicationId, {...application,status: newStatus});
+      updateApplication( applicationId, {...application,status: newStatus}, profile);
     }
   };
 
   const handleInterviewRoundChange = (event: SelectChangeEvent<string>) => {
     const newRound = event.target.value;
-    updateApplication( applicationId, { ...application, interviewing_round: newRound });
+    updateApplication( applicationId, { ...application, interviewing_round: newRound }, profile);
   };
 
   return (
