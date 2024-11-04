@@ -2,7 +2,6 @@
 import { MessageInput } from "./MessageInput";
 import { ConversationHeader } from "./ConversationHeader";
 import { ConversationBody } from "./ConversationBody";
-import Image from "next/image";
 import { useMessage } from "../../lib/store/message";
 import { useState, useRef, useEffect, useMemo } from "react";
 import { useProfile } from "../../lib/store/profile";

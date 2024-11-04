@@ -55,7 +55,7 @@ export function ConversationHeader({
         }
       });
     }
-  }, [isPrivateConversation, profile]);
+  }, [isPrivateConversation, profile, conversationId]);
   return (
     <CardHeader
       title={header}
