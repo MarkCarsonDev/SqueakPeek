@@ -7,6 +7,7 @@ import { PrivateMessageModal } from "./PrivateMessageModal";
 export interface MessageCardProps {
   avatar: AvatarTypes;
   sender_username: string;
+  sender_id: string;
   timestamp: string;
   message: string;
   upVotes?: number;
@@ -14,7 +15,6 @@ export interface MessageCardProps {
   messageId: string;
   scrollDown?: () => void;
 }
-
 
 /**
  * UI that contains the metadata of a message
@@ -27,6 +27,7 @@ export interface MessageCardProps {
 export const MessageCard = memo(function MessageCard({
   avatar,
   sender_username,
+  sender_id,
   timestamp,
   message,
   scrollDown,
@@ -126,7 +127,8 @@ export const MessageCard = memo(function MessageCard({
       <PrivateMessageModal
         isOpen={openModal}
         onClose={handleCloseModal}
-        receiverUsername={sender_username}
+        receiver_username={sender_username}
+        receiver_id={sender_id}
       />
     </>
   );

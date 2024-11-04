@@ -7,6 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import { usePathname } from "next/navigation";
+import { ProfileAvatar, AvatarTypes } from "../ProfileAvatar";
 
 export interface MessageNotificationCardProps {
   avatar: string;
@@ -24,6 +25,7 @@ export interface MessageNotificationCardProps {
  * @param conversation_id - The ID used to navigate the user to the conversation
  */
 export function MessageNotificationCard({
+  avatar,
   header,
   subHeader,
   conversation_id,
@@ -32,6 +34,7 @@ export function MessageNotificationCard({
   const pathName = usePathname();
   const currentTab = pathName.split("/")[2]; // tab is either company or private
   const textColor = isSelected ? "white" : "#3C435C";
+  const isTabPrivateConversation = currentTab === "private";
   return (
     <Link
       style={{
@@ -48,7 +51,13 @@ export function MessageNotificationCard({
       >
         <CardActionArea>
           <CardHeader
-            avatar={<Avatar>R</Avatar>}
+            avatar={
+              isTabPrivateConversation ? (
+                <ProfileAvatar avatar={avatar as AvatarTypes} />
+              ) : (
+                <Avatar>{avatar}</Avatar>
+              )
+            }
             title={
               <Typography
                 sx={{

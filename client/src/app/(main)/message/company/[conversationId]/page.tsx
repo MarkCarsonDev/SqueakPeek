@@ -1,6 +1,6 @@
 import React from "react";
 import { OpportunityStats } from "@/ui/explore/OpportunityStats";
-import { Conversation } from "@/ui/messaging/Conversation";
+import { Conversation } from "@/ui/message/Conversation";
 export default function Page({
   params,
 }: {

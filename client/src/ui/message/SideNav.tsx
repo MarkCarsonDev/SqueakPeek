@@ -17,10 +17,15 @@ import {
 import { usePathname } from "next/navigation";
 import { MessageNotificationCardProps } from "./MessageNotificationCard";
 import { MessageNotificationCardList } from "./MessageNotificationCardList";
+import { fetchPrivateConversations } from "@/lib/utils/fetchPrivateConversations";
+import { useProfile } from "@/lib/store/profile";
+import { Database } from "@/lib/types/database.types";
 /**
  * Allows the user to navigate between company threads or private messages in the message page
  */
 export function SideNav() {
+  const { profile } = useProfile();
+  const pathName = usePathname();
   const tabs = [
     {
       label: "Company Threads",
@@ -36,29 +41,55 @@ export function SideNav() {
     },
   ];
   const router = useRouter();
-  const pathName = usePathname();
   const currentTab = pathName.split("/")[2]; // tab is either company or private
   const [messageNotificationsList, setMessageNotificationsList] = useState<
     MessageNotificationCardProps[]
   >([]);
 
   useEffect(() => {
-    // TODO: Add backend logic to fetch conversations for a particular user based on the user's tab
-    setMessageNotificationsList([
-      {
-        avatar: "test",
-        conversation_id: "amazon_conversationid",
-        header: "Amazon",
-        subHeader: "Backend Engineer",
-      },
-      {
-        avatar: "test",
-        conversation_id: "netflix_conversationid",
-        header: "Netflix",
-        subHeader: "Software Engineer Intern",
-      },
-    ]);
-  }, [pathName]);
+    if (profile) {
+      if (currentTab === "private") {
+        fetchPrivateConversations(profile.profile_id).then((res) => {
+          const { data, error } = res;
+          if (error) {
+          } else if (data) {
+            const mappedData: MessageNotificationCardProps[] = data.map(
+              (item) => {
+                const { conversation_id } = item;
+                const { avatar, username } =
+                  item.profile as unknown as Database["public"]["Tables"]["profile"]["Row"]; // it returns profile as an array of profiles
+                return {
+                  avatar: avatar,
+                  conversation_id,
+                  header: username,
+                  subHeader: "",
+                };
+              }
+            );
+            setMessageNotificationsList(mappedData);
+          } else {
+            setMessageNotificationsList([]);
+          }
+        });
+      } else {
+        //TODO: Fetch bookmarked opportunities here
+        setMessageNotificationsList([
+          {
+            avatar: "test",
+            conversation_id: "amazon_conversationid",
+            header: "Amazon",
+            subHeader: "Backend Engineer",
+          },
+          {
+            avatar: "test",
+            conversation_id: "netflix_conversationid",
+            header: "Netflix",
+            subHeader: "Software Engineer Intern",
+          },
+        ]);
+      }
+    }
+  }, [pathName, currentTab, profile]);
 
   return (
     <div

@@ -12,30 +12,54 @@ export type Database = {
       application: {
         Row: {
           application_id: string
+          company_name: string
           created_at: string
+          currentScore: number | null
+          interviewing_round: string | null
           link: string | null
           location: string | null
           opportunity_id: string
+          outOfScore: number | null
           profile_id: string
-          status: Database["public"]["Enums"]["ApplicationStatus"] | null
+          role_title: string
+          status: Database["public"]["Enums"]["ApplicationStatus"]
+          status_update_date: string | null
+          test_provider: string | null
+          type: string
         }
         Insert: {
           application_id?: string
+          company_name: string
           created_at?: string
+          currentScore?: number | null
+          interviewing_round?: string | null
           link?: string | null
           location?: string | null
           opportunity_id: string
+          outOfScore?: number | null
           profile_id: string
-          status?: Database["public"]["Enums"]["ApplicationStatus"] | null
+          role_title: string
+          status?: Database["public"]["Enums"]["ApplicationStatus"]
+          status_update_date?: string | null
+          test_provider?: string | null
+          type: string
         }
         Update: {
           application_id?: string
+          company_name?: string
           created_at?: string
+          currentScore?: number | null
+          interviewing_round?: string | null
           link?: string | null
           location?: string | null
           opportunity_id?: string
+          outOfScore?: number | null
           profile_id?: string
-          status?: Database["public"]["Enums"]["ApplicationStatus"] | null
+          role_title?: string
+          status?: Database["public"]["Enums"]["ApplicationStatus"]
+          status_update_date?: string | null
+          test_provider?: string | null
+          type?: string
         }
         Relationships: [
           {
@@ -90,25 +114,25 @@ export type Database = {
           },
         ]
       }
-      conversation: {
+      company_thread: {
         Row: {
-          conversation_id: string
           created_at: string
           opportunity_id: string | null
+          thread_id: string
         }
         Insert: {
-          conversation_id?: string
           created_at?: string
           opportunity_id?: string | null
+          thread_id?: string
         }
         Update: {
-          conversation_id?: string
           created_at?: string
           opportunity_id?: string | null
+          thread_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "conversation_opportunity_id_fkey"
+            foreignKeyName: "public_user_conversation_opportunity_id_fkey"
             columns: ["opportunity_id"]
             isOneToOne: true
             referencedRelation: "opportunity"
@@ -120,7 +144,6 @@ export type Database = {
         Row: {
           company_name: string
           created_at: string
-          date_posted: string | null
           opportunity_id: string
           role_title: string
           type: Database["public"]["Enums"]["OpportunityType"]
@@ -128,7 +151,6 @@ export type Database = {
         Insert: {
           company_name: string
           created_at?: string
-          date_posted?: string | null
           opportunity_id?: string
           role_title: string
           type: Database["public"]["Enums"]["OpportunityType"]
@@ -136,7 +158,6 @@ export type Database = {
         Update: {
           company_name?: string
           created_at?: string
-          date_posted?: string | null
           opportunity_id?: string
           role_title?: string
           type?: Database["public"]["Enums"]["OpportunityType"]
@@ -181,38 +202,50 @@ export type Database = {
           },
         ]
       }
+      private_conversation: {
+        Row: {
+          conversation_id: string
+        }
+        Insert: {
+          conversation_id?: string
+        }
+        Update: {
+          conversation_id?: string
+        }
+        Relationships: []
+      }
       private_message: {
         Row: {
+          conversation_id: string
           created_at: string
           message: string | null
           message_id: string
           sender_avatar: Database["public"]["Enums"]["Avatar"] | null
           sender_username: string | null
-          thread_id: string | null
         }
         Insert: {
+          conversation_id: string
           created_at?: string
           message?: string | null
           message_id?: string
           sender_avatar?: Database["public"]["Enums"]["Avatar"] | null
           sender_username?: string | null
-          thread_id?: string | null
         }
         Update: {
+          conversation_id?: string
           created_at?: string
           message?: string | null
           message_id?: string
           sender_avatar?: Database["public"]["Enums"]["Avatar"] | null
           sender_username?: string | null
-          thread_id?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "private_message_thread_id_fkey"
-            columns: ["thread_id"]
+            foreignKeyName: "private_message_conversation_id_fkey"
+            columns: ["conversation_id"]
             isOneToOne: false
-            referencedRelation: "private_user_conversation"
-            referencedColumns: ["thread_id"]
+            referencedRelation: "private_conversation"
+            referencedColumns: ["conversation_id"]
           },
         ]
       }
@@ -220,21 +253,21 @@ export type Database = {
         Row: {
           conversation_id: string
           created_at: string
-          reciever_id: string
+          receiver_id: string
           sender_id: string
           thread_id: string
         }
         Insert: {
           conversation_id: string
           created_at?: string
-          reciever_id: string
+          receiver_id: string
           sender_id: string
           thread_id?: string
         }
         Update: {
           conversation_id?: string
           created_at?: string
-          reciever_id?: string
+          receiver_id?: string
           sender_id?: string
           thread_id?: string
         }
@@ -242,21 +275,21 @@ export type Database = {
           {
             foreignKeyName: "private_user_conversation_conversation_id_fkey"
             columns: ["conversation_id"]
-            isOneToOne: true
-            referencedRelation: "conversation"
+            isOneToOne: false
+            referencedRelation: "private_conversation"
             referencedColumns: ["conversation_id"]
           },
           {
-            foreignKeyName: "private_user_conversation_reciever_id_fkey"
-            columns: ["reciever_id"]
-            isOneToOne: true
+            foreignKeyName: "private_user_conversation_receiver_id_fkey"
+            columns: ["receiver_id"]
+            isOneToOne: false
             referencedRelation: "profile"
             referencedColumns: ["profile_id"]
           },
           {
             foreignKeyName: "private_user_conversation_sender_id_fkey"
             columns: ["sender_id"]
-            isOneToOne: true
+            isOneToOne: false
             referencedRelation: "profile"
             referencedColumns: ["profile_id"]
           },
@@ -270,7 +303,7 @@ export type Database = {
           profile_id: string
           school: string | null
           user_id: string
-          username: string | null
+          username: string
         }
         Insert: {
           avatar: Database["public"]["Enums"]["Avatar"]
@@ -279,7 +312,7 @@ export type Database = {
           profile_id?: string
           school?: string | null
           user_id?: string
-          username?: string | null
+          username: string
         }
         Update: {
           avatar?: Database["public"]["Enums"]["Avatar"]
@@ -288,33 +321,36 @@ export type Database = {
           profile_id?: string
           school?: string | null
           user_id?: string
-          username?: string | null
+          username?: string
         }
         Relationships: []
       }
       public_message: {
         Row: {
           created_at: string
-          message: string | null
+          message: string
           message_id: string
-          sender_avatar: string | null
-          sender_username: string | null
+          sender_avatar: Database["public"]["Enums"]["Avatar"]
+          sender_id: string | null
+          sender_username: string
           thread_id: string | null
         }
         Insert: {
           created_at?: string
-          message?: string | null
+          message: string
           message_id?: string
-          sender_avatar?: string | null
-          sender_username?: string | null
+          sender_avatar?: Database["public"]["Enums"]["Avatar"]
+          sender_id?: string | null
+          sender_username: string
           thread_id?: string | null
         }
         Update: {
           created_at?: string
-          message?: string | null
+          message?: string
           message_id?: string
-          sender_avatar?: string | null
-          sender_username?: string | null
+          sender_avatar?: Database["public"]["Enums"]["Avatar"]
+          sender_id?: string | null
+          sender_username?: string
           thread_id?: string | null
         }
         Relationships: [
@@ -322,50 +358,8 @@ export type Database = {
             foreignKeyName: "public_message_thread_id_fkey"
             columns: ["thread_id"]
             isOneToOne: false
-            referencedRelation: "public_user_conversation"
+            referencedRelation: "company_thread"
             referencedColumns: ["thread_id"]
-          },
-        ]
-      }
-      public_user_conversation: {
-        Row: {
-          conversation_id: string
-          created_at: string
-          sender_avatar: Database["public"]["Enums"]["Avatar"] | null
-          sender_id: string
-          sender_username: string | null
-          thread_id: string
-        }
-        Insert: {
-          conversation_id: string
-          created_at?: string
-          sender_avatar?: Database["public"]["Enums"]["Avatar"] | null
-          sender_id: string
-          sender_username?: string | null
-          thread_id?: string
-        }
-        Update: {
-          conversation_id?: string
-          created_at?: string
-          sender_avatar?: Database["public"]["Enums"]["Avatar"] | null
-          sender_id?: string
-          sender_username?: string | null
-          thread_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "public_user_conversation_conversation_id_fkey1"
-            columns: ["conversation_id"]
-            isOneToOne: false
-            referencedRelation: "conversation"
-            referencedColumns: ["conversation_id"]
-          },
-          {
-            foreignKeyName: "public_user_conversation_sender_id_fkey"
-            columns: ["sender_id"]
-            isOneToOne: false
-            referencedRelation: "profile"
-            referencedColumns: ["profile_id"]
           },
         ]
       }
@@ -374,17 +368,33 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      hello_world: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      insert_private_conversation: {
+        Args: {
+          sender_id: string
+          receiver_id: string
+        }
+        Returns: string
+      }
     }
     Enums: {
       ApplicationStatus:
-        | "Initial Screen"
+        | "Applied"
         | "Rejected"
         | "Online Assessment"
         | "Interviewing"
         | "Offer"
       Avatar: "avatar1" | "avatar2" | "avatar3" | "avatar4"
-      OpportunityType: "Internship" | "New Grad" | "Co-Op"
+      OpportunityType:
+        | "Internship"
+        | "New Grad"
+        | "Co-Op"
+        | "Full-time"
+        | "Part-Time"
+        | "Contract"
     }
     CompositeTypes: {
       [_ in never]: never

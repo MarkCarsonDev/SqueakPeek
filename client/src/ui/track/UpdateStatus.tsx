@@ -3,7 +3,7 @@ import * as React from "react";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { SxProps } from "@mui/system";
-import { ApplicationStage } from "@/lib/store/track";
+import { ApplicationStage} from "@/lib/store/track";
 
 interface UpdateStatusProps {
   options: ApplicationStage[];
@@ -31,7 +31,7 @@ export default function UpdateStatus({
 
   const getDisplayValue = (status: ApplicationStage) => {
     // Display 'OA' for 'Online Assestment', else show the status as is
-    return status === "Online Assesstment" ? "OA" : status;
+    return status === "Online Assessment" ? "OA" : status;
   }
 
   return (

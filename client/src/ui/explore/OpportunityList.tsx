@@ -4,6 +4,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import { OpportunityCard, OpportunityCardProps } from "./OpportunityCard";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { Database } from "@/lib/types/database.types";
+import { fetchOpportunities } from "@/lib/utils/fetchOpportunities";
 
 // TODO: Add filters to the OpportunityList component
 export function OpportunityList() {
@@ -15,18 +16,14 @@ export function OpportunityList() {
 
   // Fetch all opportunities once when the component mounts
   useEffect(() => {
-    const fetchOpportunities = async () => {
+    const handleFetchOpportunities = async () => {
       setLoading(true);
-      const { data, error } = await supabase.from("conversation").select(`
-        *,
-        opportunity:opportunity_id (*)
-      `);
-
+      const { data, error } = await fetchOpportunities(supabase);
       if (error) {
         console.error("Error fetching opportunities:", error);
       } else if (data) {
         const mappedData: OpportunityCardProps[] = data.map((item) => {
-          const { conversation_id } = item;
+          const { thread_id: conversation_id } = item;
           const opportunity =
             item.opportunity as unknown as Database["public"]["Tables"]["opportunity"]["Row"]; // converts opportunity of the type as listed in the database
 
@@ -52,8 +49,8 @@ export function OpportunityList() {
       setLoading(false);
     };
 
-    fetchOpportunities();
-  }, []);
+    handleFetchOpportunities();
+  }, [supabase]);
 
   if (loading) {
     return <div>Loading...</div>;
