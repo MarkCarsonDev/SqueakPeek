@@ -1,78 +1,61 @@
 import { CardHeader } from "@mui/material";
 import { useMessage } from "@/lib/store/message";
 import { useEffect, useState } from "react";
-import { createSupabaseClient } from "@/lib/supabase/client";
 import { useProfile, Profile } from "@/lib/store/profile";
 import { ProfileAvatar, AvatarTypes } from "../ProfileAvatar";
 import Image from "next/image";
 import { Database } from "@/lib/types/database.types";
+import { fetchCompanyThreadMetaData } from "@/lib/utils/fetchCompanyThreadMetaData";
+import { fetchPrivateConversationMetaData } from "@/lib/utils/fetchPrivateConversationMetaData";
 interface ConversationHeaderProps {
   conversationId: string;
 }
 /**
  * Header section of the Conversation component
+ * @param conversationId - id of the conversation. Either a company thread or a private conversation
  */
-
 export function ConversationHeader({
   conversationId,
 }: ConversationHeaderProps) {
   const { isPrivateConversation } = useMessage();
   const { profile } = useProfile();
-  const supabase = createSupabaseClient();
-
   const [header, setHeader] = useState("");
   const [subHeader, setSubHeader] = useState("");
   const [profileAvatar, setProfileAvatar] = useState<AvatarTypes | null>();
 
   useEffect(() => {
     if (isPrivateConversation && profile) {
-      supabase
-        .from("private_user_conversation")
-        .select("*, profile:profile!receiver_id(profile_id, avatar, username)")
-        .eq("conversation_id", conversationId)
-        .eq("sender_id", profile.profile_id)
-        .single()
-        .then((res) => {
+      fetchPrivateConversationMetaData(conversationId, profile.profile_id).then(
+        (res) => {
           const { data, error } = res;
           if (error) {
             // TODO: Do something with error
-          }
-          else if (data) {
+          } else if (data) {
             const conversationMetaData = data.profile as unknown as Profile;
             setHeader(conversationMetaData.username);
             setProfileAvatar(conversationMetaData.avatar);
           }
           console.log("data: ", data);
           console.log("error: ", error);
-        });
+        }
+      );
     } else if (!isPrivateConversation && profile) {
-      supabase
-        .from("company_thread")
-        .select(
-          `*,opportunity:opportunity!opportunity_id(      company_name, 
-      created_at, 
-      opportunity_id, 
-      role_title, 
-      type)`
-        )
-        .eq("thread_id", conversationId)
-        .single()
-        .then((res) => {
-          const { data, error } = res;
-          if (error) {
-            // TODO: Do something with error
-          }
-          if (data) {
-            const opportunityMetaData =
-              data.opportunity as unknown as Database["public"]["Tables"]["opportunity"]["Row"];
-            setHeader(opportunityMetaData.company_name);
-            setSubHeader(
-              opportunityMetaData.role_title + ", " + opportunityMetaData.type
-            );
-          }
-        });
+      fetchCompanyThreadMetaData(conversationId).then((res) => {
+        const { data, error } = res;
+        if (error) {
+          // TODO: Do something with error
+        }
+        if (data) {
+          const opportunityMetaData =
+            data.opportunity as unknown as Database["public"]["Tables"]["opportunity"]["Row"];
+          setHeader(opportunityMetaData.company_name);
+          setSubHeader(
+            opportunityMetaData.role_title + ", " + opportunityMetaData.type
+          );
+        }
+      });
     }
-  }, [supabase, isPrivateConversation, profile]);
+  }, [isPrivateConversation, profile]);
   return (
     <CardHeader
       title={header}
