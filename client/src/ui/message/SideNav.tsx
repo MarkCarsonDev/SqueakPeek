@@ -119,9 +119,13 @@ export function SideNav() {
         <Tabs
           value={currentTab}
           TabIndicatorProps={{
-            hidden: true,
+            style: {
+              background: "#496FFF",
+            },
           }}
           sx={{
+            marginTop: "20px",
+            justifySelf: "center",
             display: "flex",
             justifyContent: "center",
             justifyItems: "center",
@@ -156,8 +160,16 @@ export function SideNav() {
                 />
               }
               onClick={() => router.push(`/message/${tabPathName}`)}
-              label={label}
-              iconPosition="start"
+              label={
+                <Typography
+                  sx={{
+                    color: currentTab === tabPathName ? "#496FFF" : "#3C435C",
+                  }}
+                  variant="caption"
+                >
+                  {label}
+                </Typography>
+              }
             />
           ))}
         </Tabs>
