@@ -3,12 +3,13 @@ import { Database } from "../../types/database.types";
 import { createOpportunity } from "@/lib/utils/Application/createOpportunity";
 import { Profile } from "../../store/profile";
 import { Application } from "@/lib/store/track";
+import { createSupabaseClient } from "@/lib/supabase/client";
 
 export async function InsertApplication(
-  supabase: SupabaseClient,
   profile: Profile,
-  application: Application
-): Promise<string | PostgrestError | undefined> {
+  application: Application,
+  supabase: SupabaseClient = createSupabaseClient()
+): Promise<{ data: string | null; error: PostgrestError | null }> {
   const { data: opportunityData, error: opportunityError } = await supabase
     .from("opportunity")
     .select("opportunity_id")
@@ -16,7 +17,7 @@ export async function InsertApplication(
     .eq("company_name", application.company_name)
     .eq("type", application.type);
 
-  let opportunityId;
+  let opportunityId: string | null;
   if (opportunityError) {
     console.log("Error finding opportunity:", opportunityError.message);
   }
@@ -25,17 +26,27 @@ export async function InsertApplication(
     console.log("Opportunity found:", opportunityData[0].opportunity_id);
     opportunityId = opportunityData[0].opportunity_id;
   } else {
-    opportunityId = await createOpportunity(
-      supabase,
+    const { data, error } = await createOpportunity(
       application.role_title,
       application.company_name,
-      application.type as Database["public"]["Enums"]["OpportunityType"]
+      application.type as Database["public"]["Enums"]["OpportunityType"],
+      supabase
     );
+    if (error) {
+      console.error("Error creating opportunity:", error.message);
+      return { data: null, error };
+    }
+    if (data && data.length > 0) {
+      opportunityId = data[0].opportunity_id;
+    } else {
+      console.error("Error: No opportunity data returned");
+      return { data: null, error: { message: "No opportunity data returned" } as PostgrestError };
+    }
   }
 
   if (!opportunityId) {
     console.error("Failed to find or create opportunity");
-    return;
+    return { data: null, error: { message: "Failed to find or create opportunity" } as PostgrestError };
   }
 
   const newApplication: Omit<
@@ -70,12 +81,12 @@ export async function InsertApplication(
 
   if (existingApplicationError) {
     console.error("Error checking existing application:", existingApplicationError.message);
-    return existingApplicationError;
+    return { data: null, error: existingApplicationError };
   }
 
   if (existingApplicationData && existingApplicationData.length > 0) {
     console.log("Duplicate application found:", existingApplicationData[0].application_id);
-    return { message: "Duplicate application found", details: "", hint: "", code: "duplicate_application" } as PostgrestError;
+    return { data: null, error: { message: "Duplicate application found", details: "", hint: "", code: "duplicate_application" } as PostgrestError };
   }
 
   // If no existing application, create a new application
@@ -86,11 +97,13 @@ export async function InsertApplication(
 
   if (insertApplicationError) {
     console.error("Error inserting application:", insertApplicationError.message);
-    return insertApplicationError;
+    return { data: null, error: insertApplicationError };
   }
 
   if (insertApplication && insertApplication.length > 0) {
     console.log("Application inserted:", insertApplication[0].application_id);
-    return insertApplication[0].application_id;
+    return { data: insertApplication[0].application_id, error: null };
   }
+
+  return { data: null, error: { message: "Unknown error occurred" } as PostgrestError };
 }

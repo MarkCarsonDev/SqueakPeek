@@ -58,18 +58,16 @@ export const useTrack = create<TrackState>()((set) => ({
   Interviewing: [],
   Offer: [],
 
-  addApplication: async (to, application, profile) => {
-    const supabase = createSupabaseClient();
-
+  addApplication: async (to, application, profile) => {   
     // Call the InsertApplication function
-    const result = await InsertApplication(supabase, profile, application);
-    if (result && typeof result !== "string") {
-      console.error("Error inserting application:", (result as PostgrestError).message);
-      return result as PostgrestError;
+    const {data, error} = await InsertApplication(profile, application);
+    if (error) {
+      console.error("Error inserting application:", error.message);
+      return { data: null, error };
     }
 
-    if (result && typeof result === "string") {
-      application.application_id = result;
+    if (data) {
+      application.application_id = data;
     }
     
     set((state) => {
@@ -147,8 +145,6 @@ export const useTrack = create<TrackState>()((set) => ({
     },
 
     updateApplication: async (applicationId, updates, profile) => {
-      const supabase = createSupabaseClient();
-
       // Ensure profile is defined and has profile_id
     if (!profile || !profile.profile_id) {
       console.error("Profile is not defined or missing profile_id");
@@ -161,7 +157,7 @@ export const useTrack = create<TrackState>()((set) => ({
     }
   
       // Call the UpdateApplication function
-      const error = await UpdateApplication(supabase, profile, applicationId, updates);
+      const error = await UpdateApplication(profile, applicationId, updates);
       if (error) {
         console.error("Error updating application:", error.message);
         return error;
@@ -185,25 +181,34 @@ export const useTrack = create<TrackState>()((set) => ({
     },
 
     fetchApplications: async (profile) => {
-      const supabase = createSupabaseClient();
-      const applications = await FetchApplication(supabase, profile);
-
-      if (!applications) {
-        console.error("Error fetching applications or no existing applications");
+      if (!profile) {
+        console.error("Profile is required to fetch applications");
         return;
       }
-      const groupedApplications = applications.reduce((acc, application) => {
-        acc[application.status].push(application);
-        return acc;
-      }, {
-        Applied: [],
-        Rejected: [],
-        "Online Assessment": [],
-        Interviewing: [],
-        Offer: [],
-      } as Record<ApplicationStage, Application[]>);
-  
-      set(groupedApplications);
+      const { data, error } = await FetchApplication(profile);
+    if (error) {
+      console.error("Error fetching applications:", error.message);
+      return { data: null, error };
+    }
 
-    },
+    if (!data) {
+      console.error("No applications found");
+      return { data: null, error: null };
+    }
+
+    const groupedApplications = data.reduce<Record<ApplicationStage, Application[]>>((acc, application) => {
+      acc[application.status].push(application);
+      return acc;
+    }, {
+      Applied: [],
+      Rejected: [],
+      "Online Assessment": [],
+      Interviewing: [],
+      Offer: [],
+    });
+
+    set(groupedApplications);
+
+    return { data, error: null };
+  },
 }));

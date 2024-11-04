@@ -1,13 +1,13 @@
 import { SupabaseClient, PostgrestError } from "@supabase/supabase-js";
-// import { Database } from "../types/database.types";
+import { createSupabaseClient } from "@/lib/supabase/client";
 import { Profile } from "@/lib/store/profile";
 import { Application } from "@/lib/store/track";
 
 export async function UpdateApplication(
-  supabase: SupabaseClient,
   profile: Profile,
   applicationId: string,
-  updatedFields: Application
+  updatedFields: Application,
+  supabase: SupabaseClient = createSupabaseClient(),
 ): Promise<PostgrestError | undefined> {
   // Ensure the application belongs to the profile
   const { data: existingApplicationData, error: existingApplicationError } =

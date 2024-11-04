@@ -1,16 +1,12 @@
-import {SupabaseClient} from '@supabase/supabase-js';
+import {SupabaseClient, PostgrestError} from '@supabase/supabase-js';
+import {createSupabaseClient} from '@/lib/supabase/client';
 import {Profile} from '@/lib/store/profile';
 import {Application} from '@/lib/store/track';
 
 export async function FetchApplication(
-    supabase: SupabaseClient,
     profile: Profile,
-): Promise<Application[] | undefined> {
-  if (!profile) {
-    console.error('Profile is required to fetch applications');
-    return undefined;
-  }
-  
+    supabase: SupabaseClient = createSupabaseClient(),
+): Promise<{data: Application[] | null, error: PostgrestError | null}> {
     // Fetch all applications for the profile
   const {data: applications, error: applicationsError} = await supabase
       .from('application')
@@ -20,8 +16,8 @@ export async function FetchApplication(
 
   if (applicationsError) {
     console.error('Error fetching applications:', applicationsError.message);
-    return undefined;
+    return {data: null, error: applicationsError};
   }
 
-  return applications as Application[];
+  return {data: applications as Application[], error: null};
 }
