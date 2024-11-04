@@ -3,7 +3,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 90vh;
 
     
   }
@@ -26,3 +26,9 @@
   align-items: center; 
   gap: 10px; 
 }
+
+.button-links {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }

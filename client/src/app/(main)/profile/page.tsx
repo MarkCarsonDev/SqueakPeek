@@ -1,21 +1,18 @@
-"use client"
-import "@/app/(main)/profile/profile.css"
+"use client";
+import "@/app/(main)/profile/profile.css";
 import { InputField } from "@/ui/InputField";
-import { useEffect, useState, useMemo} from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Button, Avatar, Typography } from "@mui/material";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { useProfile } from "@/lib/store/profile";
-
-
+import { useRouter } from "next/navigation";
 
 export default function Page() {
-
-  const avatars = [
+  const avatars: { profile: string; avatarType: "avatar1" | "avatar2" | "avatar3" | "avatar4" }[] = [
     {
       profile: "/landingpage/track.svg",
       avatarType: "avatar1",
     },
-
     {
       profile: "/landingpage/insight.svg",
       avatarType: "avatar2",
@@ -30,19 +27,29 @@ export default function Page() {
     },
   ];
 
+  const router = useRouter();
+
   //Gets profile data using useProfile function
-  const { profile } = useProfile(); 
+  const { profile } = useProfile();
   const [profileData, setProfileData] = useState<
-    { profile_id: string; username: string | null; email: string | null; avatar: "avatar1" | "avatar2" | "avatar3" | "avatar4"; school: string | null; }[] | null
+    | {
+        profile_id: string;
+        username: string | null;
+        email: string | null;
+        avatar: "avatar1" | "avatar2" | "avatar3" | "avatar4";
+        school: string | null;
+      }[]
+    | null
   >(null);
 
   // Creates Supabase Client
   const supabase = useMemo(() => createSupabaseClient(), []);
 
-  // Creats chosenAvatar, username 
-  const [chosenAvatar, setAvatar] = useState<string | null>(null);
-  const [username, setUsername] = useState<string | null>(null);
-  const [school, setSchool] = useState<string | null>(null);
+  // Creats chosenAvatar, username
+   const [chosenAvatar, setAvatar] = useState<"avatar1" | "avatar2" | "avatar3" | "avatar4" | undefined>(undefined);
+  const [profileUsername, setUsername] = useState<string | null>(null);
+  const [profileSchool, setSchool] = useState<string | null>(null);
+  const [profileId, setProfileId] = useState<string | null>(null);
 
   // checks if profile is null then calls fetchUserprofile
   useEffect(() => {
@@ -57,6 +64,7 @@ export default function Page() {
       setUsername(profileData[0].username);
       setSchool(profileData[0].school);
       setAvatar(profileData[0].avatar);
+      setProfileId(profileData[0].profile_id);
     }
   }, [profileData]);
 
@@ -80,14 +88,38 @@ export default function Page() {
     }
   }
 
+  const handleSubmit = async () => {
+    console.log(profileUsername)
+    console.log(profileId)
+    if (profileUsername !== null && profileId) {
+      const { data, error } = await supabase
+        .from("profile")
+        .update({ username: profileUsername, school: profileSchool, avatar: chosenAvatar })
+        .eq("profile_id", profileId);
+  
+      if (error) {
+        console.error("Error updating profile:", error);
+      } else {
+        console.log("Profile updated successfully:", data);
+      }
+    } else {
+      console.warn("Profile username or profile ID is missing.");
+    }
+  };
+  
 
   return (
-
-
-
     <div className="profile_page_container">
+
+      <form onSubmit={handleSubmit}>
       <div className="edit_profile">
-        
+        <Typography
+          variant="h5"
+          sx={{ marginBottom: "20px", fontWeight: "bold" }}
+        >
+          Edit Profile
+        </Typography>
+
         <div className="avatar-container">
           {avatars.map(({ profile, avatarType }) => (
             <Avatar
@@ -112,6 +144,18 @@ export default function Page() {
           ))}
         </div>
 
+        <Typography
+          variant="h6"
+          sx={{
+            marginTop: "10px",
+            marginBottom: "20px",
+            fontWeight: "bold",
+            alignSelf: "center",
+          }}
+        >
+          Select an avatar
+        </Typography>
+
         {/* Username */}
         <InputField
           fullWidth
@@ -120,7 +164,8 @@ export default function Page() {
           variant="outlined"
           name="username"
           required
-          defaultValue={username} // Display first username error
+          defaultValue={profileUsername}
+          onChange={(e) => setUsername(e.target.value)}
           sx={{ marginBottom: "15px" }}
         />
 
@@ -131,12 +176,54 @@ export default function Page() {
           placeholder="Enter your school"
           variant="outlined"
           name="school"
-          defaultValue={school} // Display first school error
+          defaultValue={profileSchool}
+          onChange={(e) => setSchool(e.target.value)}
           sx={{ marginBottom: "15px" }}
         />
+
+        {/* Button container */}
+        <div className="button-links">
+          <Button
+            className="borderline"
+            variant="outlined"
+            onClick={() => router.back()}
+            sx={{
+              mt: 2,
+              width: "200px",
+              boxShadow: "none",
+              borderRadius: "8px",
+              ":hover": {
+                backgroundColor: "#3B5AC6",
+                boxShadow: "none",
+                color: "white"
+              },
+            }}
+          >
+            Cancel
+          </Button>
+
+          <Button
+            className="borderline"
+            variant="contained"
+            type="submit"
+            sx={{
+              mt: 2,
+              width: "200px",
+              boxShadow: "none",
+              backgroundColor: "#496FFF",
+              borderRadius: "8px",
+              ":hover": {
+                backgroundColor: "#3B5AC6",
+                boxShadow: "none",
+              },
+            }}
+          >
+            Save Changes
+          </Button>
+        </div>
+
       </div>
+      </form>
     </div>
   );
-
 }
-
