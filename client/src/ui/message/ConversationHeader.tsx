@@ -34,7 +34,10 @@ export function ConversationHeader({
         .single()
         .then((res) => {
           const { data, error } = res;
-          if (data) {
+          if (error) {
+            // TODO: Do something with error
+          }
+          else if (data) {
             const conversationMetaData = data.profile as unknown as Profile;
             setHeader(conversationMetaData.username);
             setProfileAvatar(conversationMetaData.avatar);
@@ -56,6 +59,9 @@ export function ConversationHeader({
         .single()
         .then((res) => {
           const { data, error } = res;
+          if (error) {
+            // TODO: Do something with error
+          }
           if (data) {
             const opportunityMetaData =
               data.opportunity as unknown as Database["public"]["Tables"]["opportunity"]["Row"];
