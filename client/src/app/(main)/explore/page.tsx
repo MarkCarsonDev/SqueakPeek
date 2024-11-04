@@ -2,15 +2,9 @@
 import { Typography } from "@mui/material";
 import "@/app/(main)/explore/explore.css";
 import { OpportunityList } from "@/ui/explore/OpportunityList";
-import { Filters, SelectedFilters } from "@/ui/explore/Filters";
-import { useState } from "react";
+import { Filters } from "@/ui/explore/Filters";
 
 export default function Page() {
-  const [filters, setFilters] = useState<SelectedFilters>({
-    searchQuery: "",
-    sortOption: "recent",
-  })
-
   return (
     <div className="page-container">
       <div className="header-search-container">
@@ -26,22 +20,20 @@ export default function Page() {
             <span style={{ fontWeight: "bold" }}>company threads</span>.
           </Typography>
         </div>
-        {/* To Add Later <SearchBar filters={filters} setFilters={setFilters} /> */}
-        {/* To Add Later <SortOptions filters={filters} setFilters={setFilters} /> */}
+        {/* To Add Later <SearchBar /> */}
+        {/* To Add Later <SortOptions /> */}
       </div>
       <div className="card-filter-container">
-         {/* This OpportunityList contains the OpportunityCards */}
-          <OpportunityList />
-          <Typography
-            variant="h6"
-            sx={{ marginBottom: "0.5rem", marginLeft: "0.5rem" }}
-          >
-            Filters
-            <Filters filters={filters} setFilters={setFilters} />
-
-          </Typography>
+        {/* This OpportunityList contains the OpportunityCards */}
+        <OpportunityList />
+        <Typography
+          variant="h6"
+          sx={{ marginBottom: "0.5rem", marginLeft: "0.5rem" }}
+        >
+          Filters
+          <Filters />
+        </Typography>
       </div>
     </div>
-    
   );
 }

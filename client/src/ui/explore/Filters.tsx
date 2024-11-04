@@ -9,8 +9,7 @@ import {
   Card,
 } from '@mui/material';
 import { createSupabaseClient } from '@/lib/supabase/client';
-
-const supabase = createSupabaseClient();
+import { useSearchParams, useRouter } from 'next/navigation';
 
 export interface FilterOption {
   label: string;
@@ -20,8 +19,10 @@ export interface FilterOption {
 
 export interface SelectedFilters {
   [key: string]: string | string[] | undefined;
-  searchQuery: string;
-  sortOption: string;
+  searchQuery?: string;
+  sortOption?: string;
+  company?: string[];
+  jobPosition?: string[];
 }
 
 interface FilterDefinition {
@@ -30,30 +31,20 @@ interface FilterDefinition {
   stateKey: string;
 }
 
-interface FiltersProps {
-  filters: SelectedFilters;
-  setFilters: React.Dispatch<React.SetStateAction<SelectedFilters>>;
-}
-
-// Define an interface for the raw opportunity data with an index signature
-interface OpportunityRaw {
-  [key: string]: string | undefined;
-  company_name?: string;
-  role_title?: string;
-  // Add other known properties if needed
-}
-
-export const Filters: React.FC<FiltersProps> = ({ filters, setFilters }) => {
+export const Filters: React.FC = () => {
   const [filterOptions, setFilterOptions] = useState<{
     [key: string]: FilterOption[];
   }>({});
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const supabase = createSupabaseClient();
 
   // Define the filters here
   const filterDefinitions: FilterDefinition[] = React.useMemo(() => [
     {
       title: 'Company',
       dbColumn: 'company_name',
-      stateKey: 'title',
+      stateKey: 'company',
     },
     {
       title: 'Role Title',
@@ -79,8 +70,7 @@ export const Filters: React.FC<FiltersProps> = ({ filters, setFilters }) => {
         for (const filterDef of filterDefinitions) {
           const counts: { [key: string]: number } = {};
 
-          // Cast opportunities to OpportunityRaw[] to use index signature
-          (opportunities as OpportunityRaw[]).forEach((item) => {
+          opportunities.forEach((item) => {
             // Access the value dynamically using the dbColumn
             const value: string = item[filterDef.dbColumn] || 'Unknown';
 
@@ -105,27 +95,25 @@ export const Filters: React.FC<FiltersProps> = ({ filters, setFilters }) => {
     };
 
     fetchFilterOptions();
-  }, [filterDefinitions]);
+  }, [filterDefinitions, supabase]);
 
   const handleCheckboxChange = (sectionKey: string, value: string) => {
-    setFilters((prev) => {
-      const prevValue = prev[sectionKey];
-      let currentValues: string[] = [];
+    const params = new URLSearchParams(searchParams.toString());
 
-      if (Array.isArray(prevValue)) {
-        currentValues = prevValue;
-      } else if (typeof prevValue === 'string') {
-        currentValues = [prevValue];
-      } else {
-        currentValues = [];
-      }
+    // Get existing values
+    const existingValues = params.getAll(sectionKey);
 
-      const newValues = currentValues.includes(value)
-        ? currentValues.filter((v) => v !== value)
-        : [...currentValues, value];
+    if (existingValues.includes(value)) {
+      // Remove the value
+      const newValues = existingValues.filter((v) => v !== value);
+      params.delete(sectionKey);
+      newValues.forEach((v) => params.append(sectionKey, v));
+    } else {
+      // Add the value
+      params.append(sectionKey, value);
+    }
 
-      return { ...prev, [sectionKey]: newValues };
-    });
+    router.replace(`?${params.toString()}`);
   };
 
   const renderSection = (
@@ -133,8 +121,7 @@ export const Filters: React.FC<FiltersProps> = ({ filters, setFilters }) => {
     options: FilterOption[],
     sectionKey: string
   ) => {
-    const selectedValues = filters[sectionKey];
-    const isArray = Array.isArray(selectedValues);
+    const selectedValues = searchParams.getAll(sectionKey);
 
     return (
       <Box sx={{ marginBottom: 4 }} key={sectionKey}>
@@ -143,8 +130,7 @@ export const Filters: React.FC<FiltersProps> = ({ filters, setFilters }) => {
         </Typography>
         <FormGroup>
           {options.map((option) => {
-            const isChecked =
-              isArray && (selectedValues as string[]).includes(option.value);
+            const isChecked = selectedValues.includes(option.value);
             return (
               <FormControlLabel
                 key={option.value}
