@@ -29,7 +29,7 @@ export default function Page() {
 
   const router = useRouter();
 
-  //Gets profile data using useProfile function
+  //Gets profile types using useProfile function
   const { profile } = useProfile();
   const [profileData, setProfileData] = useState<
     | {
