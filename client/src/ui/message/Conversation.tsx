@@ -52,36 +52,34 @@ export function Conversation({
   }, [setConversationType, isPrivateConversation]);
 
   useEffect(() => {
-    fetchMessages(
-      conversationId,
-      isPrivateConversation,
-      supabase
-    ).then((res) => {
-      const { error, data } = res;
+    fetchMessages(conversationId, isPrivateConversation, supabase).then(
+      (res) => {
+        const { error, data } = res;
 
-      if (error) {
-        // do something on the UI
-      } else {
-        const mappedData: MessageCardProps[] = data.map(
-          ({
-            created_at,
-            sender_avatar,
-            sender_username,
-            message,
-            message_id,
-            sender_id,
-          }) => ({
-            avatar: sender_avatar,
-            sender_username,
-            timestamp: created_at,
-            message,
-            messageId: message_id,
-            sender_id: sender_id!,
-          })
-        );
-        setMessages(mappedData);
+        if (error) {
+          // do something on the UI
+        } else {
+          const mappedData: MessageCardProps[] = data.map(
+            ({
+              created_at,
+              sender_avatar,
+              sender_username,
+              message,
+              message_id,
+              sender_id,
+            }) => ({
+              avatar: sender_avatar,
+              sender_username,
+              timestamp: created_at,
+              message,
+              messageId: message_id,
+              sender_id: sender_id!,
+            })
+          );
+          setMessages(mappedData);
+        }
       }
-    });
+    );
   }, [supabase, conversationId, setMessages, isPrivateConversation]);
 
   return (
@@ -95,18 +93,7 @@ export function Conversation({
     >
       {/* Header */}
       {/* TODO: Make this consuem the metadata of an opportunity or user */}
-      <ConversationHeader
-        title="Amazon"
-        subheader="Software Engineering, Internship"
-        avatar={
-          <Image
-            alt="Profile of {company}"
-            src="https://www.amazon.com/favicon.ico"
-            width={50}
-            height={50}
-          />
-        }
-      />
+      <ConversationHeader conversationId={conversationId} />
 
       {/* Messages */}
       <ConversationBody
