@@ -16,7 +16,7 @@ export default function Page() {
   const supabase = useMemo(() => createSupabaseClient(), []);
 
   //TODO replace with API data
-  const companyOptions = ["Google", "Netflix", "Amazon", "Facebook", "Apple"];
+  const SchoolOptions = ["Cal State Long Beach", "Cal State Fullerton", "USC", "UCSB", "UC Berkley", "UC Riverside"];
 
   //Avatar data
   const avatars: {
@@ -115,6 +115,7 @@ export default function Page() {
         console.error("Error updating profile:", error);
       } else {
         console.log("Profile updated successfully:", data);
+        router.back()
       }
     } else {
       console.warn("Profile username or profile ID is missing.");
@@ -186,7 +187,7 @@ export default function Page() {
             label="School"
             placeholder="Enter your school"
             name="School"
-            options={companyOptions}
+            options={SchoolOptions}
             value={profileSchool || ""}
             defaultValue={profileSchool}
             onValueChange={(newValue) =>
