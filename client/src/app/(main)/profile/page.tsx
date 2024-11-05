@@ -115,6 +115,7 @@ export default function Page() {
         console.error("Error updating profile:", error);
       } else {
         console.log("Profile updated successfully:", data);
+        router.back()
       }
     } else {
       console.warn("Profile username or profile ID is missing.");
