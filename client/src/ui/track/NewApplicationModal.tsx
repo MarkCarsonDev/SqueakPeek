@@ -8,8 +8,8 @@ import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import UpdateStatus from "@/ui/track/UpdateStatus";
 import { ApplicationStage, useTrack, Application } from "@/lib/store/track";
 import { useProfile } from "@/lib/store/profile";
-import {Database} from "@/lib/types/database.types";
-
+import { Database } from "@/lib/types/database.types";
+import { AlertMessage } from "@/ui/AlertMessage";
 
 interface NewApplicationModalProps {
   open: boolean;
@@ -17,9 +17,16 @@ interface NewApplicationModalProps {
   applicationStatus: ApplicationStage;
   setApplicationStatus: React.Dispatch<React.SetStateAction<ApplicationStage>>;
   existingApplication?: Application;
-};
+}
 
-const jobTypeOptions: Database["public"]["Enums"]["OpportunityType"][] = ["Internship", "New Grad", "Co-Op", "Full-time", "Part-Time", "Contract"];
+const jobTypeOptions: Database["public"]["Enums"]["OpportunityType"][] = [
+  "Internship",
+  "New Grad",
+  "Co-Op",
+  "Full-time",
+  "Part-Time",
+  "Contract",
+];
 
 const companyOptions = ["Google", "Netflix", "Amazon", "Facebook", "Apple"];
 const testProviderOptions = [
@@ -49,11 +56,30 @@ export default function NewApplicationModal({
     interviewingRound: existingApplication?.interviewing_round || "",
   });
 
-  const { role_title, location, type, company_name, dateApplied, jobLink, testProvider, currentScore, outOfScore, interviewingRound } = formFields;
+  const {
+    role_title,
+    location,
+    type,
+    company_name,
+    dateApplied,
+    jobLink,
+    testProvider,
+    currentScore,
+    outOfScore,
+    interviewingRound,
+  } = formFields;
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const [alertSeverity, setAlertSeverity] = useState<"error" | "success">(
+    "error"
+  );
 
   // Conditions for extra fields
-  const showOAFields = ["Online Assessment", "Interviewing", "Offer"].includes(applicationStatus as string);
-  const showInterviewingFields = ["Interviewing", "Offer"].includes(applicationStatus as string);
+  const showOAFields = ["Online Assessment", "Interviewing", "Offer"].includes(
+    applicationStatus as string
+  );
+  const showInterviewingFields = ["Interviewing", "Offer"].includes(
+    applicationStatus as string
+  );
   const { updateApplication, addApplication } = useTrack();
   const { profile } = useProfile(); // Retrieve profile data
 
@@ -61,7 +87,8 @@ export default function NewApplicationModal({
     e.preventDefault(); // Prevent default form submission
     console.log("status: ", applicationStatus);
     if (!profile) {
-      console.error("User must be authenticated to add an application");
+      setAlertMessage("User must be authenticated to add an application.");
+      setAlertSeverity("error");
       return;
     }
 
@@ -72,7 +99,12 @@ export default function NewApplicationModal({
       type: type,
       company_name: company_name,
       link: jobLink,
-      status: applicationStatus as "Applied" | "Rejected" | "Online Assessment" | "Interviewing" | "Offer",
+      status: applicationStatus as
+        | "Applied"
+        | "Rejected"
+        | "Online Assessment"
+        | "Interviewing"
+        | "Offer",
       currentScore: currentScore ? Number(currentScore) : undefined,
       outOfScore: outOfScore ? Number(outOfScore) : undefined,
       interviewing_round: interviewingRound,
@@ -80,15 +112,21 @@ export default function NewApplicationModal({
       profile_id: profile.profile_id, // Ensure profile_id is set
     };
 
+    let result: { success: boolean; message: string };
     if (existingApplication) {
-      // Call updateApplication with application ID and partial updates
-      updateApplication(existingApplication.application_id, updatedFields as Application, profile);
+      // Assume `updateApplication` has been similarly modified to return { success, message }
+      result = await updateApplication(existingApplication.application_id, updatedFields as Application, profile);
     } else {
-      // If it's a new application, call InsertApplication directly
-      addApplication(applicationStatus as ApplicationStage, updatedFields as Application, profile);
+      result = await addApplication(applicationStatus, updatedFields as Application, profile);
     }
 
-    handleClose();
+    // Set alert based on result
+    setAlertMessage(result.message);
+    setAlertSeverity(result.success ? "success" : "error");
+
+    if (result.success) {
+      handleClose(); // Close the modal if the operation was successful
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -97,6 +135,10 @@ export default function NewApplicationModal({
       ...prevFields,
       [name]: value,
     }));
+  };
+  
+  const closeAlert = () => {
+    setAlertMessage(null);
   };
 
   return (
@@ -135,14 +177,21 @@ export default function NewApplicationModal({
           />
           {existingApplication ? "Edit Application" : "Add New Application"}
         </Typography>
-
+        {/* Display AlertMessage if alertMessage has content */}
+        {alertMessage && (
+          <AlertMessage
+            message={alertMessage}
+            severity={alertSeverity}
+            onClose={closeAlert}
+          />)}
+      
         <div
           style={{
             display: "flex",
             flexDirection: "column",
           }}
         >
-          <div style={{ width: "150px" , marginBottom: "10px" }}>
+          <div style={{ width: "150px", marginBottom: "10px" }}>
             <UpdateStatus
               required
               name="status"

@@ -19,11 +19,11 @@ export async function InsertApplication(
 
   let opportunityId: string | null;
   if (opportunityError) {
-    console.log("Error finding opportunity:", opportunityError.message);
+    console.log("Error finding opportunity:", opportunityError.message); // This should be never printed, but here just for debugging
   }
 
   if (opportunityData && opportunityData.length > 0) {
-    console.log("Opportunity found:", opportunityData[0].opportunity_id);
+    console.log("Opportunity found:", opportunityData[0].opportunity_id); // This should be never printed, but here just for debugging
     opportunityId = opportunityData[0].opportunity_id;
   } else {
     const { data, error } = await createOpportunity(
@@ -85,6 +85,7 @@ export async function InsertApplication(
   }
 
   if (existingApplicationData && existingApplicationData.length > 0) {
+    // This should be never printed, but here just for debugging
     console.log("Duplicate application found:", existingApplicationData[0].application_id);
     return { data: null, error: { message: "Duplicate application found", details: "", hint: "", code: "duplicate_application" } as PostgrestError };
   }
