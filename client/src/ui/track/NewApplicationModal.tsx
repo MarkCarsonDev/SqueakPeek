@@ -8,8 +8,7 @@ import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import UpdateStatus from "@/ui/track/UpdateStatus";
 import { ApplicationStage, useTrack, Application } from "@/lib/store/track";
 import { useProfile } from "@/lib/store/profile";
-import {Database} from "@/lib/types/database.types";
-
+import { Database } from "@/lib/types/database.types";
 
 interface NewApplicationModalProps {
   open: boolean;
@@ -17,9 +16,17 @@ interface NewApplicationModalProps {
   applicationStatus: ApplicationStage;
   setApplicationStatus: React.Dispatch<React.SetStateAction<ApplicationStage>>;
   existingApplication?: Application;
-};
+  onSuccess: (message: string, severity: "success" | "error" | "info" | "warning") => void; // Updated onSuccess prop
+}
 
-const jobTypeOptions: Database["public"]["Enums"]["OpportunityType"][] = ["Internship", "New Grad", "Co-Op", "Full-time", "Part-Time", "Contract"];
+const jobTypeOptions: Database["public"]["Enums"]["OpportunityType"][] = [
+  "Internship",
+  "New Grad",
+  "Co-Op",
+  "Full-time",
+  "Part-Time",
+  "Contract",
+];
 
 const companyOptions = ["Google", "Netflix", "Amazon", "Facebook", "Apple"];
 const testProviderOptions = [
@@ -27,7 +34,7 @@ const testProviderOptions = [
   "Codility",
   "LeetCode",
   "HackerEarth",
-]; // This is also temporary
+];
 
 export default function NewApplicationModal({
   open,
@@ -35,6 +42,7 @@ export default function NewApplicationModal({
   applicationStatus,
   setApplicationStatus,
   existingApplication,
+  onSuccess,
 }: NewApplicationModalProps) {
   const [formFields, setFormFields] = useState({
     role_title: existingApplication?.role_title || "",
@@ -49,46 +57,55 @@ export default function NewApplicationModal({
     interviewingRound: existingApplication?.interviewing_round || "",
   });
 
-  const { role_title, location, type, company_name, dateApplied, jobLink, testProvider, currentScore, outOfScore, interviewingRound } = formFields;
+  const {
+    role_title,
+    location,
+    type,
+    company_name,
+    dateApplied,
+    jobLink,
+    testProvider,
+    currentScore,
+    outOfScore,
+    interviewingRound,
+  } = formFields;
 
-  // Conditions for extra fields
-  const showOAFields = ["Online Assessment", "Interviewing", "Offer"].includes(applicationStatus as string);
-  const showInterviewingFields = ["Interviewing", "Offer"].includes(applicationStatus as string);
   const { updateApplication, addApplication } = useTrack();
-  const { profile } = useProfile(); // Retrieve profile data
+  const { profile } = useProfile();
 
   const handleAddApplication = async (e: React.FormEvent) => {
-    e.preventDefault(); // Prevent default form submission
-    console.log("status: ", applicationStatus);
+    e.preventDefault();
+
     if (!profile) {
-      console.error("User must be authenticated to add an application");
+      onSuccess("User must be authenticated to add an application.", "error");
       return;
     }
 
     const updatedFields: Partial<Application> = {
       application_id: existingApplication?.application_id,
-      role_title: role_title, // Ensure non-null value for required fields
+      role_title: role_title,
       location: location,
       type: type,
       company_name: company_name,
       link: jobLink,
-      status: applicationStatus as "Applied" | "Rejected" | "Online Assessment" | "Interviewing" | "Offer",
+      status: applicationStatus,
       currentScore: currentScore ? Number(currentScore) : undefined,
       outOfScore: outOfScore ? Number(outOfScore) : undefined,
       interviewing_round: interviewingRound,
       test_provider: testProvider,
-      profile_id: profile.profile_id, // Ensure profile_id is set
+      profile_id: profile.profile_id,
     };
 
-    if (existingApplication) {
-      // Call updateApplication with application ID and partial updates
-      updateApplication(existingApplication.application_id, updatedFields as Application, profile);
-    } else {
-      // If it's a new application, call InsertApplication directly
-      addApplication(applicationStatus as ApplicationStage, updatedFields as Application, profile);
-    }
+    const result = existingApplication
+      ? await updateApplication(existingApplication.application_id, updatedFields as Application, profile)
+      : await addApplication(applicationStatus, updatedFields as Application, profile);
 
-    handleClose();
+    if (result.success) {
+      onSuccess(result.message, "success"); // Call onSuccess with the success message
+      handleClose(); // Close the modal
+    } else {
+      onSuccess(result.message, "error"); // Show error message on main page if needed
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -119,7 +136,7 @@ export default function NewApplicationModal({
           flexDirection: "column",
           gap: "0px 30px",
         }}
-        onSubmit={handleAddApplication} // Ensure form submission is handled
+        onSubmit={handleAddApplication}
       >
         <Typography
           variant="h4"
@@ -142,7 +159,7 @@ export default function NewApplicationModal({
             flexDirection: "column",
           }}
         >
-          <div style={{ width: "150px" , marginBottom: "10px" }}>
+          <div style={{ width: "150px", marginBottom: "10px" }}>
             <UpdateStatus
               required
               name="status"
@@ -157,7 +174,7 @@ export default function NewApplicationModal({
               setApplicationStage={setApplicationStatus}
             />
           </div>
-          {/* Left side column */}
+
           <div style={{ display: "flex", gap: "40px" }}>
             <div style={{ flex: 1 }}>
               <InputField
@@ -169,6 +186,7 @@ export default function NewApplicationModal({
                 fullWidth
                 onChange={handleInputChange}
                 sx={{ marginBottom: "10px" }}
+                disabled={!!existingApplication}
               />
               <InputField
                 label="Location"
@@ -189,11 +207,12 @@ export default function NewApplicationModal({
                 sx={{ marginBottom: "10px" }}
               />
 
-              {/* Extra fields for the form left side */}
-              {showOAFields && (
+              {["Online Assessment", "Interviewing", "Offer"].includes(
+                applicationStatus
+              ) && (
                 <>
                   <Typography variant="h5" sx={{ marginBottom: "10px" }}>
-                    Online Assesstment
+                    Online Assessment
                   </Typography>
                   <SearchDropdown
                     label="Test Provider"
@@ -213,12 +232,12 @@ export default function NewApplicationModal({
                 </>
               )}
             </div>
-            {/* Right side column */}
+
             <div style={{ flex: 1 }}>
               <SearchDropdown
                 label="Company"
                 placeholder="Company Name"
-                name="company_name" // Bind value to company state
+                name="company_name"
                 options={companyOptions}
                 value={company_name}
                 onValueChange={(newValue) =>
@@ -230,11 +249,12 @@ export default function NewApplicationModal({
                 required
                 fullWidth
                 style={{ marginBottom: "10px" }}
+                disabled={!!existingApplication}
               />
               <SearchDropdown
                 label="Job Type"
                 placeholder="Type"
-                name="type" // Bind value to jobType state
+                name="type"
                 options={jobTypeOptions}
                 value={type}
                 onValueChange={(newValue) =>
@@ -246,6 +266,7 @@ export default function NewApplicationModal({
                 required
                 fullWidth
                 style={{ marginBottom: "10px" }}
+                disabled={!!existingApplication}
               />
               <InputField
                 label="Link to Job Application"
@@ -256,42 +277,40 @@ export default function NewApplicationModal({
                 onChange={handleInputChange}
                 style={{ marginBottom: "10px" }}
               />
-              {/* Extra fields for the form right side */}
-              {showOAFields && (
-                <>
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: "10px",
-                      marginTop: "62px",
-                      marginBottom: "0px",
-                      width: "100%",
-                    }}
-                  >
-                    {/* Online Assesstment Part */}
-                    <InputField
-                      label="Current Score"
-                      placeholder="Score"
-                      name="currentScore"
-                      value={currentScore}
-                      onChange={handleInputChange}
-                      style={{ marginBottom: "10px" }}
-                    />
-                    <InputField
-                      label="Out of "
-                      placeholder=" Out of"
-                      name="outOfScore"
-                      value={outOfScore}
-                      onChange={handleInputChange}
-                      // style={{ marginBottom: "20px" }}
-                    />
-                  </div>
-                </>
+
+              {["Online Assessment", "Interviewing", "Offer"].includes(
+                applicationStatus
+              ) && (
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "10px",
+                    marginTop: "62px",
+                    marginBottom: "0px",
+                    width: "100%",
+                  }}
+                >
+                  <InputField
+                    label="Current Score"
+                    placeholder="Score"
+                    name="currentScore"
+                    value={currentScore}
+                    onChange={handleInputChange}
+                    style={{ marginBottom: "10px" }}
+                  />
+                  <InputField
+                    label="Out of "
+                    placeholder=" Out of"
+                    name="outOfScore"
+                    value={outOfScore}
+                    onChange={handleInputChange}
+                  />
+                </div>
               )}
             </div>
           </div>
 
-          {showInterviewingFields && (
+          {["Interviewing", "Offer"].includes(applicationStatus) && (
             <>
               <Typography variant="h5" sx={{ marginBottom: "10px" }}>
                 Interviewing
@@ -312,6 +331,7 @@ export default function NewApplicationModal({
               />
             </>
           )}
+
           <div
             style={{
               display: "flex",

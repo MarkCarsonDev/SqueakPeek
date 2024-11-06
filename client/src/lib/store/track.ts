@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { PostgrestError } from "@supabase/supabase-js";
 import { Database } from "@/lib/types/database.types";
 import { InsertApplication } from "@/lib/utils/Application/InsertApplication";
 import { UpdateApplication } from "@/lib/utils/Application/UpdateApplication";
@@ -25,7 +24,7 @@ interface TrackState {
     to: ApplicationStage,
     application: Application,
     profile: Profile
-  ) => void;
+  ) => Promise<{ success: boolean; message: string }>;
   removeApplication: (from: ApplicationStage, applicationId: string) => void;
   moveApplication: (
     from: ApplicationStage,
@@ -38,7 +37,7 @@ interface TrackState {
     applicationId: string,
     updates: Application,
     profile: Profile
-  ) => void;
+  ) => Promise<{ success: boolean; message: string }>;
 
   fetchApplications: (profile: Profile) => void;
 }
@@ -58,12 +57,13 @@ export const useTrack = create<TrackState>()((set) => ({
   Interviewing: [],
   Offer: [],
 
-  addApplication: async (to, application, profile) => {   
+  addApplication: async (to, application, profile): Promise<{success: boolean; message: string}> => {   
     // Call the InsertApplication function
     const {data, error} = await InsertApplication(profile, application);
     if (error) {
       console.error("Error inserting application:", error.message);
-      return { data: null, error };
+      //return { data: null, error };
+      return { success: false, message: "Duplicated Application Found" };
     }
 
     if (data) {
@@ -85,6 +85,7 @@ export const useTrack = create<TrackState>()((set) => ({
 
       return { ...state };
     });
+    return { success: true, message: "Application added successfully!" };
   },
 
   removeApplication: (from, applicationId) =>
@@ -144,42 +145,41 @@ export const useTrack = create<TrackState>()((set) => ({
       });
     },
 
-    updateApplication: async (applicationId, updates, profile) => {
+    updateApplication: async (applicationId, updates, profile): Promise<{success: boolean; message: string}> => {
       // Ensure profile is defined and has profile_id
     if (!profile || !profile.profile_id) {
       console.error("Profile is not defined or missing profile_id");
       return {
+        success: false,
         message: "Profile is not defined or missing profile_id",
-        details: "",
-        hint: "",
-        code: "profile_not_found",
-      } as PostgrestError;
+      };
     }
   
       // Call the UpdateApplication function
     const { data, error } = await UpdateApplication(profile, applicationId, updates);
     if (error) {
       console.error("Error updating application:", error.message);
-      return { data: null, error };
+      return { success: false, message: "Failed to update application." };
     }
 
-    set((state) => {
-      // Find the application across all stages
-      for (const stage in state) {
-        const applications = state[stage as ApplicationStage];
-        const appIndex = applications.findIndex(
-          (app) => app.application_id === applicationId
-        );
-        if (appIndex !== -1) {
-          // Update the application in place
-          applications[appIndex] = { ...applications[appIndex], ...updates };
-          break;
+    if (data) {
+      set((state) => {
+        // Find the application across all stages
+        for (const stage in state) {
+          const applications = state[stage as ApplicationStage];
+          const appIndex = applications.findIndex(
+            (app) => app.application_id === applicationId
+          );
+          if (appIndex !== -1) {
+            // Update the application in place
+            applications[appIndex] = { ...applications[appIndex], ...updates };
+            break;
+          }
         }
-      }
-      return { ...state };
-    });
-
-    return { data, error: null };
+        return { ...state };
+      });
+    };
+    return { success: true, message: "Application updated successfully!" };
     },
 
     fetchApplications: async (profile) => {
