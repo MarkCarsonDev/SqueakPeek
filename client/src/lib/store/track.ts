@@ -1,12 +1,10 @@
 import { create } from "zustand";
-import { PostgrestError } from "@supabase/supabase-js";
 import { Database } from "@/lib/types/database.types";
 import { InsertApplication } from "@/lib/utils/Application/InsertApplication";
 import { UpdateApplication } from "@/lib/utils/Application/UpdateApplication";
 import { FetchApplication } from "@/lib/utils/Application/FetchApplication";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { Profile } from "@/lib/store/profile";
-
 export type ApplicationStage =
   | "Applied"
   | "Rejected"
@@ -161,7 +159,6 @@ export const useTrack = create<TrackState>()((set) => ({
     const { data, error } = await UpdateApplication(profile, applicationId, updates);
     if (error) {
       console.error("Error updating application:", error.message);
-      //return { data: null, error };
       return { success: false, message: "Failed to update application." };
     }
 
@@ -181,7 +178,6 @@ export const useTrack = create<TrackState>()((set) => ({
       return { ...state };
     });
 
-    // return { data, error: null };
     return { success: true, message: "Application updated successfully!" };
     },
 

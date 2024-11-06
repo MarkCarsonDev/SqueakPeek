@@ -16,7 +16,7 @@ interface NewApplicationModalProps {
   applicationStatus: ApplicationStage;
   setApplicationStatus: React.Dispatch<React.SetStateAction<ApplicationStage>>;
   existingApplication?: Application;
-  onSuccess: (message: string) => void; // New prop to trigger success messages on main page
+  onSuccess: (message: string) => void; 
 }
 
 const jobTypeOptions: Database["public"]["Enums"]["OpportunityType"][] = [
