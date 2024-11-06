@@ -162,22 +162,23 @@ export const useTrack = create<TrackState>()((set) => ({
       return { success: false, message: "Failed to update application." };
     }
 
-    set((state) => {
-      // Find the application across all stages
-      for (const stage in state) {
-        const applications = state[stage as ApplicationStage];
-        const appIndex = applications.findIndex(
-          (app) => app.application_id === applicationId
-        );
-        if (appIndex !== -1) {
-          // Update the application in place
-          applications[appIndex] = { ...applications[appIndex], ...updates };
-          break;
+    if (data) {
+      set((state) => {
+        // Find the application across all stages
+        for (const stage in state) {
+          const applications = state[stage as ApplicationStage];
+          const appIndex = applications.findIndex(
+            (app) => app.application_id === applicationId
+          );
+          if (appIndex !== -1) {
+            // Update the application in place
+            applications[appIndex] = { ...applications[appIndex], ...updates };
+            break;
+          }
         }
-      }
-      return { ...state };
-    });
-
+        return { ...state };
+      });
+    };
     return { success: true, message: "Application updated successfully!" };
     },
 
