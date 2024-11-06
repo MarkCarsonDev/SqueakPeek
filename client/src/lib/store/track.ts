@@ -6,7 +6,7 @@ import { UpdateApplication } from "@/lib/utils/Application/UpdateApplication";
 import { FetchApplication } from "@/lib/utils/Application/FetchApplication";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { Profile } from "@/lib/store/profile";
-import { Alert } from "@mui/material";
+
 export type ApplicationStage =
   | "Applied"
   | "Rejected"

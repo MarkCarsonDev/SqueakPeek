@@ -1,18 +1,32 @@
-"use client"
-import {Alert} from '@mui/material';
+"use client";
 import React from 'react';
-
+import { Snackbar, Alert } from '@mui/material';
 
 interface AlertMessageProps {
     message: string;
     severity: "success" | "info" | "warning" | "error";
     onClose: () => void;
+    open: boolean;
+    autoHideDuration?: number;
 }
 
-export function AlertMessage({message, severity, onClose}: AlertMessageProps) {
+export function AlertMessage({
+    message,
+    severity,
+    onClose,
+    open,
+    autoHideDuration = 6000,
+}: AlertMessageProps) {
     return (
-        <Alert severity={severity} onClose={onClose}>
-            {message}
-        </Alert>
+        <Snackbar
+            open={open}
+            autoHideDuration={autoHideDuration}
+            onClose={onClose}
+            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        >
+            <Alert severity={severity} onClose={onClose} sx={{ width: '100%' }}>
+                {message}
+            </Alert>
+        </Snackbar>
     );
 }
