@@ -16,7 +16,7 @@ interface NewApplicationModalProps {
   applicationStatus: ApplicationStage;
   setApplicationStatus: React.Dispatch<React.SetStateAction<ApplicationStage>>;
   existingApplication?: Application;
-  onSuccess: (message: string) => void; 
+  onSuccess: (message: string, severity: "success" | "error" | "info" | "warning") => void; // Updated onSuccess prop
 }
 
 const jobTypeOptions: Database["public"]["Enums"]["OpportunityType"][] = [
@@ -77,7 +77,7 @@ export default function NewApplicationModal({
     e.preventDefault();
 
     if (!profile) {
-      onSuccess("User must be authenticated to add an application.");
+      onSuccess("User must be authenticated to add an application.", "error");
       return;
     }
 
@@ -101,10 +101,10 @@ export default function NewApplicationModal({
       : await addApplication(applicationStatus, updatedFields as Application, profile);
 
     if (result.success) {
-      onSuccess(result.message); // Call onSuccess with the success message
+      onSuccess(result.message, "success"); // Call onSuccess with the success message
       handleClose(); // Close the modal
     } else {
-      onSuccess(result.message); // Show error message on main page if needed
+      onSuccess(result.message, "error"); // Show error message on main page if needed
     }
   };
 

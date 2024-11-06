@@ -8,6 +8,7 @@ import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import { StageColumn, StageColumnProps } from "@/ui/track/StageColumn"; 
 import { Application, ApplicationStage, useTrack } from "@/lib/store/track";
 import { useProfile } from "@/lib/store/profile";
+import { AlertMessage } from "@/ui/AlertMessage";
 import "./tracking.css";
 
 export default function Page() {
@@ -16,6 +17,8 @@ export default function Page() {
   const [selectedApplication, setSelectedApplication] = useState<Application | undefined>();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error" | "info" | "warning">("success");
+
 
   // Retrieve application data and actions from the Zustand store
   const {
@@ -59,9 +62,10 @@ export default function Page() {
     setSelectedApplication(undefined);
   };
 
-  // Success handler for showing messages after the modal closes
-  const handleSuccess = (message: string) => {
+  // Success handler to show a snackbar message
+  const handleSuccess = (message: string, severity: "success" | "error" | "info" | "warning" = "success") => {
     setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
     setSnackbarOpen(true);
   };
 
@@ -157,14 +161,12 @@ export default function Page() {
           ))}
         </div>
       </DragDropContext>
-
-      {/* Snackbar for success message */}
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={6000}
-        onClose={closeSnackbar}
+      {/* Reusable AlertMessage component */}
+      <AlertMessage
         message={snackbarMessage}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        severity={snackbarSeverity}
+        open={snackbarOpen}
+        onClose={closeSnackbar}
       />
     </div>
   );
