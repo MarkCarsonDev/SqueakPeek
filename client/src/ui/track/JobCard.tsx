@@ -21,7 +21,7 @@ interface JobCardProps {
 
 export function JobCard({ application, profile }: JobCardProps) {
   const { moveApplication, updateApplication } = useTrack();
-  const [threadId, setThreadId] = useState<string | null>(null);
+  // const [threadId, setThreadId] = useState<string | null>(null);
 
   const {
     application_id: applicationId,
@@ -31,20 +31,21 @@ export function JobCard({ application, profile }: JobCardProps) {
     currentScore,
     outOfScore,
     interviewing_round,
+    thread_id,
   } = application;
 
-  const fetchThreadId = useCallback(async () => {
-    const { data, error } = await CompanyThread(application.opportunity_id);
-    if (error) {
-      console.error("Error fetching thread_id:", error.message);
-    } else {
-      setThreadId(data);
-    }
-  }, [application.opportunity_id]);
+  // const fetchThreadId = useCallback(async () => {
+  //   const { data, error } = await CompanyThread(application.opportunity_id);
+  //   if (error) {
+  //     console.error("Error fetching thread_id:", error.message);
+  //   } else {
+  //     setThreadId(data);
+  //   }
+  // }, [application.opportunity_id]);
 
-  useEffect(() => {
-    fetchThreadId();
-  }, [fetchThreadId]);
+  // useEffect(() => {
+  //   fetchThreadId();
+  // }, [fetchThreadId]);
 
   const handleStatusChange = (value: SetStateAction<ApplicationStage>) => {
     const newStatus = typeof value === "function" ? value(status) : value;
@@ -212,7 +213,7 @@ export function JobCard({ application, profile }: JobCardProps) {
         {/* Row 3: Icon Buttons */}
         <Box sx={{ display: "flex", gap: "6px" }}>
           <IconButton
-            href={threadId ? `/message/company/${threadId}` : "#"}
+            href={`/message/company/${thread_id}`}
             sx={{
               padding: "6px", // Adjusted padding for larger button size
               borderRadius: "50%",

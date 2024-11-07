@@ -5,6 +5,7 @@ import { UpdateApplication } from "@/lib/utils/Application/UpdateApplication";
 import { FetchApplication } from "@/lib/utils/Application/FetchApplication";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { Profile } from "@/lib/store/profile";
+import { PostgrestError } from "@supabase/supabase-js";
 export type ApplicationStage =
   | "Applied"
   | "Rejected"
@@ -12,7 +13,7 @@ export type ApplicationStage =
   | "Interviewing"
   | "Offer";
 
-export type Application = Database["public"]["Tables"]["application"]["Row"];
+export type Application = Database["public"]["Tables"]["application"]["Row"] & { thread_id: string | null };
 
 interface TrackState {
   Applied: Application[];
@@ -39,7 +40,8 @@ interface TrackState {
     profile: Profile
   ) => Promise<{ success: boolean; message: string }>;
 
-  fetchApplications: (profile: Profile) => void;
+  //fetchApplications: (profile: Profile) => void;
+   fetchApplications: (profile: Profile) => Promise<{ data: Application[] | null; error: PostgrestError | null }>;
 }
 
 // Helper function to reorder items in a list
@@ -182,12 +184,12 @@ export const useTrack = create<TrackState>()((set) => ({
     return { success: true, message: "Application updated successfully!" };
     },
 
-    fetchApplications: async (profile) => {
-      if (!profile) {
-        console.error("Profile is required to fetch applications");
-        return;
-      }
-      const { data, error } = await FetchApplication(profile);
+  fetchApplications: async (profile) => {
+    if (!profile) {
+      console.error("Profile is required to fetch applications");
+      return { data: null, error: null };
+    }
+    const { data, error } = await FetchApplication(profile);
     if (error) {
       console.error("Error fetching applications:", error.message);
       return { data: null, error };
@@ -197,7 +199,7 @@ export const useTrack = create<TrackState>()((set) => ({
       console.error("No applications found");
       return { data: null, error: null };
     }
-
+    // console.log(data.thread_id);
     const groupedApplications = data.reduce<Record<ApplicationStage, Application[]>>((acc, application) => {
       acc[application.status].push(application);
       return acc;
@@ -210,7 +212,8 @@ export const useTrack = create<TrackState>()((set) => ({
     });
 
     set(groupedApplications);
-
+    console.log(groupedApplications.Applied[0]?.thread_id);
     return { data, error: null };
   },
+
 }));
