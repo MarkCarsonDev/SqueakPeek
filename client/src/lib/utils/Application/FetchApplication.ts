@@ -21,3 +21,5 @@ export async function FetchApplication(
 
   return {data: applications as Application[], error: null};
 }
+
+

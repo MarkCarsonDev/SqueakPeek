@@ -1,5 +1,5 @@
 "use client";
-import React, { SetStateAction } from "react";
+import React, { SetStateAction, useEffect, useState, useCallback } from "react";
 import {Card, Typography,IconButton, Box, Select, MenuItem, SelectChangeEvent} from "@mui/material";
 import { faChartColumn, faLink, faBars,} from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
@@ -7,6 +7,7 @@ import { faMessage } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import UpdateStatus from "@/ui/track/UpdateStatus";
 import { Application, useTrack, ApplicationStage } from "@/lib/store/track";
+import { CompanyThread } from "@/lib/utils/Application/CompanyThread";
 import { Profile } from "@/lib/store/profile";
 
 // TODO:
@@ -20,6 +21,7 @@ interface JobCardProps {
 
 export function JobCard({ application, profile }: JobCardProps) {
   const { moveApplication, updateApplication } = useTrack();
+  const [threadId, setThreadId] = useState<string | null>(null);
 
   const {
     application_id: applicationId,
@@ -30,6 +32,19 @@ export function JobCard({ application, profile }: JobCardProps) {
     outOfScore,
     interviewing_round,
   } = application;
+
+  const fetchThreadId = useCallback(async () => {
+    const { data, error } = await CompanyThread(application.opportunity_id);
+    if (error) {
+      console.error("Error fetching thread_id:", error.message);
+    } else {
+      setThreadId(data);
+    }
+  }, [application.opportunity_id]);
+
+  useEffect(() => {
+    fetchThreadId();
+  }, [fetchThreadId]);
 
   const handleStatusChange = (value: SetStateAction<ApplicationStage>) => {
     const newStatus = typeof value === "function" ? value(status) : value;
@@ -197,6 +212,7 @@ export function JobCard({ application, profile }: JobCardProps) {
         {/* Row 3: Icon Buttons */}
         <Box sx={{ display: "flex", gap: "6px" }}>
           <IconButton
+            href={threadId ? `/message/company/${threadId}` : "#"}
             sx={{
               padding: "6px", // Adjusted padding for larger button size
               borderRadius: "50%",
