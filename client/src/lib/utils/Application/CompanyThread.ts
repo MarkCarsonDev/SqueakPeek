@@ -17,7 +17,7 @@ export async function CompanyThread(
   }
 
   if (thread && thread.length > 0) {
-    console.log('Company thread initialized:', thread[0].thread_id);
+    //console.log('Company thread initialized:', thread[0].thread_id);
     return { data: thread[0].thread_id, error: null };
   }
 
