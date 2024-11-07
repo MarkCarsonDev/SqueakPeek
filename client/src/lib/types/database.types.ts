@@ -81,7 +81,7 @@ export type Database = {
           },
         ]
       }
-      bookmark: {
+      bookmark_opportunity: {
         Row: {
           bookmark_id: string
           created_at: string
@@ -169,30 +169,36 @@ export type Database = {
       }
       opportunity_tracking: {
         Row: {
+          applied: number | null
           created_at: string
-          end_date: string | null
           interviewed: number | null
+          month: number | null
+          offered: number | null
+          online_assessment: number | null
           opportunity_id: string
           rejected: number | null
-          start_date: string | null
           tracking_id: number
         }
         Insert: {
+          applied?: number | null
           created_at?: string
-          end_date?: string | null
           interviewed?: number | null
+          month?: number | null
+          offered?: number | null
+          online_assessment?: number | null
           opportunity_id?: string
           rejected?: number | null
-          start_date?: string | null
           tracking_id?: number
         }
         Update: {
+          applied?: number | null
           created_at?: string
-          end_date?: string | null
           interviewed?: number | null
+          month?: number | null
+          offered?: number | null
+          online_assessment?: number | null
           opportunity_id?: string
           rejected?: number | null
-          start_date?: string | null
           tracking_id?: number
         }
         Relationships: [
