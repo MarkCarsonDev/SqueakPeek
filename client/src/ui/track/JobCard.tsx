@@ -27,7 +27,7 @@ export function JobCard({ application, profile }: JobCardProps) {
     application_id: applicationId,
     company_name,
     role_title,
-    status: status,
+    status,
     currentScore,
     outOfScore,
     interviewing_round,
