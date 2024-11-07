@@ -9,6 +9,8 @@ import { fetchCompanyThreadMetaData } from "@/lib/utils/fetchCompanyThreadMetaDa
 import { fetchPrivateConversationMetaData } from "@/lib/utils/fetchPrivateConversationMetaData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark } from "@fortawesome/free-regular-svg-icons";
+import { createSupabaseClient } from "@/lib/supabase/client";
+import { insertBookmarkOpportunity } from "@/lib/utils/insertBookmarkOpportunity";
 interface ConversationHeaderProps {
   conversationId: string;
 }
@@ -50,7 +52,7 @@ export function ConversationHeader({
         if (data) {
           const opportunityMetaData =
             data.opportunity as unknown as Database["public"]["Tables"]["opportunity"]["Row"];
-          // TODO set CardHeader for company thread
+          // TODO set CardHeaderAvatar for company thread
           setHeader(opportunityMetaData.company_name);
           setSubHeader(
             opportunityMetaData.role_title + ", " + opportunityMetaData.type
@@ -60,7 +62,30 @@ export function ConversationHeader({
     }
   }, [isPrivateConversation, profile, conversationId]);
 
-  function handleBookmarkClick() {}
+  // TODO: Refactor to be inside the OpportunityBookmark component
+  async function handleBookmarkClick() {
+    const supabase = createSupabaseClient();
+    const { data: opportunity, error: opportunityError } = await supabase
+      .from("company_thread")
+      .select("opportunity_id")
+      .eq("thread_id", conversationId)
+      .single();
+
+    if (opportunityError) {
+      // TODO do something
+    }
+
+    if (opportunity && profile) {
+      const { data, error } = await insertBookmarkOpportunity(
+        opportunity.opportunity_id,
+        profile.profile_id,
+        supabase
+      );
+
+      console.log("data: ", data);
+      console.log("error after inserting: ", error);
+    }
+  }
 
   if (isPrivateConversation) {
     return (
@@ -86,7 +111,7 @@ export function ConversationHeader({
             }}
             title="Bookmark Opportunity"
           >
-            <IconButton>
+            <IconButton onClick={handleBookmarkClick}>
               <FontAwesomeIcon
                 style={{
                   color: "#496FFF",

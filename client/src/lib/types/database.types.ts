@@ -120,17 +120,17 @@ export type Database = {
       company_thread: {
         Row: {
           created_at: string
-          opportunity_id: string | null
+          opportunity_id: string
           thread_id: string
         }
         Insert: {
           created_at?: string
-          opportunity_id?: string | null
+          opportunity_id: string
           thread_id?: string
         }
         Update: {
           created_at?: string
-          opportunity_id?: string | null
+          opportunity_id?: string
           thread_id?: string
         }
         Relationships: [
@@ -169,30 +169,36 @@ export type Database = {
       }
       opportunity_tracking: {
         Row: {
+          applied: number | null
           created_at: string
-          end_date: string | null
           interviewed: number | null
+          month: number | null
+          offered: number | null
+          online_assessment: number | null
           opportunity_id: string
           rejected: number | null
-          start_date: string | null
           tracking_id: number
         }
         Insert: {
+          applied?: number | null
           created_at?: string
-          end_date?: string | null
           interviewed?: number | null
+          month?: number | null
+          offered?: number | null
+          online_assessment?: number | null
           opportunity_id?: string
           rejected?: number | null
-          start_date?: string | null
           tracking_id?: number
         }
         Update: {
+          applied?: number | null
           created_at?: string
-          end_date?: string | null
           interviewed?: number | null
+          month?: number | null
+          offered?: number | null
+          online_assessment?: number | null
           opportunity_id?: string
           rejected?: number | null
-          start_date?: string | null
           tracking_id?: number
         }
         Relationships: [
