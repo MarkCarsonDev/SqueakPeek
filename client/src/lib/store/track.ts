@@ -13,7 +13,7 @@ export type ApplicationStage =
   | "Interviewing"
   | "Offer";
 
-export type Application = Database["public"]["Tables"]["application"]["Row"] & { thread_id: string | null };
+export type Application = Database["public"]["Tables"]["application"]["Row"];
 
 interface TrackState {
   Applied: Application[];
@@ -212,7 +212,8 @@ export const useTrack = create<TrackState>()((set) => ({
     });
 
     set(groupedApplications);
-    console.log(groupedApplications.Applied[0]?.thread_id);
+    // console.log(groupedApplications.Applied[0]?.thread_id);
+    console.log(groupedApplications);
     return { data, error: null };
   },
 

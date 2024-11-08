@@ -120,17 +120,17 @@ export type Database = {
       company_thread: {
         Row: {
           created_at: string
-          opportunity_id: string | null
+          opportunity_id: string
           thread_id: string
         }
         Insert: {
           created_at?: string
-          opportunity_id?: string | null
+          opportunity_id: string
           thread_id?: string
         }
         Update: {
           created_at?: string
-          opportunity_id?: string | null
+          opportunity_id?: string
           thread_id?: string
         }
         Relationships: [
