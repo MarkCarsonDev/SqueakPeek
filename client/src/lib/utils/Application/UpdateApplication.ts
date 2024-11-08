@@ -8,6 +8,7 @@ export async function UpdateApplication(
   profile: Profile,
   applicationId: string,
   updatedFields: Partial<Application>,
+  // updatedFields: Omit<Application, "thread_id">,
   supabase: SupabaseClient = createSupabaseClient()
 ): Promise<{ data: string | null; error: PostgrestError | null }> {
   // Ensure the application belongs to the profile

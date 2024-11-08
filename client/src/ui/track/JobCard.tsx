@@ -1,5 +1,5 @@
 "use client";
-import React, { SetStateAction, useEffect, useState, useCallback } from "react";
+import React, { SetStateAction} from "react";
 import {Card, Typography,IconButton, Box, Select, MenuItem, SelectChangeEvent} from "@mui/material";
 import { faChartColumn, faLink, faBars,} from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
@@ -22,18 +22,6 @@ interface JobCardProps {
 export function JobCard({ application, profile }: JobCardProps) {
   const { moveApplication, updateApplication } = useTrack();
   //const [threadId, setThreadId] = useState<string | null>(null);
-
-  const {
-    application_id: applicationId,
-    company_name,
-    role_title,
-    status,
-    currentScore,
-    outOfScore,
-    interviewing_round,
-    // thread_id,
-  } = application;
-
   // const fetchThreadId = useCallback(async () => {
   //   const { data, error } = await CompanyThread(application.opportunity_id);
   //   if (error) {
@@ -46,6 +34,17 @@ export function JobCard({ application, profile }: JobCardProps) {
   // useEffect(() => {
   //   fetchThreadId();
   // }, [fetchThreadId]);
+
+  const {
+    application_id: applicationId,
+    company_name,
+    role_title,
+    status,
+    currentScore,
+    outOfScore,
+    interviewing_round,
+    thread_id,
+  } = application;
 
   const handleStatusChange = (value: SetStateAction<ApplicationStage>) => {
     const newStatus = typeof value === "function" ? value(status) : value;
@@ -213,7 +212,7 @@ export function JobCard({ application, profile }: JobCardProps) {
         {/* Row 3: Icon Buttons */}
         <Box sx={{ display: "flex", gap: "6px" }}>
           <IconButton
-            //href={`/message/company/${thread_id}`}
+            href={`/message/company/${thread_id}`}
             //href = {`/message/company/${threadId}`}
             sx={{
               padding: "6px", // Adjusted padding for larger button size

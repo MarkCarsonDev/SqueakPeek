@@ -13,7 +13,11 @@ export type ApplicationStage =
   | "Interviewing"
   | "Offer";
 
-export type Application = Database["public"]["Tables"]["application"]["Row"];
+export type Application = Database["public"]["Tables"]["application"]["Row"] & { thread_id: string | null };
+// export type Application = Omit<Database["public"]["Tables"]["application"]["Row"], "thread_id"> & {
+//   thread_id: string | null;
+// };
+//export type Application = Database["public"]["Tables"]["application"]["Row"] ;
 
 interface TrackState {
   Applied: Application[];
@@ -156,9 +160,13 @@ export const useTrack = create<TrackState>()((set) => ({
         message: "Profile is not defined or missing profile_id",
       };
     }
+     // Exclude thread_id from updates
+     const filteredUpdates = Object.fromEntries(
+      Object.entries(updates).filter(([key]) => key !== "thread_id")
+    );
   
       // Call the UpdateApplication function
-    const { data, error } = await UpdateApplication(profile, applicationId, updates);
+    const { data, error } = await UpdateApplication(profile, applicationId, filteredUpdates);
     if (error) {
       console.error("Error updating application:", error.message);
       return { success: false, message: "Failed to update application." };
@@ -212,7 +220,6 @@ export const useTrack = create<TrackState>()((set) => ({
     });
 
     set(groupedApplications);
-    // console.log(groupedApplications.Applied[0]?.thread_id);
     console.log(groupedApplications);
     return { data, error: null };
   },
