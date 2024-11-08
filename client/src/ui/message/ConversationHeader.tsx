@@ -1,4 +1,4 @@
-import { CardHeader, Tooltip, IconButton } from "@mui/material";
+import { CardHeader } from "@mui/material";
 import { useMessage } from "@/lib/store/message";
 import { useEffect, useState } from "react";
 import { useProfile, Profile } from "@/lib/store/profile";
@@ -7,10 +7,8 @@ import Image from "next/image";
 import { Database } from "@/lib/types/database.types";
 import { fetchCompanyThreadMetaData } from "@/lib/utils/fetchCompanyThreadMetaData";
 import { fetchPrivateConversationMetaData } from "@/lib/utils/fetchPrivateConversationMetaData";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBookmark } from "@fortawesome/free-regular-svg-icons";
-import { createSupabaseClient } from "@/lib/supabase/client";
-import { insertBookmarkOpportunity } from "@/lib/utils/insertBookmarkOpportunity";
+import { OpportunityBookmark } from "../OpportunityBookmark";
+
 interface ConversationHeaderProps {
   conversationId: string;
 }
@@ -63,29 +61,6 @@ export function ConversationHeader({
   }, [isPrivateConversation, profile, conversationId]);
 
   // TODO: Refactor to be inside the OpportunityBookmark component
-  async function handleBookmarkClick() {
-    const supabase = createSupabaseClient();
-    const { data: opportunity, error: opportunityError } = await supabase
-      .from("company_thread")
-      .select("opportunity_id")
-      .eq("thread_id", conversationId)
-      .single();
-
-    if (opportunityError) {
-      // TODO do something
-    }
-
-    if (opportunity && profile) {
-      const { data, error } = await insertBookmarkOpportunity(
-        opportunity.opportunity_id,
-        profile.profile_id,
-        supabase
-      );
-
-      console.log("data: ", data);
-      console.log("error after inserting: ", error);
-    }
-  }
 
   if (isPrivateConversation) {
     return (
@@ -102,25 +77,7 @@ export function ConversationHeader({
   } else {
     return (
       <CardHeader
-        action={
-          <Tooltip
-            sx={{
-              ":hover": {
-                backgroundColor: "transparent",
-              },
-            }}
-            title="Bookmark Opportunity"
-          >
-            <IconButton onClick={handleBookmarkClick}>
-              <FontAwesomeIcon
-                style={{
-                  color: "#496FFF",
-                }}
-                icon={faBookmark}
-              />
-            </IconButton>
-          </Tooltip>
-        }
+        action={<OpportunityBookmark conversationId={conversationId} />}
         title={header}
         subheader={subHeader}
         avatar={
