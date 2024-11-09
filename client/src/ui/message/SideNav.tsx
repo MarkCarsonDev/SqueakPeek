@@ -20,6 +20,7 @@ import { MessageNotificationCardList } from "./MessageNotificationCardList";
 import { fetchPrivateConversations } from "@/lib/utils/fetchPrivateConversations";
 import { useProfile } from "@/lib/store/profile";
 import { Database } from "@/lib/types/database.types";
+import { fetchBookmarkOpportunities } from "@/lib/utils/fetchBookmarkOpportunities";
 /**
  * Allows the user to navigate between company threads or private messages in the message page
  */
@@ -73,20 +74,33 @@ export function SideNav() {
         });
       } else {
         //TODO: Fetch bookmarked opportunities here
-        setMessageNotificationsList([
-          {
-            avatar: "test",
-            conversation_id: "amazon_conversationid",
-            header: "Amazon",
-            subHeader: "Backend Engineer",
-          },
-          {
-            avatar: "test",
-            conversation_id: "netflix_conversationid",
-            header: "Netflix",
-            subHeader: "Software Engineer Intern",
-          },
-        ]);
+        fetchBookmarkOpportunities(profile.profile_id).then((res) => {
+          const { data, error } = res;
+
+          if (error) {
+            // TODO: DO something here
+          }
+
+          if (data) {
+            const mappedData: MessageNotificationCardProps[] = data.map(
+              (item) => {
+                const opportunity = item.opportunity;
+                const conversationId =
+                  item.opportunity.company_thread.thread_id;
+                return {
+                  avatar: opportunity.company_name[0], // TODO Replace with the actual company avatar
+                  conversation_id: conversationId,
+                  header: opportunity.company_name,
+                  subHeader: `${opportunity.role_title},  ${opportunity.type}`,
+                };
+              }
+            );
+
+            setMessageNotificationsList(mappedData);
+          } else {
+            setMessageNotificationsList([]);
+          }
+        });
       }
     }
   }, [pathName, currentTab, profile]);
