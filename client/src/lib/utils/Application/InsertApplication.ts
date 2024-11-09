@@ -17,7 +17,7 @@ export async function InsertApplication(
     .eq("company_name", application.company_name)
     .eq("type", application.type);
 
-  let opportunityId: string | null;
+  let opportunityId: string | null = null;
   if (opportunityError) {
     console.log("Error finding opportunity:", opportunityError.message); // This should be never printed, but here just for debugging
   }
@@ -94,15 +94,16 @@ export async function InsertApplication(
   const { data: insertApplication, error: insertApplicationError } = await supabase
     .from("application")
     .insert([newApplication])
-    .select("application_id");
-
+    .select(`application_id, 
+      opportunity_id(company_thread(thread_id))
+      `);
   if (insertApplicationError) {
     console.error("Error inserting application:", insertApplicationError.message);
     return { data: null, error: insertApplicationError };
   }
 
   if (insertApplication && insertApplication.length > 0) {
-    console.log("Application inserted:", insertApplication[0].application_id);
+    console.log("Application inserted:", insertApplication);
     return { data: insertApplication[0].application_id, error: null };
   }
 
