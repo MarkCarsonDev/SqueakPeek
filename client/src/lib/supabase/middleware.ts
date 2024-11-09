@@ -1,5 +1,8 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { trace } from "@/lib/actions/profile_setup"
+
+trace("***** BEGIN middleware.ts ******");
 
 // refreshes expired Auth token
 export async function updateSession(request: NextRequest) {
@@ -33,32 +36,6 @@ export async function updateSession(request: NextRequest) {
   // supabase.auth.getUser(). A simple mistake could make it very hard to debug
   // issues with users being randomly logged out.
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (
-    !user &&
-    !request.nextUrl.pathname.startsWith("/login") &&
-    !request.nextUrl.pathname.startsWith("/auth")
-  ) {
-    // no user, potentially respond by redirecting the user to the login page
-    // TODO: Commented for now since it's automatically redirecting to login page
-    // const url = request.nextUrl.clone();
-    // url.pathname = "/login";
-    // return NextResponse.redirect(url);
-  } else {
-    // console.log("user: ", user);
-    console.log("user logged authenticated");
-
-    // refirect user to company route when first navigating to /message route
-    if (request.nextUrl.pathname === "/message") {
-      const url = request.nextUrl.clone();
-      url.pathname = "/message/company";
-      return NextResponse.redirect(url);
-    }
-  }
-
   // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're
   // creating a new response object with NextResponse.next() make sure to:
   // 1. Pass the request in it, like so:
@@ -67,10 +44,72 @@ export async function updateSession(request: NextRequest) {
   //    myNewResponse.cookies.setAll(supabaseResponse.cookies.getAll())
   // 3. Change the myNewResponse object to fit your needs, but avoid changing
   //    the cookies!
-  // 4. Finally:
-  //    return myNewResponse
+  // 4. Finally: return myNewResponse
   // If this is not done, you may be causing the browser and server to go out
   // of sync and terminate the user's session prematurely!
+
+  //get Supabase user
+  const { data: { user } } = await supabase.auth.getUser();
+
+  //simple pathname variable
+  const pathname = request.nextUrl.pathname;
+
+  //variable for all routes under (main) & (onboarding)
+  const mainRoutes = ["/message", "/profile", "/thread", "/track", "/about", "/profile_setup"];
+  
+  //trace("middleware.ts is always invoked!!!")
+
+  //TODO: Only authenticated users can use under main
+  //if auth user
+  console.log("TODO: Keep all auth users from accessing outside main");
+      
+  if (user){
+
+    trace("Is authenticated user");
+
+    // Task 2: For authenticated users accessing the pages outside of (main)
+    // automatically redirect them to the /explore route 
+    trace("Authenticated user is attempting to acccess " + pathname);
+    if(!mainRoutes.includes(pathname) && pathname.indexOf("/explore") < 0)
+    { 
+      trace("Redirecting to /explore");
+      const url = request.nextUrl.clone();
+      url.pathname = "/explore";
+      return NextResponse.redirect(url);
+    }
+    else
+    {
+      // Task 3: Redirect authenticated users without a profile to /profile_setup
+      //if (!(await getProfile (user.id, supabase)) && pathname !== "/profile_setup") {
+        //const url = request.nextUrl.clone();
+        //url.pathname = "/profile_setup";
+        //return NextResponse.redirect(url);
+        //}
+
+      // Task 4: Redirect any users accessing /profile_setup that already has a profile to /404
+      //if (pathname === "/profile_setup") {
+        //const url = request.nextUrl.clone();
+        //url.pathname = "/404";
+        //return NextResponse.rewrite(url);
+        //}
+    }
+
+    // Task 5: Redirect auth users navigating to /message to /message/company first
+    if (request.nextUrl.pathname === "/message") {
+      const url = request.nextUrl.clone();
+      url.pathname = "/message/company";
+      return NextResponse.redirect(url);
+    }
+  }
+  else
+  {
+    trace("Restrict main to only auth users");
+    if(!pathname.indexOf("/explore")){
+      const url = request.nextUrl.clone();
+      url.pathname = "/explore";
+      return NextResponse.redirect(url);
+    }
+  }
 
   return supabaseResponse;
 }
