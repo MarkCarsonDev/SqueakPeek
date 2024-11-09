@@ -4,6 +4,15 @@ import { trace } from "@/lib/actions/profile_setup"
 
 trace("***** BEGIN middleware.ts ******");
 
+function isPublicPath(pathname: string){
+  trace("start of isPublicPaths, pathname: " + pathname);
+  const publicRoutes = ["/","/login", "/explore","/signup"];
+  const testBool = publicRoutes.includes("/explore");
+  trace("testBool: " + testBool);
+  trace("publicRoutes: " + publicRoutes);
+  return publicRoutes.includes(pathname);
+}
+
 // refreshes expired Auth token
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
@@ -30,7 +39,7 @@ export async function updateSession(request: NextRequest) {
         },
       },
     }
-  );
+  ); //end createServerClient
 
   // IMPORTANT: Avoid writing any logic between createServerClient and
   // supabase.auth.getUser(). A simple mistake could make it very hard to debug
@@ -56,13 +65,13 @@ export async function updateSession(request: NextRequest) {
 
   //variable for all routes under (main) & (onboarding)
   const mainRoutes = ["/message", "/profile", "/thread", "/track", "/about", "/profile_setup"];
-  
-  //trace("middleware.ts is always invoked!!!")
+
+  trace("middleware.ts is always invoked!!!")
 
   //TODO: Only authenticated users can use under main
   //if auth user
   console.log("TODO: Keep all auth users from accessing outside main");
-      
+
   if (user){
 
     trace("Is authenticated user");
@@ -103,13 +112,16 @@ export async function updateSession(request: NextRequest) {
   }
   else
   {
+    trace("NO AUTH USER: working here, line 112");
     trace("Restrict main to only auth users");
-    if(!pathname.indexOf("/explore")){
+    
+    if(!isPublicPath(pathname)){
+      trace("unauth'd user: Redirect to homepage");
       const url = request.nextUrl.clone();
       url.pathname = "/explore";
-      return NextResponse.redirect(url);
+      return NextResponse.redirect(url); 
     }
   }
 
   return supabaseResponse;
-}
+} //end updateSession

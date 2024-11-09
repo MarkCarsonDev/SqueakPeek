@@ -157,7 +157,7 @@ export async function createProfile(
         trace("Zod validation success, checking unique username");
         
         let user_profile = getProfileForUser();
-        let user_id=getUserId();
+        let user_id = getUserId();
         //console.log("DEBUG: user_profile: ", user_profile);
         const {username,school,avatar} = validatedFields.data;
         if(!getProfileByUserName(validatedFields.data.username))
@@ -191,10 +191,7 @@ export async function createProfile(
           }
         };
 
-      }
-
-    
-    
+        }
     }//endof existing profile check
   } //end of Promise
 }//end createProfile
