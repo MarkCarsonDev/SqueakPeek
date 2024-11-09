@@ -125,3 +125,8 @@ export async function InsertApplication(
 
   return { data: { application_id, thread_id }, error: null };
 }
+
+// .from("application")
+// .insert([application])
+// .select(`application_id, 
+//   opportunity_id(company_thread!opportunity_id(thread_id))`);

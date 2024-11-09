@@ -202,6 +202,7 @@ export function JobCard({ application, profile }: JobCardProps) {
               padding: "6px", // Adjusted padding for larger button size
               borderRadius: "50%",
             }}
+            onClick={(e) => e.stopPropagation()}
           >
             <FontAwesomeIcon
               icon={faMessage}
@@ -213,6 +214,7 @@ export function JobCard({ application, profile }: JobCardProps) {
               padding: "6px",
               borderRadius: "50%",
             }}
+            onClick={(e) => e.stopPropagation()}
           >
             <FontAwesomeIcon
               icon={faChartColumn}
@@ -224,6 +226,7 @@ export function JobCard({ application, profile }: JobCardProps) {
               padding: "6px",
               borderRadius: "50%",
             }}
+            onClick={(e) => e.stopPropagation()}
           >
             <FontAwesomeIcon
               icon={faLink}
