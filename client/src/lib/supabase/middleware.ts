@@ -1,16 +1,22 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { trace } from "@/lib/actions/profile_setup"
+import { trace, userHasExistingProfile } from "@/lib/actions/profile_setup"
 
 trace("***** BEGIN middleware.ts ******");
+trace("middleware.ts is always invoked!!!");
+
+//allowed public paths
+const publicPaths = ["/","/login", "/explore","/signup","/about"];
+
+//whitelists auth'd user paths
+const validUserPaths = ["/message", "/profile", "/thread", "/track", "/profile_setup"];
 
 function isPublicPath(pathname: string){
-  trace("start of isPublicPaths, pathname: " + pathname);
-  const publicRoutes = ["/","/login", "/explore","/signup"];
-  const testBool = publicRoutes.includes("/explore");
-  trace("testBool: " + testBool);
-  trace("publicRoutes: " + publicRoutes);
-  return publicRoutes.includes(pathname);
+  return publicPaths.includes(pathname);
+}
+
+function isAllowedUserPath(pathname: string){
+  return validUserPaths.includes(pathname);
 }
 
 // refreshes expired Auth token
@@ -63,33 +69,37 @@ export async function updateSession(request: NextRequest) {
   //simple pathname variable
   const pathname = request.nextUrl.pathname;
 
-  //variable for all routes under (main) & (onboarding)
-  const mainRoutes = ["/message", "/profile", "/thread", "/track", "/about", "/profile_setup"];
-
-  trace("middleware.ts is always invoked!!!")
-
-  //TODO: Only authenticated users can use under main
-  //if auth user
   console.log("TODO: Keep all auth users from accessing outside main");
 
   if (user){
-
+    trace("user: " + user);
     trace("Is authenticated user");
-
-    // Task 2: For authenticated users accessing the pages outside of (main)
-    // automatically redirect them to the /explore route 
-    trace("Authenticated user is attempting to acccess " + pathname);
-    if(!mainRoutes.includes(pathname) && pathname.indexOf("/explore") < 0)
-    { 
-      trace("Redirecting to /explore");
+    let hasUserProfile = await userHasExistingProfile();
+    console.log("hasUserProfile: ", hasUserProfile);
+    if (!(hasUserProfile)){
       const url = request.nextUrl.clone();
-      url.pathname = "/explore";
-      return NextResponse.redirect(url);
+      if (url.pathname.indexOf("/profile_setup") < 0){
+        url.pathname = "/profile_setup";
+        trace("redirecting to /profile_setup: user has no profile");
+        return NextResponse.redirect(url);
+      }
+    }
+    
+    //Task 1: Only allow authorized users to access
+    //the pages under the (main) directory
+    //...using whitelist strategy
+
+    if(!(isAllowedUserPath(pathname)) && !(isPublicPath(pathname))) {
+        const url = request.nextUrl.clone();
+        url.pathname = "/explore";
+        trace("redirecting to /explore: invalid path");
+        return NextResponse.redirect(url);
     }
     else
     {
+
       // Task 3: Redirect authenticated users without a profile to /profile_setup
-      //if (!(await getProfile (user.id, supabase)) && pathname !== "/profile_setup") {
+      //if (!(await getProfileForUser (user.id, supabase)) && pathname !== "/profile_setup") {
         //const url = request.nextUrl.clone();
         //url.pathname = "/profile_setup";
         //return NextResponse.redirect(url);
@@ -112,9 +122,11 @@ export async function updateSession(request: NextRequest) {
   }
   else
   {
+    //Task 2: For authenticated users accessing the pages outside of (main)
+    //automatically redirect them to the /explore route
     trace("NO AUTH USER: working here, line 112");
     trace("Restrict main to only auth users");
-    
+    //const publicPaths = ["/","/login", "/explore","/signup"];
     if(!isPublicPath(pathname)){
       trace("unauth'd user: Redirect to homepage");
       const url = request.nextUrl.clone();

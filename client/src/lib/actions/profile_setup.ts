@@ -43,7 +43,8 @@ export async function returnError(error_msg: string){
 export async function userHasExistingProfile() : Promise<Boolean>{
   trace("start of userHasExistingProfile() function");
   const userId =  await getUserId();
-  return (userId) ? true: false;
+  let userProfile = await getProfileForUser();
+  return (userProfile) ? true: false;
 }
 
 //TODO: error handling for function
@@ -62,6 +63,7 @@ export async function getUsername(){
   return trace("getUsername() not implemented")
   return "getUsername() not implemented"
 }
+//TODO add error handling
 export async function getUserId() : Promise<String|null> {
   trace("start of getUserId() function");
   const supabase = createSupabaseServer();
@@ -70,6 +72,7 @@ export async function getUserId() : Promise<String|null> {
     error: userError,
   } =  await supabase.auth.getUser();
   const userId=user?.id;
+  trace("userId: "+ userId);
   if(userId){
     return userId;
   }
@@ -89,8 +92,10 @@ export async function getProfileForUser() : Promise<Json|null>{
     .eq("user_id", user_id);
 
     const profileDataStr = JSON.stringify(data, null, 2);
+    console.log("profileDataStr: ", profileDataStr);
     let profileJson = JSON.parse(profileDataStr);
-    return profileJson[0] ? profileJson : null;
+    console.log("profileJson: ", profileJson);
+    return (profileJson && profileJson[0]) ? profileJson : null;
 }
 export async function getProfileByUserName(user_name: string) : Promise<Json|null>{
 
