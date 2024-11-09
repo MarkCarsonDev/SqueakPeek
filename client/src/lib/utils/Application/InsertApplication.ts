@@ -9,7 +9,7 @@ export async function InsertApplication(
   profile: Profile,
   application: Application,
   supabase: SupabaseClient = createSupabaseClient()
-): Promise<{ data: string | null; error: PostgrestError | null }> {
+): Promise<{ data: {application_id: string, thread_id: string | null } | null; error: PostgrestError | null }> {
   const { data: opportunityData, error: opportunityError } = await supabase
     .from("opportunity")
     .select("opportunity_id")
@@ -90,22 +90,38 @@ export async function InsertApplication(
     return { data: null, error: { message: "Duplicate application found", details: "", hint: "", code: "duplicate_application" } as PostgrestError };
   }
 
-  // If no existing application, create a new application
   const { data: insertApplication, error: insertApplicationError } = await supabase
     .from("application")
     .insert([newApplication])
-    .select(`application_id, 
-      opportunity_id(company_thread(thread_id))
-      `);
+    .select("application_id, opportunity_id");
+
   if (insertApplicationError) {
     console.error("Error inserting application:", insertApplicationError.message);
     return { data: null, error: insertApplicationError };
   }
 
-  if (insertApplication && insertApplication.length > 0) {
-    console.log("Application inserted:", insertApplication);
-    return { data: insertApplication[0].application_id, error: null };
+  if (!insertApplication || insertApplication.length === 0) {
+    return { data: null, error: { message: "Unknown error occurred" } as PostgrestError };
   }
 
-  return { data: null, error: { message: "Unknown error occurred" } as PostgrestError };
+  const application_id = insertApplication[0].application_id;
+  const opportunity_id = insertApplication[0].opportunity_id;
+
+  // Fetch the thread_id from the company_thread table using the opportunity_id
+  const { data: threadData, error: threadError } = await supabase
+    .from("company_thread")
+    .select("thread_id")
+    .eq("opportunity_id", opportunity_id)
+    .single();
+
+  if (threadError) {
+    console.error("Error fetching thread_id:", threadError.message);
+    return { data: { application_id, thread_id: null }, error: threadError };
+  }
+
+  const thread_id = threadData?.thread_id || null;
+  console.log("Application inserted:", insertApplication);
+  console.log("Thread ID:", thread_id);
+
+  return { data: { application_id, thread_id }, error: null };
 }

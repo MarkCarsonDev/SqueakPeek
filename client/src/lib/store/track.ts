@@ -73,7 +73,8 @@ export const useTrack = create<TrackState>()((set) => ({
     }
 
     if (data) {
-      application.application_id = data;
+      application.application_id = data.application_id;
+      application.thread_id = data.thread_id;
     }
     
     set((state) => {
