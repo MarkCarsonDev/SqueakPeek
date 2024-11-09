@@ -14,11 +14,6 @@ export type ApplicationStage =
   | "Offer";
 
 export type Application = Database["public"]["Tables"]["application"]["Row"] & { thread_id: string | null };
-// export type Application = Omit<Database["public"]["Tables"]["application"]["Row"], "thread_id"> & {
-//   thread_id: string | null;
-// };
-//export type Application = Database["public"]["Tables"]["application"]["Row"] ;
-
 interface TrackState {
   Applied: Application[];
   Rejected: Application[];
@@ -67,9 +62,7 @@ export const useTrack = create<TrackState>()((set) => ({
     // Call the InsertApplication function
     const {data, error} = await InsertApplication(profile, application);
     if (error) {
-      console.error("Error inserting application:", error.message);
-      //return { data: null, error };
-      return { success: false, message: "Duplicated Application Found" };
+      return { success: false, message: error.message };
     }
 
     if (data) {

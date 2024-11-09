@@ -7,11 +7,10 @@ import { faMessage } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import UpdateStatus from "@/ui/track/UpdateStatus";
 import { Application, useTrack, ApplicationStage } from "@/lib/store/track";
-//import { CompanyThread } from "@/lib/utils/Application/CompanyThread";
 import { Profile } from "@/lib/store/profile";
 
 // TODO:
-// Implement the Link for message, chart, stats
+// Implement the Link for chart, stats
 // Implement the Company Brand Logo based on the company name
 
 interface JobCardProps {
@@ -21,20 +20,6 @@ interface JobCardProps {
 
 export function JobCard({ application, profile }: JobCardProps) {
   const { moveApplication, updateApplication } = useTrack();
-  //const [threadId, setThreadId] = useState<string | null>(null);
-  // const fetchThreadId = useCallback(async () => {
-  //   const { data, error } = await CompanyThread(application.opportunity_id);
-  //   if (error) {
-  //     console.error("Error fetching thread_id:", error.message);
-  //   } else {
-  //     setThreadId(data);
-  //   }
-  // }, [application.opportunity_id]);
-
-  // useEffect(() => {
-  //   fetchThreadId();
-  // }, [fetchThreadId]);
-
   const {
     application_id: applicationId,
     company_name,
@@ -213,7 +198,6 @@ export function JobCard({ application, profile }: JobCardProps) {
         <Box sx={{ display: "flex", gap: "6px" }}>
           <IconButton
             href={`/message/company/${thread_id}`}
-            //href = {`/message/company/${threadId}`}
             sx={{
               padding: "6px", // Adjusted padding for larger button size
               borderRadius: "50%",

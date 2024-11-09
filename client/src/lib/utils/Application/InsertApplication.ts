@@ -120,8 +120,8 @@ export async function InsertApplication(
   }
 
   const thread_id = threadData?.thread_id || null;
-  console.log("Application inserted:", insertApplication);
-  console.log("Thread ID:", thread_id);
+  //console.log("Application inserted:", insertApplication);
+  //console.log("Thread ID:", thread_id);
 
   return { data: { application_id, thread_id }, error: null };
 }

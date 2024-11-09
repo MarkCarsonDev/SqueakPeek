@@ -26,7 +26,7 @@ export async function FetchApplication(
     return { data: null, error: null };
   }
 
-  // // Map the applications to include thread_id at the top level
+  // Map the applications to include thread_id at the top level
   const applicationsWithThread: Application[] = applications.map((application) => {
     const thread_id = application.application?.company_thread?.thread_id || null;
     delete application.application;
