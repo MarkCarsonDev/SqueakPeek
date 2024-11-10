@@ -8,6 +8,7 @@ trace("***** BEGIN middleware.ts ******");
 trace("middleware.ts is always invoked!!!");
 
 //allowed public paths
+//TODO: rm test in prd stack
 const publicPaths = ["/","/login", "/explore","/signup","/about"];
 
 //whitelists auth'd user paths
@@ -56,34 +57,34 @@ export async function updateSession(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
   if (user){
-    trace("user: " + user);
-    trace("Is authenticated user");
+    trace("USER " + user?.email? + " HAS AUTHENTICATED");
     
     //Task 1: Only allow authorized users to access the pages under the (main) directory
     //...using whitelist strategy
-    //console.log("Keep all auth users from accessing outside main");
+    trace("Task 1: Only allow authorized users to access the pages under the (main) directory");
     if(!(isAllowedUserPath(pathname)) && !(isPublicPath(pathname))) {
       const url = request.nextUrl.clone();
       url.pathname = "/explore";
-      trace("redirecting to /explore: invalid path");
+      trace("User attempted to access a restricted path. Redirecting to /explore");
       return NextResponse.redirect(url);
     }
 
     // Task 3: Redirect authenticated users without a profile to /profile_setup
     let hasUserProfile = await userHasExistingProfile();
     const url = request.nextUrl.clone();
-    if (!(hasUserProfile)){
-
-      trace("LOOP1: NO PROFILE");
-      if (url.pathname.indexOf("/profile_setup") < 0){
+    if (!(hasUserProfile)) {
+      trace("Task 3: Redirect authenticated users without a profile to /profile_setup");
+      const url = request.nextUrl.clone();
+        if (url.pathname.indexOf("/profile_setup") < 0){
         url.pathname = "/profile_setup";
         trace("redirecting to /profile_setup: user has no profile");
         return NextResponse.redirect(url);
       }
     }
     // Task 4: Redirect any users accessing /profile_setup that already has a profile to /404
-    else if (hasUserProfile && pathname === "/profile_setup"){
-      trace("LOOP2: has profile for user on pathname" + url.pathname);
+    else if (hasUserProfile && pathname === "/profile_setup") {
+    trace("Task 4: Redirect any users accessing /profile_setup that already has a profile to /404")
+    const url = request.nextUrl.clone();
       url.pathname = "/404";
       return NextResponse.rewrite(url);
       }
@@ -98,17 +99,20 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
   else if (!user) {
+    trace("USER HAS NOT AUTHENTICATED");
+
     //Task 2: For authenticated users accessing the pages outside of (main)
     //automatically redirect them to the /explore route
-    trace("User is not Auth'd");
-    trace("Restrict main to only auth users");
-    if(!isPublicPath(pathname)){
-      trace("unauth'd user: Redirect to explore");
+    trace("Task 2: For authenticated users accessing the pages outside of (main) automatically redirect them to the /explore route");
+    if(!isPublicPath(pathname)) {
+      trace(pathname  + "is not a public path. Redirect to explore");
       const url = request.nextUrl.clone();
       url.pathname = "/explore";
       return NextResponse.redirect(url); 
     }
+    else {
+      trace(pathname  + "is a public path. Allowing access");
+    }
   }
-
   return supabaseResponse;
-} //end updateSession
+} // end updateSession
