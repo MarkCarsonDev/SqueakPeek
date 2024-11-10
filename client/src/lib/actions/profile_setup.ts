@@ -2,6 +2,9 @@
 import { z } from "zod";
 import { createSupabaseServer } from "../supabase/server";
 import { Json } from "@/lib/types/database.types"
+import { redirect } from "next/navigation";
+
+let TRACE = false;
 
 trace("***** BEGIN profile_setup.ts ******");
 
@@ -27,51 +30,52 @@ export type ProfileSetupState = {
 
 //utility function 
 export async function trace(msg: string){
-  console.log("TRACE: ", msg);
-}
-
-export async function returnError(error_msg: string){
-  console.log("User has an existing profile");
-  return {
-    errors: {
-      username: ["User has an existing profile"],
-    } ,
-    message: "WTF?: ",
-  };
+  if (TRACE){
+    console.log("TRACE: ", msg);
+  }
 }
 
 export async function userHasExistingProfile() : Promise<Boolean>{
   trace("start of userHasExistingProfile() function");
-  const userId =  await getUserId();
   let userProfile = await getProfileForUser();
+  console.log("userProfile: ", userProfile);
+  TRACE = false;
   return (userProfile) ? true: false;
 }
 
-//TODO: error handling for function
 export async function getUser(): Promise<Json> {
   trace("start of getUser() function");
   const supabase = createSupabaseServer();
-  const data =  await supabase.auth.getUser();
-
-  const jsonDataStr = JSON.stringify(data, null, 2);
+  const {
+    data: {user},
+    error: userError,
+  } =  await supabase.auth.getUser();
+  if (userError)
+  {
+      return { 
+        errors: {
+          school: ["Error: No user"],
+        } ,
+        message: "Where is this message?",
+      };
+  }
+  const jsonDataStr = JSON.stringify(user, null, 2);
   let jsonData = JSON.parse(jsonDataStr);
   //console.log("EXTRACTED JSON DATA: ",jsonData);
   return jsonData;
 }
 
-export async function getUsername(){
-  return trace("getUsername() not implemented")
-  return "getUsername() not implemented"
-}
-//TODO add error handling
 export async function getUserId() : Promise<String|null> {
   trace("start of getUserId() function");
   const supabase = createSupabaseServer();
   const {
-    data:{user},
+    data: {user},
     error: userError,
   } =  await supabase.auth.getUser();
-  const userId=user?.id;
+  if (userError) {
+      return null;
+  }
+  const userId = user?.id;
   trace("userId: "+ userId);
   if(userId){
     return userId;
@@ -80,123 +84,161 @@ export async function getUserId() : Promise<String|null> {
 }
 
 export async function getProfileForUser() : Promise<Json|null>{
-
+  TRACE = false;
   trace("start of getProfileForUser() function");
   const user_id = getUserId();
+  if(!user_id){
+    return null;
+  }
+
   const supabase = createSupabaseServer();
     
   //query for profile by user_id
-  const { data } = await supabase
+  TRACE = true;
+  const { data, error} = await supabase
     .from("profile")
     .select('*')
     .eq("user_id", user_id);
 
+    if (error) {
+      console.log("getProfileForUser returning null: ", error);
+      return null;
+    }
+
     const profileDataStr = JSON.stringify(data, null, 2);
-    console.log("profileDataStr: ", profileDataStr);
+    trace("profileDataStr: " + profileDataStr);
     let profileJson = JSON.parse(profileDataStr);
     console.log("profileJson: ", profileJson);
     return (profileJson && profileJson[0]) ? profileJson : null;
 }
-export async function getProfileByUserName(user_name: string) : Promise<Json|null>{
+export async function getProfileByUserName(username: string) : Promise<Json|null>{
 
-  trace("start of getProfileForUser() function");
-  const user_id = getUserId();
+  trace("start of getProfileForUserName() function");
   const supabase = createSupabaseServer();
     
-  //query for profile by user_id
-  const { data } = await supabase
+  //query for profile by username
+  const { data, error } = await supabase
     .from("profile")
     .select('*')
-    .eq("user_name", user_name);
+    .eq("username", username);
+
+    if (error){
+      console.log("ERROR: retrieving profile by userId: ", error);
+      return null;
+    }
 
     const profileDataStr = JSON.stringify(data, null, 2);
     let profileJson = JSON.parse(profileDataStr);
-    //console.log("JSON DATA: ",userJson);
-    return profileJson[0] ? profileJson : null;
+    //console.log("JSON DATA: ", profileJson);
+    if (profileJson && profileJson[0]){
+      return profileJson[0];
+    }
+    else {
+      trace("No profile: return null");
+      return null
+    }
 }
 
+let redirectDashboard = false;
+
 //Create profile
-export async function createProfile(
-  
-  prevState: ProfileSetupState,
-  formData: FormData
+export async function createProfile( prevState: ProfileSetupState, formData: FormData ): Promise<ProfileSetupState> {
 
-  //Begin of promise
-): Promise<ProfileSetupState> {
-
-  //TODO use previous state to update the name, avatar, and school that was input fields
-  //for create profile where there username was already exists
-  //console.log("Previous State: ", prevState);
+  TRACE = true;
 
   if (await userHasExistingProfile()){
-    console.log("Client has an existing profile.")
+    console.log("USER has an existing profile.")
+    TRACE = false;
     return {
       errors: {
-        school: ["ERROR: User has an existing profile. Redirect to ???"],
+        school: ["ERROR: User has an existing profile"],
       } 
     };
-    
   }
-  else{
-      //Created profile boolean
-      let createdProfile = false;
+  
+  else {
+    trace("USER doesn't have a profile");
+    TRACE = false;
+    // Validate form data with Zod schema
+    const validatedFields = ProfileSetupFormSchema.safeParse({
+      name: formData.get("name"),
+      username: formData.get("username"),
+      school: formData.get("school"),
+      avatar: formData.get("avatar"),
+    });
 
-      // Validate form data with Zod schema
-      const validatedFields = ProfileSetupFormSchema.safeParse({
-        name: formData.get("name"),
-        username: formData.get("username"),
-        school: formData.get("school"),
-        avatar: formData.get("avatar"),
-      });
-
-      if (!validatedFields.success)
+    if (!validatedFields.success) {
+      console.log("ERROR: zod validation failed");
+      return {
+        errors: validatedFields.error.flatten().fieldErrors,
+        message: "Incorrect fields. Create Profile Failed",
+      };
+    }
+    else {
+      trace("Zod validation success, checking unique username");
+      const supabase = createSupabaseServer();
+      const {
+        data: {user},
+        error: userError,
+      } =  await supabase.auth.getUser();
+      if (userError)
       {
-        console.log("ERROR: zod validation failed");
-        return {
-          errors: validatedFields.error.flatten().fieldErrors,
-          message: "Incorrect fields. Create Profile Failed",
-        };
+          return { 
+            errors: {
+              school: ["Error: No user"],
+            } ,
+            message: "Where is this message?",
+          };
+      } else
+      {
+        console.log("user ", user);
       }
-      else
-      {
-        trace("Zod validation success, checking unique username");
-        
-        let user_profile = getProfileForUser();
-        let user_id = getUserId();
-        //console.log("DEBUG: user_profile: ", user_profile);
-        const {username,school,avatar} = validatedFields.data;
-        if(!getProfileByUserName(validatedFields.data.username))
-        {
-          //update the profile in Supabase
-          const supabase = createSupabaseServer();
-          const { error } = await supabase.from("profile").insert({
-            userId: user_id,
-            username,
-            school,
-            avatar,
-          });
-          if (error)
-          {
-            return { 
-              errors: {
-                school: ["Error Updating Profile @ line 129"],
-              } ,
-              message: "DEBUG: we need to catch username",
-            };
-          }
-        else
-        {
-          // Redirect to the dashboard after successful profile creation
-          console.log("TRACE: no error: redirecting to dashboard");
-          createdProfile = true;
+
+      const {username,school,avatar} = validatedFields.data;
+      
+      //TODO working here
+      trace("about to call getProfileByUserName");
+      const profileData = await getProfileByUserName(validatedFields.data.username);
+      if(!profileData)
+      { 
+        trace("INFO: no profile data found for username:" + username);
+        //insert profile into supabase
+        let userID = user?.id;
+        trace("inserting user with user_id into DB " + userID);
+        const { error } = await supabase.from("profile").insert({
+          user_id: userID,
+          username,
+          school,
+          avatar,
+        });
+
+        if (error) {
+          console.log("insert profile error: ", error);
+          return error;
         }
+        else {
+          // Redirect to the dashboard after successful profile creation
+          console.log("Profile Created: redirecting to dashboard");
+          redirectDashboard = true;
+          return {
+            errors: {
+              school: ["Profile Created. redirect to dashboard"],
+            }
+          }
+        } // end else for error
+
+      } else {// end of insert to supabase check
+        //nothing else to do, return promise
+        trace("username " + username + " already exists. try another username");
         return {
           errors: {
-            username: ["Return for Promise: FIX ME"],
+            username: ["ERROR: username ", username, " already exists. try another username"],
           }
-        };
-
         }
-    }//endof existing profile check
-  } //end of Promise
-}//end createProfile
+      }
+    } // end of checking for unqiue username
+  } // end else of zod validation
+} // end createProfile
+if (redirectDashboard){
+  redirect("/dashboard");
+}
