@@ -97,8 +97,7 @@ export async function updateSession(request: NextRequest) {
     url.pathname = "/message/company";
     return NextResponse.redirect(url);
   }
-  else if (!user)
-  {
+  else if (!user) {
     //Task 2: For authenticated users accessing the pages outside of (main)
     //automatically redirect them to the /explore route
     trace("User is not Auth'd");

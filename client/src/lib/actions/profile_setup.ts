@@ -35,14 +35,13 @@ export async function userHasExistingProfile() : Promise<Boolean>{
   trace("start of userHasExistingProfile() function");
   let userProfile = await getProfileForUser();
   return (userProfile) ? true: false;
-}
+} // end of userHasExistingProfile
 
 export async function getUser(): Promise<Json> {
   trace("start of getUser() function");
   const supabase = createSupabaseServer();
   const { data: {user}, error: userError } =  await supabase.auth.getUser();
-  if (userError)
-  {
+  if (userError) {
       return { 
         errors: {
           school: ["Error: No user"],
@@ -52,7 +51,7 @@ export async function getUser(): Promise<Json> {
   const jsonDataStr = JSON.stringify(user, null, 2);
   let jsonData = JSON.parse(jsonDataStr);
   return jsonData;
-}
+} // end of getUser
 
 export async function getUserId() : Promise<String|null> {
   trace("start of getUserId() function");
@@ -65,16 +64,16 @@ export async function getUserId() : Promise<String|null> {
   
   const userId = user?.id;
   
-  if(userId){
+  if(userId) {
     return userId;
   }
   return null;
-}
+} // end of getUserId
 
 export async function getProfileForUser() : Promise<Json|null>{
   trace("start of getProfileForUser() function");
   const user_id = await getUserId();
-  if(!user_id){
+  if(!user_id) {
     trace("No user_id: GetUserId() returned null");
     return null;
   }
@@ -95,13 +94,14 @@ export async function getProfileForUser() : Promise<Json|null>{
     const profileDataStr = JSON.stringify(data, null, 2);
     let profileJson = JSON.parse(profileDataStr);
     
-    if (profileJson && profileJson[0]){
+    if (profileJson && profileJson[0]) {
       return profileJson[0];
     }
     else {
       return null
     }
-}
+} // end of getProfileForUser
+
 export async function getProfileByUserName(username: string) : Promise<Json|null>{
 
   trace("start of getProfileByUserName() function");
@@ -113,7 +113,7 @@ export async function getProfileByUserName(username: string) : Promise<Json|null
     .select('*')
     .eq("username", username);
 
-    if (error){
+    if (error) {
       console.log("ERROR: retrieving profile by username: ", error);
       return null;
     }
@@ -121,18 +121,16 @@ export async function getProfileByUserName(username: string) : Promise<Json|null
     const profileDataStr = JSON.stringify(data, null, 2);
     let profileJson = JSON.parse(profileDataStr);
 
-    if (profileJson && profileJson[0]){
+    if (profileJson && profileJson[0]) {
       return profileJson[0];
     }
     else {
       return null
     }
-}
+} // end of getProfileByUserName
 
-//Create profile
 export async function createProfile( prevState: ProfileSetupState, formData: FormData ): Promise<ProfileSetupState> {
-
-  if (await userHasExistingProfile()){
+  if (await userHasExistingProfile()) {
     trace("USER has an existing profile.")
     return {
       errors: {
@@ -140,7 +138,6 @@ export async function createProfile( prevState: ProfileSetupState, formData: For
       } 
     };
   }
-  
   else {
     trace("USER doesn't have a profile");
     // Validate form data with Zod schema
@@ -153,28 +150,18 @@ export async function createProfile( prevState: ProfileSetupState, formData: For
 
     if (!validatedFields.success) {
       trace("ERROR: zod validation failed");
-      return {
-        errors: validatedFields.error.flatten().fieldErrors,
-        message: "Incorrect fields. Create Profile Failed",
-      };
+      return { errors: validatedFields.error.flatten().fieldErrors };
     }
     else {
       trace("Zod validation success, checking unique username");
       const supabase = createSupabaseServer();
-      const {
-        data: {user},
-        error: userError,
-      } =  await supabase.auth.getUser();
-      if (userError)
-      {
+      const { data: {user}, error: userError } =  await supabase.auth.getUser();
+      if (userError) {
           return { 
-            errors: {
-              school: ["Error: No user"],
-            } ,
-            message: "Where is this message?",
+            errors: { school: ["Error: No user"] }
           };
-      } else
-      {
+      }
+      else {
         trace("got logged in user ");
       }
 
@@ -183,10 +170,10 @@ export async function createProfile( prevState: ProfileSetupState, formData: For
       trace("about to call getProfileByUserName");
       const profileData = await getProfileByUserName(validatedFields.data.username);
       if(!profileData) { 
-        trace("INFO: no profile data found for username:" + username);
+        trace("INFO: no profile data found for username: " + username);
         //insert profile into supabase
         let userID = user?.id;
-        trace("inserting user with user_id into DB " + userID);
+        trace("inserting user with user_id into DB: " + userID);
         const { error } = await supabase.from("profile").insert({
           user_id: userID,
           username,
@@ -202,9 +189,8 @@ export async function createProfile( prevState: ProfileSetupState, formData: For
           // Redirect to the dashboard after successful profile creation
           console.log("Profile Created: redirecting to dashboard");
           redirect("/dashboard");
-          
-        } // end else for error
-      }
+        }
+      } // end of profile insertion
       else { // end of insert to supabase check
         // profile data exists, username taken
         trace("username " + username + " already exists. try another username");
