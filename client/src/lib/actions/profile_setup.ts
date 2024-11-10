@@ -109,11 +109,17 @@ export async function getProfileForUser() : Promise<Json|null>{
     trace("profileDataStr: " + profileDataStr);
     let profileJson = JSON.parse(profileDataStr);
     console.log("profileJson: ", profileJson);
-    return (profileJson && profileJson[0]) ? profileJson : null;
+    if (profileJson && profileJson[0]){
+      return profileJson[0];
+    }
+    else {
+      trace("No profile: return null");
+      return null
+    }
 }
 export async function getProfileByUserName(username: string) : Promise<Json|null>{
 
-  trace("start of getProfileForUserName() function");
+  trace("start of getProfileByUserName() function");
   const supabase = createSupabaseServer();
     
   //query for profile by username

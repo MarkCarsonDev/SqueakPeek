@@ -24,7 +24,7 @@ export async function loginAccount(
   prevState: LoginState,
   formData: FormData
 ): Promise<LoginState> {
-  console.log("createAccount");
+  console.log("loginAccount");
 
   const validatedFields = LoginFormSchema.safeParse({
     email: formData.get("email"),
@@ -42,7 +42,7 @@ export async function loginAccount(
 
   const { email, password } = validatedFields.data;
 
-  // call supabase to create account
+  // call supabase to login to authenticate user account
   const supabase = createSupabaseServer();
   const { error } = await supabase.auth.signInWithPassword({
     email: email,

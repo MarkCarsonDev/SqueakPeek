@@ -55,7 +55,7 @@ export async function createAccount(
   prevState: SignUpState,
   formData: FormData
 ): Promise<SignUpState> {
-  console.log("createAccount");
+  console.log("createAccount: Signing up");
 
   const validatedFields = SignUpFormSchema.safeParse({
     email: formData.get("email"),

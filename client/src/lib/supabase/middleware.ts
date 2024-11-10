@@ -2,6 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { trace, userHasExistingProfile } from "@/lib/actions/profile_setup"
 
+//TODO review explore redirect logic: redirected to profile_setup but url shows as explore
 trace("***** BEGIN middleware.ts ******");
 trace("middleware.ts is always invoked!!!");
 
