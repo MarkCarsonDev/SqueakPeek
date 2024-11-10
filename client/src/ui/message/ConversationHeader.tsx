@@ -7,7 +7,7 @@ import Image from "next/image";
 import { Database } from "@/lib/types/database.types";
 import { fetchCompanyThreadMetaData } from "@/lib/utils/fetchCompanyThreadMetaData";
 import { fetchPrivateConversationMetaData } from "@/lib/utils/fetchPrivateConversationMetaData";
-import { OpportunityBookmark } from "../OpportunityBookmark";
+import { OpportunityBookmark } from "./OpportunityBookmark";
 
 interface ConversationHeaderProps {
   conversationId: string;
