@@ -162,7 +162,7 @@ export async function createProfile( prevState: ProfileSetupState, formData: For
           };
       }
       else {
-        trace("got logged in user ");
+        trace("Supabase fetched the logged in user");
       }
 
       const { username, school, avatar } = validatedFields.data;
