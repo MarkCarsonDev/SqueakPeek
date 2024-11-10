@@ -3,6 +3,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { trace, userHasExistingProfile } from "@/lib/actions/profile_setup"
 
 //TODO review explore redirect logic: redirected to profile_setup but url shows as explore
+
 trace("***** BEGIN middleware.ts ******");
 trace("middleware.ts is always invoked!!!");
 
@@ -60,7 +61,7 @@ export async function updateSession(request: NextRequest) {
     
     //Task 1: Only allow authorized users to access the pages under the (main) directory
     //...using whitelist strategy
-    console.log("Keep all auth users from accessing outside main");
+    //console.log("Keep all auth users from accessing outside main");
     if(!(isAllowedUserPath(pathname)) && !(isPublicPath(pathname))) {
       const url = request.nextUrl.clone();
       url.pathname = "/explore";
@@ -70,9 +71,10 @@ export async function updateSession(request: NextRequest) {
 
     // Task 3: Redirect authenticated users without a profile to /profile_setup
     let hasUserProfile = await userHasExistingProfile();
-    console.log("hasUserProfile: ", hasUserProfile);
+    const url = request.nextUrl.clone();
     if (!(hasUserProfile)){
-      const url = request.nextUrl.clone();
+
+      trace("LOOP1: NO PROFILE");
       if (url.pathname.indexOf("/profile_setup") < 0){
         url.pathname = "/profile_setup";
         trace("redirecting to /profile_setup: user has no profile");
@@ -81,12 +83,14 @@ export async function updateSession(request: NextRequest) {
     }
     // Task 4: Redirect any users accessing /profile_setup that already has a profile to /404
     else if (hasUserProfile && pathname === "/profile_setup"){
-      const url = request.nextUrl.clone();
+      trace("LOOP2: has profile for user on pathname" + url.pathname);
       url.pathname = "/404";
       return NextResponse.rewrite(url);
       }
     }
-
+    else {
+      trace("LOOP 3: didn't do either of the above: PATHNAME: " + pathname);
+    }
   // Task 5: Redirect auth users navigating to /message to /message/company first
   if (request.nextUrl.pathname === "/message") {
     const url = request.nextUrl.clone();
