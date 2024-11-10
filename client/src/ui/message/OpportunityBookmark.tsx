@@ -6,6 +6,7 @@ import { createSupabaseClient } from "@/lib/supabase/client";
 import { insertBookmarkOpportunity } from "@/lib/utils/insertBookmarkOpportunity";
 import { useProfile } from "@/lib/store/profile";
 import { useState, useEffect } from "react";
+import { removeBookmarkOpportunity } from "@/lib/utils/removeBookmarkOpportunity";
 
 interface OpportunityBookmarkProps {
   conversationId: string;
@@ -21,6 +22,60 @@ export function OpportunityBookmark({
 }: OpportunityBookmarkProps) {
   const [isBookmarked, setIsBookmarked] = useState<null | boolean>(null);
   const [opportunityId, setOpportunityId] = useState<null | string>(null);
+  const { profile } = useProfile();
+
+  // handles inserting or removing bookmarks depending on it's current state
+  async function handleBookmarkClick() {
+    if (isBookmarked !== null && opportunityId && profile) {
+      const supabase = createSupabaseClient();
+
+      if (isBookmarked) {
+        const { error } = await removeBookmarkOpportunity(
+          opportunityId,
+          profile.profile_id,
+          supabase
+        );
+
+        if (error) {
+          // TODO: Handle Error
+        } else {
+          console.log("bookmark successfully deleted");
+          setIsBookmarked(false);
+        }
+      } else {
+        // not bookmarked
+        const { error } = await insertBookmarkOpportunity(
+          opportunityId,
+          profile.profile_id,
+          supabase
+        );
+
+        if (error) {
+          // TODO Handle error
+          console.error(error);
+        } else {
+          console.log("successufly bookmarked opportunity");
+          setIsBookmarked(true);
+        }
+      }
+    }
+  }
+
+  // retrieves opportunityId based on conversationId if it exists
+  async function fetchOpportunityId() {
+    const supabase = createSupabaseClient();
+    const { data: opportunity, error } = await supabase
+      .from("company_thread")
+      .select("opportunity_id")
+      .eq("thread_id", conversationId)
+      .single();
+
+    if (error) {
+      // TODO handle error
+      return null;
+    }
+    return opportunity.opportunity_id;
+  }
 
   // fetches opportunity id based on the conversationId
   useEffect(() => {
@@ -58,50 +113,6 @@ export function OpportunityBookmark({
         });
     }
   }, [opportunityId]);
-
-  const { profile } = useProfile();
-
-  // handles inserting or removing bookmarks depending on it's current state
-  async function handleBookmarkClick() {
-    if (isBookmarked !== null) {
-      if (isBookmarked) {
-        // TODO do something here to remove it
-        
-      } else {
-        const supabase = createSupabaseClient();
-        const opportunityId = await fetchOpportunityId();
-        if (opportunityId && profile) {
-          const { data, error } = await insertBookmarkOpportunity(
-            opportunityId,
-            profile.profile_id,
-            supabase
-          );
-
-          if (error) {
-            // TODO Handle error
-          } else {
-            setIsBookmarked(true);
-          }
-        }
-      }
-    }
-  }
-
-  // retrieves opportunityId based on conversationId if it exists
-  async function fetchOpportunityId() {
-    const supabase = createSupabaseClient();
-    const { data: opportunity, error } = await supabase
-      .from("company_thread")
-      .select("opportunity_id")
-      .eq("thread_id", conversationId)
-      .single();
-
-    if (error) {
-      // TODO handle error
-      return null;
-    }
-    return opportunity.opportunity_id;
-  }
 
   if (isBookmarked !== null) {
     return (
