@@ -3,32 +3,6 @@ import { z } from "zod";
 import { createSupabaseServer } from "../supabase/server";
 import { redirect } from "next/navigation";
 
-// add form validation here
-// error validation from signup.tsx
-/**
-    //     const formErrors = { email: "", password: "", confirmPassword: "" };
-  //     let isValid = true;
-
-  //     if (!email) {
-  //       formErrors.email = "Email is required";
-  //       isValid = false;
-  //     }
-
-  //     if (!password) {
-  //       formErrors.password = "Password is required";
-  //       isValid = false;
-  //     }
-
-  //     if (password !== confirmPassword) {
-  //       formErrors.confirmPassword = "Passwords do not match";
-  //       isValid = false;
-  //     } else if (!confirmPassword) {
-  //       formErrors.confirmPassword = "Confirm password is required";
-  //       isValid = false;
-  //     }
- */
-
-//TODO add form validation here. Assuming the forms are valid for now
 const SignUpFormSchema = z
   .object({
     email: z.string(),
@@ -36,7 +10,7 @@ const SignUpFormSchema = z
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Password don't match",
+    message: "Password do not match",
     path: ["confirmPassword"],
   }); // form validation if confirm password does not equal password
 
@@ -81,9 +55,15 @@ export async function createAccount(
     password: password,
   });
   if (error) {
-    console.log("error occured creating account: ", error);
-    return { message: "Database Error" };
+    let errorMessage = error + "";
+    errorMessage = errorMessage.replace("AuthApiError: ", "") + ": Please choose another email";
+    console.log("errorMessage: ", errorMessage);
+    
+    return {
+      errors: {
+        email: [errorMessage],
+      } 
+    };
   }
-
   redirect("/profile_setup");
 }
