@@ -11,6 +11,7 @@ import { memo, useMemo } from "react";
 import { insertMessage } from "../../lib/utils/insertMessage";
 import { AvatarTypes } from "../ProfileAvatar";
 import { useMessage } from "@/lib/store/message";
+import { useAlert } from "@/lib/store/alert";
 /**
  * Allows user to send a message into a private conversation or a company thread, and broadcasts the message based on the conversationId
   * @param {string} conversationId - ID used to broadcast messages to subscribed users
@@ -25,6 +26,7 @@ export const MessageInput = memo(function MessageInput({
   const [currentMessage, setCurrentMessage] = useState("");
   const messageInputRef = useRef<null | HTMLDivElement>(null);
   const { isPrivateConversation } = useMessage();
+  const { setAlert } = useAlert();
 
   // Memoize the Supabase client and the sender channel to prevent changing it's value when MessageInput re-renders
   const supabase = useMemo(() => createSupabaseClient(), []);
@@ -71,8 +73,15 @@ export const MessageInput = memo(function MessageInput({
         supabase
       );
 
+      if (error) {
+        setAlert({
+          message: "Message Failed to send",
+          type: "error",
+        });
+      }
+
       // TODO: need to check state of channel before sending message
-      if (!error) {
+      else {
         senderChannel.send({
           type: "broadcast",
           event: "conversation",
