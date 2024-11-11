@@ -3,7 +3,14 @@ import { z } from "zod";
 import { createSupabaseServer } from "../supabase/server";
 import { Json } from "@/lib/types/database.types"
 import { redirect } from "next/navigation";
-import { debug } from "@/lib/supabase/middleware"
+
+//debug utility function 
+const DEBUG = false;
+function debug(msg: string){
+  if (DEBUG){
+    console.log("DEBUG: ", msg);
+  }
+}
 
 debug("***** BEGIN profile_setup.ts ******");
 
@@ -27,9 +34,9 @@ export type ProfileSetupState = {
   message?: string | null;
 };
 
-export async function userHasExistingProfile() : Promise<Boolean>{
+export async function userHasExistingProfile() : Promise<boolean>{
   debug("start of userHasExistingProfile() function");
-  let userProfile = await getProfileForUser();
+  const userProfile = await getProfileForUser();
   return (userProfile) ? true: false;
 } // end of userHasExistingProfile
 
@@ -45,11 +52,11 @@ export async function getUser(): Promise<Json> {
       }
   }
   const jsonDataStr = JSON.stringify(user, null, 2);
-  let jsonData = JSON.parse(jsonDataStr);
+  const jsonData = JSON.parse(jsonDataStr);
   return jsonData;
 } // end of getUser
 
-export async function getUserId() : Promise<String|null> {
+export async function getUserId() : Promise<string|null> {
   debug("start of getUserId() function");
   const supabase = createSupabaseServer();
   const { data: {user}, error: userError } =  await supabase.auth.getUser();
@@ -89,7 +96,7 @@ export async function getProfileForUser() : Promise<Json|null>{
     }
 
     const profileDataStr = JSON.stringify(data, null, 2);
-    let profileJson = JSON.parse(profileDataStr);
+    const profileJson = JSON.parse(profileDataStr);
     
     if (profileJson && profileJson[0]) {
       return profileJson[0];
@@ -116,7 +123,7 @@ export async function getProfileByUserName(username: string) : Promise<Json|null
     }
 
     const profileDataStr = JSON.stringify(data, null, 2);
-    let profileJson = JSON.parse(profileDataStr);
+    const profileJson = JSON.parse(profileDataStr);
 
     if (profileJson && profileJson[0]) {
       return profileJson[0];
@@ -164,7 +171,7 @@ export async function createProfile( prevState: ProfileSetupState, formData: For
       const profileData = await getProfileByUserName(validatedFields.data.username);
       if(!profileData) { 
         //insert profile into supabase
-        let userID = user?.id;
+        const userID = user?.id;
         debug("inserting user with user_id into DB: " + userID);
         const { error } = await supabase.from("profile").insert({
           user_id: userID,

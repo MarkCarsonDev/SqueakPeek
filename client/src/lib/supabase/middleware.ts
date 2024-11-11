@@ -3,8 +3,11 @@ import { NextResponse, type NextRequest } from "next/server";
 import { userHasExistingProfile } from "@/lib/actions/profile_setup"
 
 //debug utility function 
-export async function debug(msg: string){
-  //console.log("DEBUG: ", msg);
+const DEBUG = false;
+export function debug(msg: string){
+  if (DEBUG){
+    console.log("DEBUG: ", msg);
+  }
 }
 
 debug("***** BEGIN middleware.ts ******");
@@ -30,9 +33,7 @@ function hasBasePath(pathname: string, basepaths: string[]) {
   return false
 }
 function isPublicPath(pathname: string){
-  let retVal = hasBasePath(pathname, publicPaths);
-  debug("retVal: " + retVal + "");
-  return retVal;
+  return hasBasePath(pathname, publicPaths)
 }
 
 function isAllowedUserPath(pathname: string){
@@ -43,9 +44,7 @@ function isAllowedUserPath(pathname: string){
   //  debug("RETURNING FALSE: pathname: signup " + pathname);
   //  return false
   // }
-  let retVal2 = hasBasePath(pathname, validUserPaths);
-  debug("retVal2: " + retVal2 + "");
-  return retVal2;
+  return hasBasePath(pathname, validUserPaths);
 }
 
 // refreshes expired Auth token
@@ -99,7 +98,7 @@ export async function updateSession(request: NextRequest) {
     }
 
     // Task 3: Redirect authenticated users without a profile to /profile_setup
-    let hasUserProfile = await userHasExistingProfile();
+    const hasUserProfile = await userHasExistingProfile();
     const url = request.nextUrl.clone();
     debug("url: " + url);
     if (!(hasUserProfile)) {
