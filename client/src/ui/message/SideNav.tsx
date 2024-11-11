@@ -145,9 +145,11 @@ export function SideNav() {
               schema: "public", // Subscribes to the "public" schema in Postgres
               event: "INSERT", // Listen to all changes
               table: "private_user_conversation",
-              filter: `profile_id=eq.${profile.profile_id}`,
+              filter: `receiver_id=eq.${profile.profile_id}`,
             },
-            () => setPrivateConversationNotifications(profile.profile_id)
+            () => {
+              setPrivateConversationNotifications(profile.profile_id);
+            }
           )
           .subscribe();
 
@@ -174,7 +176,13 @@ export function SideNav() {
         setOpportunityBookmarksNotifications(profile.profile_id);
       }
     }
-  }, [pathName, currentTab, profile, setOpportunityBookmarksNotifications, setPrivateConversationNotifications]);
+  }, [
+    pathName,
+    currentTab,
+    profile,
+    setOpportunityBookmarksNotifications,
+    setPrivateConversationNotifications,
+  ]);
 
   return (
     <div
