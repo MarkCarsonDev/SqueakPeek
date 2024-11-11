@@ -75,7 +75,7 @@ export const MessageInput = memo(function MessageInput({
 
       if (error) {
         setAlert({
-          message: "Message Failed to send",
+          message: error.message,
           type: "error",
         });
       }
