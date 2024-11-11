@@ -9,6 +9,8 @@ import UpdateStatus from "@/ui/track/UpdateStatus";
 import { ApplicationStage, useTrack, Application } from "@/lib/store/track";
 import { useProfile } from "@/lib/store/profile";
 import { Database } from "@/lib/types/database.types";
+import {companies} from "@/lib/data/companies";
+import { roles } from "@/lib/data/roles";
 
 interface NewApplicationModalProps {
   open: boolean;
@@ -28,7 +30,7 @@ const jobTypeOptions: Database["public"]["Enums"]["OpportunityType"][] = [
   "Contract",
 ];
 
-const companyOptions = ["Google", "Netflix", "Amazon", "Facebook", "Apple"];
+// const companyOptions = companies;
 const testProviderOptions = [
   "HackerRank",
   "Codility",
@@ -177,15 +179,21 @@ export default function NewApplicationModal({
 
           <div style={{ display: "flex", gap: "40px" }}>
             <div style={{ flex: 1 }}>
-              <InputField
+              <SearchDropdown
                 label="Role Title"
-                placeholder="Title"
+                placeholder="Titile"
                 name="role_title"
+                options={roles}
                 value={role_title}
+                onValueChange={(newValue) =>
+                  setFormFields((prevFields) => ({
+                    ...prevFields,
+                    role_title: newValue || "",
+                  }))
+                }
                 required
                 fullWidth
-                onChange={handleInputChange}
-                sx={{ marginBottom: "10px" }}
+                style={{ marginBottom: "10px" }}
                 disabled={!!existingApplication}
               />
               <InputField
@@ -238,7 +246,7 @@ export default function NewApplicationModal({
                 label="Company"
                 placeholder="Company Name"
                 name="company_name"
-                options={companyOptions}
+                options={companies}
                 value={company_name}
                 onValueChange={(newValue) =>
                   setFormFields((prevFields) => ({
