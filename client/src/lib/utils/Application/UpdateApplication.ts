@@ -3,12 +3,10 @@ import { createSupabaseClient } from "@/lib/supabase/client";
 import { Profile } from "@/lib/store/profile";
 import { Application } from "@/lib/store/track";
 
-
 export async function UpdateApplication(
   profile: Profile,
   applicationId: string,
   updatedFields: Partial<Application>,
-  // updatedFields: Omit<Application, "thread_id">,
   supabase: SupabaseClient = createSupabaseClient()
 ): Promise<{ data: string | null; error: PostgrestError | null }> {
   // Ensure the application belongs to the profile

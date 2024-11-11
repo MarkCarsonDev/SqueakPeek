@@ -179,17 +179,6 @@ export default function NewApplicationModal({
 
           <div style={{ display: "flex", gap: "40px" }}>
             <div style={{ flex: 1 }}>
-              {/* <InputField
-                label="Role Title"
-                placeholder="Title"
-                name="role_title"
-                value={role_title}
-                required
-                fullWidth
-                onChange={handleInputChange}
-                sx={{ marginBottom: "10px" }}
-                disabled={!!existingApplication}
-              /> */}
               <SearchDropdown
                 label="Role Title"
                 placeholder="Titile"
