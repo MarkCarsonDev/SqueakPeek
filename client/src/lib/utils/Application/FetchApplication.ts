@@ -35,17 +35,3 @@ export async function FetchApplication(
   console.log(applicationsWithThread);
   return { data: applicationsWithThread, error: null };
 }
-
-
-
-// Alternative query to fetch applications with thread_id
-// .select(`
-//   *,
-//   opportunity (
-//     company_thread (thread_id)
-//   )
-// `)
-// Or 
-// .select(`*, 
-//   application:opportunity!opportunity_id(opportunity_id, company_thread:company_thread!opportunity_id(thread_id))
-//   `)

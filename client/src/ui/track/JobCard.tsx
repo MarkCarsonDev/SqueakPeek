@@ -1,5 +1,5 @@
 "use client";
-import React, { SetStateAction} from "react";
+import React, { SetStateAction, useEffect, useState } from "react";
 import {Card, Typography,IconButton, Box, Select, MenuItem, SelectChangeEvent} from "@mui/material";
 import { faChartColumn, faLink, faBars,} from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
@@ -8,10 +8,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import UpdateStatus from "@/ui/track/UpdateStatus";
 import { Application, useTrack, ApplicationStage } from "@/lib/store/track";
 import { Profile } from "@/lib/store/profile";
+import { generateCompanyLogo } from "@/lib/utils/generateCompanyLogo";
 
 // TODO:
-// Implement the Link for chart, stats
-// Implement the Company Brand Logo based on the company name
+// Implement the Link for chart
+// Implement the copy job link
 
 interface JobCardProps {
   application: Application;
@@ -20,6 +21,7 @@ interface JobCardProps {
 
 export function JobCard({ application, profile }: JobCardProps) {
   const { moveApplication, updateApplication } = useTrack();
+  const [logoUrl, setLogoUrl] = useState<string>("");
   const {
     application_id: applicationId,
     company_name,
@@ -43,12 +45,13 @@ export function JobCard({ application, profile }: JobCardProps) {
     const newRound = event.target.value;
     updateApplication( applicationId, { ...application, interviewing_round: newRound }, profile);
   };
-
-  const domain = company_name.replace(/\s+/g, '').toLowerCase();
-  const possibleExtensions = ['com', 'net', 'org', 'io', 'co']; // Add more extensions as needed
-
-  const imageUrl = possibleExtensions.map(ext => `https://cdn.brandfetch.io/${domain}.${ext}/w/512/h/512/400?c=1idFo73gafU3boEDPib`);
-
+  useEffect(() => {
+    async function fetchLogo() {
+      const url = await generateCompanyLogo(company_name);
+      setLogoUrl(url);
+    }
+    fetchLogo();
+  }, [company_name]);
   return (
     <Card
       sx={{
@@ -74,17 +77,21 @@ export function JobCard({ application, profile }: JobCardProps) {
           padding: "4px",
         }}
       >
-        <Image
-          // src="/landingpage/logo.svg"
-          src={imageUrl[0]} 
-          height={40}
-          width={40}
-          alt={`${company_name} Logo`}
-          style={{
-            objectFit: "cover",
-            borderRadius: "8px",
-          }}
-        />
+        {logoUrl ? (
+          <Image
+            src={logoUrl}
+            height={40}
+            width={40}
+            alt={`${company_name} Logo`}
+            style={{
+              objectFit: "cover",
+              borderRadius: "8px",
+            }}
+            onError={() => setLogoUrl("/landingpage/insight.svg")} // Fallback on error
+          />
+        ) : (
+          <Box sx={{ width: 40, height: 40, backgroundColor: "#f0f0f0", borderRadius: "8px" }} /> // Placeholder box
+        )}
       </Box>
 
       {/* Column 2: Main Content */}

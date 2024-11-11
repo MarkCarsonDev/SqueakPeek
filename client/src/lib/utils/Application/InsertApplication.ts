@@ -119,11 +119,9 @@ export async function InsertApplication(
     console.error("Error fetching thread_id:", threadError.message);
     return { data: { application_id, thread_id: null }, error: threadError };
   }
-
-
   const thread_id = threadData?.thread_id || null;
-  console.log("Application inserted:", insertApplication);
-  console.log("Thread ID:", typeof(thread_id));
+  // console.log("Application inserted:", insertApplication);
+  // console.log("Thread ID:", typeof(thread_id));
   return { data: { application_id, thread_id }, error: null };
 }
 
