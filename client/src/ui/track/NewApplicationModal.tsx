@@ -28,7 +28,7 @@ const jobTypeOptions: Database["public"]["Enums"]["OpportunityType"][] = [
   "Contract",
 ];
 
-const companyOptions = ["Google", "Netflix", "Amazon", "Facebook", "Apple"];
+const companyOptions = ["Google", "Netflix", "Amazon", "Facebook", "Apple", "Walmart"];
 const testProviderOptions = [
   "HackerRank",
   "Codility",

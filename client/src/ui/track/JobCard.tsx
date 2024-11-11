@@ -44,6 +44,11 @@ export function JobCard({ application, profile }: JobCardProps) {
     updateApplication( applicationId, { ...application, interviewing_round: newRound }, profile);
   };
 
+  const domain = company_name.replace(/\s+/g, '').toLowerCase();
+  const possibleExtensions = ['com', 'net', 'org', 'io', 'co']; // Add more extensions as needed
+
+  const imageUrl = possibleExtensions.map(ext => `https://cdn.brandfetch.io/${domain}.${ext}/w/512/h/512/400?c=1idFo73gafU3boEDPib`);
+
   return (
     <Card
       sx={{
@@ -70,10 +75,11 @@ export function JobCard({ application, profile }: JobCardProps) {
         }}
       >
         <Image
-          src="/landingpage/logo.svg"
+          // src="/landingpage/logo.svg"
+          src={imageUrl[0]} 
           height={40}
           width={40}
-          alt="Squeakpeek Logo"
+          alt={`${company_name} Logo`}
           style={{
             objectFit: "cover",
             borderRadius: "8px",
