@@ -1,7 +1,19 @@
 "use client";
 import React, { SetStateAction, useEffect, useState } from "react";
-import {Card, Typography,IconButton, Box, Select, MenuItem, SelectChangeEvent} from "@mui/material";
-import { faChartColumn, faLink, faBars,} from "@fortawesome/free-solid-svg-icons";
+import {
+  Card,
+  Typography,
+  IconButton,
+  Box,
+  Select,
+  MenuItem,
+  SelectChangeEvent,
+} from "@mui/material";
+import {
+  faChartColumn,
+  faLink,
+  faBars,
+} from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import { faMessage } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -21,7 +33,7 @@ interface JobCardProps {
 
 export function JobCard({ application, profile }: JobCardProps) {
   const { moveApplication, updateApplication } = useTrack();
-  const [logoUrl, setLogoUrl] = useState<string>("");
+  const [logoUrl, setLogoUrl] = useState("/landingpage/insight.svg");
   const {
     application_id: applicationId,
     company_name,
@@ -37,18 +49,30 @@ export function JobCard({ application, profile }: JobCardProps) {
     const newStatus = typeof value === "function" ? value(status) : value;
     if (newStatus !== status) {
       moveApplication(status, newStatus, applicationId, 0, 0);
-      updateApplication( applicationId, {...application,status: newStatus}, profile);
+      updateApplication(
+        applicationId,
+        { ...application, status: newStatus },
+        profile
+      );
     }
   };
 
   const handleInterviewRoundChange = (event: SelectChangeEvent<string>) => {
     const newRound = event.target.value;
-    updateApplication( applicationId, { ...application, interviewing_round: newRound }, profile);
+    updateApplication(
+      applicationId,
+      { ...application, interviewing_round: newRound },
+      profile
+    );
   };
   useEffect(() => {
     async function fetchLogo() {
-      const url = await generateCompanyLogo(company_name);
-      setLogoUrl(url);
+      try {
+        const url = await generateCompanyLogo(company_name);
+        if (url) setLogoUrl(url); // Only set logoUrl if fetch is successful
+      } catch (error) {
+        console.error(`Error fetching logo for ${company_name}:`, error);
+      }
     }
     fetchLogo();
   }, [company_name]);
@@ -59,13 +83,13 @@ export function JobCard({ application, profile }: JobCardProps) {
         border: "2px solid #E0E4F2",
         backgroundColor: "#F6F8FF",
         display: "grid",
-        gridTemplateColumns: "50px auto 30px", 
+        gridTemplateColumns: "50px auto 30px",
         alignItems: "center",
-        padding: "10px", 
+        padding: "10px",
         marginX: "auto",
         boxShadow: "none",
-        marginBottom: "10px", 
-        overflow: "hidden", 
+        marginBottom: "10px",
+        overflow: "hidden",
       }}
     >
       {/* Column 1: Company Brand */}
@@ -77,21 +101,17 @@ export function JobCard({ application, profile }: JobCardProps) {
           padding: "4px",
         }}
       >
-        {logoUrl ? (
-          <Image
-            src={logoUrl}
-            height={40}
-            width={40}
-            alt={`${company_name} Logo`}
-            style={{
-              objectFit: "cover",
-              borderRadius: "8px",
-            }}
-            onError={() => setLogoUrl("/landingpage/insight.svg")} // Fallback on error
-          />
-        ) : (
-          <Box sx={{ width: 40, height: 40, backgroundColor: "#f0f0f0", borderRadius: "8px" }} /> // Placeholder box
-        )}
+        <Image
+          src={logoUrl}
+          height={40}
+          width={40}
+          alt={`${company_name} Logo`}
+          style={{
+            objectFit: "cover",
+            borderRadius: "8px",
+          }}
+          onError={() => setLogoUrl("/landingpage/insight.svg")} // Fallback on error
+        />
       </Box>
 
       {/* Column 2: Main Content */}
@@ -184,20 +204,18 @@ export function JobCard({ application, profile }: JobCardProps) {
                 },
               }}
             >
-              {["1", "2", "3", "4+"].map(
-                (round) => (
-                  <MenuItem
-                    key={round}
-                    value={round}
-                    sx={{
-                      color: "white",
-                      fontSize: "14px",
-                    }}
-                  >
-                    {round}
-                  </MenuItem>
-                )
-              )}
+              {["1", "2", "3", "4+"].map((round) => (
+                <MenuItem
+                  key={round}
+                  value={round}
+                  sx={{
+                    color: "white",
+                    fontSize: "14px",
+                  }}
+                >
+                  {round}
+                </MenuItem>
+              ))}
             </Select>
           )}
         </Box>

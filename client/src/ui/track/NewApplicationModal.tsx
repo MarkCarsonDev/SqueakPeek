@@ -9,8 +9,8 @@ import UpdateStatus from "@/ui/track/UpdateStatus";
 import { ApplicationStage, useTrack, Application } from "@/lib/store/track";
 import { useProfile } from "@/lib/store/profile";
 import { Database } from "@/lib/types/database.types";
-import {companies} from "@/lib/store/companies";
-import { roles } from "@/lib/store/roles";
+import {companies} from "@/lib/data/companies";
+import { roles } from "@/lib/data/roles";
 
 interface NewApplicationModalProps {
   open: boolean;
