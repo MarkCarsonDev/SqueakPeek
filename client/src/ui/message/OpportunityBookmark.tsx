@@ -7,7 +7,7 @@ import { insertBookmarkOpportunity } from "@/lib/utils/insertBookmarkOpportunity
 import { useProfile } from "@/lib/store/profile";
 import { useState, useEffect } from "react";
 import { removeBookmarkOpportunity } from "@/lib/utils/removeBookmarkOpportunity";
-
+import { useMessageNotification } from "@/lib/store/messageNotification";
 interface OpportunityBookmarkProps {
   conversationId: string;
 }
@@ -23,7 +23,7 @@ export function OpportunityBookmark({
   const [isBookmarked, setIsBookmarked] = useState<null | boolean>(null);
   const [opportunityId, setOpportunityId] = useState<null | string>(null);
   const { profile } = useProfile();
-
+  const { removeNotification } = useMessageNotification();
   // handles inserting or removing bookmarks depending on it's current state
   async function handleBookmarkClick() {
     if (isBookmarked !== null && opportunityId && profile) {
@@ -39,11 +39,11 @@ export function OpportunityBookmark({
         if (error) {
           // TODO: Handle Error
         } else {
-          console.log("bookmark successfully deleted");
+          removeNotification(conversationId);
           setIsBookmarked(false);
         }
       } else {
-        // not bookmarked
+        // Not bookmarked
         const { error } = await insertBookmarkOpportunity(
           opportunityId,
           profile.profile_id,
@@ -61,10 +61,9 @@ export function OpportunityBookmark({
     }
   }
 
-  // retrieves opportunityId based on conversationId if it exists
-
   // fetches opportunity id based on the conversationId
   useEffect(() => {
+    // retrieves opportunityId based on conversationId if it exists
     async function fetchOpportunityId() {
       const supabase = createSupabaseClient();
       const { data: opportunity, error } = await supabase

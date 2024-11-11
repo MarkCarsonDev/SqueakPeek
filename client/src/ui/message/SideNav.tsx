@@ -22,10 +22,12 @@ import { useProfile } from "@/lib/store/profile";
 import { Database } from "@/lib/types/database.types";
 import { fetchBookmarkOpportunities } from "@/lib/utils/fetchBookmarkOpportunities";
 import { createSupabaseClient } from "@/lib/supabase/client";
+import { useMessageNotification } from "@/lib/store/messageNotification";
 /**
  * Allows the user to navigate between company threads or private messages in the message page
  */
 export function SideNav() {
+  const { setNotifications } = useMessageNotification();
   const { profile } = useProfile();
   const pathName = usePathname();
   const tabs = [
@@ -44,9 +46,6 @@ export function SideNav() {
   ];
   const router = useRouter();
   const currentTab = pathName.split("/")[2]; // tab is either company or private
-  const [messageNotificationsList, setMessageNotificationsList] = useState<
-    MessageNotificationCardProps[]
-  >([]);
   const supabase = useMemo(() => createSupabaseClient(), []);
 
   // TODO: Need to test this
@@ -121,9 +120,9 @@ export function SideNav() {
             subHeader: "",
           };
         });
-        setMessageNotificationsList(mappedData);
+        setNotifications(mappedData);
       } else {
-        setMessageNotificationsList([]);
+        setNotifications([]);
       }
     });
   }
@@ -148,9 +147,9 @@ export function SideNav() {
           };
         });
 
-        setMessageNotificationsList(mappedData);
+        setNotifications(mappedData);
       } else {
-        setMessageNotificationsList([]);
+        setNotifications([]);
       }
     });
   }
@@ -238,7 +237,7 @@ export function SideNav() {
           ))}
         </Tabs>
       </div>
-      <MessageNotificationCardList list={messageNotificationsList} />
+      <MessageNotificationCardList />
     </div>
   );
 }
