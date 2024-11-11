@@ -15,4 +15,6 @@
 
         Task 3: For authenticated users WITHOUT a profile accessing the ANY route. Automatically route them to profile_setup
 
-        Task 4: For any users accessing the profile_setup, route them to a page not found
+        Task 4: For any users accessing the profile_setup with a profile, route them to a page not found
+
+        Task 5: For unauthenticated users accessing the pages under (main) render the create account model. Explore page can be accessed by any user

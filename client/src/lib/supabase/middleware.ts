@@ -2,37 +2,50 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { userHasExistingProfile } from "@/lib/actions/profile_setup"
 
-//TODO review explore redirect logic: redirected to profile_setup but url shows as explore
-
 //debug utility function 
 export async function debug(msg: string){
-  console.log("DEBUG: ", msg);
+  //console.log("DEBUG: ", msg);
 }
 
 debug("***** BEGIN middleware.ts ******");
 debug("middleware.ts is always invoked!!!");
 
 //allowed public paths
-//TODO: rm test in prd stack
-const publicPaths = ["/","/login", "/explore","/signup","/about"];
+const publicPaths = ["/","/login","/explore","/signup","/about"];
 
 //whitelists auth'd user paths
 const validUserPaths = ["/message", "/profile", "/thread", "/track", "/profile_setup"];
 
 function hasBasePath(pathname: string, basepaths: string[]) {
   for (let i = 0; i < basepaths.length; i++) {
+    debug("pathname: " + pathname);
+    debug("basepaths[i]" + basepaths[i]);
+    if (pathname == "/")
+      return true 
+    if (basepaths[i] == "/") {continue}
     if (pathname.indexOf(basepaths[i]) == 0) {
-      return true;
+      return true
     }
-    return false
   }
+  return false
 }
 function isPublicPath(pathname: string){
-  return hasBasePath(pathname, publicPaths);
+  let retVal = hasBasePath(pathname, publicPaths);
+  debug("retVal: " + retVal + "");
+  return retVal;
 }
 
 function isAllowedUserPath(pathname: string){
-  return hasBasePath(pathname, validUserPaths);
+  debug("start of isAllowedUserPath");
+  debug("pathname: " + typeof(pathname));
+  //TODO: should we keep Auth'd users off of signup?
+  //if (pathname === "/signup"){
+  //  debug("RETURNING FALSE: pathname: signup " + pathname);
+  //  return false
+  // }
+  let retVal2 = hasBasePath(pathname, validUserPaths);
+  debug("retVal2: " + retVal2 + "");
+  return retVal2;
 }
 
 // refreshes expired Auth token
@@ -133,10 +146,12 @@ export async function updateSession(request: NextRequest) {
     //automatically redirect them to the /explore route
     debug("Task 2: For authenticated users accessing the pages outside of (main) automatically redirect them to the /explore route");
     if(!isPublicPath(pathname)) {
-      debug(pathname  + "is not a public path. Redirect to explore");
       const url = request.nextUrl.clone();
-      url.pathname = "/explore";
-      return NextResponse.redirect(url); 
+      if (url.pathname.indexOf("/explore") < 0) {
+        debug(pathname  + " is not a public path. Redirect to explore");
+        url.pathname = "/explore";
+        return NextResponse.redirect(url); 
+      }
     }
     else {
       debug(pathname  + " is a public path. Allowing access");
