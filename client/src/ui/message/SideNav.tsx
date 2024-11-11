@@ -93,7 +93,7 @@ export function SideNav() {
         };
       }
     }
-  }, [pathName, currentTab, profile]);
+  }, [pathName, currentTab, profile, supabase]);
 
   useEffect(() => {
     if (profile) {

@@ -62,23 +62,24 @@ export function OpportunityBookmark({
   }
 
   // retrieves opportunityId based on conversationId if it exists
-  async function fetchOpportunityId() {
-    const supabase = createSupabaseClient();
-    const { data: opportunity, error } = await supabase
-      .from("company_thread")
-      .select("opportunity_id")
-      .eq("thread_id", conversationId)
-      .single();
-
-    if (error) {
-      // TODO handle error
-      return null;
-    }
-    return opportunity.opportunity_id;
-  }
 
   // fetches opportunity id based on the conversationId
   useEffect(() => {
+    async function fetchOpportunityId() {
+      const supabase = createSupabaseClient();
+      const { data: opportunity, error } = await supabase
+        .from("company_thread")
+        .select("opportunity_id")
+        .eq("thread_id", conversationId)
+        .single();
+
+      if (error) {
+        // TODO handle error
+        return null;
+      }
+      return opportunity.opportunity_id;
+    }
+
     fetchOpportunityId().then((id) => {
       if (id) {
         console.log("id: ", id);
@@ -112,7 +113,7 @@ export function OpportunityBookmark({
           }
         });
     }
-  }, [opportunityId]);
+  }, [opportunityId, conversationId, profile]);
 
   if (isBookmarked !== null) {
     return (
