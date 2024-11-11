@@ -1,5 +1,4 @@
 import {
-  MessageNotificationCardProps,
   MessageNotificationCard,
 } from "./MessageNotificationCard";
 import { usePathname } from "next/navigation";

@@ -2,7 +2,7 @@
 import { Typography, Tabs, Tab } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useMemo, useCallback } from "react";
 
 import {
   faBuilding as solidBuilding,
@@ -48,7 +48,71 @@ export function SideNav() {
   const currentTab = pathName.split("/")[2]; // tab is either company or private
   const supabase = useMemo(() => createSupabaseClient(), []);
 
+  // sets notifications based on private conversations
+  const setPrivateConversationNotifications = useCallback(
+    (profileId: string) => {
+      fetchPrivateConversations(profileId).then((res) => {
+        const { data, error } = res;
+        if (error) {
+        } else if (data) {
+          const mappedData: MessageNotificationCardProps[] = data.map(
+            (item) => {
+              const { conversation_id } = item;
+              const { avatar, username } =
+                item.profile as unknown as Database["public"]["Tables"]["profile"]["Row"]; // it returns profile as an array of profiles
+              return {
+                avatar: avatar,
+                conversation_id,
+                header: username,
+                subHeader: "",
+              };
+            }
+          );
+          setNotifications(mappedData);
+        } else {
+          setNotifications([]);
+        }
+      });
+    },
+    [setNotifications]
+  );
+
+  // sets notifications based on user's bookmarked opportunities
+  const setOpportunityBookmarksNotifications = useCallback(
+    (profileId: string) => {
+      fetchBookmarkOpportunities(profileId).then((res) => {
+        const { data, error } = res;
+
+        if (error) {
+          // TODO: DO something here
+        }
+
+        if (data) {
+          const mappedData: MessageNotificationCardProps[] = data.map(
+            (item) => {
+              const opportunity = item.opportunity;
+              const conversationId = item.opportunity.company_thread.thread_id;
+              return {
+                avatar: opportunity.company_name[0], // TODO Replace with the actual company avatar
+                conversation_id: conversationId,
+                header: opportunity.company_name,
+                subHeader: `${opportunity.role_title},  ${opportunity.type}`,
+              };
+            }
+          );
+
+          setNotifications(mappedData);
+        } else {
+          setNotifications([]);
+        }
+      });
+    },
+    [setNotifications]
+  );
+
   // TODO: Need to test this
+
+  // tracks live changes which sets message notifications in real time
   useEffect(() => {
     if (profile) {
       if (currentTab === "company") {
@@ -63,7 +127,7 @@ export function SideNav() {
               table: "bookmark_opportunity",
               filter: `profile_id=eq.${profile.profile_id}`,
             },
-            () => setOpportunityBookmarks(profile.profile_id)
+            () => setOpportunityBookmarksNotifications(profile.profile_id)
           )
           .subscribe();
 
@@ -83,7 +147,7 @@ export function SideNav() {
               table: "private_user_conversation",
               filter: `profile_id=eq.${profile.profile_id}`,
             },
-            () => setPrivateConversationBookmarks(profile.profile_id)
+            () => setPrivateConversationNotifications(profile.profile_id)
           )
           .subscribe();
 
@@ -92,67 +156,25 @@ export function SideNav() {
         };
       }
     }
-  }, [pathName, currentTab, profile, supabase]);
+  }, [
+    pathName,
+    currentTab,
+    profile,
+    supabase,
+    setPrivateConversationNotifications,
+    setOpportunityBookmarksNotifications,
+  ]);
 
+  // sets notifications on page load
   useEffect(() => {
     if (profile) {
       if (currentTab === "private") {
-        setPrivateConversationBookmarks(profile.profile_id);
+        setPrivateConversationNotifications(profile.profile_id);
       } else {
-        setOpportunityBookmarks(profile.profile_id);
+        setOpportunityBookmarksNotifications(profile.profile_id);
       }
     }
-  }, [pathName, currentTab, profile]);
-
-  function setPrivateConversationBookmarks(profileId: string) {
-    fetchPrivateConversations(profileId).then((res) => {
-      const { data, error } = res;
-      if (error) {
-      } else if (data) {
-        const mappedData: MessageNotificationCardProps[] = data.map((item) => {
-          const { conversation_id } = item;
-          const { avatar, username } =
-            item.profile as unknown as Database["public"]["Tables"]["profile"]["Row"]; // it returns profile as an array of profiles
-          return {
-            avatar: avatar,
-            conversation_id,
-            header: username,
-            subHeader: "",
-          };
-        });
-        setNotifications(mappedData);
-      } else {
-        setNotifications([]);
-      }
-    });
-  }
-
-  function setOpportunityBookmarks(profileId: string) {
-    fetchBookmarkOpportunities(profileId).then((res) => {
-      const { data, error } = res;
-
-      if (error) {
-        // TODO: DO something here
-      }
-
-      if (data) {
-        const mappedData: MessageNotificationCardProps[] = data.map((item) => {
-          const opportunity = item.opportunity;
-          const conversationId = item.opportunity.company_thread.thread_id;
-          return {
-            avatar: opportunity.company_name[0], // TODO Replace with the actual company avatar
-            conversation_id: conversationId,
-            header: opportunity.company_name,
-            subHeader: `${opportunity.role_title},  ${opportunity.type}`,
-          };
-        });
-
-        setNotifications(mappedData);
-      } else {
-        setNotifications([]);
-      }
-    });
-  }
+  }, [pathName, currentTab, profile, setOpportunityBookmarksNotifications, setPrivateConversationNotifications]);
 
   return (
     <div
