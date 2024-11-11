@@ -66,6 +66,7 @@ export async function getUserId() : Promise<String|null> {
   return null;
 } // end of getUserId
 
+//getProfileForUser gets profile for currently auth'd user
 export async function getProfileForUser() : Promise<Json|null>{
   debug("start of getProfileForUser() function");
   const user_id = await getUserId();
@@ -157,16 +158,11 @@ export async function createProfile( prevState: ProfileSetupState, formData: For
             errors: { school: ["Error: No user"] }
           };
       }
-      else {
-        debug("Supabase fetched the logged in user");
-      }
 
       const { username, school, avatar } = validatedFields.data;
       
-      debug("about to call getProfileByUserName");
       const profileData = await getProfileByUserName(validatedFields.data.username);
       if(!profileData) { 
-        debug("INFO: no profile data found for username: " + username);
         //insert profile into supabase
         let userID = user?.id;
         debug("inserting user with user_id into DB: " + userID);
