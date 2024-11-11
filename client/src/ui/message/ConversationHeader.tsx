@@ -7,6 +7,8 @@ import Image from "next/image";
 import { Database } from "@/lib/types/database.types";
 import { fetchCompanyThreadMetaData } from "@/lib/utils/fetchCompanyThreadMetaData";
 import { fetchPrivateConversationMetaData } from "@/lib/utils/fetchPrivateConversationMetaData";
+import { OpportunityBookmark } from "./OpportunityBookmark";
+
 interface ConversationHeaderProps {
   conversationId: string;
 }
@@ -48,7 +50,7 @@ export function ConversationHeader({
         if (data) {
           const opportunityMetaData =
             data.opportunity as unknown as Database["public"]["Tables"]["opportunity"]["Row"];
-          // TODO set CardHeader for company thread
+          // TODO set CardHeaderAvatar for company thread
           setHeader(opportunityMetaData.company_name);
           setSubHeader(
             opportunityMetaData.role_title + ", " + opportunityMetaData.type
@@ -57,26 +59,40 @@ export function ConversationHeader({
       });
     }
   }, [isPrivateConversation, profile, conversationId]);
-  return (
-    <CardHeader
-      title={header}
-      subheader={subHeader}
-      avatar={
-        isPrivateConversation ? (
-          <ProfileAvatar avatar={profileAvatar!} />
-        ) : (
+
+  // TODO: Refactor to be inside the OpportunityBookmark component
+
+  if (isPrivateConversation) {
+    return (
+      <CardHeader
+        title={header}
+        subheader={subHeader}
+        avatar={<ProfileAvatar avatar={profileAvatar!} />}
+        sx={{
+          boxShadow: "rgba(224,228,242,.7) 0px 2px 2px 0px",
+          zIndex: 1,
+        }}
+      />
+    );
+  } else {
+    return (
+      <CardHeader
+        action={<OpportunityBookmark conversationId={conversationId} />}
+        title={header}
+        subheader={subHeader}
+        avatar={
           <Image
             alt="Profile of {company}"
             src="https://www.amazon.com/favicon.ico"
             width={50}
             height={50}
           />
-        )
-      }
-      sx={{
-        boxShadow: "rgba(224,228,242,.7) 0px 2px 2px 0px",
-        zIndex: 1,
-      }}
-    />
-  );
+        }
+        sx={{
+          boxShadow: "rgba(224,228,242,.7) 0px 2px 2px 0px",
+          zIndex: 1,
+        }}
+      />
+    );
+  }
 }
