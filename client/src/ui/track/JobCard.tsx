@@ -14,7 +14,7 @@ import {
   faLink,
   faBars,
 } from "@fortawesome/free-solid-svg-icons";
-import Image from "next/image";
+// import Image from "next/image";
 import { faMessage } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import UpdateStatus from "@/ui/track/UpdateStatus";
