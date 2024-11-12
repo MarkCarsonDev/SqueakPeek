@@ -20,6 +20,15 @@ export async function insertMessage(
   isPrivateConversation: boolean,
   supabase: SupabaseClient = createSupabaseClient()
 ): Promise<PostgrestError | null> {
+  if (newMessage.message === "") {
+    return {
+      code: "",
+      details: "",
+      hint: "",
+      message: "Message cannot be empty",
+    };
+  }
+
   if (isPrivateConversation) {
     const addMsg: Database["public"]["Tables"]["private_message"]["Row"] = {
       conversation_id: conversationId,

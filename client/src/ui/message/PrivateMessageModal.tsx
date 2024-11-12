@@ -16,6 +16,7 @@ import { useProfile } from "@/lib/store/profile";
 import { insertMessage } from "@/lib/utils/insertMessage";
 import { MessageCardProps } from "./MessageCard";
 import { v4 as uuidv4 } from "uuid";
+import { useAlert } from "@/lib/store/alert";
 
 interface PrivateMessageModalProps {
   isOpen: boolean;
@@ -40,14 +41,30 @@ export function PrivateMessageModal({
   const [currentMessage, setCurrentMessage] = useState("");
   const { profile } = useProfile();
   const router = useRouter();
+  const { setAlert } = useAlert();
 
   const handleSendMessage = async () => {
     if (profile) {
-      const { data: new_conversation_id, error } =
-        await insertPrivateConversation(profile.profile_id, receiver_id);
+      const {
+        data: new_conversation_id,
+        error: insertPrivateConversationError,
+      } = await insertPrivateConversation(profile.profile_id, receiver_id);
 
-      if (error) {
-        // TODO do something
+      if (insertPrivateConversationError) {
+        const { code } = insertPrivateConversationError;
+        if (code === "22P02") {
+          // If user tries to start a duplicate conversation with a user
+          setAlert({
+            message: `Conversation already exists with ${receiver_username}`,
+            type: "error",
+          });
+        } else {
+          setAlert({
+            message: insertPrivateConversationError.message,
+            type: "error",
+          });
+          console.log("code: ", code);
+        }
       } else if (new_conversation_id) {
         const newMessage: MessageCardProps = {
           avatar: profile.avatar,
@@ -64,7 +81,10 @@ export function PrivateMessageModal({
           true
         );
         if (insertMessageError) {
-          // TODO: Do something to handle error
+          setAlert({
+            message: insertMessageError.message,
+            type: "error",
+          });
         } else {
           router.push(`/message/private/${new_conversation_id}`);
         }
@@ -103,7 +123,7 @@ export function PrivateMessageModal({
             fontWeight: "bold",
           }}
         >
-          Direct Message {receiver_username}?
+          Start a conversation with {receiver_username}?
         </Typography>
         <TextField
           sx={{
