@@ -16,8 +16,8 @@ export default function Page() {
   const [applicationStatus, setApplicationStatus] = useState<ApplicationStage>("Applied");
   const [selectedApplication, setSelectedApplication] = useState<Application | undefined>();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error" | "info" | "warning">("success");
+  // const [snackbarMessage, setSnackbarMessage] = useState("");
+  // const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error" | "info" | "warning">("success");
 
 
   // Retrieve application data and actions from the Zustand store
