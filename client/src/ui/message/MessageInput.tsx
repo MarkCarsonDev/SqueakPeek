@@ -64,7 +64,6 @@ export const MessageInput = memo(function MessageInput({
         message,
       };
 
-      // TODO: Do something if inserting to the database fails
       const error = await insertMessage(
         newMessage,
         conversationId,
