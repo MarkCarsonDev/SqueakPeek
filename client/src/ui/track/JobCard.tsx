@@ -101,14 +101,14 @@ export function JobCard({ application, profile }: JobCardProps) {
           padding: "4px",
         }}
       >
-        <Image
+        <img
           src={logoUrl}
           height={40}
           width={40}
           alt={`${company_name} Logo`}
           style={{
-            objectFit: "cover",
-            borderRadius: "8px",
+        objectFit: "cover",
+        borderRadius: "8px",
           }}
           onError={() => setLogoUrl("/landingpage/insight.svg")} // Fallback on error
         />
