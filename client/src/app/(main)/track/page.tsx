@@ -8,7 +8,7 @@ import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import { StageColumn, StageColumnProps } from "@/ui/track/StageColumn"; 
 import { Application, ApplicationStage, useTrack } from "@/lib/store/track";
 import { useProfile } from "@/lib/store/profile";
-import { AlertMessage } from "@/ui/AlertMessage";
+//import { AlertMessage } from "@/ui/AlertMessage";
 import "./tracking.css";
 
 export default function Page() {
@@ -63,16 +63,16 @@ export default function Page() {
   };
 
   // Success handler to show a snackbar message
-  const handleSuccess = (message: string, severity: "success" | "error" | "info" | "warning" = "success") => {
-    setSnackbarMessage(message);
-    setSnackbarSeverity(severity);
-    setSnackbarOpen(true);
-  };
+  // const handleSuccess = (message: string, severity: "success" | "error" | "info" | "warning" = "success") => {
+  //   setSnackbarMessage(message);
+  //   setSnackbarSeverity(severity);
+  //   setSnackbarOpen(true);
+  // };
 
   // Close Snackbar
-  const closeSnackbar = () => {
-    setSnackbarOpen(false);
-  };
+  // const closeSnackbar = () => {
+  //   setSnackbarOpen(false);
+  // };
 
   // Handle drag-and-drop for moving applications between stages
   const onDragEnd = (result: DropResult) => {
@@ -133,7 +133,7 @@ export default function Page() {
           applicationStatus={applicationStatus}
           setApplicationStatus={setApplicationStatus}
           existingApplication={selectedApplication}
-          onSuccess={handleSuccess} // Pass handleSuccess to handle success messages
+          //onSuccess={handleSuccess} // Pass handleSuccess to handle success messages
         />
       )}
 
@@ -162,12 +162,12 @@ export default function Page() {
         </div>
       </DragDropContext>
       {/* Reusable AlertMessage component */}
-      <AlertMessage
+      {/* <AlertMessage
         message={snackbarMessage}
         severity={snackbarSeverity}
         open={snackbarOpen}
         onClose={closeSnackbar}
-      />
+      /> */}
     </div>
   );
 }

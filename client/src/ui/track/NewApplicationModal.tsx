@@ -11,14 +11,15 @@ import { useProfile } from "@/lib/store/profile";
 import { Database } from "@/lib/types/database.types";
 import {companies} from "@/lib/data/companies";
 import { roles } from "@/lib/data/roles";
-
+import { useAlert } from "@/lib/store/alert";
 interface NewApplicationModalProps {
   open: boolean;
   handleClose: () => void;
   applicationStatus: ApplicationStage;
   setApplicationStatus: React.Dispatch<React.SetStateAction<ApplicationStage>>;
   existingApplication?: Application;
-  onSuccess: (message: string, severity: "success" | "error" | "info" | "warning") => void; // Updated onSuccess prop
+  // onSuccess: (message: string, severity: "success" | "error" | "info" | "warning") => void; // Updated onSuccess prop
+  
 }
 
 const jobTypeOptions: Database["public"]["Enums"]["OpportunityType"][] = [
@@ -44,7 +45,7 @@ export default function NewApplicationModal({
   applicationStatus,
   setApplicationStatus,
   existingApplication,
-  onSuccess,
+  // onSuccess,
 }: NewApplicationModalProps) {
   const [formFields, setFormFields] = useState({
     role_title: existingApplication?.role_title || "",
@@ -74,12 +75,16 @@ export default function NewApplicationModal({
 
   const { updateApplication, addApplication } = useTrack();
   const { profile } = useProfile();
-
+  const { setAlert } = useAlert();
   const handleAddApplication = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!profile) {
-      onSuccess("User must be authenticated to add an application.", "error");
+      //onSuccess("User must be authenticated to add an application.", "error");
+      setAlert({
+        message: "User must be authenticated to add an application.",
+        type: "error",
+      })
       return;
     }
 
@@ -103,10 +108,18 @@ export default function NewApplicationModal({
       : await addApplication(applicationStatus, updatedFields as Application, profile);
 
     if (result.success) {
-      onSuccess(result.message, "success"); // Call onSuccess with the success message
+      setAlert({
+        message: result.message,
+        type: "success",
+      })
+      //onSuccess(result.message, "success"); // Call onSuccess with the success message
       handleClose(); // Close the modal
     } else {
-      onSuccess(result.message, "error"); // Show error message on main page if needed
+      setAlert({
+        message: result.message,
+        type: "error",
+      })
+      //onSuccess(result.message, "error"); // Show error message on main page if needed
     }
   };
 
