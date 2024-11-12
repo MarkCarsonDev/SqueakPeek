@@ -45,7 +45,9 @@ export function PrivateMessageModal({
 
   const handleSendMessage = async () => {
     if (profile) {
-      if (currentMessage === "") {
+      if (currentMessage.trim() === "") {
+        // removes leading and trailing whitespace
+        // This prevents creating a conversation where the first message is an empty string
         setAlert({
           message: "Message cannot be empty",
           type: "error",
