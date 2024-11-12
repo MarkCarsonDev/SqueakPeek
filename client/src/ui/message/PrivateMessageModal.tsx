@@ -45,48 +45,55 @@ export function PrivateMessageModal({
 
   const handleSendMessage = async () => {
     if (profile) {
-      const {
-        data: new_conversation_id,
-        error: insertPrivateConversationError,
-      } = await insertPrivateConversation(profile.profile_id, receiver_id);
+      if (currentMessage === "") {
+        setAlert({
+          message: "Message cannot be empty",
+          type: "error",
+        });
+      } else {
+        const {
+          data: new_conversation_id,
+          error: insertPrivateConversationError,
+        } = await insertPrivateConversation(profile.profile_id, receiver_id);
 
-      if (insertPrivateConversationError) {
-        const { code } = insertPrivateConversationError;
-        if (code === "22P02") {
-          // If user tries to start a duplicate conversation with a user
-          setAlert({
-            message: `Conversation already exists with ${receiver_username}`,
-            type: "error",
-          });
-        } else {
-          setAlert({
-            message: insertPrivateConversationError.message,
-            type: "error",
-          });
-          console.log("code: ", code);
-        }
-      } else if (new_conversation_id) {
-        const newMessage: MessageCardProps = {
-          avatar: profile.avatar,
-          sender_username: profile.username,
-          sender_id: profile.username,
-          timestamp: new Date().toUTCString(),
-          messageId: uuidv4(),
-          message: currentMessage,
-        };
-        const insertMessageError = await insertMessage(
-          newMessage,
-          new_conversation_id,
-          profile,
-          true
-        );
-        if (insertMessageError) {
-          setAlert({
-            message: insertMessageError.message,
-            type: "error",
-          });
-        } else {
-          router.push(`/message/private/${new_conversation_id}`);
+        if (insertPrivateConversationError) {
+          const { code } = insertPrivateConversationError;
+          if (code === "22P02") {
+            // If user tries to start a duplicate conversation with a user
+            setAlert({
+              message: `Conversation already exists with ${receiver_username}`,
+              type: "error",
+            });
+          } else {
+            setAlert({
+              message: insertPrivateConversationError.message,
+              type: "error",
+            });
+            console.log("code: ", code);
+          }
+        } else if (new_conversation_id) {
+          const newMessage: MessageCardProps = {
+            avatar: profile.avatar,
+            sender_username: profile.username,
+            sender_id: profile.username,
+            timestamp: new Date().toUTCString(),
+            messageId: uuidv4(),
+            message: currentMessage,
+          };
+          const insertMessageError = await insertMessage(
+            newMessage,
+            new_conversation_id,
+            profile,
+            true
+          );
+          if (insertMessageError) {
+            setAlert({
+              message: insertMessageError.message,
+              type: "error",
+            });
+          } else {
+            router.push(`/message/private/${new_conversation_id}`);
+          }
         }
       }
     }
