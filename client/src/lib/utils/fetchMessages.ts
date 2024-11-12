@@ -24,8 +24,8 @@ export async function fetchMessages(
       private_conversation!inner()
     `
       )
-      .eq("private_conversation.conversation_id", conversation_id);
-
+      .eq("private_conversation.conversation_id", conversation_id)
+      .order("created_at", { ascending: true });
     const { error } = res;
     const data =
       res.data as Database["public"]["Tables"]["public_message"]["Row"][];
@@ -42,7 +42,8 @@ export async function fetchMessages(
         company_thread!inner()
       `
       )
-      .eq("company_thread.thread_id", conversation_id);
+      .eq("company_thread.thread_id", conversation_id)
+      .order("created_at", { ascending: true });
 
     const { error } = res;
     const data =
