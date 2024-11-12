@@ -92,6 +92,7 @@ export const MessageInput = memo(function MessageInput({
 
   return (
     <TextField
+      multiline
       autoFocus
       inputRef={messageInputRef}
       value={currentMessage}
@@ -99,6 +100,7 @@ export const MessageInput = memo(function MessageInput({
       fullWidth
       slotProps={{
         input: {
+          maxRows:2,
           endAdornment: (
             <InputAdornment position="end">
               <IconButton
