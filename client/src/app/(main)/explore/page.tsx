@@ -1,10 +1,13 @@
 "use client";
-import { Typography } from "@mui/material";
+import { Typography, Button } from "@mui/material";
 import "@/app/(main)/explore/explore.css";
 import { OpportunityList } from "@/ui/explore/OpportunityList";
 import { Filters } from "@/ui/explore/Filters";
+import { useState } from "react";
 
 export default function Page() {
+  const [isFilterModalOpen, setFilterModalOpen] = useState(false);
+
   return (
     <div className="page-container">
       <div className="header-search-container">
@@ -22,17 +25,17 @@ export default function Page() {
         </div>
         {/* To Add Later <SearchBar /> */}
         {/* To Add Later <SortOptions /> */}
+        <Button variant="contained" onClick={() => setFilterModalOpen(true)}>
+          Filters
+        </Button>
       </div>
       <div className="card-filter-container">
         {/* This OpportunityList contains the OpportunityCards */}
-        <OpportunityList />
-        <Typography
-          variant="h6"
-          sx={{ marginBottom: "0.5rem", marginLeft: "0.5rem" }}
-        >
-          Filters
-          <Filters />
-        </Typography>
+        <div className="opportunity-list-container">
+          <OpportunityList />
+        </div>
+        {/* Filters Modal */}
+        <Filters open={isFilterModalOpen} handleClose={() => setFilterModalOpen(false)} />
       </div>
     </div>
   );
