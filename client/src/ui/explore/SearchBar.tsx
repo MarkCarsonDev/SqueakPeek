@@ -67,7 +67,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ resetSearch, onResetComple
               }}
               disableRipple
             >
-              Press Enter
+              Search -&gt;
             </Button>
           </InputAdornment>
         ),

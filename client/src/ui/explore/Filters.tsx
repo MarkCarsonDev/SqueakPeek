@@ -147,7 +147,7 @@ export const Filters: React.FC<FiltersProps> = ({ open, handleClose }) => {
       setLocalSelectedFilters(initialFilters);
     };
   
-    const renderSection = (title: string, options: FilterOption[], sectionKey: string) => {
+    const renderSection = (title: string, options: FilterOption[], sectionKey: string, finalSection: string) => {
       const selectedValues = localSelectedFilters[sectionKey] || [];
       return (
         <Box sx={{ marginBottom: 4 }} key={sectionKey}>
@@ -168,7 +168,8 @@ export const Filters: React.FC<FiltersProps> = ({ open, handleClose }) => {
               />
             ))}
           </FormGroup>
-          <Divider />
+          {/* // only render divider if not the last section */}
+            {sectionKey !== finalSection && <Divider />}
         </Box>
       );
     };
@@ -183,30 +184,43 @@ export const Filters: React.FC<FiltersProps> = ({ open, handleClose }) => {
           justifyContent: 'center',
         }}
       >
+        <Box>
         <Card
           sx={{
-            width: '70%',
-            maxHeight: '80vh',
+            width: '70vw',
+            maxHeight: '65vh',
             overflowY: 'auto',
             padding: '2rem',
-            borderRadius: '8px',
+            paddingBottom: '0',
+            borderRadius: '8px 8px 0 0',
           }}
         >
           {filterDefinitions.map((filterDef) =>
-            renderSection(filterDef.title, filterOptions[filterDef.stateKey] || [], filterDef.stateKey)
+            renderSection(filterDef.title, filterOptions[filterDef.stateKey] || [], filterDef.stateKey, filterDefinitions[filterDefinitions.length - 1].stateKey)
           )}
-          <Box sx={{ display: 'flex', position: 'absolute', bottom: '9.5vh', justifyContent: 'space-between', marginTop: '2rem', backgroundColor: 'white', width: 'calc(70% - 1rem)' }}>
-            <Button variant="outlined" onClick={handleClearSelections}>
-              Clear Selections
-            </Button>
-            <Button variant="outlined" onClick={handleCancel}>
+        </Card>
+        <Box className="filter-buttons" 
+        sx={{
+            width: '70vw',
+            backgroundColor: 'white',
+            padding: '2rem',
+            overflowY: 'auto',
+            alignItems: 'center',
+            borderRadius: '0 0 8px 8px',
+            borderTop: '1px solid #e0e0e0',
+          }}>
+            
+            <Button className="filter-buttons left" variant="outlined" onClick={handleCancel} sx={{margin: '0 0.5rem', width: '15%'}}>
               Cancel
             </Button>
-            <Button variant="contained" onClick={handleApplyFilters}>
+            <Button className="filter-buttons left" variant="outlined" onClick={handleClearSelections} sx={{margin: '0 0.5rem', width: '15%'}}>
+              Reset
+            </Button>
+            <Button className="filter-buttons right" variant="contained" onClick={handleApplyFilters} sx={{margin: '0 0.5rem', float: 'right', width: '40%'}}>
               Apply Filters
             </Button>
           </Box>
-        </Card>
+        </Box>
       </Modal>
     );
   };

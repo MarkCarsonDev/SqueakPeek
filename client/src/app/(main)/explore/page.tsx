@@ -39,10 +39,10 @@ export default function Page() {
           </Typography>
         </div>
         <SearchBar resetSearch={resetSearch} onResetComplete={handleSearchResetComplete} />
-        <Button variant="contained" onClick={() => setFilterModalOpen(true)}>
+        <Button className="filter-button explore-control-button" variant="contained" onClick={() => setFilterModalOpen(true)}>
           Filters
         </Button>
-        <Button variant="outlined" onClick={handleResetFilters}>
+        <Button className="reset-filter-button explore-control-button" variant="outlined" onClick={handleResetFilters}>
           Reset Filters
         </Button>
       </div>

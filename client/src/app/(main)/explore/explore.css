@@ -35,3 +35,8 @@
 .opportunity-list-container {
     overflow-y: auto;
 }
+
+.explore-control-button {
+    height: 3.5rem;
+    box-shadow: 0;
+}
