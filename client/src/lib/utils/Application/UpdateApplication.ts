@@ -3,7 +3,6 @@ import { createSupabaseClient } from "@/lib/supabase/client";
 import { Profile } from "@/lib/store/profile";
 import { Application } from "@/lib/store/track";
 
-
 export async function UpdateApplication(
   profile: Profile,
   applicationId: string,

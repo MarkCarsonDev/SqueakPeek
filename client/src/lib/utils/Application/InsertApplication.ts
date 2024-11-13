@@ -9,7 +9,7 @@ export async function InsertApplication(
   profile: Profile,
   application: Application,
   supabase: SupabaseClient = createSupabaseClient()
-): Promise<{ data: string | null; error: PostgrestError | null }> {
+): Promise<{ data: {application_id: string, thread_id: string | null } | null; error: PostgrestError | null }> {
   const { data: opportunityData, error: opportunityError } = await supabase
     .from("opportunity")
     .select("opportunity_id")
@@ -17,13 +17,13 @@ export async function InsertApplication(
     .eq("company_name", application.company_name)
     .eq("type", application.type);
 
-  let opportunityId: string | null;
+  let opportunityId: string | null = null;
   if (opportunityError) {
-    console.log("Error finding opportunity:", opportunityError.message);
+    console.log("Error finding opportunity:", opportunityError.message); // This should be never printed, but here just for debugging
   }
 
   if (opportunityData && opportunityData.length > 0) {
-    console.log("Opportunity found:", opportunityData[0].opportunity_id);
+    console.log("Opportunity found:", opportunityData[0].opportunity_id); // This should be never printed, but here just for debugging
     opportunityId = opportunityData[0].opportunity_id;
   } else {
     const { data, error } = await createOpportunity(
@@ -85,25 +85,43 @@ export async function InsertApplication(
   }
 
   if (existingApplicationData && existingApplicationData.length > 0) {
+    // This should be never printed, but here just for debugging
     console.log("Duplicate application found:", existingApplicationData[0].application_id);
     return { data: null, error: { message: "Duplicate application found", details: "", hint: "", code: "duplicate_application" } as PostgrestError };
   }
 
-  // If no existing application, create a new application
   const { data: insertApplication, error: insertApplicationError } = await supabase
     .from("application")
     .insert([newApplication])
-    .select("application_id");
+    .select("application_id, opportunity_id");
+  
 
   if (insertApplicationError) {
     console.error("Error inserting application:", insertApplicationError.message);
     return { data: null, error: insertApplicationError };
   }
 
-  if (insertApplication && insertApplication.length > 0) {
-    console.log("Application inserted:", insertApplication[0].application_id);
-    return { data: insertApplication[0].application_id, error: null };
+  if (!insertApplication || insertApplication.length === 0) {
+    return { data: null, error: { message: "Unknown error occurred" } as PostgrestError };
   }
 
-  return { data: null, error: { message: "Unknown error occurred" } as PostgrestError };
+  const application_id = insertApplication[0].application_id;
+  const opportunity_id = insertApplication[0].opportunity_id;
+
+  // Fetch the thread_id from the company_thread table using the opportunity_id
+  const { data: threadData, error: threadError } = await supabase
+    .from("company_thread")
+    .select("thread_id")
+    .eq("opportunity_id", opportunity_id)
+    .single();
+
+  if (threadError) {
+    console.error("Error fetching thread_id:", threadError.message);
+    return { data: { application_id, thread_id: null }, error: threadError };
+  }
+  const thread_id = threadData?.thread_id || null;
+  // console.log("Application inserted:", insertApplication);
+  // console.log("Thread ID:", typeof(thread_id));
+  return { data: { application_id, thread_id }, error: null };
 }
+
