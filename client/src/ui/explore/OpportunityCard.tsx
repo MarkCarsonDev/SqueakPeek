@@ -8,8 +8,8 @@ import {
   Typography,
   Chip,
   Button,
-  Avatar,
   IconButton,
+  Avatar
 } from "@mui/material";
 import {
   faAnglesUp,
@@ -21,9 +21,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark as regularBookmark } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useState} from "react";
 import { OpportunityStackedBarGraph } from "./OpportunityStackedBarGraph";
 import Link from "next/link";
+import { useFetchCompanyLogo } from "@/lib/hooks/useFetchCompanyLogo";
 
 interface jobStats {
   status: string;
@@ -87,6 +88,7 @@ export function OpportunityCard({
   const [bookmarked, setBookmarked] = useState(false);
   const isAppliedColor = appliedStatus ? "green" : "red";
   const isHiringColor = hiringStatus ? "green" : "red";
+  const logoUrl = useFetchCompanyLogo(company_name);
 
   const handleBookmark = () => {
     setBookmarked((prev) => !prev); // Toggle the bookmark state
@@ -129,12 +131,13 @@ export function OpportunityCard({
       >
         {/* TODO: Add real header */}
         <CardHeader
-          style={{ margin: 0, padding: ".5rem", height: "2rem" }}
+          style={{
+            margin: 0,
+            padding: ".5rem",
+            height: "2rem",
+          }}
           avatar={
-            <Avatar
-              src={"https://www.amazon.com/favicon.ico"}
-              style={{ margin: 0 }}
-            ></Avatar>
+            <Avatar src={logoUrl} />
           }
           title={company_name}
           subheader={
@@ -142,6 +145,7 @@ export function OpportunityCard({
 
             role_title + " " + type
           }
+          // sx={{ backgroundColor: "#F6F8FF" }}
         />
 
         {/* Button to threads and button to share Still in progress */}
