@@ -9,6 +9,7 @@ import { useSubscribeConversation } from "@/lib/hooks/useSubscribeConversation";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { fetchMessages } from "@/lib/utils/fetchMessages";
 import { MessageCardProps } from "./MessageCard";
+import { notFound } from "next/navigation";
 
 /**
  * This is a UI container that holds all messages for a particular conversation
@@ -25,6 +26,7 @@ export function Conversation({
     useMessage();
   const { profile } = useProfile();
   const [numNewMessages, setNumNewMessages] = useState(0); // used for rendering new message notification
+  const [pageNotFound, setNotFound] = useState(false);
   const bottomRef = useRef<null | HTMLDivElement>(null); // used for scrolling down the page
   const supabase = useMemo(() => createSupabaseClient(), []);
 
@@ -32,6 +34,43 @@ export function Conversation({
   function resetNumNewMessages() {
     setNumNewMessages(0);
   }
+
+  // determines if conversation exists
+  useEffect(() => {
+    const doesConversationExist = async () => {
+      if (isPrivateConversation) {
+        const { data, error } = await supabase
+          .from("private_conversation")
+          .select("conversation_id")
+          .eq("conversation_id", conversationId)
+          .single();
+        return { data, error };
+      } else {
+        const { data, error } = await supabase
+          .from("company_thread")
+          .select("thread_id")
+          .eq("thread_id", conversationId)
+          .single();
+        return { data, error };
+      }
+    };
+    doesConversationExist().then((res) => {
+      const { data, error } = res;
+      console.log("data res: ", data);
+      console.log("error: ", error);
+      if (error || !data) {
+        // TODO navigate to not found page
+        setNotFound(true);
+      }
+    });
+  }, []);
+
+  // routes to not-found if conversation does not exist
+  useEffect(() => {
+    if (pageNotFound) {
+      notFound();
+    }
+  }, [pageNotFound]);
 
   useSubscribeConversation(
     supabase,
