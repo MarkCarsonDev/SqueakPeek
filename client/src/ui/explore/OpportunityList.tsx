@@ -14,8 +14,8 @@ export function OpportunityList() {
   const [currentPage, setCurrentPage] = useState(1);
   const limit = 5;
   const [hasMore, setHasMore] = useState(true);
-  const supabase = useMemo(() => createSupabaseClient(), []); // only creates it once when the OpportunityList component mounts
   const [totalDBCount, setTotalDBCount] = useState<number>(0);
+  const supabase = useMemo(() => createSupabaseClient(), []); // only creates it once when the OpportunityList component mounts
 
   const searchParams = useSearchParams();
 
@@ -30,6 +30,16 @@ export function OpportunityList() {
     };
   }, [searchParams]);
 
+  // **New useEffect to reset currentPage when filters change**
+  useEffect(() => {
+    // Reset currentPage to 1 when filters change
+    setCurrentPage(1);
+    // Clear the shown opportunities to avoid displaying old data
+    setShownOpportunities([]);
+    // Optionally, reset hasMore to true
+    setHasMore(true);
+  }, [filters]);
+
   // Fetch opportunities when the component mounts or when filters or pagination change
   useEffect(() => {
     const handleFetchOpportunities = async () => {
@@ -37,6 +47,7 @@ export function OpportunityList() {
       const offset = (currentPage - 1) * limit;
       const { data, error, totalCount } = await fetchOpportunities(supabase, filters, limit, offset);
       setTotalDBCount(totalCount || 0);
+
       if (error) {
         console.error("Error fetching opportunities:", error);
       } else if (data) {
@@ -56,6 +67,7 @@ export function OpportunityList() {
             },
           };
         });
+
         console.log("mappedData: ", mappedData);
 
         if (currentPage === 1) {
@@ -76,7 +88,7 @@ export function OpportunityList() {
     };
 
     handleFetchOpportunities();
-  }, [supabase, filters, currentPage, searchParams]);
+  }, [supabase, filters, currentPage]);
 
   const handleLoadMore = () => {
     setCurrentPage((prevPage) => prevPage + 1);
@@ -86,8 +98,8 @@ export function OpportunityList() {
     return <div>Loading...</div>;
   }
 
-  if (shownOpportunities.length === 0) {
-    return <div>No opportunities found that match your criterion.</div>;
+  if (shownOpportunities.length === 0 && !loading) {
+    return <div>No opportunities found that match your criteria.</div>;
   }
 
   return (
