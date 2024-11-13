@@ -37,6 +37,8 @@ export function MessageNotificationCard({
   const textColor = isSelected ? "white" : "#3C435C";
   const isTabPrivateConversation = currentTab === "private";
 
+  const companyLogoURL = useFetchCompanyLogo(header);
+
   return (
     <Link
       style={{
@@ -57,7 +59,7 @@ export function MessageNotificationCard({
               isTabPrivateConversation ? (
                 <ProfileAvatar avatar={avatar as AvatarTypes} />
               ) : (
-                <Avatar src={useFetchCompanyLogo(header)} />
+                <Avatar src={companyLogoURL} />
               )
             }
             title={

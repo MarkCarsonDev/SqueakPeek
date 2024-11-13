@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { generateCompanyLogo } from "../utils/generateCompanyLogo";
 
+
+// TODO: Refactor hook to only make the network request if necessary. Example not necessary for PrivateConversations
 /**
  * Fetches the image logo of the company
  * @param companyName - Name of the company

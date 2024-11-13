@@ -24,6 +24,7 @@ export function ConversationHeader({
   const [header, setHeader] = useState("");
   const [subHeader, setSubHeader] = useState("");
   const [profileAvatar, setProfileAvatar] = useState<AvatarTypes | null>();
+  const companyLogoURL = useFetchCompanyLogo(header);
 
   useEffect(() => {
     if (isPrivateConversation && profile) {
@@ -75,8 +76,6 @@ export function ConversationHeader({
       />
     );
   } else {
-    const companyLogoURL  = useFetchCompanyLogo(header);
-
     return (
       <CardHeader
         action={<OpportunityBookmark conversationId={conversationId} />}
