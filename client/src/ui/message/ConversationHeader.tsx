@@ -90,11 +90,15 @@ export function ConversationHeader({
         title={header}
         subheader={subHeader}
         avatar={
-          <img
+          <img // TODO: Turn this into Image component
             alt="Profile of {company}"
             src={companyLogoURL}
             width={50}
             height={50}
+            style={{
+              objectFit: "cover",
+              borderRadius: "8px",
+            }}
           />
         }
         sx={{
