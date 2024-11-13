@@ -1,12 +1,16 @@
+
+
 .page-container {
     padding: 1rem;
     display: flex;
     flex-direction: column;
-    height: 100vh; /* Added to make the page take up the full viewport height */
+    height: 100vh;
 }
 
 .header-search-container {
     display: flex;
+    gap: 1rem;
+    justify-content: left;
 }
 
 .card-filter-container {
@@ -24,5 +28,5 @@
 
 /* New styles added to make the OpportunityList scrollable */
 .opportunity-list-container {
-    overflow-y: auto; /* Enables vertical scrolling */
+    overflow-y: auto;
 }
