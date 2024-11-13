@@ -7,7 +7,7 @@ import { Database } from "@/lib/types/database.types";
 import { fetchCompanyThreadMetaData } from "@/lib/utils/fetchCompanyThreadMetaData";
 import { fetchPrivateConversationMetaData } from "@/lib/utils/fetchPrivateConversationMetaData";
 import { OpportunityBookmark } from "./OpportunityBookmark";
-import { generateCompanyLogo } from "@/lib/utils/generateCompanyLogo";
+import { useFetchCompanyLogo } from "@/lib/hooks/useFetchCompanyLogo";
 
 interface ConversationHeaderProps {
   conversationId: string;
@@ -24,7 +24,7 @@ export function ConversationHeader({
   const [header, setHeader] = useState("");
   const [subHeader, setSubHeader] = useState("");
   const [profileAvatar, setProfileAvatar] = useState<AvatarTypes | null>();
-  const [companyLogoURL, setCompanyLogoURL] = useState("");
+  const companyLogoURL = useFetchCompanyLogo(header);
 
   useEffect(() => {
     if (isPrivateConversation && profile) {
@@ -60,14 +60,6 @@ export function ConversationHeader({
       });
     }
   }, [isPrivateConversation, profile, conversationId]);
-
-  useEffect(() => {
-    if (!isPrivateConversation) {
-      generateCompanyLogo(header).then((logoURL) => {
-        setCompanyLogoURL(logoURL);
-      });
-    }
-  }, [companyLogoURL, header, isPrivateConversation]);
 
   // TODO: Refactor to be inside the OpportunityBookmark component
 
