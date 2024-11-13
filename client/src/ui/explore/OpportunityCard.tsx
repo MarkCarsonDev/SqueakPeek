@@ -9,6 +9,7 @@ import {
   Chip,
   Button,
   IconButton,
+  Avatar
 } from "@mui/material";
 import {
   faAnglesUp,
@@ -23,7 +24,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useEffect } from "react";
 import { OpportunityStackedBarGraph } from "./OpportunityStackedBarGraph";
 import Link from "next/link";
-import { generateCompanyLogo } from "@/lib/utils/generateCompanyLogo";
+import { useFetchCompanyLogo } from "@/lib/hooks/useFetchCompanyLogo";
 
 interface jobStats {
   status: string;
@@ -87,18 +88,7 @@ export function OpportunityCard({
   const [bookmarked, setBookmarked] = useState(false);
   const isAppliedColor = appliedStatus ? "green" : "red";
   const isHiringColor = hiringStatus ? "green" : "red";
-  const [logoUrl, setLogoUrl] = useState("/landingpage/insight.svg");
-  useEffect(() => {
-    async function fetchLogo() {
-      try {
-        const url = await generateCompanyLogo(company_name);
-        if (url) setLogoUrl(url); // Only set logoUrl if fetch is successful
-      } catch (error) {
-        console.error(`Error fetching logo for ${company_name}:`, error);
-      }
-    }
-    fetchLogo();
-  }, [company_name]);
+  const logoUrl = useFetchCompanyLogo(company_name);
 
   const handleBookmark = () => {
     setBookmarked((prev) => !prev); // Toggle the bookmark state
@@ -147,17 +137,7 @@ export function OpportunityCard({
             height: "2rem",
           }}
           avatar={
-            <img
-              src={logoUrl}
-              height={45}
-              width={45}
-              alt={`${company_name} Logo`}
-              style={{
-                objectFit: "cover",
-                borderRadius: "80px",
-              }}
-              onError={() => setLogoUrl("/landingpage/insight.svg")} // Fallback on error
-            />
+            <Avatar src={logoUrl} />
           }
           title={company_name}
           subheader={
