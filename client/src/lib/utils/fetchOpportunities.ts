@@ -2,15 +2,19 @@ import { SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "@/lib/types/database.types";
 import { SelectedFilters } from "@/ui/explore/Filters";
 
-
 /**
- * Fetches all available opportunities
+ * Fetches opportunities with applied filters and pagination.
  * @param supabase - Supabase client
- * @returns {data: An array of opportunities, error: PostgrestError}
+ * @param filters - Selected filters to apply
+ * @param limit - Number of records to fetch
+ * @param offset - Number of records to skip
+ * @returns {data: An array of opportunities, error: PostgrestError, totalCount: number}
  */
 export async function fetchOpportunities(
   supabase: SupabaseClient<Database>,
-  filters: SelectedFilters
+  filters: SelectedFilters,
+  limit: number,
+  offset: number
 ) {
   let query = supabase
     .from("company_thread")
@@ -20,8 +24,10 @@ export async function fetchOpportunities(
       opportunity:opportunity_id (
         *
       )
-    `
-    );
+    `,
+      { count: "exact" } // To get the total count
+    )
+    .range(offset, offset + limit - 1);
 
   // Apply filters
   if (filters.company && filters.company.length > 0) {
@@ -34,7 +40,7 @@ export async function fetchOpportunities(
 
   // Add more filters here
 
-  const { data, error } = await query;
+  const { data, error, count } = await query;
 
-  return { data, error };
+  return { data, error, totalCount: count };
 }
