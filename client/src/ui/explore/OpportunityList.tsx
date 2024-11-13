@@ -4,39 +4,47 @@ import { OpportunityCard, OpportunityCardProps } from "./OpportunityCard";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { fetchOpportunities } from "@/lib/utils/fetchOpportunities";
 import { SelectedFilters } from './Filters';
+import { Button } from "@mui/material";
 
 export function OpportunityList() {
   const [shownOpportunities, setShownOpportunities] = useState<
     OpportunityCardProps[]
   >([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const limit = 5;
+  const [hasMore, setHasMore] = useState(true);
   const supabase = useMemo(() => createSupabaseClient(), []); // only creates it once when the OpportunityList component mounts
+  const [totalDBCount, setTotalDBCount] = useState<number>(0);
 
   const searchParams = useSearchParams();
 
   // Parse filters from searchParams
-  const filters: SelectedFilters = useMemo(() => ({
-    searchQuery: searchParams.get('searchQuery') || '',
-    sortOption: searchParams.get('sortOption') || 'recent',
-    company: searchParams.getAll('company'),
-    jobPosition: searchParams.getAll('jobPosition'),
-    // Add more filter options here
-  }), [searchParams]);
+  const filters: SelectedFilters = useMemo(() => {
+    const company = searchParams.getAll('company');
+    const jobPosition = searchParams.getAll('jobPosition');
+    return {
+      company: company.length > 0 ? company : undefined,
+      jobPosition: jobPosition.length > 0 ? jobPosition : undefined,
+      // Add more filter options here
+    };
+  }, [searchParams]);
 
-  // Fetch opportunities when the component mounts or when filters change
+  // Fetch opportunities when the component mounts or when filters or pagination change
   useEffect(() => {
     const handleFetchOpportunities = async () => {
       setLoading(true);
-      const { data, error } = await fetchOpportunities(supabase, filters);
+      const offset = (currentPage - 1) * limit;
+      const { data, error, totalCount } = await fetchOpportunities(supabase, filters, limit, offset);
+      setTotalDBCount(totalCount || 0);
       if (error) {
         console.error("Error fetching opportunities:", error);
       } else if (data) {
         const mappedData: OpportunityCardProps[] = data.map((item) => {
-          const { thread_id: conversation_id } = item;
-          const opportunity = item.opportunity;
+          const { thread_id, opportunity } = item;
 
           return {
-            conversation_id,
+            conversation_id: thread_id,
             opportunity,
             aggregate: {
               totalApplied: 200,
@@ -50,21 +58,36 @@ export function OpportunityList() {
         });
         console.log("mappedData: ", mappedData);
 
-        setShownOpportunities(mappedData);
+        if (currentPage === 1) {
+          setShownOpportunities(mappedData);
+        } else {
+          setShownOpportunities((prev) => [...prev, ...mappedData]);
+        }
+
+        // Check if there are more results
+        if (offset + data.length >= (totalCount || 0)) {
+          setHasMore(false);
+        } else {
+          setHasMore(true);
+        }
       }
 
       setLoading(false);
     };
 
     handleFetchOpportunities();
-  }, [supabase, filters]);
+  }, [supabase, filters, currentPage, searchParams]);
 
-  if (loading) {
+  const handleLoadMore = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
+
+  if (loading && currentPage === 1) {
     return <div>Loading...</div>;
   }
 
   if (shownOpportunities.length === 0) {
-    return <div>No opportunities found that match your criteria.</div>;
+    return <div>No opportunities found that match your criterion.</div>;
   }
 
   return (
@@ -73,6 +96,12 @@ export function OpportunityList() {
         item.opportunity ? ( // Ensure item.opportunity is defined before rendering
           <OpportunityCard key={item.opportunity.opportunity_id} {...item} />
         ) : null
+      )}
+      {loading && currentPage > 1 && <div>Loading more...</div>}
+      {hasMore && !loading && (
+        <Button onClick={handleLoadMore}>
+          Load {Math.min(limit, totalDBCount - (currentPage * limit))} More (Showing {Math.min(currentPage * limit, totalDBCount)} of {totalDBCount})
+        </Button>
       )}
     </div>
   );
