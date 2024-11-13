@@ -109,7 +109,7 @@ export function OpportunityList() {
 
   if (totalDBCount == 0 && !loading) {
     return <Typography sx={{width: '100%', margin: '4rem', display: 'flex', flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
-        We couldn&apost find any opportunities that match your criterion...
+        We couldn{"'"}t find any opportunities that match your criterion...
       </Typography>;
   }
 
