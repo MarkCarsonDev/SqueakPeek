@@ -1,5 +1,52 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+// import { userHasExistingProfile } from "@/lib/actions/profile_setup" // TODO: Place this back
+
+//debug utility function 
+const DEBUG = false;
+export function debug(msg: string){
+  if (DEBUG){
+    console.log("DEBUG: ", msg);
+  }
+}
+
+debug("***** BEGIN middleware.ts ******");
+debug("middleware.ts is always invoked!!!");
+
+//allowed public paths
+const publicPaths = ["/","/login","/explore","/signup","/about"];
+
+//make a set
+//whitelists auth'd user paths
+const validUserPaths = ["/message", "/profile", "/thread", "/track", "/profile_setup"];
+
+function hasBasePath(pathname: string, basepaths: string[]) {
+  for (let i = 0; i < basepaths.length; i++) {
+    debug("pathname: " + pathname);
+    debug("basepaths[i]" + basepaths[i]);
+    if (pathname == "/")
+      return true 
+    if (basepaths[i] == "/") {continue}
+    if (pathname.indexOf(basepaths[i]) == 0) {
+      return true
+    }
+  }
+  return false
+}
+function isPublicPath(pathname: string){
+  return hasBasePath(pathname, publicPaths)
+}
+
+function isAllowedUserPath(pathname: string){
+  debug("start of isAllowedUserPath");
+  debug("pathname: " + typeof(pathname));
+  //TODO: should we keep Auth'd users off of signup?
+  //if (pathname === "/signup"){
+  //  debug("RETURNING FALSE: pathname: signup " + pathname);
+  //  return false
+  // }
+  return hasBasePath(pathname, validUserPaths);
+}
 
 // refreshes expired Auth token
 export async function updateSession(request: NextRequest) {
@@ -27,50 +74,89 @@ export async function updateSession(request: NextRequest) {
         },
       },
     }
-  );
+  ); //end createServerClient
 
-  // IMPORTANT: Avoid writing any logic between createServerClient and
-  // supabase.auth.getUser(). A simple mistake could make it very hard to debug
-  // issues with users being randomly logged out.
+  //get Supabase user
+  const { data: { user } } = await supabase.auth.getUser();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  //simple pathname variable
+  const pathname = request.nextUrl.pathname;
 
-  if (
-    !user &&
-    !request.nextUrl.pathname.startsWith("/login") &&
-    !request.nextUrl.pathname.startsWith("/auth")
-  ) {
-    // no user, potentially respond by redirecting the user to the login page
-    // TODO: Commented for now since it's automatically redirecting to login page
-    // const url = request.nextUrl.clone();
-    // url.pathname = "/login";
-    // return NextResponse.redirect(url);
-  } else {
-    // console.log("user: ", user);
-    console.log("user logged authenticated");
+  debug("USER REQUEST PATHNAME: "+ pathname);
 
-    // refirect user to company route when first navigating to /message route
-    if (request.nextUrl.pathname === "/message") {
+  if (user) {
+    const userEmail = user?.email;
+    debug("USER " + userEmail + " HAS AUTHENTICATED");
+    
+    //Task 1: Only allow authorized users to access the pages under the (main) directory
+    //...using whitelist strategy
+    if(!(isAllowedUserPath(pathname)) && !(isPublicPath(pathname))) {
+      debug("User attempted to access a restricted path. Redirecting to /explore");
+      debug("Task 1: Only allow authorized users to access the pages under the (main) directory");
       const url = request.nextUrl.clone();
-      url.pathname = "/message/company";
+      url.pathname = "/explore";
       return NextResponse.redirect(url);
     }
+
+    // TODO: Place this back
+    // Task 3: Redirect authenticated users without a profile to /profile_setup
+    // const hasUserProfile = await userHasExistingProfile();
+    // const url = request.nextUrl.clone();
+    // debug("url: " + url);
+    // if (!(hasUserProfile)) {
+    //   debug("Task 3: Redirect authenticated users without a profile to /profile_setup");
+    //   debug("USER " + user?.email + " HAS NO PROFILE");
+    //   debug("url.pathname.indexOf(/profile_setup): " + url.pathname.indexOf("/profile_setup"));
+      
+    //   //if not on profile_setup, redirect to profile_setup
+    //   if (url.pathname.indexOf("/profile_setup") < 0) {
+    //     if (!isPublicPath(pathname)){
+    //       url.pathname = "/profile_setup";
+    //       debug("redirecting to /profile_setup: user has no profile");
+    //       return NextResponse.redirect(url);
+    //     }
+    //   }
+
+    //   else {
+    //     debug("user is trying to access: " + url.pathname);
+    //     debug("User accessing profile_setup");
+    //   }
+    // } // end of handling of non auth'd users
+    // else {
+    //   // Task 4: Redirect any users accessing /profile_setup that already has a profile to /404
+    //   debug("USER " + user?.email + " HAS PROFILE");
+    //   if (pathname === "/profile_setup") {
+    //     debug("Task 4: Redirect any users accessing /profile_setup that already has a profile to /404");
+    //     debug("USER " + user?.email + " ALREADY HAS PROFILE, redirecting to 404");
+    //     const url = request.nextUrl.clone();
+    //     url.pathname = "/404";
+    //     return NextResponse.rewrite(url);
+    //   }
+    //   // Task 5: Redirect auth users navigating to /message to /message/company first
+    //   if (request.nextUrl.pathname === "/message") {
+    //     const url = request.nextUrl.clone();
+    //     url.pathname = "/message/company";
+    //     return NextResponse.redirect(url);
+    //   }
+    // } // end handling of auth'd users
   }
+  else {
+    debug("USER HAS NOT AUTHENTICATED");
 
-  // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're
-  // creating a new response object with NextResponse.next() make sure to:
-  // 1. Pass the request in it, like so:
-  //    const myNewResponse = NextResponse.next({ request })
-  // 2. Copy over the cookies, like so:
-  //    myNewResponse.cookies.setAll(supabaseResponse.cookies.getAll())
-  // 3. Change the myNewResponse object to fit your needs, but avoid changing
-  //    the cookies!
-  // 4. Finally:
-  //    return myNewResponse
-  // If this is not done, you may be causing the browser and server to go out
-  // of sync and terminate the user's session prematurely!
-
+    //Task 2: For authenticated users accessing the pages outside of (main)
+    //automatically redirect them to the /explore route
+    debug("Task 2: For authenticated users accessing the pages outside of (main) automatically redirect them to the /explore route");
+    if(!isPublicPath(pathname)) {
+      const url = request.nextUrl.clone();
+      if (url.pathname.indexOf("/explore") < 0) {
+        debug(pathname  + " is not a public path. Redirect to explore");
+        url.pathname = "/explore";
+        return NextResponse.redirect(url); 
+      }
+    }
+    else {
+      debug(pathname  + " is a public path. Allowing access");
+    }
+  }
   return supabaseResponse;
-}
+} // end updateSession
