@@ -14,6 +14,7 @@ import {
   faLink,
   faBars,
 } from "@fortawesome/free-solid-svg-icons";
+// import Image from "next/image";
 //import Image from "next/image";
 import { faMessage } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -107,8 +108,8 @@ export function JobCard({ application, profile }: JobCardProps) {
           width={40}
           alt={`${company_name} Logo`}
           style={{
-            objectFit: "cover",
-            borderRadius: "8px",
+        objectFit: "cover",
+        borderRadius: "8px",
           }}
           onError={() => setLogoUrl("/landingpage/insight.svg")} // Fallback on error
         />

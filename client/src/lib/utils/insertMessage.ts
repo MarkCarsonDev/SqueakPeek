@@ -20,7 +20,7 @@ export async function insertMessage(
   isPrivateConversation: boolean,
   supabase: SupabaseClient = createSupabaseClient()
 ): Promise<PostgrestError | null> {
-  if (newMessage.message === "") {
+  if (newMessage.message.trim() === "") { // removes leading and trailing whitespace
     return {
       code: "",
       details: "",
