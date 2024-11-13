@@ -3,11 +3,11 @@ import { useMessage } from "@/lib/store/message";
 import { useEffect, useState } from "react";
 import { useProfile, Profile } from "@/lib/store/profile";
 import { ProfileAvatar, AvatarTypes } from "../ProfileAvatar";
-import Image from "next/image";
 import { Database } from "@/lib/types/database.types";
 import { fetchCompanyThreadMetaData } from "@/lib/utils/fetchCompanyThreadMetaData";
 import { fetchPrivateConversationMetaData } from "@/lib/utils/fetchPrivateConversationMetaData";
 import { OpportunityBookmark } from "./OpportunityBookmark";
+import { generateCompanyLogo } from "@/lib/utils/generateCompanyLogo";
 
 interface ConversationHeaderProps {
   conversationId: string;
@@ -24,6 +24,7 @@ export function ConversationHeader({
   const [header, setHeader] = useState("");
   const [subHeader, setSubHeader] = useState("");
   const [profileAvatar, setProfileAvatar] = useState<AvatarTypes | null>();
+  const [companyLogoURL, setCompanyLogoURL] = useState("");
 
   useEffect(() => {
     if (isPrivateConversation && profile) {
@@ -60,6 +61,14 @@ export function ConversationHeader({
     }
   }, [isPrivateConversation, profile, conversationId]);
 
+  useEffect(() => {
+    if (!isPrivateConversation) {
+      generateCompanyLogo(header).then((logoURL) => {
+        setCompanyLogoURL(logoURL);
+      });
+    }
+  }, [companyLogoURL, header, isPrivateConversation]);
+
   // TODO: Refactor to be inside the OpportunityBookmark component
 
   if (isPrivateConversation) {
@@ -81,11 +90,15 @@ export function ConversationHeader({
         title={header}
         subheader={subHeader}
         avatar={
-          <Image
+          <img // TODO: Turn this into Image component
             alt="Profile of {company}"
-            src="https://www.amazon.com/favicon.ico"
+            src={companyLogoURL}
             width={50}
             height={50}
+            style={{
+              objectFit: "cover",
+              borderRadius: "8px",
+            }}
           />
         }
         sx={{
