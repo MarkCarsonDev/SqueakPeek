@@ -32,18 +32,26 @@ export async function fetchOpportunities(
       { count: "exact" }
     );
 
-  // Apply company and job position filters if provided
-  if (filters.company && filters.company.length > 0) {
-    mainQuery = mainQuery.in("opportunity.company_name", filters.company);
-  }
-
-  if (filters.jobPosition && filters.jobPosition.length > 0) {
-    mainQuery = mainQuery.in("opportunity.role_title", filters.jobPosition);
-  }
-
-  if (filters.jobType && filters.jobType.length > 0) {
-    mainQuery = mainQuery.in("opportunity.type", filters.jobType);
-  }
+    if (filters.company) {
+      const companies = filters.company[0]?.split(',') || [];
+      if (companies.length > 0) {
+        mainQuery = mainQuery.in("opportunity.company_name", companies);
+      }
+    }
+  
+    if (filters.jobPosition) {
+      const positions = filters.jobPosition[0]?.split(',') || [];
+      if (positions.length > 0) {
+        mainQuery = mainQuery.in("opportunity.role_title", positions);
+      }
+    }
+  
+    if (filters.jobType) {
+      const jobTypes = filters.jobType[0]?.split(',') || [];
+      if (jobTypes.length > 0) {
+        mainQuery = mainQuery.in("opportunity.type", jobTypes);
+      }
+    }
 
   // Exclude entries without a matching opportunity
   mainQuery = mainQuery.not("opportunity", "is", "null");
@@ -55,6 +63,7 @@ export async function fetchOpportunities(
     return { data: mainData, error: mainError, totalCount: count || 0 };
   }
 
+  
   // Separate search queries for `role_title` and `company_name` using `ilike`
   const roleTitleQuery = supabase
     .from("company_thread")
@@ -93,13 +102,13 @@ export async function fetchOpportunities(
 
   const typeMappings = Object.fromEntries(
     jobTypeOptions.map((typeValue: string) => [
-      typeValue.toLowerCase().replace(/[^a-z]/g, ""),
+      typeValue.toLowerCase().replace(/[^a-z0-9]/g, ""),
       typeValue,
     ])
   );
 
 // Find matching type based on normalized search query
-const normalizedSearch = filters.searchQuery ? filters.searchQuery.toLowerCase().replace(/[^a-z]/g, "") : null;
+const normalizedSearch = filters.searchQuery ? filters.searchQuery.toLowerCase().replace(/[^a-z0-9]/g, "") : null;
 const matchingType = normalizedSearch
   ? Object.keys(typeMappings).find((key) => key.includes(normalizedSearch))
   : null;
@@ -137,11 +146,21 @@ const typeQuery = matchingType
   // Combine results, filter out nulls, and deduplicate by `thread_id`
   const combinedData = [...(roleData || []), ...(companyData || []), ...(typeData || [])]
     .filter((item) => item.opportunity !== null);
-  
-  const uniqueData = Array.from(new Map(combinedData.map((item) => [item.thread_id, item])).values());
 
-  // Paginate the unique results
-  const paginatedData = uniqueData.slice(offset, offset + limit);
+    console.log("combinedData", combinedData);
 
-  return { data: paginatedData, error: null, totalCount: uniqueData.length };
+// Get mainData with applied filters and all search query matches, then filter for intersection
+const combinedThreadIds = new Set(combinedData.map((item) => item.thread_id));
+
+const { data: mainData, error: mainError, count } = await mainQuery;
+const filteredData = (mainData || []).filter(
+  (item) => combinedThreadIds.has(item.thread_id)
+);
+
+// Paginate the filtered results
+const paginatedData = filteredData.slice(offset, offset + limit);
+
+
+return { data: paginatedData, error: null, totalCount: filteredData.length };
+
 }
