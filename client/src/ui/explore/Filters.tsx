@@ -7,6 +7,8 @@ import {
   Typography,
   Divider,
   Card,
+  Button,
+  Modal,
 } from '@mui/material';
 import { createSupabaseClient } from '@/lib/supabase/client';
 import { useSearchParams, useRouter } from 'next/navigation';
@@ -18,11 +20,10 @@ export interface FilterOption {
 }
 
 export interface SelectedFilters {
-  [key: string]: string | string[] | undefined;
-  searchQuery?: string;
-  sortOption?: string;
+  [key: string]: string[] | undefined;
   company?: string[];
   jobPosition?: string[];
+  // Add more filter keys as needesd
 }
 
 interface FilterDefinition {
@@ -31,35 +32,42 @@ interface FilterDefinition {
   stateKey: string;
 }
 
-export const Filters: React.FC = () => {
+interface FiltersProps {
+  open: boolean;
+  handleClose: () => void;
+}
+
+export const Filters: React.FC<FiltersProps> = ({ open, handleClose }) => {
   const [filterOptions, setFilterOptions] = useState<{
     [key: string]: FilterOption[];
   }>({});
+  const [localSelectedFilters, setLocalSelectedFilters] = useState<SelectedFilters>({});
   const searchParams = useSearchParams();
   const router = useRouter();
   const supabase = createSupabaseClient();
 
   // Define the filters here
-  const filterDefinitions: FilterDefinition[] = React.useMemo(() => [
-    {
-      title: 'Company',
-      dbColumn: 'company_name',
-      stateKey: 'company',
-    },
-    {
-      title: 'Role Title',
-      dbColumn: 'role_title',
-      stateKey: 'jobPosition',
-    },
-    // Add more filters as needed
-  ], []);
+  const filterDefinitions: FilterDefinition[] = React.useMemo(
+    () => [
+      {
+        title: 'Company',
+        dbColumn: 'company_name',
+        stateKey: 'company',
+      },
+      {
+        title: 'Role Title',
+        dbColumn: 'role_title',
+        stateKey: 'jobPosition',
+      },
+      // Add more filters as needed
+    ],
+    []
+  );
 
   useEffect(() => {
     const fetchFilterOptions = async () => {
       // Fetch all necessary data from the 'opportunity' table
-      const { data: opportunities, error } = await supabase
-        .from('opportunity')
-        .select('*');
+      const { data: opportunities, error } = await supabase.from('opportunity').select('*');
 
       if (error) {
         console.error('Error fetching opportunities:', error);
@@ -72,7 +80,8 @@ export const Filters: React.FC = () => {
 
           opportunities.forEach((item) => {
             // Access the value dynamically using the dbColumn
-            const value: string = item[filterDef.dbColumn] || 'Unknown';
+            const key: keyof typeof item = filterDef.dbColumn as keyof typeof item;
+            const value: string = item[key] || 'Unknown';
 
             // Increment the count for this value
             counts[value] = (counts[value] || 0) + 1;
@@ -97,31 +106,72 @@ export const Filters: React.FC = () => {
     fetchFilterOptions();
   }, [filterDefinitions, supabase]);
 
-  const handleCheckboxChange = (sectionKey: string, value: string) => {
-    const params = new URLSearchParams(searchParams.toString());
-
-    // Get existing values
-    const existingValues = params.getAll(sectionKey);
-
-    if (existingValues.includes(value)) {
-      // Remove the value
-      const newValues = existingValues.filter((v) => v !== value);
-      params.delete(sectionKey);
-      newValues.forEach((v) => params.append(sectionKey, v));
-    } else {
-      // Add the value
-      params.append(sectionKey, value);
+  // Synchronize localSelectedFilters with URL parameters when modal opens
+  useEffect(() => {
+    if (open) {
+      const initialFilters: SelectedFilters = {};
+      filterDefinitions.forEach((filterDef) => {
+        initialFilters[filterDef.stateKey] = searchParams.getAll(filterDef.stateKey);
+      });
+      setLocalSelectedFilters(initialFilters);
     }
+  }, [open, searchParams, filterDefinitions]);
 
-    router.replace(`?${params.toString()}`);
+  const handleCheckboxChange = (sectionKey: string, value: string) => {
+    setLocalSelectedFilters((prevFilters) => {
+      const existingValues = prevFilters[sectionKey] || [];
+      let newValues: string[];
+
+      if (existingValues.includes(value)) {
+        // Remove the value
+        newValues = existingValues.filter((v) => v !== value);
+      } else {
+        // Add the value
+        newValues = [...existingValues, value];
+      }
+
+      return {
+        ...prevFilters,
+        [sectionKey]: newValues,
+      };
+    });
   };
 
-  const renderSection = (
-    title: string,
-    options: FilterOption[],
-    sectionKey: string
-  ) => {
-    const selectedValues = searchParams.getAll(sectionKey);
+  const handleApplyFilters = () => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    // Clear existing filter parameters
+    filterDefinitions.forEach((filterDef) => {
+      params.delete(filterDef.stateKey);
+    });
+
+    // Set new filter parameters
+    Object.keys(localSelectedFilters).forEach((sectionKey) => {
+      const values = localSelectedFilters[sectionKey];
+      if (values) {
+        values.forEach((value) => {
+          params.append(sectionKey, value);
+        });
+      }
+    });
+
+    router.replace(`?${params.toString()}`);
+
+    handleClose();
+  };
+
+  const handleCancel = () => {
+    handleClose();
+    // Reset localSelectedFilters to match URL parameters
+    const initialFilters: SelectedFilters = {};
+    filterDefinitions.forEach((filterDef) => {
+      initialFilters[filterDef.stateKey] = searchParams.getAll(filterDef.stateKey);
+    });
+    setLocalSelectedFilters(initialFilters);
+  };
+
+  const renderSection = (title: string, options: FilterOption[], sectionKey: string) => {
+    const selectedValues = localSelectedFilters[sectionKey] || [];
 
     return (
       <Box sx={{ marginBottom: 4 }} key={sectionKey}>
@@ -151,16 +201,40 @@ export const Filters: React.FC = () => {
   };
 
   return (
-    <Card
-      sx={{ border: 'solid 3px #e0e4f2', borderRadius: '20px', padding: '1rem' }}
+    <Modal
+      open={open}
+      onClose={handleCancel}
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
     >
-      {filterDefinitions.map((filterDef) =>
-        renderSection(
-          filterDef.title,
-          filterOptions[filterDef.stateKey] || [],
-          filterDef.stateKey
-        )
-      )}
-    </Card>
+      <Card
+        sx={{
+          width: '70%',
+          maxHeight: '80vh',
+          overflowY: 'auto',
+          padding: '2rem',
+          borderRadius: '8px',
+        }}
+      >
+        {filterDefinitions.map((filterDef) =>
+          renderSection(
+            filterDef.title,
+            filterOptions[filterDef.stateKey] || [],
+            filterDef.stateKey
+          )
+        )}
+        <Box sx={{ display: 'flex', position: 'absolute', bottom: '9.5vh', justifyContent: 'space-between', marginTop: '2rem', backgroundColor: 'white', width: 'calc(70% - 1rem)'}}>
+          <Button variant="outlined" onClick={handleCancel}>
+            Cancel
+          </Button>
+          <Button variant="contained" onClick={handleApplyFilters}>
+            Apply Filters
+          </Button>
+        </Box>
+      </Card>
+    </Modal>
   );
 };
