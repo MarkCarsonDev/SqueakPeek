@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import { usePathname } from "next/navigation";
 import { ProfileAvatar, AvatarTypes } from "../ProfileAvatar";
+import { useFetchCompanyLogo } from "@/lib/hooks/useFetchCompanyLogo";
 
 export interface MessageNotificationCardProps {
   avatar: string;
@@ -35,6 +36,9 @@ export function MessageNotificationCard({
   const currentTab = pathName.split("/")[2]; // tab is either company or private
   const textColor = isSelected ? "white" : "#3C435C";
   const isTabPrivateConversation = currentTab === "private";
+
+  const { companyLogoURL } = useFetchCompanyLogo(header);
+
   return (
     <Link
       style={{
@@ -55,7 +59,7 @@ export function MessageNotificationCard({
               isTabPrivateConversation ? (
                 <ProfileAvatar avatar={avatar as AvatarTypes} />
               ) : (
-                <Avatar>{avatar}</Avatar>
+                <Avatar src={companyLogoURL} />
               )
             }
             title={
