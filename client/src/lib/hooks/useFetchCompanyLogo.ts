@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useMessage } from "../store/message";
 import { generateCompanyLogo } from "../utils/generateCompanyLogo";
 
 /**
@@ -9,15 +8,12 @@ import { generateCompanyLogo } from "../utils/generateCompanyLogo";
  */
 export const useFetchCompanyLogo = (companyName: string) => {
   const [companyLogoURL, setCompanyLogoURL] = useState("");
-  const { isPrivateConversation } = useMessage();
 
   useEffect(() => {
-    if (!isPrivateConversation) {
-      generateCompanyLogo(companyName).then((logoURL) => {
-        setCompanyLogoURL(logoURL);
-      });
-    }
-  }, [companyName, isPrivateConversation, setCompanyLogoURL]);
+    generateCompanyLogo(companyName).then((logoURL) => {
+      setCompanyLogoURL(logoURL);
+    });
+  }, [companyName, setCompanyLogoURL]);
 
-  return { companyLogoURL };
+  return companyLogoURL;
 };

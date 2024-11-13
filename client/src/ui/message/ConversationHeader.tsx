@@ -60,8 +60,6 @@ export function ConversationHeader({
     }
   }, [isPrivateConversation, profile, conversationId]);
 
-  const { companyLogoURL } = useFetchCompanyLogo(header);
-
   // TODO: Refactor to be inside the OpportunityBookmark component
 
   if (isPrivateConversation) {
@@ -77,6 +75,8 @@ export function ConversationHeader({
       />
     );
   } else {
+    const companyLogoURL  = useFetchCompanyLogo(header);
+
     return (
       <CardHeader
         action={<OpportunityBookmark conversationId={conversationId} />}
