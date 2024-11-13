@@ -4,13 +4,14 @@
     padding: 1rem;
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    /* height: 100vh; */
 }
 
 .header-search-container {
     display: flex;
     gap: 1rem;
     justify-content: left;
+    position: sticky;
 }
 
 .card-filter-container {
@@ -33,7 +34,10 @@
 
 /* New styles added to make the OpportunityList scrollable */
 .opportunity-list-container {
-    overflow-y: auto;
+    overflow-y: visible;
+    border-top: 1px solid #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
+    margin-top: 1rem;
 }
 
 .explore-control-button {

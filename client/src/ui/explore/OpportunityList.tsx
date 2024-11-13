@@ -4,8 +4,9 @@ import { OpportunityCard, OpportunityCardProps } from "./OpportunityCard";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { fetchOpportunities } from "@/lib/utils/fetchOpportunities";
 import { SelectedFilters } from './Filters';
-import { Button } from "@mui/material";
+import { Typography, Button, Divider, Box } from "@mui/material";
 import { Database } from "@/lib/types/database.types";
+import { Just_Another_Hand } from "next/font/google";
 
 export function OpportunityList() {
   const [shownOpportunities, setShownOpportunities] = useState<OpportunityCardProps[]>([]);
@@ -33,6 +34,7 @@ export function OpportunityList() {
   }, [searchParams]);
 
   useEffect(() => {
+    setLoading(true);
     console.log("Filters changed:", filters);
     setCurrentPage(1);
     setShownOpportunities([]);
@@ -101,15 +103,26 @@ export function OpportunityList() {
   };
 
   if (loading && currentPage === 1) {
-    return <div>Loading...</div>;
+    return <Typography sx={{width: '100%', margin: '4rem', display: 'flex', flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
+        Loading...
+      </Typography>;
   }
 
-  if (shownOpportunities.length === 0 && !loading) {
-    return <div>No opportunities found that match your criteria.</div>;
+  if (totalDBCount == 0 && !loading) {
+    return <Typography sx={{width: '100%', margin: '4rem', display: 'flex', flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
+        We couldn't find any opportunities that match your criterion...
+      </Typography>;
   }
 
   return (
-    <div>
+    <Box>
+      {!loading && (
+        <Box sx={{width: '100%', marginTop: '1rem', display: 'flex', flexDirection:'column', alignItems:"flex-end", justifyContent:'end'}}>
+          <Typography sx={{float: 'right'}}>
+            Found {totalDBCount} results
+          </Typography>
+        </Box>
+      )}
       {shownOpportunities.map((item) =>
         item.opportunity ? (
           <OpportunityCard key={item.opportunity.opportunity_id} {...item} />
@@ -118,9 +131,14 @@ export function OpportunityList() {
       {loading && currentPage > 1 && <div>Loading more...</div>}
       {hasMore && !loading && (
         <Button onClick={handleLoadMore}>
-          Load {Math.min(limit, totalDBCount - (currentPage * limit))} More (Showing {Math.min(currentPage * limit, totalDBCount)} of {totalDBCount})
+          Load {Math.min(limit, totalDBCount - (currentPage * limit))} more (Showing {Math.min(currentPage * limit, totalDBCount)} of {totalDBCount})
         </Button>
       )}
-    </div>
+      {!hasMore && !loading && (
+        <Typography>
+          <p>Showing all {totalDBCount} opportunities</p>
+          </Typography>
+      )}
+    </Box>
   );
 }
