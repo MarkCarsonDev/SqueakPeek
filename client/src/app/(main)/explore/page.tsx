@@ -3,6 +3,7 @@ import { Typography, Button } from "@mui/material";
 import "@/app/(main)/explore/explore.css";
 import { OpportunityList } from "@/ui/explore/OpportunityList";
 import { Filters } from "@/ui/explore/Filters";
+import { SearchBar } from "@/ui/explore/SearchBar";
 import { useState } from "react";
 
 export default function Page() {
@@ -24,6 +25,7 @@ export default function Page() {
           </Typography>
         </div>
         {/* To Add Later <SearchBar /> */}
+        < SearchBar />
         {/* To Add Later <SortOptions /> */}
         <Button variant="contained" onClick={() => setFilterModalOpen(true)}>
           Filters

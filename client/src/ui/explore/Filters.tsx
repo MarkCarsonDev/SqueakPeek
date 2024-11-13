@@ -20,10 +20,12 @@ export interface FilterOption {
 }
 
 export interface SelectedFilters {
-  [key: string]: string[] | undefined;
-  company?: string[];
+  [key: string]: string[] | string | undefined;
+  jobType?: string[];
   jobPosition?: string[];
-  // Add more filter keys as needesd
+  company?: string[];
+  searchQuery?: string;
+  // Add more filter keys as needed
 }
 
 interface FilterDefinition {
@@ -46,66 +48,57 @@ export const Filters: React.FC<FiltersProps> = ({ open, handleClose }) => {
   const router = useRouter();
   const supabase = createSupabaseClient();
 
-  // Define the filters here
   const filterDefinitions: FilterDefinition[] = React.useMemo(
     () => [
       {
-        title: 'Company',
-        dbColumn: 'company_name',
-        stateKey: 'company',
+        title: 'Job Type',
+        dbColumn: 'type',
+        stateKey: 'jobType',
       },
       {
         title: 'Role Title',
         dbColumn: 'role_title',
         stateKey: 'jobPosition',
       },
-      // Add more filters as needed
+      {
+        title: 'Company',
+        dbColumn: 'company_name',
+        stateKey: 'company',
+      },
     ],
     []
   );
 
   useEffect(() => {
     const fetchFilterOptions = async () => {
-      // Fetch all necessary data from the 'opportunity' table
       const { data: opportunities, error } = await supabase.from('opportunity').select('*');
-
       if (error) {
         console.error('Error fetching opportunities:', error);
-      } else if (opportunities) {
-        const optionsData: { [key: string]: FilterOption[] } = {};
-
-        // Loop through each filter definition to generate options
-        for (const filterDef of filterDefinitions) {
-          const counts: { [key: string]: number } = {};
-
-          opportunities.forEach((item) => {
-            // Access the value dynamically using the dbColumn
-            const key: keyof typeof item = filterDef.dbColumn as keyof typeof item;
-            const value: string = item[key] || 'Unknown';
-
-            // Increment the count for this value
-            counts[value] = (counts[value] || 0) + 1;
-          });
-
-          // Convert counts object to an array of FilterOption
-          const options = Object.entries(counts).map(([value, count]) => ({
-            label: `${value} (${count})`,
-            value: value,
-            count,
-          }));
-
-          // Store the options using the stateKey
-          optionsData[filterDef.stateKey] = options;
-        }
-
-        // Update the state with the new filter options
-        setFilterOptions(optionsData);
+        return;
       }
+  
+      const optionsData: { [key: string]: FilterOption[] } = {};
+      filterDefinitions.forEach((filterDef) => {
+        const counts: { [key: string]: number } = {};
+  
+        (opportunities as Record<string, any>[]).forEach((item) => {
+          const value: string = item[filterDef.dbColumn] || 'Unknown';
+          counts[value] = (counts[value] || 0) + 1;
+        });
+  
+        optionsData[filterDef.stateKey] = Object.entries(counts).map(([value, count]) => ({
+          label: `${value} (${count})`,
+          value,
+          count,
+        }));
+      });
+  
+      setFilterOptions(optionsData);
     };
-
+  
     fetchFilterOptions();
   }, [filterDefinitions, supabase]);
-
+  
   // Synchronize localSelectedFilters with URL parameters when modal opens
   useEffect(() => {
     if (open) {
@@ -120,15 +113,9 @@ export const Filters: React.FC<FiltersProps> = ({ open, handleClose }) => {
   const handleCheckboxChange = (sectionKey: string, value: string) => {
     setLocalSelectedFilters((prevFilters) => {
       const existingValues = prevFilters[sectionKey] || [];
-      let newValues: string[];
-
-      if (existingValues.includes(value)) {
-        // Remove the value
-        newValues = existingValues.filter((v) => v !== value);
-      } else {
-        // Add the value
-        newValues = [...existingValues, value];
-      }
+      const newValues = existingValues.includes(value)
+        ? (existingValues as string[]).filter((v) => v !== value) // Remove if exists
+        : [...(existingValues as string[]), value]; // Add if not exists
 
       return {
         ...prevFilters,
@@ -149,14 +136,13 @@ export const Filters: React.FC<FiltersProps> = ({ open, handleClose }) => {
     Object.keys(localSelectedFilters).forEach((sectionKey) => {
       const values = localSelectedFilters[sectionKey];
       if (values) {
-        values.forEach((value) => {
+        (Array.isArray(values) ? values : [values]).forEach((value) => {
           params.append(sectionKey, value);
         });
       }
     });
 
     router.replace(`?${params.toString()}`);
-
     handleClose();
   };
 
@@ -179,21 +165,18 @@ export const Filters: React.FC<FiltersProps> = ({ open, handleClose }) => {
           {title}
         </Typography>
         <FormGroup>
-          {options.map((option) => {
-            const isChecked = selectedValues.includes(option.value);
-            return (
-              <FormControlLabel
-                key={option.value}
-                control={
-                  <Checkbox
-                    checked={isChecked}
-                    onChange={() => handleCheckboxChange(sectionKey, option.value)}
-                  />
-                }
-                label={option.label}
-              />
-            );
-          })}
+          {options.map((option) => (
+            <FormControlLabel
+              key={option.value}
+              control={
+                <Checkbox
+                  checked={selectedValues.includes(option.value)} // Automatically check based on state
+                  onChange={() => handleCheckboxChange(sectionKey, option.value)}
+                />
+              }
+              label={option.label}
+            />
+          ))}
         </FormGroup>
         <Divider />
       </Box>
