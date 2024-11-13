@@ -152,7 +152,7 @@ const typeQuery = matchingType
 // Get mainData with applied filters and all search query matches, then filter for intersection
 const combinedThreadIds = new Set(combinedData.map((item) => item.thread_id));
 
-const { data: mainData, error: mainError, count } = await mainQuery;
+const { data: mainData } = await mainQuery;
 const filteredData = (mainData || []).filter(
   (item) => combinedThreadIds.has(item.thread_id)
 );

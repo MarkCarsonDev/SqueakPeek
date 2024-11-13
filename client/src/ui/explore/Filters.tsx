@@ -12,6 +12,9 @@ import {
 } from '@mui/material';
 import { createSupabaseClient } from '@/lib/supabase/client';
 import { useSearchParams, useRouter } from 'next/navigation';
+import { Database } from '@/lib/types/database.types';
+
+export type Opportunity = Database["public"]["Tables"]["opportunity"]["Row"];
 
 export interface FilterOption {
   label: string;
@@ -67,8 +70,8 @@ export const Filters: React.FC<FiltersProps> = ({ open, handleClose }) => {
           filterDefinitions.forEach((filterDef) => {
             const counts: { [key: string]: number } = {};
       
-            (opportunities as Record<string, any>[]).forEach((item) => {
-              const value: string = item[filterDef.dbColumn] || 'Unknown';
+            (opportunities as Opportunity[]).forEach((item: Opportunity) => {
+              const value: string = item[filterDef.dbColumn as keyof Opportunity] as string || 'Unknown';
               counts[value] = (counts[value] || 0) + 1;
             });
       

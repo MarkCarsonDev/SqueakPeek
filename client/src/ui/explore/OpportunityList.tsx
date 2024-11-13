@@ -4,9 +4,8 @@ import { OpportunityCard, OpportunityCardProps } from "./OpportunityCard";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { fetchOpportunities } from "@/lib/utils/fetchOpportunities";
 import { SelectedFilters } from './Filters';
-import { Typography, Button, Divider, Box } from "@mui/material";
+import { Typography, Button, Box } from "@mui/material";
 import { Database } from "@/lib/types/database.types";
-import { Just_Another_Hand } from "next/font/google";
 
 export function OpportunityList() {
   const [shownOpportunities, setShownOpportunities] = useState<OpportunityCardProps[]>([]);
@@ -110,7 +109,7 @@ export function OpportunityList() {
 
   if (totalDBCount == 0 && !loading) {
     return <Typography sx={{width: '100%', margin: '4rem', display: 'flex', flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
-        We couldn't find any opportunities that match your criterion...
+        We couldn&apost find any opportunities that match your criterion...
       </Typography>;
   }
 
