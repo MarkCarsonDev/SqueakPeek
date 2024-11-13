@@ -16,6 +16,7 @@ debug("middleware.ts is always invoked!!!");
 //allowed public paths
 const publicPaths = ["/","/login","/explore","/signup","/about"];
 
+//make a set
 //whitelists auth'd user paths
 const validUserPaths = ["/message", "/profile", "/thread", "/track", "/profile_setup"];
 
