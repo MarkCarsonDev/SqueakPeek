@@ -11,6 +11,10 @@ const nextConfig = {
         hostname: "www.amazon.com",
         protocol: "https",
       },
+      {
+        hostname: "cdn.brandfetch.io",
+        protocol: "https",
+      },
     ],
   },
   reactStrictMode: false

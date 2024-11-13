@@ -5,6 +5,7 @@ import { UpdateApplication } from "@/lib/utils/Application/UpdateApplication";
 import { FetchApplication } from "@/lib/utils/Application/FetchApplication";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { Profile } from "@/lib/store/profile";
+import { PostgrestError } from "@supabase/supabase-js";
 export type ApplicationStage =
   | "Applied"
   | "Rejected"
@@ -12,8 +13,7 @@ export type ApplicationStage =
   | "Interviewing"
   | "Offer";
 
-export type Application = Database["public"]["Tables"]["application"]["Row"];
-
+export type Application = Database["public"]["Tables"]["application"]["Row"] & { thread_id: string | null };
 interface TrackState {
   Applied: Application[];
   Rejected: Application[];
@@ -39,7 +39,8 @@ interface TrackState {
     profile: Profile
   ) => Promise<{ success: boolean; message: string }>;
 
-  fetchApplications: (profile: Profile) => void;
+  //fetchApplications: (profile: Profile) => void;
+   fetchApplications: (profile: Profile) => Promise<{ data: Application[] | null; error: PostgrestError | null }>;
 }
 
 // Helper function to reorder items in a list
@@ -61,13 +62,12 @@ export const useTrack = create<TrackState>()((set) => ({
     // Call the InsertApplication function
     const {data, error} = await InsertApplication(profile, application);
     if (error) {
-      console.error("Error inserting application:", error.message);
-      //return { data: null, error };
-      return { success: false, message: "Duplicated Application Found" };
+      return { success: false, message: error.message };
     }
 
     if (data) {
-      application.application_id = data;
+      application.application_id = data.application_id;
+      application.thread_id = data.thread_id;
     }
     
     set((state) => {
@@ -154,9 +154,13 @@ export const useTrack = create<TrackState>()((set) => ({
         message: "Profile is not defined or missing profile_id",
       };
     }
+     // Exclude thread_id from updates
+     const filteredUpdates = Object.fromEntries(
+      Object.entries(updates).filter(([key]) => key !== "thread_id")
+    );
   
       // Call the UpdateApplication function
-    const { data, error } = await UpdateApplication(profile, applicationId, updates);
+    const { data, error } = await UpdateApplication(profile, applicationId, filteredUpdates);
     if (error) {
       console.error("Error updating application:", error.message);
       return { success: false, message: "Failed to update application." };
@@ -182,12 +186,12 @@ export const useTrack = create<TrackState>()((set) => ({
     return { success: true, message: "Application updated successfully!" };
     },
 
-    fetchApplications: async (profile) => {
-      if (!profile) {
-        console.error("Profile is required to fetch applications");
-        return;
-      }
-      const { data, error } = await FetchApplication(profile);
+  fetchApplications: async (profile) => {
+    if (!profile) {
+      console.error("Profile is required to fetch applications");
+      return { data: null, error: null };
+    }
+    const { data, error } = await FetchApplication(profile);
     if (error) {
       console.error("Error fetching applications:", error.message);
       return { data: null, error };
@@ -197,7 +201,7 @@ export const useTrack = create<TrackState>()((set) => ({
       console.error("No applications found");
       return { data: null, error: null };
     }
-
+    // console.log(data.thread_id);
     const groupedApplications = data.reduce<Record<ApplicationStage, Application[]>>((acc, application) => {
       acc[application.status].push(application);
       return acc;
@@ -210,7 +214,8 @@ export const useTrack = create<TrackState>()((set) => ({
     });
 
     set(groupedApplications);
-
+    console.log(groupedApplications);
     return { data, error: null };
   },
+
 }));

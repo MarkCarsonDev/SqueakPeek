@@ -1,17 +1,30 @@
 "use client";
-import React, { SetStateAction } from "react";
-import {Card, Typography,IconButton, Box, Select, MenuItem, SelectChangeEvent} from "@mui/material";
-import { faChartColumn, faLink, faBars,} from "@fortawesome/free-solid-svg-icons";
-import Image from "next/image";
+import React, { SetStateAction} from "react";
+import {
+  Card,
+  Typography,
+  IconButton,
+  Box,
+  Select,
+  MenuItem,
+  SelectChangeEvent,
+} from "@mui/material";
+import {
+  faChartColumn,
+  faLink,
+  faBars,
+} from "@fortawesome/free-solid-svg-icons";
+// import Image from "next/image";
 import { faMessage } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import UpdateStatus from "@/ui/track/UpdateStatus";
 import { Application, useTrack, ApplicationStage } from "@/lib/store/track";
 import { Profile } from "@/lib/store/profile";
+import { useFetchCompanyLogo } from "@/lib/hooks/useFetchCompanyLogo";
 
 // TODO:
-// Implement the Link for message, chart, stats
-// Implement the Company Brand Logo based on the company name
+// Implement the Link for chart
+// Implement the copy job link
 
 interface JobCardProps {
   application: Application;
@@ -20,30 +33,38 @@ interface JobCardProps {
 
 export function JobCard({ application, profile }: JobCardProps) {
   const { moveApplication, updateApplication } = useTrack();
-
+  const logoUrl = useFetchCompanyLogo(application.company_name);
   const {
     application_id: applicationId,
     company_name,
     role_title,
-    status: status,
+    status,
     currentScore,
     outOfScore,
     interviewing_round,
+    thread_id,
   } = application;
 
   const handleStatusChange = (value: SetStateAction<ApplicationStage>) => {
     const newStatus = typeof value === "function" ? value(status) : value;
     if (newStatus !== status) {
       moveApplication(status, newStatus, applicationId, 0, 0);
-      updateApplication( applicationId, {...application,status: newStatus}, profile);
+      updateApplication(
+        applicationId,
+        { ...application, status: newStatus },
+        profile
+      );
     }
   };
 
   const handleInterviewRoundChange = (event: SelectChangeEvent<string>) => {
     const newRound = event.target.value;
-    updateApplication( applicationId, { ...application, interviewing_round: newRound }, profile);
+    updateApplication(
+      applicationId,
+      { ...application, interviewing_round: newRound },
+      profile
+    );
   };
-
   return (
     <Card
       sx={{
@@ -51,13 +72,13 @@ export function JobCard({ application, profile }: JobCardProps) {
         border: "2px solid #E0E4F2",
         backgroundColor: "#F6F8FF",
         display: "grid",
-        gridTemplateColumns: "50px auto 30px", 
+        gridTemplateColumns: "50px auto 30px",
         alignItems: "center",
-        padding: "10px", 
+        padding: "10px",
         marginX: "auto",
         boxShadow: "none",
-        marginBottom: "10px", 
-        overflow: "hidden", 
+        marginBottom: "10px",
+        overflow: "hidden",
       }}
     >
       {/* Column 1: Company Brand */}
@@ -69,14 +90,14 @@ export function JobCard({ application, profile }: JobCardProps) {
           padding: "4px",
         }}
       >
-        <Image
-          src="/landingpage/logo.svg"
+        <img
+          src={logoUrl}
           height={40}
           width={40}
-          alt="Squeakpeek Logo"
+          alt={`${company_name} Logo`}
           style={{
-            objectFit: "cover",
-            borderRadius: "8px",
+        objectFit: "cover",
+        borderRadius: "8px",
           }}
         />
       </Box>
@@ -171,20 +192,18 @@ export function JobCard({ application, profile }: JobCardProps) {
                 },
               }}
             >
-              {["1", "2", "3", "4+"].map(
-                (round) => (
-                  <MenuItem
-                    key={round}
-                    value={round}
-                    sx={{
-                      color: "white",
-                      fontSize: "14px",
-                    }}
-                  >
-                    {round}
-                  </MenuItem>
-                )
-              )}
+              {["1", "2", "3", "4+"].map((round) => (
+                <MenuItem
+                  key={round}
+                  value={round}
+                  sx={{
+                    color: "white",
+                    fontSize: "14px",
+                  }}
+                >
+                  {round}
+                </MenuItem>
+              ))}
             </Select>
           )}
         </Box>
@@ -197,10 +216,12 @@ export function JobCard({ application, profile }: JobCardProps) {
         {/* Row 3: Icon Buttons */}
         <Box sx={{ display: "flex", gap: "6px" }}>
           <IconButton
+            href={`/message/company/${thread_id}`}
             sx={{
               padding: "6px", // Adjusted padding for larger button size
               borderRadius: "50%",
             }}
+            onClick={(e) => e.stopPropagation()}
           >
             <FontAwesomeIcon
               icon={faMessage}
@@ -212,6 +233,7 @@ export function JobCard({ application, profile }: JobCardProps) {
               padding: "6px",
               borderRadius: "50%",
             }}
+            onClick={(e) => e.stopPropagation()}
           >
             <FontAwesomeIcon
               icon={faChartColumn}
@@ -223,6 +245,7 @@ export function JobCard({ application, profile }: JobCardProps) {
               padding: "6px",
               borderRadius: "50%",
             }}
+            onClick={(e) => e.stopPropagation()}
           >
             <FontAwesomeIcon
               icon={faLink}
