@@ -38,9 +38,11 @@ export async function fetchOpportunities(
     query = query.in('opportunity.role_title', filters.jobPosition);
   }
 
-  // Add more filters here
+  // Exclude those that are unmatched due to the filters
+  query = query.not('opportunity', 'is', 'null');
 
   const { data, error, count } = await query;
+  console.log("Fetched data:", data); // Log the fetched data
 
   return { data, error, totalCount: count };
 }

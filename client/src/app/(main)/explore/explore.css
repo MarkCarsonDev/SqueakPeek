@@ -1,19 +1,28 @@
-.page-container{
+.page-container {
     padding: 1rem;
-}
-
-.header-search-container{
-    display: flex;
-}
-
-.card-filter-container{
-    display: grid;
-    gap: 2rem;
-    grid-template-columns: 70% 30%;
-}
-
-
-.header-text{
     display: flex;
     flex-direction: column;
+    height: 100vh; /* Added to make the page take up the full viewport height */
+}
+
+.header-search-container {
+    display: flex;
+}
+
+.card-filter-container {
+    flex: 1; /* Added to allow this container to grow and fill available space */
+    display: grid;
+    gap: 2rem;
+    /* grid-template-columns: 70% 30%; */
+    overflow: hidden; /* Prevents internal content from affecting the page height */
+}
+
+.header-text {
+    display: flex;
+    flex-direction: column;
+}
+
+/* New styles added to make the OpportunityList scrollable */
+.opportunity-list-container {
+    overflow-y: auto; /* Enables vertical scrolling */
 }

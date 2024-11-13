@@ -7,16 +7,13 @@ import { SelectedFilters } from './Filters';
 import { Button } from "@mui/material";
 
 export function OpportunityList() {
-  const [shownOpportunities, setShownOpportunities] = useState<
-    OpportunityCardProps[]
-  >([]);
+  const [shownOpportunities, setShownOpportunities] = useState<OpportunityCardProps[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(1);
   const limit = 5;
   const [hasMore, setHasMore] = useState(true);
   const [totalDBCount, setTotalDBCount] = useState<number>(0);
-  const supabase = useMemo(() => createSupabaseClient(), []); // only creates it once when the OpportunityList component mounts
-
+  const supabase = useMemo(() => createSupabaseClient(), []);
   const searchParams = useSearchParams();
 
   // Parse filters from searchParams
@@ -26,72 +23,78 @@ export function OpportunityList() {
     return {
       company: company.length > 0 ? company : undefined,
       jobPosition: jobPosition.length > 0 ? jobPosition : undefined,
-      // Add more filter options here
     };
   }, [searchParams]);
 
-  // **New useEffect to reset currentPage when filters change**
+  // **Effect to reset state and immediately fetch new data on filter change**
   useEffect(() => {
-    // Reset currentPage to 1 when filters change
-    setCurrentPage(1);
-    // Clear the shown opportunities to avoid displaying old data
-    setShownOpportunities([]);
-    // Optionally, reset hasMore to true
-    setHasMore(true);
-  }, [filters]);
+    console.log("Filters changed:", filters); // Log the new filters
+    // Reset relevant states when filters change
+    setCurrentPage(1);             // Start from the first page
+    setShownOpportunities([]);      // Clear current opportunities list
+    setHasMore(true);               // Reset hasMore to true in case of new results
+    fetchFilteredData(1);           // Fetch the first set of results for the new filters
+  }, [filters]);                    // Triggered only when filters change
 
-  // Fetch opportunities when the component mounts or when filters or pagination change
-  useEffect(() => {
-    const handleFetchOpportunities = async () => {
-      setLoading(true);
-      const offset = (currentPage - 1) * limit;
-      const { data, error, totalCount } = await fetchOpportunities(supabase, filters, limit, offset);
-      setTotalDBCount(totalCount || 0);
+  // **Function to handle data fetching based on page and filters**
+  const fetchFilteredData = async (page: number) => {
+    setLoading(true);
+    const offset = (page - 1) * limit;
 
-      if (error) {
-        console.error("Error fetching opportunities:", error);
-      } else if (data) {
-        const mappedData: OpportunityCardProps[] = data.map((item) => {
-          const { thread_id, opportunity } = item;
+    // Fetch data based on the provided page and filters
+    const { data, error, totalCount } = await fetchOpportunities(supabase, filters, limit, offset);
+    console.log("Fetched data:", data); // Log the fetched data
+    console.log("Total count:", totalCount); // Log the total count
+    if (error) {
+      console.error("Error fetching opportunities:", error);
+      setLoading(false);
+      return;
+    }
 
-          return {
-            conversation_id: thread_id,
-            opportunity,
-            aggregate: {
-              totalApplied: 200,
-              interviewing: 12,
-              oa: 12,
-              offered: 12,
-              rejected: 12,
-              messages: 12,
-            },
-          };
-        });
+    setTotalDBCount(totalCount || 0); // Update the total count to reflect filtered results
 
-        console.log("mappedData: ", mappedData);
+    if (data) {
+      const mappedData: OpportunityCardProps[] = data.map((item) => {
+        const { thread_id, opportunity } = item;
 
-        if (currentPage === 1) {
-          setShownOpportunities(mappedData);
-        } else {
-          setShownOpportunities((prev) => [...prev, ...mappedData]);
-        }
+        return {
+          conversation_id: thread_id,
+          opportunity,
+          aggregate: {
+            totalApplied: 200,
+            interviewing: 12,
+            oa: 12,
+            offered: 12,
+            rejected: 12,
+            messages: 12,
+          },
+        };
+      });
 
-        // Check if there are more results
-        if (offset + data.length >= (totalCount || 0)) {
-          setHasMore(false);
-        } else {
-          setHasMore(true);
-        }
+      // If fetching the first page, replace shownOpportunities; otherwise, append
+      if (page === 1) {
+        setShownOpportunities(mappedData);
+      } else {
+        setShownOpportunities((prev) => [...prev, ...mappedData]);
       }
 
-      setLoading(false);
-    };
+      // Determine if there are more results to load
+      setHasMore(offset + data.length < (totalCount || 0));
+    }
+    
+    setLoading(false);
+  };
 
-    handleFetchOpportunities();
-  }, [supabase, filters, currentPage]);
+  // **Effect to fetch additional pages (pagination)**
+  useEffect(() => {
+    if (currentPage > 1) {        // Only fetch additional data if currentPage is > 1
+      fetchFilteredData(currentPage);
+    }
+  }, [currentPage]);               // Triggered only when currentPage changes
 
+  // **Handler for Load More button**
   const handleLoadMore = () => {
-    setCurrentPage((prevPage) => prevPage + 1);
+    setCurrentPage((prevPage) => prevPage + 1); // Increase currentPage to trigger fetching the next page
   };
 
   if (loading && currentPage === 1) {
