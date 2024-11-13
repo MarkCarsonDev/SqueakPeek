@@ -37,7 +37,7 @@ export function MessageNotificationCard({
   const textColor = isSelected ? "white" : "#3C435C";
   const isTabPrivateConversation = currentTab === "private";
 
-  const { companyLogoURL } = useFetchCompanyLogo(header);
+  const companyLogoURL = useFetchCompanyLogo(header);
 
   return (
     <Link

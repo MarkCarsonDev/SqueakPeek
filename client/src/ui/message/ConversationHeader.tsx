@@ -24,6 +24,7 @@ export function ConversationHeader({
   const [header, setHeader] = useState("");
   const [subHeader, setSubHeader] = useState("");
   const [profileAvatar, setProfileAvatar] = useState<AvatarTypes | null>();
+  const companyLogoURL = useFetchCompanyLogo(header);
 
   useEffect(() => {
     if (isPrivateConversation && profile) {
@@ -59,8 +60,6 @@ export function ConversationHeader({
       });
     }
   }, [isPrivateConversation, profile, conversationId]);
-
-  const { companyLogoURL } = useFetchCompanyLogo(header);
 
   // TODO: Refactor to be inside the OpportunityBookmark component
 
