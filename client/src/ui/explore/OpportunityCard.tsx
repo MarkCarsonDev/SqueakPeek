@@ -8,7 +8,6 @@ import {
   Typography,
   Chip,
   Button,
-  Avatar,
   IconButton,
 } from "@mui/material";
 import {
@@ -21,9 +20,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark as regularBookmark } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { OpportunityStackedBarGraph } from "./OpportunityStackedBarGraph";
 import Link from "next/link";
+import { generateCompanyLogo } from "@/lib/utils/generateCompanyLogo";
 
 interface jobStats {
   status: string;
@@ -87,6 +87,18 @@ export function OpportunityCard({
   const [bookmarked, setBookmarked] = useState(false);
   const isAppliedColor = appliedStatus ? "green" : "red";
   const isHiringColor = hiringStatus ? "green" : "red";
+  const [logoUrl, setLogoUrl] = useState("/landingpage/insight.svg");
+  useEffect(() => {
+    async function fetchLogo() {
+      try {
+        const url = await generateCompanyLogo(company_name);
+        if (url) setLogoUrl(url); // Only set logoUrl if fetch is successful
+      } catch (error) {
+        console.error(`Error fetching logo for ${company_name}:`, error);
+      }
+    }
+    fetchLogo();
+  }, [company_name]);
 
   const handleBookmark = () => {
     setBookmarked((prev) => !prev); // Toggle the bookmark state
@@ -129,12 +141,23 @@ export function OpportunityCard({
       >
         {/* TODO: Add real header */}
         <CardHeader
-          style={{ margin: 0, padding: ".5rem", height: "2rem" }}
+          style={{
+            margin: 0,
+            padding: ".5rem",
+            height: "2rem",
+          }}
           avatar={
-            <Avatar
-              src={"https://www.amazon.com/favicon.ico"}
-              style={{ margin: 0 }}
-            ></Avatar>
+            <img
+              src={logoUrl}
+              height={45}
+              width={45}
+              alt={`${company_name} Logo`}
+              style={{
+                objectFit: "cover",
+                borderRadius: "80px",
+              }}
+              onError={() => setLogoUrl("/landingpage/insight.svg")} // Fallback on error
+            />
           }
           title={company_name}
           subheader={
@@ -142,6 +165,7 @@ export function OpportunityCard({
 
             role_title + " " + type
           }
+          // sx={{ backgroundColor: "#F6F8FF" }}
         />
 
         {/* Button to threads and button to share Still in progress */}
