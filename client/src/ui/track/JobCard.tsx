@@ -14,14 +14,14 @@ import {
   faLink,
   faBars,
 } from "@fortawesome/free-solid-svg-icons";
-// import Image from "next/image";
-//import Image from "next/image";
+
 import { faMessage } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import UpdateStatus from "@/ui/track/UpdateStatus";
 import { Application, useTrack, ApplicationStage } from "@/lib/store/track";
 import { Profile } from "@/lib/store/profile";
 import { useFetchCompanyLogo } from "@/lib/hooks/useFetchCompanyLogo";
+import { useAlert } from "@/lib/store/alert";
 
 // TODO:
 // Implement the Link for chart
@@ -35,6 +35,7 @@ interface JobCardProps {
 export function JobCard({ application, profile }: JobCardProps) {
   const { moveApplication, updateApplication } = useTrack();
   const logoUrl = useFetchCompanyLogo(application.company_name);
+  const { setAlert } = useAlert();
   const {
     application_id: applicationId,
     company_name,
@@ -44,6 +45,7 @@ export function JobCard({ application, profile }: JobCardProps) {
     outOfScore,
     interviewing_round,
     thread_id,
+    link,
   } = application;
 
   const handleStatusChange = (value: SetStateAction<ApplicationStage>) => {
@@ -246,7 +248,21 @@ export function JobCard({ application, profile }: JobCardProps) {
               padding: "6px",
               borderRadius: "50%",
             }}
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => {
+              e.stopPropagation()
+              if (link) {
+                navigator.clipboard.writeText(link)
+                setAlert({
+                  message: "Link copied to clipboard",
+                  type: "success",
+                })
+              } else {
+                setAlert({
+                  message: "No link available",
+                  type: "error",
+                })
+              }
+            }}
           >
             <FontAwesomeIcon
               icon={faLink}

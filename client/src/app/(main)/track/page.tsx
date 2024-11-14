@@ -8,18 +8,14 @@ import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import { StageColumn, StageColumnProps } from "@/ui/track/StageColumn"; 
 import { Application, ApplicationStage, useTrack } from "@/lib/store/track";
 import { useProfile } from "@/lib/store/profile";
-//import { AlertMessage } from "@/ui/AlertMessage";
+// import {useAlert} from "@/lib/store/alert";
 import "./tracking.css";
 
 export default function Page() {
   const [openModal, setOpenModal] = useState(false);
   const [applicationStatus, setApplicationStatus] = useState<ApplicationStage>("Applied");
   const [selectedApplication, setSelectedApplication] = useState<Application | undefined>();
-  // const [snackbarOpen, setSnackbarOpen] = useState(false);
-  // const [snackbarMessage, setSnackbarMessage] = useState("");
-  // const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error" | "info" | "warning">("success");
-
-
+  // const { setAlert } = useAlert();
   // Retrieve application data and actions from the Zustand store
   const {
     Applied,
@@ -161,13 +157,6 @@ export default function Page() {
           ))}
         </div>
       </DragDropContext>
-      {/* Reusable AlertMessage component */}
-      {/* <AlertMessage
-        message={snackbarMessage}
-        severity={snackbarSeverity}
-        open={snackbarOpen}
-        onClose={closeSnackbar}
-      /> */}
     </div>
   );
 }
