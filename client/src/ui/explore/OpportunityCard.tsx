@@ -34,11 +34,11 @@ interface jobStats {
 
 // TODO: Replace this with the actual database type
 interface Aggregate {
-  rejected: number;
-  interviewing: number;
-  offered: number;
-  totalApplied: number;
-  oa: number;
+  rejected: number | null;
+  interviewing: number | null;
+  offered: number | null;
+  totalApplied: number | null;
+  oa: number | null;
   messages: number;
 }
 

@@ -24,19 +24,21 @@ export function OpportunityList() {
       } else if (data) {
         const mappedData: OpportunityCardProps[] = data.map((item) => {
           const { thread_id: conversation_id } = item;
+          
           const opportunity =
             item.opportunity as unknown as Database["public"]["Tables"]["opportunity"]["Row"]; // converts opportunity of the type as listed in the database
-
+          const opportunity_tracking = 
+            item.opportunity_tracking as unknown as Database["public"]["Tables"]["opportunity_tracking"]["Row"];
           // TODO: Replace aggregate with real data
           return {
             conversation_id,
             opportunity,
             aggregate: {
-              totalApplied: 200,
-              interviewing: 12,
-              oa: 12,
-              offered: 12,
-              rejected: 12,
+              totalApplied: opportunity_tracking.applied,
+              interviewing: opportunity_tracking.interviewed,
+              oa: opportunity_tracking.online_assessment,
+              offered: opportunity_tracking.offered,
+              rejected: opportunity_tracking.rejected,
               messages: 12,
             },
           };
