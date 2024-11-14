@@ -1,5 +1,5 @@
 "use client";
-import React, { SetStateAction, useEffect, useState } from "react";
+import React, { SetStateAction} from "react";
 import {
   Card,
   Typography,
@@ -21,7 +21,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import UpdateStatus from "@/ui/track/UpdateStatus";
 import { Application, useTrack, ApplicationStage } from "@/lib/store/track";
 import { Profile } from "@/lib/store/profile";
-import { generateCompanyLogo } from "@/lib/utils/generateCompanyLogo";
+import { useFetchCompanyLogo } from "@/lib/hooks/useFetchCompanyLogo";
 
 // TODO:
 // Implement the Link for chart
@@ -34,7 +34,7 @@ interface JobCardProps {
 
 export function JobCard({ application, profile }: JobCardProps) {
   const { moveApplication, updateApplication } = useTrack();
-  const [logoUrl, setLogoUrl] = useState("/landingpage/insight.svg");
+  const logoUrl = useFetchCompanyLogo(application.company_name);
   const {
     application_id: applicationId,
     company_name,
@@ -66,17 +66,6 @@ export function JobCard({ application, profile }: JobCardProps) {
       profile
     );
   };
-  useEffect(() => {
-    async function fetchLogo() {
-      try {
-        const url = await generateCompanyLogo(company_name);
-        if (url) setLogoUrl(url); // Only set logoUrl if fetch is successful
-      } catch (error) {
-        console.error(`Error fetching logo for ${company_name}:`, error);
-      }
-    }
-    fetchLogo();
-  }, [company_name]);
   return (
     <Card
       sx={{
@@ -111,7 +100,6 @@ export function JobCard({ application, profile }: JobCardProps) {
         objectFit: "cover",
         borderRadius: "8px",
           }}
-          onError={() => setLogoUrl("/landingpage/insight.svg")} // Fallback on error
         />
       </Box>
 
