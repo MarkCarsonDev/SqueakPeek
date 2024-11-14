@@ -47,7 +47,6 @@ export default function Page() {
     | {
         profile_id: string;
         username: string | null;
-        email: string | null;
         avatar: "avatar1" | "avatar2" | "avatar3" | "avatar4";
         school: string | null;
       }[]
@@ -86,7 +85,7 @@ export default function Page() {
       // Query the profile table using the user's profile_id
       const { data, error } = await supabase
         .from("profile")
-        .select("profile_id, username, email, avatar, school")
+        .select("profile_id, username, avatar, school")
         .eq("profile_id", user.profile_id);
 
       if (error) {
@@ -189,7 +188,6 @@ export default function Page() {
             name="School"
             options={SchoolOptions}
             value={profileSchool || ""}
-            defaultValue={profileSchool}
             onValueChange={(newValue) =>
               setSchool(newValue || "")
             }
