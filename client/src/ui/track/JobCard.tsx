@@ -66,11 +66,11 @@ export function JobCard({ application, profile }: JobCardProps) {
     e.stopPropagation();
     const {success, message} = await removeApplication(status, application, profile);
     if (success) {
-      // This would never print since there is nothing to return from the database
-      setAlert( {message: "Error remove application", type: "error" });
+      setAlert( {message: "Application removed", type: "success" });
     }
     else if (message) {
-      setAlert( {message: "Application removed", type: "success" });
+      // This should never print.
+      setAlert( {message: message, type: "error" });
     }
   };
   return (
