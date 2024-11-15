@@ -8,6 +8,7 @@ import { fetchCompanyThreadMetaData } from "@/lib/utils/fetchCompanyThreadMetaDa
 import { fetchPrivateConversationMetaData } from "@/lib/utils/fetchPrivateConversationMetaData";
 import { OpportunityBookmark } from "./OpportunityBookmark";
 import { useFetchCompanyLogo } from "@/lib/hooks/useFetchCompanyLogo";
+import { useAlert } from "@/lib/store/alert";
 
 interface ConversationHeaderProps {
   conversationId: string;
@@ -26,6 +27,7 @@ export function ConversationHeader({
   const [isLoading, setIsLoading] = useState(true);
   const [profileAvatar, setProfileAvatar] = useState<AvatarTypes | null>();
   const companyLogoURL = useFetchCompanyLogo(header);
+  const { setAlert } = useAlert();
 
   useEffect(() => {
     if (isPrivateConversation && profile) {
@@ -33,7 +35,10 @@ export function ConversationHeader({
         (res) => {
           const { data, error } = res;
           if (error) {
-            // TODO: Do something with error
+            setAlert({
+              message: "Failed to fetch conversation header",
+              type: "error",
+            });
           } else if (data) {
             const conversationMetaData = data.profile as unknown as Profile;
             setHeader(conversationMetaData.username);
@@ -48,7 +53,10 @@ export function ConversationHeader({
       fetchCompanyThreadMetaData(conversationId).then((res) => {
         const { data, error } = res;
         if (error) {
-          // TODO: Do something with error
+          setAlert({
+            message: "Failed to fetch conversation header",
+            type: "error",
+          });
         }
         if (data) {
           const opportunityMetaData =
@@ -63,8 +71,6 @@ export function ConversationHeader({
       });
     }
   }, [isPrivateConversation, profile, conversationId]);
-
-  // TODO: Refactor to be inside the OpportunityBookmark component
 
   if (isLoading) {
     return (
