@@ -18,7 +18,7 @@ export function MessageNotificationCardList({
   const currentConversationId = pathName.split("/").at(-1); // tab is either company or private
 
   if (isLoading) {
-    return [<CardSkeleton />, <CardSkeleton />, <CardSkeleton />];
+    return [<CardSkeleton key={0} />, <CardSkeleton key={1} />, <CardSkeleton key={2} />];
   } else {
     return notifications.map((notification) => (
       <MessageNotificationCard
