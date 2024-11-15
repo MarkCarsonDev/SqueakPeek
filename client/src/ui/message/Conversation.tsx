@@ -26,6 +26,7 @@ export function Conversation({
     useMessage();
   const { profile } = useProfile();
   const [numNewMessages, setNumNewMessages] = useState(0); // used for rendering new message notification
+  const [isLoading, setIsLoading] = useState(true);
   const [pageNotFound, setNotFound] = useState(false);
   const bottomRef = useRef<null | HTMLDivElement>(null); // used for scrolling down the page
   const supabase = useMemo(() => createSupabaseClient(), []);
@@ -115,6 +116,7 @@ export function Conversation({
             })
           );
           setMessages(mappedData);
+          setIsLoading(false);
         }
       }
     );
@@ -130,11 +132,11 @@ export function Conversation({
       }}
     >
       {/* Header */}
-      {/* TODO: Make this consuem the metadata of an opportunity or user */}
       <ConversationHeader conversationId={conversationId} />
 
       {/* Messages */}
       <ConversationBody
+        isLoading={isLoading}
         numNewMessages={numNewMessages}
         resetNumNewMessages={() => resetNumNewMessages()}
         bottomRef={bottomRef}
@@ -148,7 +150,7 @@ export function Conversation({
           padding: "10px 10px",
         }}
       >
-        <MessageInput conversationId={conversationId} />
+        <MessageInput isLoading={isLoading} conversationId={conversationId} />
       </div>
     </div>
   );
