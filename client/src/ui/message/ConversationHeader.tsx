@@ -1,4 +1,4 @@
-import { CardHeader } from "@mui/material";
+import { CardHeader, Avatar, Skeleton } from "@mui/material";
 import { useMessage } from "@/lib/store/message";
 import { useEffect, useState } from "react";
 import { useProfile, Profile } from "@/lib/store/profile";
@@ -8,6 +8,7 @@ import { fetchCompanyThreadMetaData } from "@/lib/utils/fetchCompanyThreadMetaDa
 import { fetchPrivateConversationMetaData } from "@/lib/utils/fetchPrivateConversationMetaData";
 import { OpportunityBookmark } from "./OpportunityBookmark";
 import { useFetchCompanyLogo } from "@/lib/hooks/useFetchCompanyLogo";
+import { useAlert } from "@/lib/store/alert";
 
 interface ConversationHeaderProps {
   conversationId: string;
@@ -23,30 +24,43 @@ export function ConversationHeader({
   const { profile } = useProfile();
   const [header, setHeader] = useState("");
   const [subHeader, setSubHeader] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const [profileAvatar, setProfileAvatar] = useState<AvatarTypes | null>();
   const companyLogoURL = useFetchCompanyLogo(header);
+  const { setAlert } = useAlert();
 
   useEffect(() => {
+    const ignoreErrorCode = "PGRST116"; // error occurs when fetching header metadata from a different conversation type
+    console.log("rendering useEffect");
     if (isPrivateConversation && profile) {
+      console.log("fetching private conversation");
       fetchPrivateConversationMetaData(conversationId, profile.profile_id).then(
         (res) => {
           const { data, error } = res;
-          if (error) {
-            // TODO: Do something with error
+          if (error && error.code !== ignoreErrorCode) {
+            setAlert({
+              message: "Failed to fetch company thread header",
+              type: "error",
+            });
           } else if (data) {
             const conversationMetaData = data.profile as unknown as Profile;
             setHeader(conversationMetaData.username);
             setProfileAvatar(conversationMetaData.avatar);
+            setIsLoading(false);
           }
-          console.log("data: ", data);
-          console.log("error: ", error);
         }
       );
     } else if (!isPrivateConversation && profile) {
+      console.log("fetching company thread");
+
       fetchCompanyThreadMetaData(conversationId).then((res) => {
         const { data, error } = res;
-        if (error) {
-          // TODO: Do something with error
+
+        if (error && error.code !== ignoreErrorCode) {
+          setAlert({
+            message: "Failed to fetch conversation header",
+            type: "error",
+          });
         }
         if (data) {
           const opportunityMetaData =
@@ -56,19 +70,18 @@ export function ConversationHeader({
           setSubHeader(
             opportunityMetaData.role_title + ", " + opportunityMetaData.type
           );
+          setIsLoading(false);
         }
       });
     }
-  }, [isPrivateConversation, profile, conversationId]);
+  }, [isPrivateConversation, profile, conversationId, setAlert]);
 
-  // TODO: Refactor to be inside the OpportunityBookmark component
-
-  if (isPrivateConversation) {
+  if (isLoading) {
     return (
       <CardHeader
-        title={header}
-        subheader={subHeader}
-        avatar={<ProfileAvatar avatar={profileAvatar!} />}
+        title={<Skeleton width={"100px"} />}
+        subheader={<Skeleton width={"175px"} />}
+        avatar={<Skeleton width={"40px"} height={"40px"} variant="circular" />}
         sx={{
           boxShadow: "rgba(224,228,242,.7) 0px 2px 2px 0px",
           zIndex: 1,
@@ -76,28 +89,40 @@ export function ConversationHeader({
       />
     );
   } else {
-    return (
-      <CardHeader
-        action={<OpportunityBookmark conversationId={conversationId} />}
-        title={header}
-        subheader={subHeader}
-        avatar={
-          <img // TODO: Turn this into Image component
-            alt="Profile of {company}"
-            src={companyLogoURL}
-            width={50}
-            height={50}
-            style={{
-              objectFit: "cover",
-              borderRadius: "8px",
-            }}
-          />
-        }
-        sx={{
-          boxShadow: "rgba(224,228,242,.7) 0px 2px 2px 0px",
-          zIndex: 1,
-        }}
-      />
-    );
+    if (isPrivateConversation) {
+      return (
+        <CardHeader
+          title={header}
+          subheader={subHeader}
+          avatar={<ProfileAvatar avatar={profileAvatar!} />}
+          sx={{
+            boxShadow: "rgba(224,228,242,.7) 0px 2px 2px 0px",
+            zIndex: 1,
+          }}
+        />
+      );
+    } else {
+      return (
+        <CardHeader
+          action={
+            <OpportunityBookmark
+              isDisabled={isLoading}
+              conversationId={conversationId}
+            />
+          }
+          title={header}
+          subheader={subHeader}
+          avatar={
+            <Avatar alt={`Profile of ${header}`} src={companyLogoURL}>
+              <Skeleton variant="circular" animation="wave" />
+            </Avatar>
+          }
+          sx={{
+            boxShadow: "rgba(224,228,242,.7) 0px 2px 2px 0px",
+            zIndex: 1,
+          }}
+        />
+      );
+    }
   }
 }
