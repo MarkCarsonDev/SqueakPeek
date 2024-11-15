@@ -89,18 +89,19 @@ export const useTrack = create<TrackState>()((set) => ({
   },
 
   removeApplication: async (from, application, profile): Promise<{success: boolean; message: string}> => {
-    // Call the supabase function to remove the application
-    const { success, error } = await RemoveApplication(profile, application.application_id);
-    if (error) {
-      console.error("Error removing application:", error.message);
-      return { success: false, message: "Failed to remove application." };
-    }
     set((state) => {
       state[from] = state[from].filter(
         (app) => app.application_id !== application.application_id
       );
       return { ...state };
     });
+    
+    // Call the supabase function to remove the application
+    const {error } = await RemoveApplication(profile, application.application_id);
+    if (error) {
+      return { success: false, message: "Failed to remove application." };
+    }
+    
     return { success: true, message: "Application removed successfully!" };
   },
 

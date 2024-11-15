@@ -6,22 +6,17 @@ export async function RemoveApplication(
     profile: Profile,
     applicationId: string,
     supabase: SupabaseClient = createSupabaseClient()
-): Promise<{ success: string | null; error: PostgrestError | null }> {
-    const {data, error} = await supabase
+): Promise<{ success: boolean | null; error: PostgrestError | null }> {
+    const {error} = await supabase
         .from('application')
         .delete()
         .eq('application_id', applicationId)
         .eq('profile_id', profile.profile_id);
 
     if (error) {
-        console.error('Error removing application:', error.message);
-        return {success: null, error};
+        console.error('Error:', error.message);
+        return {success: false, error};
     }
-
-    if (data) {
-        return {success: 'Application removed successfully', error: null};
-    } else {
-        console.error('Error: No data returned');
-        return {success: null, error: {message: 'No data returned'} as PostgrestError};
-    }
+    return {success: true, error: {message: 'No data returned'} as PostgrestError};
+    
 }

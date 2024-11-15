@@ -1,18 +1,11 @@
 "use client";
 import React, { SetStateAction} from "react";
-import {
-  Card,
-  Typography,
-  IconButton,
-  Box,
-  Select,
-  MenuItem,
-  SelectChangeEvent,
-} from "@mui/material";
+import {Card, Typography, IconButton, Box, Select, MenuItem, SelectChangeEvent} from "@mui/material";
 import {
   faChartColumn,
   faLink,
   faBars,
+  faTrashCan
 } from "@fortawesome/free-solid-svg-icons";
 
 import { faMessage } from "@fortawesome/free-solid-svg-icons";
@@ -33,7 +26,7 @@ interface JobCardProps {
 }
 
 export function JobCard({ application, profile }: JobCardProps) {
-  const { moveApplication, updateApplication } = useTrack();
+  const { moveApplication, updateApplication, removeApplication } = useTrack();
   const logoUrl = useFetchCompanyLogo(application.company_name);
   const { setAlert } = useAlert();
   const {
@@ -67,6 +60,18 @@ export function JobCard({ application, profile }: JobCardProps) {
       { ...application, interviewing_round: newRound },
       profile
     );
+  };
+
+  const handleRemoveApplication = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const {success, message} = await removeApplication(status, application, profile);
+    if (success) {
+      // This would never print since there is nothing to return from the database
+      setAlert( {message: "Error remove application", type: "error" });
+    }
+    else if (message) {
+      setAlert( {message: "Application removed", type: "success" });
+    }
   };
   return (
     <Card
@@ -278,6 +283,7 @@ export function JobCard({ application, profile }: JobCardProps) {
           display: "flex",
           justifyContent: "flex-end",
           alignItems: "flex-start",
+          flexDirection: "column",
           height: "100%",
           position: "relative",
           paddingRight: "8px",
@@ -288,6 +294,15 @@ export function JobCard({ application, profile }: JobCardProps) {
         >
           <FontAwesomeIcon
             icon={faBars}
+            style={{ fontSize: "12px", color: "#333333" }}
+          />
+        </IconButton>
+        <IconButton
+          sx={{ padding: "4px", borderRadius: "50%", marginTop: "auto" }}
+          onClick={handleRemoveApplication}
+        >
+          <FontAwesomeIcon
+            icon={faTrashCan}
             style={{ fontSize: "12px", color: "#333333" }}
           />
         </IconButton>
