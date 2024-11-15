@@ -23,6 +23,7 @@ export function ConversationHeader({
   const { profile } = useProfile();
   const [header, setHeader] = useState("");
   const [subHeader, setSubHeader] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const [profileAvatar, setProfileAvatar] = useState<AvatarTypes | null>();
   const companyLogoURL = useFetchCompanyLogo(header);
 
@@ -37,6 +38,7 @@ export function ConversationHeader({
             const conversationMetaData = data.profile as unknown as Profile;
             setHeader(conversationMetaData.username);
             setProfileAvatar(conversationMetaData.avatar);
+            setIsLoading(false);
           }
           console.log("data: ", data);
           console.log("error: ", error);
@@ -56,6 +58,7 @@ export function ConversationHeader({
           setSubHeader(
             opportunityMetaData.role_title + ", " + opportunityMetaData.type
           );
+          setIsLoading(false);
         }
       });
     }
@@ -63,12 +66,12 @@ export function ConversationHeader({
 
   // TODO: Refactor to be inside the OpportunityBookmark component
 
-  if (isPrivateConversation) {
+  if (isLoading) {
     return (
       <CardHeader
-        title={header}
-        subheader={subHeader}
-        avatar={<ProfileAvatar avatar={profileAvatar!} />}
+        title={<Skeleton width={"100px"} />}
+        subheader={<Skeleton width={"175px"} />}
+        avatar={<Skeleton width={"55px"} height={"55px"} variant="circular" />}
         sx={{
           boxShadow: "rgba(224,228,242,.7) 0px 2px 2px 0px",
           zIndex: 1,
@@ -76,21 +79,40 @@ export function ConversationHeader({
       />
     );
   } else {
-    return (
-      <CardHeader
-        action={<OpportunityBookmark conversationId={conversationId} />}
-        title={header}
-        subheader={subHeader}
-        avatar={
-          <Avatar alt={`Profile of ${header}`} src={companyLogoURL}>
-            <Skeleton variant="circular" animation="wave"  />
-          </Avatar>
-        }
-        sx={{
-          boxShadow: "rgba(224,228,242,.7) 0px 2px 2px 0px",
-          zIndex: 1,
-        }}
-      />
-    );
+    if (isPrivateConversation) {
+      return (
+        <CardHeader
+          title={header}
+          subheader={subHeader}
+          avatar={<ProfileAvatar avatar={profileAvatar!} />}
+          sx={{
+            boxShadow: "rgba(224,228,242,.7) 0px 2px 2px 0px",
+            zIndex: 1,
+          }}
+        />
+      );
+    } else {
+      return (
+        <CardHeader
+          action={
+            <OpportunityBookmark
+              isDisabled={isLoading}
+              conversationId={conversationId}
+            />
+          }
+          title={header}
+          subheader={subHeader}
+          avatar={
+            <Avatar alt={`Profile of ${header}`} src={companyLogoURL}>
+              <Skeleton variant="circular" animation="wave" />
+            </Avatar>
+          }
+          sx={{
+            boxShadow: "rgba(224,228,242,.7) 0px 2px 2px 0px",
+            zIndex: 1,
+          }}
+        />
+      );
+    }
   }
 }
