@@ -3,6 +3,10 @@ interface CardSkeletonProps {
   titleWidth?: string;
   subheaderWidth?: string;
 }
+
+/**
+ * Renders the loading state of the CardHeader MUI component
+ */
 export function CardSkeleton({
   titleWidth = "",
   subheaderWidth = "",

@@ -32,9 +32,7 @@ export function ConversationHeader({
 
   useEffect(() => {
     const ignoreErrorCode = "PGRST116"; // error occurs when fetching header metadata from a different conversation type
-    console.log("rendering useEffect");
     if (isPrivateConversation && profile) {
-      console.log("fetching private conversation");
       fetchPrivateConversationMetaData(conversationId, profile.profile_id).then(
         (res) => {
           const { data, error } = res;
@@ -52,8 +50,6 @@ export function ConversationHeader({
         }
       );
     } else if (!isPrivateConversation && profile) {
-      console.log("fetching company thread");
-
       fetchCompanyThreadMetaData(conversationId).then((res) => {
         const { data, error } = res;
 
@@ -66,7 +62,6 @@ export function ConversationHeader({
         if (data) {
           const opportunityMetaData =
             data.opportunity as unknown as Database["public"]["Tables"]["opportunity"]["Row"];
-          // TODO set CardHeaderAvatar for company thread
           setHeader(opportunityMetaData.company_name);
           setSubHeader(
             opportunityMetaData.role_title + ", " + opportunityMetaData.type

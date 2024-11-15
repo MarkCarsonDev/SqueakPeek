@@ -90,7 +90,6 @@ export function SideNav() {
         const { data, error } = res;
 
         if (error) {
-          // TODO Handle error here
           setAlert({
             message: "Failed to fetch bookmarked company threads",
             type: "error",
@@ -101,7 +100,7 @@ export function SideNav() {
               const opportunity = item.opportunity;
               const conversationId = item.opportunity.company_thread.thread_id;
               return {
-                avatar: opportunity.company_name[0], // TODO Replace with the actual company avatar
+                avatar: opportunity.company_name[0],
                 conversation_id: conversationId,
                 header: opportunity.company_name,
                 subHeader: `${opportunity.role_title},  ${opportunity.type}`,
