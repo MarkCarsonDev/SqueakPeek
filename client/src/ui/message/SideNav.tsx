@@ -2,7 +2,7 @@
 import { Typography, Tabs, Tab } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useCallback } from "react";
+import { useEffect, useMemo, useCallback, useState } from "react";
 
 import {
   faBuilding as solidBuilding,
@@ -23,10 +23,13 @@ import { Database } from "@/lib/types/database.types";
 import { fetchBookmarkOpportunities } from "@/lib/utils/fetchBookmarkOpportunities";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { useMessageNotification } from "@/lib/store/messageNotification";
+import { useAlert } from "@/lib/store/alert";
 /**
  * Allows the user to navigate between company threads or private messages in the message page
  */
 export function SideNav() {
+  const [isLoading, setIsLoading] = useState(true);
+  const { setAlert } = useAlert();
   const { setNotifications } = useMessageNotification();
   const { profile } = useProfile();
   const pathName = usePathname();
@@ -54,6 +57,10 @@ export function SideNav() {
       fetchPrivateConversations(profileId).then((res) => {
         const { data, error } = res;
         if (error) {
+          setAlert({
+            message: "Failed to fetch conversations",
+            type: "error",
+          });
         } else if (data) {
           const mappedData: MessageNotificationCardProps[] = data.map(
             (item) => {
@@ -69,12 +76,11 @@ export function SideNav() {
             }
           );
           setNotifications(mappedData);
-        } else {
-          setNotifications([]);
+          setIsLoading(false);
         }
       });
     },
-    [setNotifications]
+    [setNotifications, setAlert]
   );
 
   // sets notifications based on user's bookmarked opportunities
@@ -84,10 +90,12 @@ export function SideNav() {
         const { data, error } = res;
 
         if (error) {
-          // TODO: DO something here
-        }
-
-        if (data) {
+          // TODO Handle error here
+          setAlert({
+            message: "Failed to fetch bookmarked company threads",
+            type: "error",
+          });
+        } else if (data) {
           const mappedData: MessageNotificationCardProps[] = data.map(
             (item) => {
               const opportunity = item.opportunity;
@@ -102,18 +110,18 @@ export function SideNav() {
           );
 
           setNotifications(mappedData);
-        } else {
-          setNotifications([]);
+          setIsLoading(false);
         }
       });
     },
-    [setNotifications]
+    [setNotifications, setAlert]
   );
 
   // TODO: Need to test this
 
   // tracks live changes which sets message notifications in real time
   useEffect(() => {
+    setIsLoading(true);
     if (profile) {
       if (currentTab === "company") {
         // filter does not exist on delete.
@@ -159,7 +167,6 @@ export function SideNav() {
       }
     }
   }, [
-    pathName,
     currentTab,
     profile,
     supabase,
@@ -177,7 +184,6 @@ export function SideNav() {
       }
     }
   }, [
-    pathName,
     currentTab,
     profile,
     setOpportunityBookmarksNotifications,
@@ -267,7 +273,7 @@ export function SideNav() {
           ))}
         </Tabs>
       </div>
-      <MessageNotificationCardList />
+      <MessageNotificationCardList isLoading={isLoading} />
     </div>
   );
 }

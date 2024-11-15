@@ -9,6 +9,7 @@ import { fetchPrivateConversationMetaData } from "@/lib/utils/fetchPrivateConver
 import { OpportunityBookmark } from "./OpportunityBookmark";
 import { useFetchCompanyLogo } from "@/lib/hooks/useFetchCompanyLogo";
 import { useAlert } from "@/lib/store/alert";
+import { CardSkeleton } from "./CardSkeleton";
 
 interface ConversationHeaderProps {
   conversationId: string;
@@ -77,17 +78,7 @@ export function ConversationHeader({
   }, [isPrivateConversation, profile, conversationId, setAlert]);
 
   if (isLoading) {
-    return (
-      <CardHeader
-        title={<Skeleton width={"100px"} />}
-        subheader={<Skeleton width={"175px"} />}
-        avatar={<Skeleton width={"40px"} height={"40px"} variant="circular" />}
-        sx={{
-          boxShadow: "rgba(224,228,242,.7) 0px 2px 2px 0px",
-          zIndex: 1,
-        }}
-      />
-    );
+    return <CardSkeleton titleWidth="100px" subheaderWidth="175px" />;
   } else {
     if (isPrivateConversation) {
       return (
