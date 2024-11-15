@@ -1,4 +1,4 @@
-import { CardHeader } from "@mui/material";
+import { CardHeader, Avatar, Skeleton } from "@mui/material";
 import { useMessage } from "@/lib/store/message";
 import { useEffect, useState } from "react";
 import { useProfile, Profile } from "@/lib/store/profile";
@@ -82,16 +82,9 @@ export function ConversationHeader({
         title={header}
         subheader={subHeader}
         avatar={
-          <img // TODO: Turn this into Image component
-            alt="Profile of {company}"
-            src={companyLogoURL}
-            width={50}
-            height={50}
-            style={{
-              objectFit: "cover",
-              borderRadius: "8px",
-            }}
-          />
+          <Avatar alt={`Profile of ${header}`} src={companyLogoURL}>
+            <Skeleton variant="circular" animation="wave"  />
+          </Avatar>
         }
         sx={{
           boxShadow: "rgba(224,228,242,.7) 0px 2px 2px 0px",
