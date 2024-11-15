@@ -14,6 +14,7 @@ export default function Page() {
   const [openModal, setOpenModal] = useState(false);
   const [applicationStatus, setApplicationStatus] = useState<ApplicationStage>("Applied");
   const [selectedApplication, setSelectedApplication] = useState<Application | undefined>();
+  const [preventClick, setPreventClick] = useState(false);
   // Retrieve application data and actions from the Zustand store
   const {
     Applied,
@@ -45,6 +46,10 @@ export default function Page() {
 
   // Function to open the modal and set the application status
   const handleOpenModal = (stage: ApplicationStage, application?: Application) => {
+    if (preventClick) {
+      setPreventClick(false); // Reset preventClick to allow subsequent clicks
+      return;
+    }
     setApplicationStatus(stage); 
     setSelectedApplication(application); 
     setOpenModal(true); 
@@ -54,6 +59,7 @@ export default function Page() {
   const handleCloseModal = () => {
     setOpenModal(false);
     setSelectedApplication(undefined);
+    setPreventClick(false);
   };
 
   // Handle drag-and-drop for moving applications between stages
@@ -137,7 +143,8 @@ export default function Page() {
               stageColor={stage.stageColor}
               applications={stage.applications}
               handleOpenModal={handleOpenModal}
-              onCardClick={(application) => handleOpenModal(stage.stage, application)}
+              onCardClick={(application) => {if (!preventClick) {handleOpenModal(stage.stage, application)}}}
+              setPreventClick={setPreventClick}
             />
           ))}
         </div>

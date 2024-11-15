@@ -1,5 +1,5 @@
 "use client";
-import React, { SetStateAction} from "react";
+import React, { SetStateAction, useState, useRef} from "react";
 import {Card, Typography, IconButton, Box, Select, MenuItem, SelectChangeEvent} from "@mui/material";
 import {
   faChartColumn,
@@ -15,6 +15,7 @@ import { Application, useTrack, ApplicationStage } from "@/lib/store/track";
 import { Profile } from "@/lib/store/profile";
 import { useFetchCompanyLogo } from "@/lib/hooks/useFetchCompanyLogo";
 import { useAlert } from "@/lib/store/alert";
+import ApplicationDelete from "@/ui/track/ApplicationDelete";
 
 // TODO:
 // Implement the Link for chart
@@ -23,10 +24,12 @@ import { useAlert } from "@/lib/store/alert";
 interface JobCardProps {
   application: Application;
   profile: Profile;
+  onCardClick?: (application: Application) => void;
+  setPreventClick?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export function JobCard({ application, profile }: JobCardProps) {
-  const { moveApplication, updateApplication, removeApplication } = useTrack();
+export function JobCard({ application, profile, onCardClick, setPreventClick }: JobCardProps) {
+  const { moveApplication, updateApplication} = useTrack();
   const logoUrl = useFetchCompanyLogo(application.company_name);
   const { setAlert } = useAlert();
   const {
@@ -61,20 +64,27 @@ export function JobCard({ application, profile }: JobCardProps) {
       profile
     );
   };
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
-  const handleRemoveApplication = async (e: React.MouseEvent) => {
+  const handleOpenDeleteModal = (e: React.MouseEvent) => {
     e.stopPropagation();
-    const {success, message} = await removeApplication(status, application, profile);
-    if (success) {
-      setAlert( {message: "Application removed", type: "success" });
-    }
-    else if (message) {
-      // This should never print.
-      setAlert( {message: message, type: "error" });
-    }
+    setPreventClick?.(true);
+    setDeleteModalOpen(true);
   };
+
+  const handleCloseDeleteModal = () => {
+    setPreventClick?.(false);
+    setDeleteModalOpen(false);
+  };
+
+
   return (
+    <>
     <Card
+    onClick={() => {
+      setPreventClick?.(false);
+      onCardClick?.(application);
+    }}
       sx={{
         borderRadius: "8px",
         border: "2px solid #E0E4F2",
@@ -88,6 +98,7 @@ export function JobCard({ application, profile }: JobCardProps) {
         marginBottom: "10px",
         overflow: "hidden",
       }}
+      
     >
       {/* Column 1: Company Brand */}
       <Box
@@ -274,6 +285,15 @@ export function JobCard({ application, profile }: JobCardProps) {
               style={{ fontSize: "14px", color: "#333333" }}
             />
           </IconButton>
+          <IconButton
+          sx={{ padding: "6px", borderRadius: "50%"}}
+          onClick={handleOpenDeleteModal}
+        >
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            style={{ fontSize: "12px", color: "#333333" }}
+          />
+        </IconButton>
         </Box>
       </Box>
 
@@ -283,7 +303,6 @@ export function JobCard({ application, profile }: JobCardProps) {
           display: "flex",
           justifyContent: "flex-end",
           alignItems: "flex-start",
-          flexDirection: "column",
           height: "100%",
           position: "relative",
           paddingRight: "8px",
@@ -297,16 +316,16 @@ export function JobCard({ application, profile }: JobCardProps) {
             style={{ fontSize: "12px", color: "#333333" }}
           />
         </IconButton>
-        <IconButton
-          sx={{ padding: "4px", borderRadius: "50%", marginTop: "auto" }}
-          onClick={handleRemoveApplication}
-        >
-          <FontAwesomeIcon
-            icon={faTrashCan}
-            style={{ fontSize: "12px", color: "#333333" }}
-          />
-        </IconButton>
       </Box>
     </Card>
+    {/* ApplicationDelete Modal */}
+    <ApplicationDelete
+        open={deleteModalOpen}
+        handleClose={handleCloseDeleteModal}
+        application={application}
+        profile={profile}
+        status={status}
+      />
+    </>
   );
 }
