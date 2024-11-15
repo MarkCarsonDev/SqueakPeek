@@ -3,7 +3,7 @@ import { useRef, memo, useEffect } from "react";
 import { NewMessagesNotificationModal } from "./NewMessageNotificationModal";
 import { MutableRefObject } from "react";
 import { MessageList } from "./MessageList";
-import { Typography, CircularProgress } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 
 /**
  * Renders new message notifications, message list, and the message input

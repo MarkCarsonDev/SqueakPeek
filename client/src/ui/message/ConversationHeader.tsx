@@ -30,13 +30,16 @@ export function ConversationHeader({
   const { setAlert } = useAlert();
 
   useEffect(() => {
+    const ignoreErrorCode = "PGRST116"; // error occurs when fetching header metadata from a different conversation type
+    console.log("rendering useEffect");
     if (isPrivateConversation && profile) {
+      console.log("fetching private conversation");
       fetchPrivateConversationMetaData(conversationId, profile.profile_id).then(
         (res) => {
           const { data, error } = res;
-          if (error) {
+          if (error && error.code !== ignoreErrorCode) {
             setAlert({
-              message: "Failed to fetch conversation header",
+              message: "Failed to fetch company thread header",
               type: "error",
             });
           } else if (data) {
@@ -45,14 +48,15 @@ export function ConversationHeader({
             setProfileAvatar(conversationMetaData.avatar);
             setIsLoading(false);
           }
-          console.log("data: ", data);
-          console.log("error: ", error);
         }
       );
     } else if (!isPrivateConversation && profile) {
+      console.log("fetching company thread");
+
       fetchCompanyThreadMetaData(conversationId).then((res) => {
         const { data, error } = res;
-        if (error) {
+
+        if (error && error.code !== ignoreErrorCode) {
           setAlert({
             message: "Failed to fetch conversation header",
             type: "error",
@@ -70,14 +74,14 @@ export function ConversationHeader({
         }
       });
     }
-  }, [isPrivateConversation, profile, conversationId]);
+  }, [isPrivateConversation, profile, conversationId, setAlert]);
 
   if (isLoading) {
     return (
       <CardHeader
         title={<Skeleton width={"100px"} />}
         subheader={<Skeleton width={"175px"} />}
-        avatar={<Skeleton width={"55px"} height={"55px"} variant="circular" />}
+        avatar={<Skeleton width={"40px"} height={"40px"} variant="circular" />}
         sx={{
           boxShadow: "rgba(224,228,242,.7) 0px 2px 2px 0px",
           zIndex: 1,

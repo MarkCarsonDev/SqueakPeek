@@ -64,7 +64,7 @@ export function Conversation({
         setNotFound(true);
       }
     });
-  }, []);
+  }, [supabase, conversationId, isPrivateConversation]);
 
   // routes to not-found if conversation does not exist
   useEffect(() => {
