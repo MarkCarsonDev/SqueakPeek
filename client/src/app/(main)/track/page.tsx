@@ -7,15 +7,13 @@ import NewApplicationModal from "@/ui/track/NewApplicationModal";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import { StageColumn, StageColumnProps } from "@/ui/track/StageColumn"; 
 import { Application, ApplicationStage, useTrack } from "@/lib/store/track";
-import { useProfile } from "@/lib/store/profile";
-// import {useAlert} from "@/lib/store/alert";
+import { useProfile } from "@/lib/store/profile"; 
 import "./tracking.css";
 
 export default function Page() {
   const [openModal, setOpenModal] = useState(false);
   const [applicationStatus, setApplicationStatus] = useState<ApplicationStage>("Applied");
   const [selectedApplication, setSelectedApplication] = useState<Application | undefined>();
-  // const { setAlert } = useAlert();
   // Retrieve application data and actions from the Zustand store
   const {
     Applied,
@@ -57,18 +55,6 @@ export default function Page() {
     setOpenModal(false);
     setSelectedApplication(undefined);
   };
-
-  // Success handler to show a snackbar message
-  // const handleSuccess = (message: string, severity: "success" | "error" | "info" | "warning" = "success") => {
-  //   setSnackbarMessage(message);
-  //   setSnackbarSeverity(severity);
-  //   setSnackbarOpen(true);
-  // };
-
-  // Close Snackbar
-  // const closeSnackbar = () => {
-  //   setSnackbarOpen(false);
-  // };
 
   // Handle drag-and-drop for moving applications between stages
   const onDragEnd = (result: DropResult) => {
@@ -129,7 +115,6 @@ export default function Page() {
           applicationStatus={applicationStatus}
           setApplicationStatus={setApplicationStatus}
           existingApplication={selectedApplication}
-          //onSuccess={handleSuccess} // Pass handleSuccess to handle success messages
         />
       )}
 

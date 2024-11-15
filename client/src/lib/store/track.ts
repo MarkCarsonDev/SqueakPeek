@@ -3,6 +3,7 @@ import { Database } from "@/lib/types/database.types";
 import { InsertApplication } from "@/lib/utils/Application/InsertApplication";
 import { UpdateApplication } from "@/lib/utils/Application/UpdateApplication";
 import { FetchApplication } from "@/lib/utils/Application/FetchApplication";
+import { RemoveApplication} from "@/lib/utils/Application/RemoveApplication";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { Profile } from "@/lib/store/profile";
 import { PostgrestError } from "@supabase/supabase-js";
@@ -25,7 +26,7 @@ interface TrackState {
     application: Application,
     profile: Profile
   ) => Promise<{ success: boolean; message: string }>;
-  removeApplication: (from: ApplicationStage, applicationId: string) => void;
+  removeApplication: (from: ApplicationStage, application: Application, profile: Profile) => Promise<{ success: boolean; message: string }>;
   moveApplication: (
     from: ApplicationStage,
     to: ApplicationStage,
@@ -39,7 +40,6 @@ interface TrackState {
     profile: Profile
   ) => Promise<{ success: boolean; message: string }>;
 
-  //fetchApplications: (profile: Profile) => void;
    fetchApplications: (profile: Profile) => Promise<{ data: Application[] | null; error: PostgrestError | null }>;
 }
 
@@ -88,13 +88,22 @@ export const useTrack = create<TrackState>()((set) => ({
     return { success: true, message: "Application added successfully!" };
   },
 
-  removeApplication: (from, applicationId) =>
+  removeApplication: async (from, application, profile): Promise<{success: boolean; message: string}> => {
+    // Call the supabase function to remove the application
+    const { success, error } = await RemoveApplication(profile, application.application_id);
+    if (error) {
+      console.error("Error removing application:", error.message);
+      return { success: false, message: "Failed to remove application." };
+    }
     set((state) => {
       state[from] = state[from].filter(
-        (app) => app.application_id !== applicationId
+        (app) => app.application_id !== application.application_id
       );
       return { ...state };
-    }),
+    });
+    return { success: true, message: "Application removed successfully!" };
+  },
+
 
   // TODO: Call the server to update the card position also?
   moveApplication: async (from, to, applicationId, sourceIndex, destinationIndex) => {

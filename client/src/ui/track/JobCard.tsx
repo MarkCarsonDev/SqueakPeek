@@ -25,7 +25,7 @@ import { useAlert } from "@/lib/store/alert";
 
 // TODO:
 // Implement the Link for chart
-// Implement the copy job link
+// Implement the delete button.
 
 interface JobCardProps {
   application: Application;
