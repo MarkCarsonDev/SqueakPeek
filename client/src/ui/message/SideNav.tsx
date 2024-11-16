@@ -195,6 +195,7 @@ export function SideNav() {
         display: "flex",
         flexDirection: "column",
         borderRight: "3px solid #E0E4F2",
+        overflowY:"auto"
       }}
     >
       {" "}
