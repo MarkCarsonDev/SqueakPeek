@@ -267,12 +267,12 @@ export function JobCard({ application, profile, onCardClick, setPreventClick }: 
                 navigator.clipboard.writeText(link)
                 setAlert({
                   message: "Link copied to clipboard",
-                  type: "success",
+                  type: "info",
                 })
               } else {
                 setAlert({
                   message: "No link available",
-                  type: "error",
+                  type: "warning",
                 })
               }
             }}
