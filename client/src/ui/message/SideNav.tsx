@@ -67,18 +67,15 @@ export function SideNav() {
               const { conversation_id } = item;
               const { avatar, username } =
                 item.profile as unknown as Database["public"]["Tables"]["profile"]["Row"]; // it returns profile as an array of profiles
-              const { data: privateMessageData } = await fetchLatestPrivateMessage(conversation_id); // fetches latest message on each conversation
+              const { data: privateMessageData } =
+                await fetchLatestPrivateMessage(conversation_id); // fetches latest message on each conversation
               if (privateMessageData) {
                 const { sender_username, message } = privateMessageData;
                 return {
                   avatar: avatar,
                   conversation_id,
                   header: username,
-                  subHeader: `${
-                    profile?.username === sender_username
-                      ? "You"
-                      : sender_username
-                  }: ${message}`,
+                  subHeader: `${sender_username}: ${message}`,
                 };
               } else {
                 return {
