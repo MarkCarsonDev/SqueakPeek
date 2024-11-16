@@ -80,7 +80,7 @@ export function ConversationHeader({
         <CardHeader
           title={header}
           subheader={subHeader}
-          avatar={<ProfileAvatar avatar={profileAvatar!} />}
+          avatar={<ProfileAvatar width="40px" height="40px" avatar={profileAvatar!} />}
           sx={{
             boxShadow: "rgba(224,228,242,.7) 0px 2px 2px 0px",
             zIndex: 1,

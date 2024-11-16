@@ -195,6 +195,7 @@ export function SideNav() {
         display: "flex",
         flexDirection: "column",
         borderRight: "3px solid #E0E4F2",
+        overflowY: "auto",
       }}
     >
       {" "}
@@ -272,7 +273,10 @@ export function SideNav() {
           ))}
         </Tabs>
       </div>
-      <MessageNotificationCardList isLoading={isLoading} />
+      <MessageNotificationCardList
+        currentTab={currentTab}
+        isLoading={isLoading}
+      />
     </div>
   );
 }
