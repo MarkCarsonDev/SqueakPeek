@@ -76,14 +76,22 @@ export function MessageNotificationCard({
               </Typography>
             }
             subheader={
-              <Typography
-                sx={{
-                  color: textColor,
+              <div
+                style={{
+                  width: "80%", // TODO Make this resonsive for smaller screens
                 }}
-                variant="caption"
               >
-                {subHeader}
-              </Typography>
+                <Typography
+                  component={"p"}
+                  noWrap
+                  sx={{
+                    color: textColor,
+                  }}
+                  variant="caption"
+                >
+                  {subHeader}
+                </Typography>
+              </div>
             }
           />
         </CardActionArea>
