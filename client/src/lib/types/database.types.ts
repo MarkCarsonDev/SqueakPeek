@@ -104,14 +104,14 @@ export type Database = {
           {
             foreignKeyName: "bookmark_opportunity_id_fkey"
             columns: ["opportunity_id"]
-            isOneToOne: true
+            isOneToOne: false
             referencedRelation: "opportunity"
             referencedColumns: ["opportunity_id"]
           },
           {
             foreignKeyName: "bookmark_profile_id_fkey"
             columns: ["profile_id"]
-            isOneToOne: true
+            isOneToOne: false
             referencedRelation: "profile"
             referencedColumns: ["profile_id"]
           },
@@ -171,9 +171,9 @@ export type Database = {
         Row: {
           applied: number | null
           created_at: string
-          interviewed: number | null
+          interviewing: number | null
           month: number | null
-          offered: number | null
+          offer: number | null
           online_assessment: number | null
           opportunity_id: string
           rejected: number | null
@@ -182,9 +182,9 @@ export type Database = {
         Insert: {
           applied?: number | null
           created_at?: string
-          interviewed?: number | null
+          interviewing?: number | null
           month?: number | null
-          offered?: number | null
+          offer?: number | null
           online_assessment?: number | null
           opportunity_id?: string
           rejected?: number | null
@@ -193,9 +193,9 @@ export type Database = {
         Update: {
           applied?: number | null
           created_at?: string
-          interviewed?: number | null
+          interviewing?: number | null
           month?: number | null
-          offered?: number | null
+          offer?: number | null
           online_assessment?: number | null
           opportunity_id?: string
           rejected?: number | null
@@ -227,26 +227,26 @@ export type Database = {
         Row: {
           conversation_id: string
           created_at: string
-          message: string | null
+          message: string
           message_id: string
           sender_avatar: Database["public"]["Enums"]["Avatar"] | null
-          sender_username: string | null
+          sender_username: string
         }
         Insert: {
           conversation_id: string
           created_at?: string
-          message?: string | null
+          message?: string
           message_id?: string
           sender_avatar?: Database["public"]["Enums"]["Avatar"] | null
-          sender_username?: string | null
+          sender_username: string
         }
         Update: {
           conversation_id?: string
           created_at?: string
-          message?: string | null
+          message?: string
           message_id?: string
           sender_avatar?: Database["public"]["Enums"]["Avatar"] | null
-          sender_username?: string | null
+          sender_username?: string
         }
         Relationships: [
           {
@@ -308,7 +308,6 @@ export type Database = {
         Row: {
           avatar: Database["public"]["Enums"]["Avatar"]
           created_at: string
-          email: string | null
           profile_id: string
           school: string | null
           user_id: string
@@ -317,7 +316,6 @@ export type Database = {
         Insert: {
           avatar: Database["public"]["Enums"]["Avatar"]
           created_at?: string
-          email?: string | null
           profile_id?: string
           school?: string | null
           user_id?: string
@@ -326,7 +324,6 @@ export type Database = {
         Update: {
           avatar?: Database["public"]["Enums"]["Avatar"]
           created_at?: string
-          email?: string | null
           profile_id?: string
           school?: string | null
           user_id?: string

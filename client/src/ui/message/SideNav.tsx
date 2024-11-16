@@ -3,7 +3,7 @@ import { Typography, Tabs, Tab } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useCallback, useState } from "react";
-
+import { fetchLatestPrivateMessage } from "@/lib/utils/fetchLatestPrivateMessage";
 import {
   faBuilding as solidBuilding,
   faMessage as solidMessage,
@@ -54,7 +54,7 @@ export function SideNav() {
   // sets notifications based on private conversations
   const setPrivateConversationNotifications = useCallback(
     (profileId: string) => {
-      fetchPrivateConversations(profileId).then((res) => {
+      fetchPrivateConversations(profileId).then(async (res) => {
         const { data, error } = res;
         if (error) {
           setAlert({
@@ -62,19 +62,38 @@ export function SideNav() {
             type: "error",
           });
         } else if (data) {
-          const mappedData: MessageNotificationCardProps[] = data.map(
-            (item) => {
+          const mappedData: MessageNotificationCardProps[] = await Promise.all(
+            data.map(async (item) => {
               const { conversation_id } = item;
               const { avatar, username } =
                 item.profile as unknown as Database["public"]["Tables"]["profile"]["Row"]; // it returns profile as an array of profiles
-              return {
-                avatar: avatar,
-                conversation_id,
-                header: username,
-                subHeader: "",
-              };
-            }
+              const { data: privateMessageData } = await fetchLatestPrivateMessage(conversation_id); // fetches latest message on each conversation
+              if (privateMessageData) {
+                const { sender_username, message } = privateMessageData;
+                return {
+                  avatar: avatar,
+                  conversation_id,
+                  header: username,
+                  subHeader: `${
+                    profile?.username === sender_username
+                      ? "You"
+                      : sender_username
+                  }: ${message}`,
+                };
+              } else {
+                return {
+                  avatar: avatar,
+                  conversation_id,
+                  header: username,
+                  subHeader: "",
+                };
+              }
+            })
           );
+
+          mappedData.map(async (notification) => {
+            notification.conversation_id;
+          });
           setNotifications(mappedData);
           setIsLoading(false);
         }

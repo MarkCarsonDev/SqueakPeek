@@ -1,5 +1,4 @@
 import { createSupabaseClient } from "../supabase/client";
-import { SupabaseClient } from "@supabase/supabase-js";
 
 /**
  * Fetches private conversations of the current user
@@ -9,7 +8,7 @@ import { SupabaseClient } from "@supabase/supabase-js";
  */
 export async function fetchPrivateConversations(
   profile_id: string,
-  supabase: SupabaseClient = createSupabaseClient()
+  supabase = createSupabaseClient()
 ) {
   const { data, error } = await supabase
     .from("private_user_conversation")
