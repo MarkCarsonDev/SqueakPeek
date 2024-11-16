@@ -11,10 +11,9 @@ export async function fetchOpportunities(
 ) {
   const { data, error } = await supabase
     .from("company_thread")
-    .select(`
+    .select(`     
       *,
-      opportunity:opportunity_id (*),
-      opportunity_tracking:opportunity_id (*)
+      opportunity:opportunity_id(*,opportunity_tracking:opportunity_tracking!inner(*))
     `);
 
   console.log(data);

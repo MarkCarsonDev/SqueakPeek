@@ -22,24 +22,25 @@ export function OpportunityList() {
       if (error) {
         console.error("Error fetching opportunities:", error);
       } else if (data) {
-        const mappedData: OpportunityCardProps[] = data.map((item) => {
-          const { thread_id: conversation_id } = item;
-          
-          const opportunity =
-            item.opportunity as unknown as Database["public"]["Tables"]["opportunity"]["Row"]; // converts opportunity of the type as listed in the database
-          const opportunity_tracking = 
-            item.opportunity_tracking as unknown as Database["public"]["Tables"]["opportunity_tracking"]["Row"];
-          // TODO: Replace aggregate with real data
+        const mappedData: OpportunityCardProps[] = data
+        .map((item) => {
+          const { thread_id: conversation_id, opportunity, opportunity_tracking } = item;
+
+          if (!opportunity || !opportunity_tracking) return null;
+
+          const opp = opportunity as Database["public"]["Tables"]["opportunity"]["Row"];
+          const tracking = opportunity_tracking as Database["public"]["Tables"]["opportunity_tracking"]["Row"];
+
           return {
             conversation_id,
-            opportunity,
+            opportunity: opp,
             aggregate: {
-              totalApplied: opportunity_tracking.applied,
-              interviewing: opportunity_tracking.interviewed,
-              oa: opportunity_tracking.online_assessment,
-              offered: opportunity_tracking.offered,
-              rejected: opportunity_tracking.rejected,
-              messages: 12,
+              totalApplied: tracking.applied || 0,
+              interviewing: tracking.interviewed || 0,
+              oa: tracking.online_assessment || 0,
+              offered: tracking.offered || 0,
+              rejected: tracking.rejected || 0,
+              messages: 12, // Placeholder for message count
             },
           };
         });
