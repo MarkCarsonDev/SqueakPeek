@@ -1,4 +1,4 @@
-import { Modal, Button, Typography } from "@mui/material";
+import { Modal, Button, Typography, Box } from "@mui/material";
 import { useAlert } from "@/lib/store/alert";
 import { useTrack, Application, ApplicationStage } from "@/lib/store/track";
 import { Profile } from "@/lib/store/profile";
@@ -39,14 +39,32 @@ export default function ApplicationDelete({
       onClose={handleClose}
       aria-labelledby="simple-modal-title"
       aria-describedby="simple-modal-description"
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
     >
-      <div>
+      <Box
+        sx={{
+          backgroundColor: "white",
+          width: "auto",
+          padding: "10px 20px",
+          borderRadius: "8px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "0px 30px",
+        }}
+      >
         <Typography id="simple-modal-title">
           Are you sure you want to delete this application?
         </Typography>
-        <Button onClick={handleDelete}>Delete</Button>
+        <Typography id="simple-modal-description">
+          This action cannot be undone.
+        </Typography>
         <Button onClick={handleClose}>Cancel</Button>
-      </div>
+        <Button onClick={handleDelete}>Delete</Button> 
+      </Box>
     </Modal>
   );
 }

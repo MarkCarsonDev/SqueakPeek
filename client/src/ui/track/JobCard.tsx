@@ -1,5 +1,5 @@
 "use client";
-import React, { SetStateAction, useState, useRef} from "react";
+import React, { SetStateAction, useState} from "react";
 import {Card, Typography, IconButton, Box, Select, MenuItem, SelectChangeEvent} from "@mui/material";
 import {
   faChartColumn,
@@ -15,7 +15,7 @@ import { Application, useTrack, ApplicationStage } from "@/lib/store/track";
 import { Profile } from "@/lib/store/profile";
 import { useFetchCompanyLogo } from "@/lib/hooks/useFetchCompanyLogo";
 import { useAlert } from "@/lib/store/alert";
-import ApplicationDelete from "@/ui/track/ApplicationDelete";
+import ApplicationDelete from "@/ui/track/ApplicationDeleteModal";
 
 // TODO:
 // Implement the Link for chart
@@ -64,20 +64,17 @@ export function JobCard({ application, profile, onCardClick, setPreventClick }: 
       profile
     );
   };
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-
-  const handleOpenDeleteModal = (e: React.MouseEvent) => {
+  
+  const [deleteApplicationModalOpen, setDeleteApplicationModalOpen] = useState(false);
+  const handleOpenDeleteApplicationModal = (e: React.MouseEvent) => {
     e.stopPropagation();
     setPreventClick?.(true);
-    setDeleteModalOpen(true);
+    setDeleteApplicationModalOpen(true);
   };
-
-  const handleCloseDeleteModal = () => {
+  const handleCloseDeleteApplicationModal = () => {
     setPreventClick?.(false);
-    setDeleteModalOpen(false);
+    setDeleteApplicationModalOpen(false);
   };
-
-
   return (
     <>
     <Card
@@ -287,7 +284,7 @@ export function JobCard({ application, profile, onCardClick, setPreventClick }: 
           </IconButton>
           <IconButton
           sx={{ padding: "6px", borderRadius: "50%"}}
-          onClick={handleOpenDeleteModal}
+          onClick={handleOpenDeleteApplicationModal}
         >
           <FontAwesomeIcon
             icon={faTrashCan}
@@ -320,8 +317,8 @@ export function JobCard({ application, profile, onCardClick, setPreventClick }: 
     </Card>
     {/* ApplicationDelete Modal */}
     <ApplicationDelete
-        open={deleteModalOpen}
-        handleClose={handleCloseDeleteModal}
+        open={deleteApplicationModalOpen}
+        handleClose={handleCloseDeleteApplicationModal}
         application={application}
         profile={profile}
         status={status}
