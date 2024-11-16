@@ -4,7 +4,6 @@ import {Card, Typography, IconButton, Box, Select, MenuItem, SelectChangeEvent} 
 import {
   faChartColumn,
   faLink,
-  faBars,
   faTrashCan
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -292,27 +291,6 @@ export function JobCard({ application, profile, onCardClick, setPreventClick }: 
           />
         </IconButton>
         </Box>
-      </Box>
-
-      {/* Column 3: 3-Bar Icon */}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "flex-end",
-          alignItems: "flex-start",
-          height: "100%",
-          position: "relative",
-          paddingRight: "8px",
-        }}
-      >
-        <IconButton
-          sx={{ padding: "4px", borderRadius: "50%", position: "relative" }}
-        >
-          <FontAwesomeIcon
-            icon={faBars}
-            style={{ fontSize: "12px", color: "#333333" }}
-          />
-        </IconButton>
       </Box>
     </Card>
     {/* ApplicationDelete Modal */}
