@@ -3,7 +3,6 @@ import { usePathname } from "next/navigation";
 import { useMessageNotification } from "@/lib/store/messageNotification";
 import { CardSkeleton } from "./CardSkeleton";
 import { Typography } from "@mui/material";
-import { useMessage } from "@/lib/store/message";
 
 interface MessageNotificationCardProps {
   isLoading: boolean;
