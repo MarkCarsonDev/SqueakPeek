@@ -61,7 +61,7 @@ export async function createAccount(
     
     return {
       errors: {
-        email: [errorMessage],
+        confirmPassword: [errorMessage],
       } 
     };
   }

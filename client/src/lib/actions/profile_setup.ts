@@ -39,7 +39,7 @@ export async function getUser(): Promise<Json> {
   if (userError) {
       return { 
         errors: {
-          message: ["Error: No user"],
+          message: ["Error: No user"]
         }
       }
   }
@@ -153,9 +153,7 @@ export async function createProfile( prevState: ProfileSetupState, formData: For
       const supabase = createSupabaseServer();
       const { data: {user}, error: userError } =  await supabase.auth.getUser();
       if (userError) {
-          return { 
-            errors: { school: ["Error: No user"] }
-          };
+        console.log("ERROR: no supabase user");
       }
 
       const { username, school, avatar } = validatedFields.data;
