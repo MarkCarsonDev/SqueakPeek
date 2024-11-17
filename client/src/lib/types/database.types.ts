@@ -265,6 +265,7 @@ export type Database = {
         Row: {
           conversation_id: string
           created_at: string
+          isRead: boolean
           receiver_id: string
           sender_id: string
           thread_id: string
@@ -272,6 +273,7 @@ export type Database = {
         Insert: {
           conversation_id: string
           created_at?: string
+          isRead?: boolean
           receiver_id: string
           sender_id: string
           thread_id?: string
@@ -279,6 +281,7 @@ export type Database = {
         Update: {
           conversation_id?: string
           created_at?: string
+          isRead?: boolean
           receiver_id?: string
           sender_id?: string
           thread_id?: string
