@@ -88,6 +88,11 @@ export const MessageInput = memo(function MessageInput({
           payload: { message: newMessage },
         });
       }
+    } else {
+      setAlert({
+        message: "Profile not found",
+        type: "error",
+      });
     }
   }
 
