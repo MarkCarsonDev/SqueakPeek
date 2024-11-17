@@ -10,9 +10,12 @@ export async function FetchApplication(
   // Fetch all applications for the profile with their corresponding thread_id
   const { data: applications, error: applicationsError } = await supabase
     .from('application')
-    
     .select(`*,
-       application:opportunity!opportunity_id(company_thread!opportunity_id(thread_id))
+      application:opportunity!opportunity_id(
+      company_thread!opportunity_id(thread_id),
+      opportunity_tracking!opportunity_id(applied, rejected, online_assessment, interviewing, offer)
+       )
+       
       `)    
     .eq('profile_id', profile.profile_id)
     .order('order', { ascending: true });
@@ -26,12 +29,16 @@ export async function FetchApplication(
     return { data: null, error: null };
   }
 
+  console.log(applications);
+  console.log(applications[0].application);
   // Map the applications to include thread_id at the top level
   const applicationsWithThread: Application[] = applications.map((application) => {
     const thread_id = application.application?.company_thread?.thread_id || null;
     delete application.application;
     return { ...application, thread_id };
   });
-  console.log(applicationsWithThread);
+  //console.log(applicationsWithThread);
   return { data: applicationsWithThread, error: null };
 }
+
+//opportunity_tracking:opportunity!opportunity_id(opportunity_tracking!opportunity_id(*))
