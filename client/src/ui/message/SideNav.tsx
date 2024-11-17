@@ -87,10 +87,6 @@ export function SideNav() {
               }
             })
           );
-
-          mappedData.map(async (notification) => {
-            notification.conversation_id;
-          });
           setNotifications(mappedData);
           setIsLoading(false);
         }

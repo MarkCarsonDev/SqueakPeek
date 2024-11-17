@@ -230,6 +230,7 @@ export type Database = {
           message: string
           message_id: string
           sender_avatar: Database["public"]["Enums"]["Avatar"] | null
+          sender_id: string
           sender_username: string
         }
         Insert: {
@@ -238,6 +239,7 @@ export type Database = {
           message?: string
           message_id?: string
           sender_avatar?: Database["public"]["Enums"]["Avatar"] | null
+          sender_id: string
           sender_username: string
         }
         Update: {
@@ -246,6 +248,7 @@ export type Database = {
           message?: string
           message_id?: string
           sender_avatar?: Database["public"]["Enums"]["Avatar"] | null
+          sender_id?: string
           sender_username?: string
         }
         Relationships: [
@@ -337,7 +340,7 @@ export type Database = {
           message: string
           message_id: string
           sender_avatar: Database["public"]["Enums"]["Avatar"]
-          sender_id: string | null
+          sender_id: string
           sender_username: string
           thread_id: string | null
         }
@@ -346,7 +349,7 @@ export type Database = {
           message: string
           message_id?: string
           sender_avatar?: Database["public"]["Enums"]["Avatar"]
-          sender_id?: string | null
+          sender_id: string
           sender_username: string
           thread_id?: string | null
         }
@@ -355,7 +358,7 @@ export type Database = {
           message?: string
           message_id?: string
           sender_avatar?: Database["public"]["Enums"]["Avatar"]
-          sender_id?: string | null
+          sender_id?: string
           sender_username?: string
           thread_id?: string | null
         }
