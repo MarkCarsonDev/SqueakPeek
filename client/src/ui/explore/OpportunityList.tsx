@@ -5,6 +5,7 @@ import { OpportunityCard, OpportunityCardProps } from "./OpportunityCard";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { Database } from "@/lib/types/database.types";
 import { fetchOpportunities } from "@/lib/utils/fetchOpportunities";
+import { fetchOpportunityTracking } from "@/lib/utils/fetchOpportunityTracking";
 
 // TODO: Add filters to the OpportunityList component
 export function OpportunityList() {
@@ -18,35 +19,57 @@ export function OpportunityList() {
   useEffect(() => {
     const handleFetchOpportunities = async () => {
       setLoading(true);
-      const { data, error } = await fetchOpportunities(supabase);
-      if (error) {
-        console.error("Error fetching opportunities:", error);
-      } else if (data) {
-        const mappedData: OpportunityCardProps[] = data
-        .map((item) => {
-          const { thread_id: conversation_id, opportunity, opportunity_tracking } = item;
 
-          if (!opportunity || !opportunity_tracking) return null;
+      try {
+        const [opportunitiesResult, trackingResult] = await Promise.all([
+          fetchOpportunities(supabase),
+          fetchOpportunityTracking(supabase),
+        ]);
 
-          const opp = opportunity as Database["public"]["Tables"]["opportunity"]["Row"];
-          const tracking = opportunity_tracking as Database["public"]["Tables"]["opportunity_tracking"]["Row"];
+        const { data: opportunities, error: opportunitiesError } = opportunitiesResult;
+        const { data: trackingData, error: trackingError } = trackingResult;
 
-          return {
-            conversation_id,
-            opportunity: opp,
-            aggregate: {
-              totalApplied: tracking.applied || 0,
-              interviewing: tracking.interviewed || 0,
-              oa: tracking.online_assessment || 0,
-              offered: tracking.offered || 0,
-              rejected: tracking.rejected || 0,
-              messages: 12, // Placeholder for message count
-            },
-          };
-        });
-        console.log("mappedData: ", mappedData);
+        if (opportunitiesError) {
+          console.error("Error fetching opportunities:", opportunitiesError);
+        }
+        if (trackingError) {
+          console.error("Error fetching opportunity tracking:", trackingError);
+        }
 
-        setShownOpportunities(mappedData); // Initially, all opportunities are shown
+        if (opportunities && trackingData) {
+          const mappedData: OpportunityCardProps[] = opportunities
+            .map((item) => {
+              const { thread_id: conversation_id } = item;
+              const opportunity = item.opportunity as Database["public"]["Tables"]["opportunity"]["Row"];
+              if (!opportunity) {
+                return null;
+              }
+
+              const opportunityTracking = trackingData.find(
+                (tracking) =>
+                  tracking.opportunity_id === opportunity.opportunity_id
+              ) as Database["public"]["Tables"]["opportunity_tracking"]["Row"];
+
+              return {
+                conversation_id,
+                opportunity,
+                aggregate: {
+                  totalApplied: opportunityTracking?.applied || 0,
+                  interviewing: opportunityTracking?.interviewed || 0,
+                  oa: opportunityTracking?.online_assessment || 0,
+                  offered: opportunityTracking?.offered || 0,
+                  rejected: opportunityTracking?.rejected || 0,
+                  messages: 12, // Placeholder for message count
+                },
+              };
+            })
+            .filter((item) => item !== null);
+
+          console.log("mappedData: ", mappedData);
+          setShownOpportunities(mappedData);
+        }
+      } catch (error) {
+        console.error("Error in fetching opportunities or tracking data:", error);
       }
 
       setLoading(false);

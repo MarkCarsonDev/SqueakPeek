@@ -29,7 +29,7 @@ import { useFetchCompanyLogo } from "@/lib/hooks/useFetchCompanyLogo";
 interface jobStats {
   status: string;
   color: string;
-  quantity: number;
+  quantity: number | null;
 }
 
 // TODO: Replace this with the actual database type
@@ -63,22 +63,22 @@ export function OpportunityCard({
     {
       status: "Rejected:",
       color: "red",
-      quantity: 12,
+      quantity: aggregate.rejected,
     },
     {
       status: "OA:",
       color: "orange",
-      quantity: 12,
+      quantity: aggregate.oa,
     },
     {
       status: "Interviewing:",
       color: "gold",
-      quantity: 12,
+      quantity: aggregate.interviewing,
     },
     {
       status: "Offered:",
       color: "green",
-      quantity: 12,
+      quantity: aggregate.offered,
     },
   ];
 

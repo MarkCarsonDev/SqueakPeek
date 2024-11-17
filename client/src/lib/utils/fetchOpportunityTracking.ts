@@ -6,15 +6,12 @@ import { createSupabaseClient } from "../supabase/client";
  * @param supabase - Supabase client
  * @returns {data: An array of opportunities with tracking details, error: PostgrestError}
  */
-export async function fetchOpportunities(
+export async function fetchOpportunityTracking(
   supabase: SupabaseClient = createSupabaseClient()
 ) {
   const { data, error } = await supabase
-    .from("company_thread")
-    .select(`     
-      *,
-      opportunity:opportunity_id(*)
-    `);
+  .from("opportunity_tracking")
+  .select("*");
 
   return { data, error };
 }
