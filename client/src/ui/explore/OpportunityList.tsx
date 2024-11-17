@@ -4,7 +4,7 @@ import { OpportunityCard, OpportunityCardProps } from "./OpportunityCard";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { fetchOpportunities } from "@/lib/utils/fetchOpportunities";
 import { SelectedFilters } from './Filters';
-import { Typography, Button, Box } from "@mui/material";
+import { Typography, Button, Box, Skeleton } from "@mui/material";
 import { Database } from "@/lib/types/database.types";
 
 export function OpportunityList() {
@@ -102,9 +102,11 @@ export function OpportunityList() {
   };
 
   if (loading && currentPage === 1) {
-    return <Typography sx={{width: '100%', margin: '4rem', display: 'flex', flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
-        Loading...
-      </Typography>;
+    return (
+      <Box>
+        <Skeleton variant="rectangular" width="100%" height={118} />
+      </Box>
+    );
   }
 
   if (totalDBCount == 0 && !loading) {
@@ -127,7 +129,7 @@ export function OpportunityList() {
           <OpportunityCard key={item.opportunity.opportunity_id} {...item} />
         ) : null
       )}
-      {loading && currentPage > 1 && <div>Loading more...</div>}
+      {loading && currentPage > 1 && ( <Skeleton variant="rectangular" width="100%" height={118} />)}
       {hasMore && !loading && (
         <Button onClick={handleLoadMore}>
           Load {Math.min(limit, totalDBCount - (currentPage * limit))} more (Showing {Math.min(currentPage * limit, totalDBCount)} of {totalDBCount})
