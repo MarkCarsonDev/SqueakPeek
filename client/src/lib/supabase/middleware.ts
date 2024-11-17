@@ -49,7 +49,7 @@ export async function updateSession(request: NextRequest) {
     // return NextResponse.redirect(url);
   } else {
     // console.log("user: ", user);
-    console.log("user logged authenticated");
+    console.log("User logged authenticated: ", user);
 
     // refirect user to company route when first navigating to /message route
     if (request.nextUrl.pathname === "/message") {
