@@ -56,14 +56,58 @@ export default function ApplicationDelete({
           gap: "0px 30px",
         }}
       >
-        <Typography id="simple-modal-title">
+        <Typography id="simple-modal-title" variant="h6">
           Are you sure you want to delete this application?
         </Typography>
         <Typography id="simple-modal-description">
           This action cannot be undone.
         </Typography>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleDelete}>Delete</Button> 
+        <Box
+          sx={{
+            flexDirection: "row",
+            fullWidth: "100%",
+          }}
+        >
+          <Button
+            variant="contained"
+            onClick={handleClose}
+            color="primary"
+            sx={{
+              marginRight: "3%",
+              color: "#496FFF",
+              backgroundColor: "white",
+              boxShadow: "none",
+              border: "1px solid #E0E3EB",
+              borderRadius: "8px",
+              width: "47%",
+              ":hover": {
+                backgroundColor: "white",
+                border: "1px solid #A6B0C3",
+                boxShadow: "none",
+              },
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={handleDelete}
+            variant="contained"
+            color="primary"
+            sx={{
+              marginLeft: "3%",
+              boxShadow: "none",
+              borderRadius: "8px",
+              backgroundColor: "#8E1600",
+              width: "47%",
+              ":hover": {
+                backgroundColor: "red",
+                boxShadow: "none",
+              },
+            }}
+          >
+            Delete
+          </Button>
+        </Box>
       </Box>
     </Modal>
   );
