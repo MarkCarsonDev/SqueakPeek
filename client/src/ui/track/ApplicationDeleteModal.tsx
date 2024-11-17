@@ -47,25 +47,35 @@ export default function ApplicationDelete({
     >
       <Box
         sx={{
-          backgroundColor: "white",
-          width: "auto",
-          padding: "10px 20px",
-          borderRadius: "8px",
-          display: "flex",
-          flexDirection: "column",
-          gap: "0px 30px",
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: "60%",
+          backgroundColor: 'white',
+          p: 4, 
+          borderRadius: '8px',
         }}
       >
-        <Typography id="simple-modal-title" variant="h6">
+        <Typography 
+          id="simple-modal-title" 
+          variant="h4"
+          sx={{
+            marginBottom: "20px"
+          }}>
           Are you sure you want to delete this application?
         </Typography>
-        <Typography id="simple-modal-description">
+        <Typography 
+          id="simple-modal-description"
+          variant="subtitle1">
           This action cannot be undone.
         </Typography>
         <Box
           sx={{
             flexDirection: "row",
             fullWidth: "100%",
+            marginTop: "20px",
+            height: "58px",
           }}
         >
           <Button
@@ -74,12 +84,13 @@ export default function ApplicationDelete({
             color="primary"
             sx={{
               marginRight: "3%",
-              color: "#496FFF",
+              color: "#3C435C",
               backgroundColor: "white",
               boxShadow: "none",
               border: "1px solid #E0E3EB",
               borderRadius: "8px",
               width: "47%",
+              height: "100%",
               ":hover": {
                 backgroundColor: "white",
                 border: "1px solid #A6B0C3",
@@ -97,10 +108,11 @@ export default function ApplicationDelete({
               marginLeft: "3%",
               boxShadow: "none",
               borderRadius: "8px",
-              backgroundColor: "#8E1600",
+              backgroundColor: "#496FFF",
               width: "47%",
+              height: "100%",
               ":hover": {
-                backgroundColor: "red",
+                backgroundColor: "#3B5AC6",
                 boxShadow: "none",
               },
             }}
