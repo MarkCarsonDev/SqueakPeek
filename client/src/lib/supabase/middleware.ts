@@ -2,16 +2,8 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { userHasExistingProfile } from "@/lib/actions/profile_setup"
 
-//debug utility function 
-const DEBUG = false;
-export function debug(msg: string){
-  if (DEBUG){
-    console.log("DEBUG: ", msg);
-  }
-}
-
-debug("***** BEGIN middleware.ts ******");
-debug("middleware.ts is always invoked!!!");
+console.log("***** BEGIN middleware.ts ******");
+console.log("middleware.ts is always invoked!!!");
 
 //allowed public paths
 const publicPaths = ["/","/login","/explore","/signup","/about"];
@@ -22,8 +14,8 @@ const validUserPaths = ["/message", "/profile", "/thread", "/track", "/profile_s
 
 function hasBasePath(pathname: string, basepaths: string[]) {
   for (let i = 0; i < basepaths.length; i++) {
-    debug("pathname: " + pathname);
-    debug("basepaths[i]" + basepaths[i]);
+    console.log("pathname: " + pathname);
+    console.log("basepaths[i]" + basepaths[i]);
     if (pathname == "/")
       return true 
     if (basepaths[i] == "/") {continue}
@@ -38,11 +30,11 @@ function isPublicPath(pathname: string){
 }
 
 function isAllowedUserPath(pathname: string){
-  debug("start of isAllowedUserPath");
-  debug("pathname: " + typeof(pathname));
+  console.log("start of isAllowedUserPath");
+  console.log("pathname: " + typeof(pathname));
   //TODO: should we keep Auth'd users off of signup?
   //if (pathname === "/signup"){
-  //  debug("RETURNING FALSE: pathname: signup " + pathname);
+  //  console.log("RETURNING FALSE: pathname: signup " + pathname);
   //  return false
   // }
   return hasBasePath(pathname, validUserPaths);
@@ -82,17 +74,17 @@ export async function updateSession(request: NextRequest) {
   //simple pathname variable
   const pathname = request.nextUrl.pathname;
 
-  debug("USER REQUEST PATHNAME: "+ pathname);
+  console.log("USER REQUEST PATHNAME: "+ pathname);
 
   if (user) {
     const userEmail = user?.email;
-    debug("USER " + userEmail + " HAS AUTHENTICATED");
+    console.log("USER " + userEmail + " HAS AUTHENTICATED");
     
     //Task 1: Only allow authorized users to access the pages under the (main) directory
     //...using whitelist strategy
     if(!(isAllowedUserPath(pathname)) && !(isPublicPath(pathname))) {
-      debug("User attempted to access a restricted path. Redirecting to /explore");
-      debug("Task 1: Only allow authorized users to access the pages under the (main) directory");
+      console.log("User attempted to access a restricted path. Redirecting to /explore");
+      console.log("Task 1: Only allow authorized users to access the pages under the (main) directory");
       const url = request.nextUrl.clone();
       url.pathname = "/explore";
       return NextResponse.redirect(url);
@@ -101,32 +93,32 @@ export async function updateSession(request: NextRequest) {
     // Task 3: Redirect authenticated users without a profile to /profile_setup
     const hasUserProfile = await userHasExistingProfile();
     const url = request.nextUrl.clone();
-    debug("url: " + url);
+    console.log("url: " + url);
     if (!(hasUserProfile)) {
-      debug("Task 3: Redirect authenticated users without a profile to /profile_setup");
-      debug("USER " + user?.email + " HAS NO PROFILE");
-      debug("url.pathname.indexOf(/profile_setup): " + url.pathname.indexOf("/profile_setup"));
+      console.log("Task 3: Redirect authenticated users without a profile to /profile_setup");
+      console.log("USER " + user?.email + " HAS NO PROFILE");
+      console.log("url.pathname.indexOf(/profile_setup): " + url.pathname.indexOf("/profile_setup"));
       
       //if not on profile_setup, redirect to profile_setup
       if (url.pathname.indexOf("/profile_setup") < 0) {
         if (!isPublicPath(pathname)){
           url.pathname = "/profile_setup";
-          debug("redirecting to /profile_setup: user has no profile");
+          console.log("redirecting to /profile_setup: user has no profile");
           return NextResponse.redirect(url);
         }
       }
 
       else {
-        debug("user is trying to access: " + url.pathname);
-        debug("User accessing profile_setup");
+        console.log("user is trying to access: " + url.pathname);
+        console.log("User accessing profile_setup");
       }
     } // end of handling of non auth'd users
     else {
       // Task 4: Redirect any users accessing /profile_setup that already has a profile to /404
-      debug("USER " + user?.email + " HAS PROFILE");
+      console.log("USER " + user?.email + " HAS PROFILE");
       if (pathname === "/profile_setup") {
-        debug("Task 4: Redirect any users accessing /profile_setup that already has a profile to /404");
-        debug("USER " + user?.email + " ALREADY HAS PROFILE, redirecting to 404");
+        console.log("Task 4: Redirect any users accessing /profile_setup that already has a profile to /404");
+        console.log("USER " + user?.email + " ALREADY HAS PROFILE, redirecting to 404");
         const url = request.nextUrl.clone();
         url.pathname = "/404";
         return NextResponse.rewrite(url);
@@ -140,21 +132,21 @@ export async function updateSession(request: NextRequest) {
     } // end handling of auth'd users
   }
   else {
-    debug("USER HAS NOT AUTHENTICATED");
+    console.log("USER HAS NOT AUTHENTICATED");
 
     //Task 2: For authenticated users accessing the pages outside of (main)
     //automatically redirect them to the /explore route
-    debug("Task 2: For authenticated users accessing the pages outside of (main) automatically redirect them to the /explore route");
+    console.log("Task 2: For authenticated users accessing the pages outside of (main) automatically redirect them to the /explore route");
     if(!isPublicPath(pathname)) {
       const url = request.nextUrl.clone();
       if (url.pathname.indexOf("/explore") < 0) {
-        debug(pathname  + " is not a public path. Redirect to explore");
+        console.log(pathname  + " is not a public path. Redirect to explore");
         url.pathname = "/explore";
         return NextResponse.redirect(url); 
       }
     }
     else {
-      debug(pathname  + " is a public path. Allowing access");
+      console.log(pathname  + " is a public path. Allowing access");
     }
   }
   return supabaseResponse;
