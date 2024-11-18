@@ -16,6 +16,7 @@ export interface MessageNotificationCardProps {
   subHeader: string;
   conversation_id: string;
   isSelected?: boolean;
+  isRead: boolean;
 }
 
 /**
@@ -31,6 +32,7 @@ export function MessageNotificationCard({
   subHeader,
   conversation_id,
   isSelected,
+  isRead,
 }: MessageNotificationCardProps) {
   const pathName = usePathname();
   const currentTab = pathName.split("/")[2]; // tab is either company or private
@@ -51,9 +53,15 @@ export function MessageNotificationCard({
         sx={{
           backgroundColor: isSelected ? "#496FFF" : "transparent",
           boxShadow: "none",
+          display: "flex",
         }}
       >
-        <CardActionArea>
+        <CardActionArea
+          style={{
+            display: "grid",
+            gridTemplateColumns: "92% 8%",
+          }}
+        >
           <CardHeader
             avatar={
               isTabPrivateConversation ? (
@@ -94,6 +102,22 @@ export function MessageNotificationCard({
               </div>
             }
           />
+
+          {/** Status on whether the conversation has been read or not */}
+          {/** This only applies to private conversations. Company Threads are by defualt read */}
+
+          <div>
+            {!isRead && (
+              <div
+                style={{
+                  width: "10px",
+                  height: "10px",
+                  borderRadius: "10px",
+                  backgroundColor: "#496FFF",
+                }}
+              />
+            )}
+          </div>
         </CardActionArea>
       </Card>
     </Link>

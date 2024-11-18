@@ -31,7 +31,7 @@ export type Database = {
         Insert: {
           application_id?: string
           company_name: string
-          created_at?: string
+          created_at: string
           currentScore?: number | null
           interviewing_round?: string | null
           link?: string | null
@@ -265,7 +265,7 @@ export type Database = {
         Row: {
           conversation_id: string
           created_at: string
-          isRead: boolean
+          is_read: boolean
           receiver_id: string
           sender_id: string
           thread_id: string
@@ -273,7 +273,7 @@ export type Database = {
         Insert: {
           conversation_id: string
           created_at?: string
-          isRead?: boolean
+          is_read?: boolean
           receiver_id: string
           sender_id: string
           thread_id?: string
@@ -281,7 +281,7 @@ export type Database = {
         Update: {
           conversation_id?: string
           created_at?: string
-          isRead?: boolean
+          is_read?: boolean
           receiver_id?: string
           sender_id?: string
           thread_id?: string
@@ -380,10 +380,6 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      hello_world: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
       insert_private_conversation: {
         Args: {
           sender_id: string

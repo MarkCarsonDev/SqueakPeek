@@ -30,7 +30,7 @@ import { useAlert } from "@/lib/store/alert";
 export function SideNav() {
   const [isLoading, setIsLoading] = useState(true);
   const { setAlert } = useAlert();
-  const { setNotifications } = useMessageNotification();
+  const { setNotifications, notifications } = useMessageNotification();
   const { profile } = useProfile();
   const pathName = usePathname();
   const tabs = [
@@ -64,27 +64,21 @@ export function SideNav() {
         } else if (data) {
           const mappedData: MessageNotificationCardProps[] = await Promise.all(
             data.map(async (item) => {
-              const { conversation_id } = item;
+              const { conversation_id, is_read } = item;
               const { avatar, username } =
                 item.profile as unknown as Database["public"]["Tables"]["profile"]["Row"]; // it returns profile as an array of profiles
               const { data: privateMessageData } =
                 await fetchLatestPrivateMessage(conversation_id); // fetches latest message on each conversation
-              if (privateMessageData) {
-                const { sender_username, message } = privateMessageData;
-                return {
-                  avatar: avatar,
-                  conversation_id,
-                  header: username,
-                  subHeader: `${sender_username}: ${message}`,
-                };
-              } else {
-                return {
-                  avatar: avatar,
-                  conversation_id,
-                  header: username,
-                  subHeader: "",
-                };
-              }
+
+              return {
+                avatar,
+                conversation_id,
+                header: username,
+                subHeader: privateMessageData
+                  ? `${privateMessageData.sender_username}: ${privateMessageData.message}`
+                  : "",
+                isRead: is_read,
+              };
             })
           );
           setNotifications(mappedData);
@@ -116,6 +110,7 @@ export function SideNav() {
                 conversation_id: conversationId,
                 header: opportunity.company_name,
                 subHeader: `${opportunity.role_title},  ${opportunity.type}`,
+                isRead: true,
               };
             }
           );
