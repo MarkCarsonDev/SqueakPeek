@@ -10,11 +10,16 @@ export async function fetchOpportunities(
   supabase: SupabaseClient = createSupabaseClient()
 ) {
   const { data, error } = await supabase
-    .from("company_thread")
-    .select(`     
+  .from("company_thread")
+      .select(`
       *,
-      opportunity:opportunity_id(*)
+      opportunity:opportunity_id (
+        *,
+        opportunity_tracking (
+          *
+        )
+      )
     `);
-
+      console.log('opporutnity data', data)
   return { data, error };
 }
