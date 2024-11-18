@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { userHasExistingProfile } from "@/lib/actions/profile_setup"
 
 // refreshes expired Auth token
 export async function updateSession(request: NextRequest) {
@@ -33,6 +34,9 @@ export async function updateSession(request: NextRequest) {
   // supabase.auth.getUser(). A simple mistake could make it very hard to debug
   // issues with users being randomly logged out.
 
+    //simple pathname variable
+    const pathname = request.nextUrl.pathname;
+
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -51,11 +55,22 @@ export async function updateSession(request: NextRequest) {
     // console.log("user: ", user);
     console.log("user logged authenticated");
 
-    // refirect user to company route when first navigating to /message route
+    // redirect user to company route when first navigating to /message route
     if (request.nextUrl.pathname === "/message") {
       const url = request.nextUrl.clone();
       url.pathname = "/message/company";
       return NextResponse.redirect(url);
+    }
+    // Task 4: Redirect any users accessing /profile_setup that already has a profile to /404
+    if (await userHasExistingProfile()) {
+      console.log("USER " + user?.email + " HAS PROFILE");
+      if (pathname === "/profile_setup") {
+        console.log("Task 4: Redirect any users accessing /profile_setup that already has a profile to /404");
+        console.log("USER " + user?.email + " ALREADY HAS PROFILE, redirecting to 404");
+        const url = request.nextUrl.clone();
+        url.pathname = "/404";
+        return NextResponse.rewrite(url);
+      }
     }
   }
 
