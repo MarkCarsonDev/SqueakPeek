@@ -46,9 +46,9 @@ export function OpportunityList() {
 
             const totalApplied =
               (opportunityTracking?.applied || 0) +
-              (opportunityTracking?.interviewed || 0) +
+              (opportunityTracking?.interviewing || 0) +
               (opportunityTracking?.online_assessment || 0) +
-              (opportunityTracking?.offered || 0) +
+              (opportunityTracking?.offer || 0) +
               (opportunityTracking?.rejected || 0);
 
             return {
@@ -56,9 +56,9 @@ export function OpportunityList() {
               opportunity,
               aggregate: {
                 totalApplied,
-                interviewing: opportunityTracking?.interviewed || 0,
+                interviewing: opportunityTracking?.interviewing || 0,
                 oa: opportunityTracking?.online_assessment || 0,
-                offered: opportunityTracking?.offered || 0,
+                offered: opportunityTracking?.offer || 0,
                 rejected: opportunityTracking?.rejected || 0,
               },
             };
