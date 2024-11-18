@@ -149,7 +149,7 @@ export type Database = {
           created_at: string
           opportunity_id: string
           role_title: string
-          type: Database["public"]["Enums"]["OpportunityType"]
+          type: Database["public"]["Enums"]["OpportunityType"] 
         }
         Insert: {
           company_name: string
