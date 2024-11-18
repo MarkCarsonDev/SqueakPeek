@@ -226,8 +226,8 @@ export function SideNav() {
             ).length
           }
         </Typography>
-      </div>
       <SideNavTabsList currentTab={currentTab} />
+      </div>
       <MessageNotificationCardList
         currentTab={currentTab}
         isLoading={isLoading}
