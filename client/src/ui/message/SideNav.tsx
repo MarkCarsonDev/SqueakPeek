@@ -1,18 +1,7 @@
 "use client";
-import { Typography, Tabs, Tab } from "@mui/material";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useRouter } from "next/navigation";
+import { Typography } from "@mui/material";
 import { useEffect, useMemo, useCallback, useState } from "react";
 import { fetchLatestPrivateMessage } from "@/lib/utils/fetchLatestPrivateMessage";
-import {
-  faBuilding as solidBuilding,
-  faMessage as solidMessage,
-} from "@fortawesome/free-solid-svg-icons";
-
-import {
-  faBuilding as regularBuilding,
-  faMessage as regularMessage,
-} from "@fortawesome/free-regular-svg-icons";
 
 import { usePathname } from "next/navigation";
 import { MessageNotificationCardProps } from "./MessageNotificationCard";
@@ -24,6 +13,7 @@ import { fetchBookmarkOpportunities } from "@/lib/utils/fetchBookmarkOpportuniti
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { useMessageNotification } from "@/lib/store/messageNotification";
 import { useAlert } from "@/lib/store/alert";
+import SideNavTabsList from "./SideNavTabsList";
 /**
  * Allows the user to navigate between company threads or private messages in the message page
  */
@@ -34,21 +24,7 @@ export function SideNav() {
     useMessageNotification();
   const { profile } = useProfile();
   const pathName = usePathname();
-  const tabs = [
-    {
-      label: "Company Threads",
-      tabPathName: "company",
-      solidIcon: solidBuilding,
-      regularIcon: regularBuilding,
-    },
-    {
-      label: "Private",
-      tabPathName: "private",
-      solidIcon: solidMessage,
-      regularIcon: regularMessage,
-    },
-  ];
-  const router = useRouter();
+
   const currentTab = pathName.split("/")[2]; // tab is either company or private
   const supabase = useMemo(() => createSupabaseClient(), []);
 
@@ -250,64 +226,8 @@ export function SideNav() {
             ).length
           }
         </Typography>
-        <Tabs
-          value={currentTab}
-          TabIndicatorProps={{
-            style: {
-              background: "#496FFF",
-            },
-          }}
-          sx={{
-            marginTop: "20px",
-            justifySelf: "center",
-            display: "flex",
-            justifyContent: "center",
-            justifyItems: "center",
-            "&.Mui-selected": {
-              color: "yellow",
-              opacity: 1,
-            },
-            "&.Mui-focusVisible": {
-              backgroundColor: "#d1eaff",
-            },
-          }}
-        >
-          {tabs.map(({ tabPathName, solidIcon, regularIcon, label }) => (
-            <Tab
-              value={tabPathName}
-              key={tabPathName}
-              sx={{
-                padding: "0px",
-                marginRight: "20px",
-                "&.Mui-selected": {
-                  color: "#496FFF",
-                },
-              }}
-              icon={
-                <FontAwesomeIcon
-                  size="2x"
-                  icon={
-                    currentTab === tabPathName // gets the route name after the /message route
-                      ? solidIcon
-                      : regularIcon
-                  }
-                />
-              }
-              onClick={() => router.push(`/message/${tabPathName}`)}
-              label={
-                <Typography
-                  sx={{
-                    color: currentTab === tabPathName ? "#496FFF" : "#3C435C",
-                  }}
-                  variant="caption"
-                >
-                  {label}
-                </Typography>
-              }
-            />
-          ))}
-        </Tabs>
       </div>
+      <SideNavTabsList currentTab={currentTab} />
       <MessageNotificationCardList
         currentTab={currentTab}
         isLoading={isLoading}
