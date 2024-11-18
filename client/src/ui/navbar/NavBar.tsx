@@ -11,6 +11,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { NavbarMenuDropdown } from "./NavbarMenuDropdown";
 import { LogoNameLink } from "./LogoNameLink";
+import { useMessageNotification } from "@/lib/store/messageNotification";
 
 interface ILinks {
   name: string;
@@ -36,7 +37,10 @@ export function NavBar() {
     },
   ];
   const pathName = usePathname();
-
+  const { privateNotifications } = useMessageNotification();
+  const numPrivateNotifications = privateNotifications.filter(
+    (notification) => notification.isRead === false
+  ).length;
   return (
     // Navbar container
     <nav
@@ -71,10 +75,10 @@ export function NavBar() {
             textAlign: "center",
           }}
         >
-          {links.map((links) => (
-            <li key={links.name}>
+          {links.map((link) => (
+            <li key={link.name}>
               <Link
-                href={links.href}
+                href={link.href}
                 style={{
                   color: "#3C435C",
                   textDecoration: "none",
@@ -83,16 +87,47 @@ export function NavBar() {
                   marginLeft: "30px",
                 }}
               >
-                <FontAwesomeIcon
-                  icon={links.icon}
-                  style={{ marginRight: "10%" }}
-                />
-                <Typography
-                  sx={{
-                    fontWeight: pathName.startsWith(links.href) ? "bold" : "normal",
+                <div
+                  style={{
+                    marginRight: "7px",
                   }}
                 >
-                  {links.name}
+                  {link.name === "Message" && numPrivateNotifications > 0 && (
+                    <div
+                      style={{
+                        position: "absolute",
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          color: "white",
+                          position: "relative",
+                          width: "17px",
+                          height: "17px",
+                          left: "40%",
+                          bottom: "10px",
+                          backgroundColor: "red",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          borderRadius: "30px",
+                        }}
+                        variant="caption"
+                      >
+                        {numPrivateNotifications}
+                      </Typography>
+                    </div>
+                  )}
+                  <FontAwesomeIcon icon={link.icon} />
+                </div>
+                <Typography
+                  sx={{
+                    fontWeight: pathName.startsWith(link.href)
+                      ? "bold"
+                      : "normal",
+                  }}
+                >
+                  {link.name}
                 </Typography>
               </Link>
             </li>
