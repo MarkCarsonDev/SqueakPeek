@@ -46,7 +46,7 @@ export default function LiveNotifications() {
   // tracks live changes which sets message notifications in real time
   useEffect(() => {
     if (profile) {
-      console.log("reado to listen for live notifications");
+      console.log("reado to listen for live notifications hiii");
       // currentTab == "private"
       // filter does not exist on delete.
       const privateChannel = supabase
