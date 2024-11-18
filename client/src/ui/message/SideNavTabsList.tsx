@@ -26,13 +26,16 @@ const tabs = [
   },
 ];
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
+import { useMessageNotification } from "@/lib/store/messageNotification";
 interface SideNavTabsListProps {
   currentTab: string;
 }
 export default function SideNavTabsList({ currentTab }: SideNavTabsListProps) {
   const router = useRouter();
-
+  const { privateNotifications } = useMessageNotification();
+  const numPrivateNotifications = privateNotifications.filter(
+    (notification) => notification.isRead === false
+  ).length;
   return (
     <Tabs
       value={currentTab}
@@ -68,14 +71,38 @@ export default function SideNavTabsList({ currentTab }: SideNavTabsListProps) {
             },
           }}
           icon={
-            <FontAwesomeIcon
-              size="2x"
-              icon={
-                currentTab === tabPathName // gets the route name after the /message route
-                  ? solidIcon
-                  : regularIcon
-              }
-            />
+            <>
+              {tabPathName === "private" && numPrivateNotifications > 0 && (
+                <div
+                  style={{
+                    position: "absolute",
+                    width: "20px",
+                    height: "20px",
+                    bottom: "70%",
+                    right: "20%",
+                    backgroundColor: "red",
+                    borderRadius: "20px",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      color: "white",
+                    }}
+                    variant="caption"
+                  >
+                    {numPrivateNotifications}
+                  </Typography>
+                </div>
+              )}
+              <FontAwesomeIcon
+                size="2x"
+                icon={
+                  currentTab === tabPathName // gets the route name after the /message route
+                    ? solidIcon
+                    : regularIcon
+                }
+              />
+            </>
           }
           onClick={() => router.push(`/message/${tabPathName}`)}
           label={

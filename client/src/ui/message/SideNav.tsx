@@ -220,13 +220,8 @@ export function SideNav() {
         </Typography>
         <Typography>
           Talk to other applicants in the process, or talk privately{" "}
-          {
-            privateNotifications.filter(
-              (notification) => notification.isRead === false
-            ).length
-          }
         </Typography>
-      <SideNavTabsList currentTab={currentTab} />
+        <SideNavTabsList currentTab={currentTab} />
       </div>
       <MessageNotificationCardList
         currentTab={currentTab}
