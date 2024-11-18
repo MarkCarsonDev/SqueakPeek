@@ -38,7 +38,7 @@ export function OpportunityList() {
                 return null;
               }
 
-              const opportunityTracking  = opportunity.opportunity_tracking as unknown as Database["public"]["Tables"]["opportunity_tracking"]["Row"];
+              const opportunityTracking  = opportunity.opportunity_tracking as Database["public"]["Tables"]["opportunity_tracking"]["Row"];
 
               console.log("Tracking Data: ", opportunityTracking);
               return {
