@@ -60,7 +60,6 @@ export function OpportunityList() {
                 oa: opportunityTracking?.online_assessment || 0,
                 offered: opportunityTracking?.offered || 0,
                 rejected: opportunityTracking?.rejected || 0,
-                messages: 12, // Placeholder for message count
               },
             };
           })

@@ -39,7 +39,6 @@ interface Aggregate {
   offered: number | null;
   totalApplied: number | null;
   oa: number | null;
-  messages: number;
 }
 
 export interface OpportunityCardProps {
@@ -83,7 +82,7 @@ export function OpportunityCard({
   ];
 
   const { company_name, role_title, type } = opportunity;
-  const { rejected, interviewing, offered, totalApplied, oa, messages } =
+  const { rejected, interviewing, offered, totalApplied, oa } =
     aggregate;
   const [bookmarked, setBookmarked] = useState(false);
   const isAppliedColor = appliedStatus ? "green" : "red";
