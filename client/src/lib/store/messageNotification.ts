@@ -53,12 +53,15 @@ export const useMessageNotification = create<MessageNotificationState>()(
         const newNotification = privateNotifications.find(
           (notification) => notification.conversation_id === conversation_id
         );
-        const newNotifications = privateNotifications.filter(
+        let newNotifications = privateNotifications.filter(
           (notification) => notification.conversation_id !== conversation_id
         );
 
         if (newNotification) {
-          newNotifications.push({ ...newNotification, isRead: readValue });
+          newNotifications = [
+            { ...newNotification, isRead: readValue },
+            ...newNotifications,
+          ];
         }
         return { ...state, privateNotifications: newNotifications };
       });
