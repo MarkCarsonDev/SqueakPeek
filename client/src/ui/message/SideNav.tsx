@@ -30,7 +30,7 @@ import { useAlert } from "@/lib/store/alert";
 export function SideNav() {
   const [isLoading, setIsLoading] = useState(true);
   const { setAlert } = useAlert();
-  const { setNotifications, notifications } = useMessageNotification();
+  const { setNotifications } = useMessageNotification();
   const { profile } = useProfile();
   const pathName = usePathname();
   const tabs = [
@@ -81,7 +81,7 @@ export function SideNav() {
               };
             })
           );
-          setNotifications(mappedData);
+          setNotifications("privateNotifications", mappedData);
           setIsLoading(false);
         }
       });
@@ -115,7 +115,7 @@ export function SideNav() {
             }
           );
 
-          setNotifications(mappedData);
+          setNotifications("publicNotifications", mappedData);
           setIsLoading(false);
         }
       });

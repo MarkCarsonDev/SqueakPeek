@@ -41,7 +41,7 @@ export function OpportunityBookmark({
         if (error) {
           // TODO: Handle Error
         } else {
-          removeNotification(conversationId);
+          removeNotification("publicNotifications", conversationId);
           setIsBookmarked(false);
         }
       } else {
