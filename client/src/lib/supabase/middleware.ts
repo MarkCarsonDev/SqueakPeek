@@ -7,7 +7,7 @@ console.log("middleware.ts is always invoked!!!");
 
 //looked into making these Sets but couldn't quite implement the references yet
 //allowed public paths
-const publicPaths = ["/","/login","/signup","/about"];
+const publicPaths = ["/","/login","/signup","/about","/auth/callback"];
 
 //whitelists auth'd user paths
 const validUserPaths = ["/message", "/explore", "/profile", "/thread", "/track", "/profile_setup"];
