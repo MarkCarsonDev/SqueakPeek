@@ -49,7 +49,7 @@ export async function loginAccount(
     password: password,
   });
   if (error) {
-    console.log("Error loging in: ", error);
+    console.log("Error logging in: ", error);
     return { message: "Login Failed" };
   }
 
