@@ -1,9 +1,27 @@
-"use client";
-import { Typography } from "@mui/material";
+'use client';
+
+import { Typography, Button } from "@mui/material";
 import "@/app/(main)/explore/explore.css";
 import { OpportunityList } from "@/ui/explore/OpportunityList";
+import { Filters } from "@/ui/explore/Filters";
+import { SearchBar } from "@/ui/explore/SearchBar";
+import { useState } from "react";
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
+  const [isFilterModalOpen, setFilterModalOpen] = useState(false);
+  const [resetSearch, setResetSearch] = useState(false); // New state
+  const router = useRouter();
+
+  const handleResetFilters = () => {
+    router.replace(`?`);
+    setResetSearch(true);
+  };
+
+  // Reset `resetSearch` state after the search bar has cleared
+  const handleSearchResetComplete = () => {
+    setResetSearch(false);
+  };
 
   return (
     <div className="page-container">
@@ -20,19 +38,19 @@ export default function Page() {
             <span style={{ fontWeight: "bold" }}>company threads</span>.
           </Typography>
         </div>
-        {/* To Add Later <SearchBar filters={filters} setFilters={setFilters} /> */}
-        {/* To Add Later <SortOptions filters={filters} setFilters={setFilters} /> */}
+        <SearchBar resetSearch={resetSearch} onResetComplete={handleSearchResetComplete} />
+        <Button className="filter-button explore-control-button" variant="contained" onClick={() => setFilterModalOpen(true)}>
+          Filters
+        </Button>
+        <Button className="reset-filter-button explore-control-button" variant="outlined" onClick={handleResetFilters}>
+          Reset Filters
+        </Button>
       </div>
       <div className="card-filter-container">
-         {/* This OpportunityList contains the OpportunityCards */}
+        <div className="opportunity-list-container">
           <OpportunityList />
-          <Typography
-            variant="h6"
-            sx={{ marginBottom: "0.5rem", marginLeft: "0.5rem" }}
-          >
-            Filters
-          </Typography>
-          {/* <Filters filters={filters} setFilters={setFilters} /> */}
+        </div>
+        <Filters open={isFilterModalOpen} handleClose={() => setFilterModalOpen(false)} />
       </div>
     </div>
   );
