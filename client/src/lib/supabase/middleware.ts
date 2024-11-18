@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { userHasExistingProfile } from "@/lib/actions/profile_setup"
+<<<<<<< HEAD
 
 console.log("***** BEGIN middleware.ts ******");
 console.log("middleware.ts is always invoked!!!");
@@ -39,6 +40,8 @@ function isAllowedUserPath(pathname: string){
   // }
   return hasBasePath(pathname, validUserPaths);
 }
+=======
+>>>>>>> 797906169f3534fb35ca7dfdf8c4429d809c22cd
 
 // refreshes expired Auth token
 export async function updateSession(request: NextRequest) {
@@ -71,11 +74,21 @@ export async function updateSession(request: NextRequest) {
   //get Supabase user
   const { data: { user } } = await supabase.auth.getUser();
 
+<<<<<<< HEAD
   //simple pathname variable
   const pathname = request.nextUrl.pathname;
+=======
+    //simple pathname variable
+    const pathname = request.nextUrl.pathname;
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+>>>>>>> 797906169f3534fb35ca7dfdf8c4429d809c22cd
 
   console.log("USER REQUEST PATHNAME: "+ pathname);
 
+<<<<<<< HEAD
   if (user) {
     const userEmail = user?.email;
     console.log("USER " + userEmail + " HAS AUTHENTICATED");
@@ -85,10 +98,29 @@ export async function updateSession(request: NextRequest) {
     if(!(isAllowedUserPath(pathname)) && !(isPublicPath(pathname))) {
       console.log("User attempted to access a restricted path. Redirecting to /explore");
       console.log("Task 1: Only allow authorized users to access the pages under the (main) directory");
+=======
+    // redirect user to company route when first navigating to /message route
+    if (request.nextUrl.pathname === "/message") {
+>>>>>>> 797906169f3534fb35ca7dfdf8c4429d809c22cd
       const url = request.nextUrl.clone();
       url.pathname = "/explore";
       return NextResponse.redirect(url);
     }
+<<<<<<< HEAD
+=======
+    // Task 4: Redirect any users accessing /profile_setup that already has a profile to /404
+    if (await userHasExistingProfile()) {
+      console.log("USER " + user?.email + " HAS PROFILE");
+      if (pathname === "/profile_setup") {
+        console.log("Task 4: Redirect any users accessing /profile_setup that already has a profile to /404");
+        console.log("USER " + user?.email + " ALREADY HAS PROFILE, redirecting to 404");
+        const url = request.nextUrl.clone();
+        url.pathname = "/404";
+        return NextResponse.rewrite(url);
+      }
+    }
+  }
+>>>>>>> 797906169f3534fb35ca7dfdf8c4429d809c22cd
 
     // Task 3: Redirect authenticated users without a profile to /profile_setup
     const hasUserProfile = await userHasExistingProfile();
