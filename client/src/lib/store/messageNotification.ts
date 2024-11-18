@@ -12,7 +12,7 @@ interface MessageNotificationState {
   removeNotification: (type: NotificationType, conversationId: string) => void;
   setReadPrivateConversation: (
     conversation_id: string,
-    readValue: boolean,
+    readValue: boolean
   ) => void;
 }
 
@@ -48,7 +48,6 @@ export const useMessageNotification = create<MessageNotificationState>()(
     },
 
     setReadPrivateConversation: (conversation_id, readValue) => {
-      console.log('set read private conversation')
       set((state) => {
         const { privateNotifications } = state;
         const newNotification = privateNotifications.find(

@@ -48,7 +48,6 @@ export const LiveNotifications = memo(function LiveNotifications() {
   // tracks live changes which sets message notifications in real time
   useEffect(() => {
     if (profile) {
-      console.log("reado to listen for live notifications");
       // currentTab == "private"
       // filter does not exist on delete.
       const privateChannel = supabase
@@ -61,8 +60,7 @@ export const LiveNotifications = memo(function LiveNotifications() {
             table: "private_user_conversation",
             filter: `sender_id=eq.${profile.profile_id}`,
           },
-          (payload) => {
-            console.log("payload: ", payload);
+          () => {
             setPrivateConversationNotifications(profile.profile_id);
           }
         )
@@ -75,7 +73,6 @@ export const LiveNotifications = memo(function LiveNotifications() {
             filter: `sender_id=eq.${profile.profile_id}`,
           },
           (payload) => {
-            console.log("live notifications payload: ", payload);
             const newNotification =
               payload.new as Database["public"]["Tables"]["private_user_conversation"]["Row"];
             setReadPrivateConversation(
