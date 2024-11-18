@@ -9,7 +9,7 @@ export async function InsertApplication(
   profile: Profile,
   application: Application,
   supabase: SupabaseClient = createSupabaseClient()
-): Promise<{ data: {application_id: string, thread_id: string | null } | null; error: PostgrestError | null }> {
+): Promise<{ data: {application_id: string, thread_id: string | null, application_stats: object | null } | null; error: PostgrestError | null }> {
   const { data: opportunityData, error: opportunityError } = await supabase
     .from("opportunity")
     .select("opportunity_id")
@@ -117,11 +117,12 @@ export async function InsertApplication(
 
   if (threadError) {
     console.error("Error fetching thread_id:", threadError.message);
-    return { data: { application_id, thread_id: null }, error: threadError };
+    return { data: { application_id, thread_id: null, application_stats: null }, error: threadError };
   }
   const thread_id = threadData?.thread_id || null;
+  const application_stats = null;
   // console.log("Application inserted:", insertApplication);
   // console.log("Thread ID:", typeof(thread_id));
-  return { data: { application_id, thread_id }, error: null };
+  return { data: { application_id, thread_id, application_stats }, error: null };
 }
 

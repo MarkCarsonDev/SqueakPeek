@@ -7,7 +7,7 @@ export async function FetchApplication(
   profile: Profile,
   supabase: SupabaseClient = createSupabaseClient(),
 ): Promise<{ data: Application[] | null; error: PostgrestError | null }> {
-  // Fetch all applications for the profile with their corresponding thread_id
+  // Fetch all applications for the profile with their corresponding thread_id and opportunity_tracking
   const { data: applications, error: applicationsError } = await supabase
     .from('application')
     .select(`*,
@@ -41,5 +41,3 @@ export async function FetchApplication(
   console.log(finalApplications);
   return { data: finalApplications, error: null };
 }
-
-//opportunity_tracking:opportunity!opportunity_id(opportunity_tracking!opportunity_id(*))

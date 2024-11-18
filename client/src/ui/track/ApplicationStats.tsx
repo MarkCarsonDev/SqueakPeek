@@ -16,11 +16,6 @@ export default function ApplicationStats({application}: ApplicationStatsProps) {
       series={[
         {
           data: [
-            // { id: 0, color: "#769FCD", value: application.applied, label: "Applied" },
-            // { id: 1, color: "#C7253E", value: application.rejected, label: "Rejected" },
-            // { id: 2, color: "#EB5B00", value: application.online_assessment, label: "Online Assessment" },
-            // { id: 4, color: "#F0A202", value: application.interviewing, label: "Interviewing" },
-            // { id: 5, color: "#2E7E33", value: application.offer, label: "Offer" }
             { id: 0, color: "#769FCD", value: application.application_stats?.applied ?? 0, label: "Applied" },
             { id: 1, color: "#C7253E", value: application.application_stats?.rejected ?? 0, label: "Rejected" },
             { id: 2, color: "#EB5B00", value: application.application_stats?.online_assessment ?? 0, label: "Online Assessment" },
