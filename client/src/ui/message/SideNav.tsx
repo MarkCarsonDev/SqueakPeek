@@ -1,18 +1,7 @@
 "use client";
-import { Typography, Tabs, Tab } from "@mui/material";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useRouter } from "next/navigation";
+import { Typography } from "@mui/material";
 import { useEffect, useMemo, useCallback, useState } from "react";
-
-import {
-  faBuilding as solidBuilding,
-  faMessage as solidMessage,
-} from "@fortawesome/free-solid-svg-icons";
-
-import {
-  faBuilding as regularBuilding,
-  faMessage as regularMessage,
-} from "@fortawesome/free-regular-svg-icons";
+import { fetchLatestPrivateMessage } from "@/lib/utils/fetchLatestPrivateMessage";
 
 import { usePathname } from "next/navigation";
 import { MessageNotificationCardProps } from "./MessageNotificationCard";
@@ -24,37 +13,25 @@ import { fetchBookmarkOpportunities } from "@/lib/utils/fetchBookmarkOpportuniti
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { useMessageNotification } from "@/lib/store/messageNotification";
 import { useAlert } from "@/lib/store/alert";
+import SideNavTabsList from "./SideNavTabsList";
 /**
  * Allows the user to navigate between company threads or private messages in the message page
  */
 export function SideNav() {
   const [isLoading, setIsLoading] = useState(true);
   const { setAlert } = useAlert();
-  const { setNotifications } = useMessageNotification();
+  const { setNotifications, setReadPrivateConversation } =
+    useMessageNotification();
   const { profile } = useProfile();
   const pathName = usePathname();
-  const tabs = [
-    {
-      label: "Company Threads",
-      tabPathName: "company",
-      solidIcon: solidBuilding,
-      regularIcon: regularBuilding,
-    },
-    {
-      label: "Private",
-      tabPathName: "private",
-      solidIcon: solidMessage,
-      regularIcon: regularMessage,
-    },
-  ];
-  const router = useRouter();
+
   const currentTab = pathName.split("/")[2]; // tab is either company or private
   const supabase = useMemo(() => createSupabaseClient(), []);
 
   // sets notifications based on private conversations
   const setPrivateConversationNotifications = useCallback(
     (profileId: string) => {
-      fetchPrivateConversations(profileId).then((res) => {
+      fetchPrivateConversations(profileId).then(async (res) => {
         const { data, error } = res;
         if (error) {
           setAlert({
@@ -62,20 +39,26 @@ export function SideNav() {
             type: "error",
           });
         } else if (data) {
-          const mappedData: MessageNotificationCardProps[] = data.map(
-            (item) => {
-              const { conversation_id } = item;
+          const mappedData: MessageNotificationCardProps[] = await Promise.all(
+            data.map(async (item) => {
+              const { conversation_id, is_read } = item;
               const { avatar, username } =
                 item.profile as unknown as Database["public"]["Tables"]["profile"]["Row"]; // it returns profile as an array of profiles
+              const { data: privateMessageData } =
+                await fetchLatestPrivateMessage(conversation_id); // fetches latest message on each conversation
+
               return {
-                avatar: avatar,
+                avatar,
                 conversation_id,
                 header: username,
-                subHeader: "",
+                subHeader: privateMessageData
+                  ? `${privateMessageData.sender_username}: ${privateMessageData.message}`
+                  : "",
+                isRead: is_read,
               };
-            }
+            })
           );
-          setNotifications(mappedData);
+          setNotifications("privateNotifications", mappedData);
           setIsLoading(false);
         }
       });
@@ -104,11 +87,12 @@ export function SideNav() {
                 conversation_id: conversationId,
                 header: opportunity.company_name,
                 subHeader: `${opportunity.role_title},  ${opportunity.type}`,
+                isRead: true,
               };
             }
           );
 
-          setNotifications(mappedData);
+          setNotifications("publicNotifications", mappedData);
           setIsLoading(false);
         }
       });
@@ -122,6 +106,42 @@ export function SideNav() {
   useEffect(() => {
     setIsLoading(true);
     if (profile) {
+      // currentTab == "private"
+      // filter does not exist on delete.
+      const privateChannel = supabase
+        .channel("private_changes")
+        .on(
+          "postgres_changes",
+          {
+            schema: "public", // Subscribes to the "public" schema in Postgres
+            event: "INSERT", // Listen to all changes
+            table: "private_user_conversation",
+            filter: `sender_id=eq.${profile.profile_id}`,
+          },
+          (payload) => {
+            console.log("payload: ", payload);
+            setPrivateConversationNotifications(profile.profile_id);
+          }
+        )
+        .on(
+          "postgres_changes",
+          {
+            schema: "public", // Subscribes to the "public" schema in Postgres
+            event: "UPDATE", // Listen to all changes
+            table: "private_user_conversation",
+            filter: `sender_id=eq.${profile.profile_id}`,
+          },
+          (payload) => {
+            const newNotification =
+              payload.new as Database["public"]["Tables"]["private_user_conversation"]["Row"];
+            setReadPrivateConversation(
+              newNotification.conversation_id,
+              newNotification.is_read
+            );
+          }
+        )
+        .subscribe();
+
       if (currentTab === "company") {
         // filter does not exist on delete.
         const bookmarkChannel = supabase
@@ -141,29 +161,11 @@ export function SideNav() {
         return () => {
           bookmarkChannel.unsubscribe();
         };
-      } else {
-        // currentTab == "private"
-        // filter does not exist on delete.
-        const bookmarkChannel = supabase
-          .channel("private_changes")
-          .on(
-            "postgres_changes",
-            {
-              schema: "public", // Subscribes to the "public" schema in Postgres
-              event: "INSERT", // Listen to all changes
-              table: "private_user_conversation",
-              filter: `receiver_id=eq.${profile.profile_id}`,
-            },
-            () => {
-              setPrivateConversationNotifications(profile.profile_id);
-            }
-          )
-          .subscribe();
-
-        return () => {
-          bookmarkChannel.unsubscribe();
-        };
       }
+
+      return () => {
+        privateChannel.unsubscribe();
+      };
     }
   }, [
     currentTab,
@@ -171,14 +173,14 @@ export function SideNav() {
     supabase,
     setPrivateConversationNotifications,
     setOpportunityBookmarksNotifications,
+    setReadPrivateConversation,
   ]);
 
   // sets notifications on page load
   useEffect(() => {
     if (profile) {
-      if (currentTab === "private") {
-        setPrivateConversationNotifications(profile.profile_id);
-      } else {
+      setPrivateConversationNotifications(profile.profile_id);
+      if (currentTab === "company") {
         setOpportunityBookmarksNotifications(profile.profile_id);
       }
     }
@@ -188,6 +190,10 @@ export function SideNav() {
     setOpportunityBookmarksNotifications,
     setPrivateConversationNotifications,
   ]);
+
+  useEffect(() => {
+    supabase.channel("");
+  }, [supabase]);
 
   return (
     <div
@@ -213,65 +219,9 @@ export function SideNav() {
           Messages
         </Typography>
         <Typography>
-          Talk to other applicants in the process, or talk privately
+          Talk to other applicants in the process, or talk privately{" "}
         </Typography>
-        <Tabs
-          value={currentTab}
-          TabIndicatorProps={{
-            style: {
-              background: "#496FFF",
-            },
-          }}
-          sx={{
-            marginTop: "20px",
-            justifySelf: "center",
-            display: "flex",
-            justifyContent: "center",
-            justifyItems: "center",
-            "&.Mui-selected": {
-              color: "yellow",
-              opacity: 1,
-            },
-            "&.Mui-focusVisible": {
-              backgroundColor: "#d1eaff",
-            },
-          }}
-        >
-          {tabs.map(({ tabPathName, solidIcon, regularIcon, label }) => (
-            <Tab
-              value={tabPathName}
-              key={tabPathName}
-              sx={{
-                padding: "0px",
-                marginRight: "20px",
-                "&.Mui-selected": {
-                  color: "#496FFF",
-                },
-              }}
-              icon={
-                <FontAwesomeIcon
-                  size="2x"
-                  icon={
-                    currentTab === tabPathName // gets the route name after the /message route
-                      ? solidIcon
-                      : regularIcon
-                  }
-                />
-              }
-              onClick={() => router.push(`/message/${tabPathName}`)}
-              label={
-                <Typography
-                  sx={{
-                    color: currentTab === tabPathName ? "#496FFF" : "#3C435C",
-                  }}
-                  variant="caption"
-                >
-                  {label}
-                </Typography>
-              }
-            />
-          ))}
-        </Tabs>
+        <SideNavTabsList currentTab={currentTab} />
       </div>
       <MessageNotificationCardList
         currentTab={currentTab}
