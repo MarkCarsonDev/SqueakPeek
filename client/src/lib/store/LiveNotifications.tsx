@@ -8,7 +8,7 @@ import { fetchLatestPrivateMessage } from "@/lib/utils/fetchLatestPrivateMessage
 import { Database } from "@/lib/types/database.types";
 import { useMessageNotification } from "./messageNotification";
 
-export const LiveNotifications = memo(() => {
+export const LiveNotifications = memo(function LiveNotifications() {
   const { profile } = useProfile();
   const supabase = useMemo(() => createSupabaseClient(), []);
 
@@ -90,12 +90,7 @@ export const LiveNotifications = memo(() => {
         privateChannel.unsubscribe();
       };
     }
-  }, [
-    profile,
-    supabase,
-    setPrivateConversationNotifications,
-    setReadPrivateConversation,
-  ]);
+  }, [profile, supabase, setPrivateConversationNotifications, setReadPrivateConversation]);
 
   // sets notifications on page load
   useEffect(() => {

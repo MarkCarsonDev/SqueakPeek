@@ -1,7 +1,7 @@
 import { NavBar } from "@/ui/navbar/NavBar";
 import { createSupabaseServer } from "../../lib/supabase/server";
-import InitProfile from "../../lib/store/initProfile";
-import {LiveNotifications} from "@/lib/store/LiveNotifications";
+import { InitProfile } from "@/lib/store/InitProfile";
+import { LiveNotifications } from "@/lib/store/LiveNotifications";
 
 /**
  * This layout file affects files in the (main) directory

@@ -135,6 +135,7 @@ export function SideNav() {
   ]);
 
   // sets notifications on page load
+  // TODO: private notifications is being set twice if the user goes to the message page. See LiveNotificatons component
   useEffect(() => {
     if (profile) {
       setPrivateConversationNotifications(profile.profile_id);
