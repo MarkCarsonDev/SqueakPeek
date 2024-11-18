@@ -73,26 +73,25 @@ export default function SideNavTabsList({ currentTab }: SideNavTabsListProps) {
           icon={
             <>
               {tabPathName === "private" && numPrivateNotifications > 0 && (
-                <div
-                  style={{
+                <Typography
+                  sx={{
+                    color: "white",
                     position: "absolute",
                     width: "20px",
                     height: "20px",
-                    bottom: "70%",
+                    bottom: "65%",
                     right: "20%",
-                    backgroundColor: "red",
+                    backgroundColor: "#496FFF",
                     borderRadius: "20px",
+                    border: "2px solid #F6F8FF",
+                    marginTop: "2px",
                   }}
+                  variant="caption"
                 >
-                  <Typography
-                    sx={{
-                      color: "white",
-                    }}
-                    variant="caption"
-                  >
-                    {numPrivateNotifications}
-                  </Typography>
-                </div>
+                  {numPrivateNotifications <= 9
+                    ? numPrivateNotifications
+                    : "9+"}
+                </Typography>
               )}
               <FontAwesomeIcon
                 size="2x"

@@ -102,19 +102,23 @@ export function NavBar() {
                         sx={{
                           color: "white",
                           position: "relative",
-                          width: "17px",
-                          height: "17px",
-                          left: "40%",
-                          bottom: "10px",
-                          backgroundColor: "red",
+                          width: "16px",
+                          height: "16px",
+                          left: "22%",
+                          bottom: "13px",
+                          backgroundColor: "#496FFF",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
                           borderRadius: "30px",
+                          border: "2px solid white",
+                          fontSize: "10px",
                         }}
                         variant="caption"
                       >
-                        {numPrivateNotifications}
+                        {numPrivateNotifications <= 9
+                          ? numPrivateNotifications
+                          : "9+"}
                       </Typography>
                     </div>
                   )}
