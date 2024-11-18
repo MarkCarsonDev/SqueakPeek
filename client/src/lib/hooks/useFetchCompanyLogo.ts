@@ -14,7 +14,6 @@ export const useFetchCompanyLogo = (companyName: string) => {
   useEffect(() => {
     generateCompanyLogo(companyName).then((logoURL) => {
       if (logoURL) {
-        console.log("profile set")
         setCompanyLogoURL(logoURL);
       }
     });

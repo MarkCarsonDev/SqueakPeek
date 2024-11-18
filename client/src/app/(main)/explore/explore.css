@@ -9,7 +9,7 @@
 .card-filter-container{
     display: grid;
     gap: 2rem;
-    grid-template-columns: 70% 30%;
+    grid-template-columns: 70% 20%;
 }
 
 

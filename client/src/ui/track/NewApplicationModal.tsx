@@ -365,7 +365,7 @@ export default function NewApplicationModal({
               fullWidth
               sx={{
                 marginTop: "20px",
-                color: "#496FFF",
+                color: "#3C435C",
                 backgroundColor: "white",
                 boxShadow: "none",
                 height: "53px",

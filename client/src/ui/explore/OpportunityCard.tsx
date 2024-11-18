@@ -29,17 +29,16 @@ import { useFetchCompanyLogo } from "@/lib/hooks/useFetchCompanyLogo";
 interface jobStats {
   status: string;
   color: string;
-  quantity: number;
+  quantity: number | null;
 }
 
 // TODO: Replace this with the actual database type
 interface Aggregate {
-  rejected: number;
-  interviewing: number;
-  offered: number;
-  totalApplied: number;
-  oa: number;
-  messages: number;
+  rejected: number | null;
+  interviewing: number | null;
+  offered: number | null;
+  totalApplied: number | null;
+  oa: number | null;
 }
 
 export interface OpportunityCardProps {
@@ -62,28 +61,28 @@ export function OpportunityCard({
   const stats: jobStats[] = [
     {
       status: "Rejected:",
-      color: "red",
-      quantity: 12,
+      color: "#C7253E",
+      quantity: aggregate.rejected,
     },
     {
       status: "OA:",
-      color: "orange",
-      quantity: 12,
+      color: "#EB5B00",
+      quantity: aggregate.oa,
     },
     {
       status: "Interviewing:",
-      color: "gold",
-      quantity: 12,
+      color: "#F0A202",
+      quantity: aggregate.interviewing,
     },
     {
       status: "Offered:",
-      color: "green",
-      quantity: 12,
+      color: "#2E7E33",
+      quantity: aggregate.offered,
     },
   ];
 
   const { company_name, role_title, type } = opportunity;
-  const { rejected, interviewing, offered, totalApplied, oa, messages } =
+  const { rejected, interviewing, offered, totalApplied, oa } =
     aggregate;
   const [bookmarked, setBookmarked] = useState(false);
   const isAppliedColor = appliedStatus ? "green" : "red";
@@ -169,10 +168,7 @@ export function OpportunityCard({
                 boxShadow: "none",
               }}
             >
-              <FontAwesomeIcon icon={faComment} />
-              <Typography style={{ color: "white", marginLeft: ".5rem" }}>
-                {messages}
-              </Typography>
+              <FontAwesomeIcon icon={faComment} style={{fontSize: "1.2rem"}}/>
             </Button>
           </Link>
 
