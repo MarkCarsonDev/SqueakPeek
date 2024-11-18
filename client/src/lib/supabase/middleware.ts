@@ -5,6 +5,7 @@ import { userHasExistingProfile } from "@/lib/actions/profile_setup"
 console.log("***** BEGIN middleware.ts ******");
 console.log("middleware.ts is always invoked!!!");
 
+
 //looked into making these Sets but couldn't quite implement the references yet
 //allowed public paths
 const publicPaths = ["/","/login","/signup","/about","/auth/callback"];
