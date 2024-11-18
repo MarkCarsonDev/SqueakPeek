@@ -20,7 +20,7 @@ import SideNavTabsList from "./SideNavTabsList";
 export function SideNav() {
   const [isLoading, setIsLoading] = useState(true);
   const { setAlert } = useAlert();
-  const { setNotifications, setReadPrivateConversation, privateNotifications } =
+  const { setNotifications, setReadPrivateConversation } =
     useMessageNotification();
   const { profile } = useProfile();
   const pathName = usePathname();
