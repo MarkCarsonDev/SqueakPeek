@@ -168,7 +168,7 @@ export function OpportunityCard({
                 boxShadow: "none",
               }}
             >
-              <FontAwesomeIcon icon={faComment} />
+              <FontAwesomeIcon icon={faComment} style={{fontSize: "1.2rem"}}/>
             </Button>
           </Link>
 
