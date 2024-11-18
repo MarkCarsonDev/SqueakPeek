@@ -3,6 +3,7 @@ import { useRef, memo, useEffect } from "react";
 import { NewMessagesNotificationModal } from "./NewMessageNotificationModal";
 import { MutableRefObject } from "react";
 import { MessageList } from "./MessageList";
+import { CircularProgress } from "@mui/material";
 
 /**
  * Renders new message notifications, message list, and the message input
@@ -15,10 +16,12 @@ export const ConversationBody = memo(function ConversationBody({
   numNewMessages,
   resetNumNewMessages,
   bottomRef,
+  isLoading,
 }: {
   numNewMessages: number;
   resetNumNewMessages: () => void;
   bottomRef: MutableRefObject<HTMLDivElement | null>;
+  isLoading: boolean;
 }) {
   // Scroll to the bottom of the element
   const scrollContainerRef = useRef<null | HTMLDivElement>(null);
@@ -62,31 +65,49 @@ export const ConversationBody = memo(function ConversationBody({
     scrollDown();
   }, []);
 
-  return (
-    <div
-      style={{
-        overflowY: "auto", // allows vertical scrolling on the messages
-      }}
-      ref={scrollContainerRef}
-    >
-      <NewMessagesNotificationModal
-        numNewMessages={numNewMessages}
-        scrollDown={scrollDown}
-        resetNumNewMessages={resetNumNewMessages}
-      />
-
-      <MessageList
-        isPageBottomFlushed={pageIsBottomFlushed()}
-        scrollDown={scrollDown}
-      />
-
-      {/* Used as a reference to scroll down the page */}
+  if (isLoading) {
+    return (
       <div
-        ref={bottomRef}
         style={{
-          height: `${scrollThreshold}px`,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
         }}
-      />
-    </div>
-  );
+      >
+        <CircularProgress
+          sx={{
+            color: "#496FFF",
+          }}
+        />
+      </div>
+    );
+  } else {
+    return (
+      <div
+        style={{
+          overflowY: "auto", // allows vertical scrolling on the messages
+        }}
+        ref={scrollContainerRef}
+      >
+        <NewMessagesNotificationModal
+          numNewMessages={numNewMessages}
+          scrollDown={scrollDown}
+          resetNumNewMessages={resetNumNewMessages}
+        />
+
+        <MessageList
+          isPageBottomFlushed={pageIsBottomFlushed()}
+          scrollDown={scrollDown}
+        />
+
+        {/* Used as a reference to scroll down the page */}
+        <div
+          ref={bottomRef}
+          style={{
+            height: `${scrollThreshold}px`,
+          }}
+        />
+      </div>
+    );
+  }
 });

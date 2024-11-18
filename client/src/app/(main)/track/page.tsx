@@ -7,19 +7,14 @@ import NewApplicationModal from "@/ui/track/NewApplicationModal";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import { StageColumn, StageColumnProps } from "@/ui/track/StageColumn"; 
 import { Application, ApplicationStage, useTrack } from "@/lib/store/track";
-import { useProfile } from "@/lib/store/profile";
-import { AlertMessage } from "@/ui/AlertMessage";
+import { useProfile } from "@/lib/store/profile"; 
 import "./tracking.css";
 
 export default function Page() {
   const [openModal, setOpenModal] = useState(false);
   const [applicationStatus, setApplicationStatus] = useState<ApplicationStage>("Applied");
   const [selectedApplication, setSelectedApplication] = useState<Application | undefined>();
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error" | "info" | "warning">("success");
-
-
+  const [preventClick, setPreventClick] = useState(false);
   // Retrieve application data and actions from the Zustand store
   const {
     Applied,
@@ -51,6 +46,10 @@ export default function Page() {
 
   // Function to open the modal and set the application status
   const handleOpenModal = (stage: ApplicationStage, application?: Application) => {
+    if (preventClick) {
+      setPreventClick(false); // Reset preventClick to allow subsequent clicks
+      return;
+    }
     setApplicationStatus(stage); 
     setSelectedApplication(application); 
     setOpenModal(true); 
@@ -60,18 +59,7 @@ export default function Page() {
   const handleCloseModal = () => {
     setOpenModal(false);
     setSelectedApplication(undefined);
-  };
-
-  // Success handler to show a snackbar message
-  const handleSuccess = (message: string, severity: "success" | "error" | "info" | "warning" = "success") => {
-    setSnackbarMessage(message);
-    setSnackbarSeverity(severity);
-    setSnackbarOpen(true);
-  };
-
-  // Close Snackbar
-  const closeSnackbar = () => {
-    setSnackbarOpen(false);
+    setPreventClick(false);
   };
 
   // Handle drag-and-drop for moving applications between stages
@@ -133,7 +121,6 @@ export default function Page() {
           applicationStatus={applicationStatus}
           setApplicationStatus={setApplicationStatus}
           existingApplication={selectedApplication}
-          onSuccess={handleSuccess} // Pass handleSuccess to handle success messages
         />
       )}
 
@@ -156,18 +143,12 @@ export default function Page() {
               stageColor={stage.stageColor}
               applications={stage.applications}
               handleOpenModal={handleOpenModal}
-              onCardClick={(application) => handleOpenModal(stage.stage, application)}
+              onCardClick={(application) => {if (!preventClick) {handleOpenModal(stage.stage, application)}}}
+              setPreventClick={setPreventClick}
             />
           ))}
         </div>
       </DragDropContext>
-      {/* Reusable AlertMessage component */}
-      <AlertMessage
-        message={snackbarMessage}
-        severity={snackbarSeverity}
-        open={snackbarOpen}
-        onClose={closeSnackbar}
-      />
     </div>
   );
 }
