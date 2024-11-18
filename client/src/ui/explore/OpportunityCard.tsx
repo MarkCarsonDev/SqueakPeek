@@ -31,21 +31,24 @@ interface jobStats {
   quantity: number;
 }
 
-// TODO: Replace this with the actual database type
+// OpportunityCardProps.ts
 interface Aggregate {
-  rejected: number;
-  interviewing: number;
-  offered: number;
   totalApplied: number;
+  interviewed: number;
   oa: number;
+  offered: number;
+  rejected: number;
   messages: number;
 }
 
 export interface OpportunityCardProps {
   conversation_id: string;
-  opportunity: Database["public"]["Tables"]["opportunity"]["Row"];
+  opportunity: Database["public"]["Tables"]["opportunity"]["Row"] & {
+    opportunity_tracking: Database["public"]["Tables"]["opportunity_tracking"]["Row"][] | null;
+  };
   aggregate: Aggregate;
 }
+
 
 export function OpportunityCard({
   conversation_id,
@@ -82,7 +85,7 @@ export function OpportunityCard({
   ];
 
   const { company_name, role_title, type } = opportunity;
-  const { rejected, interviewing, offered, totalApplied, oa, messages } =
+  const { rejected, interviewed, offered, totalApplied, oa, messages } =
     aggregate;
   const [bookmarked, setBookmarked] = useState(false);
   const isAppliedColor = appliedStatus ? "green" : "red";
@@ -309,7 +312,7 @@ export function OpportunityCard({
           <OpportunityStackedBarGraph
             rejected={rejected}
             oa={oa}
-            interviewing={interviewing}
+            interviewing={interviewed}
             offered={offered}
           />
         </div>

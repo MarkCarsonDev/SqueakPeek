@@ -18,7 +18,6 @@
     flex: 1; /* Added to allow this container to grow and fill available space */
     display: grid;
     gap: 2rem;
-    /* grid-template-columns: 70% 30%; */
     overflow: hidden; /* Prevents internal content from affecting the page height */
 }
 

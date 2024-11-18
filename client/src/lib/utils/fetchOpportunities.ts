@@ -4,12 +4,12 @@ import { SelectedFilters } from "@/ui/explore/Filters";
 
 
 /**
- * Fetches opportunities with applied filters and pagination.
+ * Fetches opportunities and associated tracking data with applied filters and pagination.
  * @param supabase - Supabase client
  * @param filters - Selected filters to apply
  * @param limit - Number of records to fetch
  * @param offset - Number of records to skip
- * @returns {data: An array of opportunities, error: PostgrestError, totalCount: number}
+ * @returns {data: An array of opportunities with tracking details, error: PostgrestError, totalCount: number}
  */
 export async function fetchOpportunities(
   supabase: SupabaseClient<Database>,
@@ -26,11 +26,15 @@ export async function fetchOpportunities(
       `
       thread_id,
       opportunity:opportunity_id (
-        *
+        *,
+        opportunity_tracking (
+          *
+        )
       )
     `,
       { count: "exact" }
     );
+    
 
     if (filters.company) {
       const companies = filters.company[0]?.split(',') || [];
@@ -71,7 +75,10 @@ export async function fetchOpportunities(
       `
       thread_id,
       opportunity:opportunity_id (
-        *
+        *,
+        opportunity_tracking (
+          *
+        )
       )
     `
     )
@@ -83,7 +90,10 @@ export async function fetchOpportunities(
       `
       thread_id,
       opportunity:opportunity_id (
-        *
+        *,
+        opportunity_tracking (
+          *
+        )
       )
     `
     )
@@ -120,8 +130,11 @@ const typeQuery = matchingType
         `
         thread_id,
         opportunity:opportunity_id (
+        *,
+        opportunity_tracking (
           *
         )
+      )
       `
       )
       .eq("opportunity.type", typeMappings[matchingType])
