@@ -10,6 +10,7 @@ import { createSupabaseClient } from "@/lib/supabase/client";
 import { fetchMessages } from "@/lib/utils/fetchMessages";
 import { MessageCardProps } from "./MessageCard";
 import { notFound } from "next/navigation";
+import { updatePrivateConversationIsRead } from "@/lib/utils/updatePrivateConversationIsRead";
 
 /**
  * This is a UI container that holds all messages for a particular conversation
@@ -45,6 +46,14 @@ export function Conversation({
           .select("conversation_id")
           .eq("conversation_id", conversationId)
           .single();
+        if (data && profile) {
+          const { error: updateError } = await updatePrivateConversationIsRead(
+            data.conversation_id,
+            profile.profile_id,
+            supabase
+          );
+          console.log("updateError: ", updateError);
+        }
         return { data, error };
       } else {
         const { data, error } = await supabase
