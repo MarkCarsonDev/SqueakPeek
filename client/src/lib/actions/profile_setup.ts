@@ -32,22 +32,6 @@ export async function userHasExistingProfile() : Promise<boolean>{
   return (userProfile) ? true: false;
 } // end of userHasExistingProfile
 
-export async function getUser(): Promise<Json> {
-  console.log("start of getUser() function");
-  const supabase = createSupabaseServer();
-  const { data: {user}, error: userError } =  await supabase.auth.getUser();
-  if (userError) {
-      return { 
-        errors: {
-          message: ["Error: No user"]
-        }
-      }
-  }
-  const jsonDataStr = JSON.stringify(user, null, 2);
-  const jsonData = JSON.parse(jsonDataStr);
-  return jsonData;
-} // end of getUser
-
 export async function getUserId() : Promise<string|null> {
   console.log("start of getUserId() function");
   const supabase = createSupabaseServer();
@@ -177,7 +161,7 @@ export async function createProfile( prevState: ProfileSetupState, formData: For
         else {
           // Redirect to the dashboard after successful profile creation
           console.log("Profile Created: redirecting to dashboard");
-          redirect("/dashboard");
+          redirect("/explore");
         }
       } // end of profile insertion
       else { // end of insert to supabase check

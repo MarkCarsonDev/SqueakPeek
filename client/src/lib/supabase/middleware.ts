@@ -5,13 +5,14 @@ import { userHasExistingProfile } from "@/lib/actions/profile_setup"
 console.log("***** BEGIN middleware.ts ******");
 console.log("middleware.ts is always invoked!!!");
 
+//looked into making these Sets but couldn't quite implement the references yet
 //allowed public paths
-const publicPaths = ["/","/login","/explore","/signup","/about"];
+const publicPaths = ["/","/login","/signup","/about"];
 
-//make a set
 //whitelists auth'd user paths
-const validUserPaths = ["/message", "/profile", "/thread", "/track", "/profile_setup"];
+const validUserPaths = ["/message", "/explore", "/profile", "/thread", "/track", "/profile_setup"];
 
+//may be a JavaScript way to do this easier with Sets... looking into it
 function hasBasePath(pathname: string, basepaths: string[]) {
   for (let i = 0; i < basepaths.length; i++) {
     console.log("pathname: " + pathname);
@@ -25,10 +26,13 @@ function hasBasePath(pathname: string, basepaths: string[]) {
   }
   return false
 }
+
+//hasBasePath on publicPaths
 function isPublicPath(pathname: string){
   return hasBasePath(pathname, publicPaths)
 }
 
+//hasBasePath on validUserPaths (protected paths)
 function isAllowedUserPath(pathname: string){
   console.log("start of isAllowedUserPath");
   console.log("pathname: " + typeof(pathname));
@@ -73,21 +77,22 @@ export async function updateSession(request: NextRequest) {
 
   //simple pathname variable
   const pathname = request.nextUrl.pathname;
-
   console.log("USER REQUEST PATHNAME: "+ pathname);
-
+  
+  //Auth user
   if (user) {
     const userEmail = user?.email;
     console.log("USER " + userEmail + " HAS AUTHENTICATED");
     
-    //Task 1: Only allow authorized users to access the pages under the (main) directory
-    //...using whitelist strategy
+    //Task 1: Only allow authorized users to access the pages under the (main) directory using whitelist strategy
     if(!(isAllowedUserPath(pathname)) && !(isPublicPath(pathname))) {
-      console.log("User attempted to access a restricted path. Redirecting to /explore");
+      console.log("User attempted to access a restricted path. Redirecting to /404");
       console.log("Task 1: Only allow authorized users to access the pages under the (main) directory");
       const url = request.nextUrl.clone();
-      url.pathname = "/explore";
-      return NextResponse.redirect(url);
+      if (url.pathname.indexOf("/404") < 0) {
+        url.pathname = "/404";
+        return NextResponse.redirect(url);
+      }
     }
 
     // Task 3: Redirect authenticated users without a profile to /profile_setup
@@ -107,13 +112,13 @@ export async function updateSession(request: NextRequest) {
           return NextResponse.redirect(url);
         }
       }
-
       else {
         console.log("user is trying to access: " + url.pathname);
         console.log("User accessing profile_setup");
       }
     } // end of handling of non auth'd users
     else {
+      
       // Task 4: Redirect any users accessing /profile_setup that already has a profile to /404
       console.log("USER " + user?.email + " HAS PROFILE");
       if (pathname === "/profile_setup") {
@@ -123,6 +128,7 @@ export async function updateSession(request: NextRequest) {
         url.pathname = "/404";
         return NextResponse.rewrite(url);
       }
+      
       // Task 5: Redirect auth users navigating to /message to /message/company first
       if (request.nextUrl.pathname === "/message") {
         const url = request.nextUrl.clone();
@@ -135,13 +141,13 @@ export async function updateSession(request: NextRequest) {
     console.log("USER HAS NOT AUTHENTICATED");
 
     //Task 2: For authenticated users accessing the pages outside of (main)
-    //automatically redirect them to the /explore route
-    console.log("Task 2: For authenticated users accessing the pages outside of (main) automatically redirect them to the /explore route");
+    //automatically redirect them to the /404 route
+    console.log("Task 2: For authenticated users accessing the pages outside of (main) automatically redirect them to the /404 route");
     if(!isPublicPath(pathname)) {
       const url = request.nextUrl.clone();
-      if (url.pathname.indexOf("/explore") < 0) {
-        console.log(pathname  + " is not a public path. Redirect to explore");
-        url.pathname = "/explore";
+      if (url.pathname.indexOf("/404") < 0) {
+        console.log(pathname  + " is not a public path. Redirect to 404");
+        url.pathname = "/404";
         return NextResponse.redirect(url); 
       }
     }
