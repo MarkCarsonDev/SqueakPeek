@@ -48,6 +48,7 @@ export const useMessageNotification = create<MessageNotificationState>()(
     },
 
     setReadPrivateConversation: (conversation_id, readValue) => {
+      console.log('set read private conversation')
       set((state) => {
         const { privateNotifications } = state;
         const newNotification = privateNotifications.find(
