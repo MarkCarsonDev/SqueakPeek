@@ -76,11 +76,33 @@ export function OpportunityList() {
   }, [supabase]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignContent: "center",
+        }}
+      >
+        <Typography variant="h3">Loading...</Typography>
+      </div>
+    );
   }
 
   if (shownOpportunities.length === 0) {
-    return <div>No opportunities found that match your criterion.</div>;
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignContent: "center",
+        }}
+      >
+        <Typography variant="h4">
+          No opportunities found that match your criterion.
+        </Typography>
+      </div>
+    );
   }
 
   return (

@@ -28,7 +28,6 @@ export default function Page() {
           <OpportunityList />
           <Typography
             variant="h6"
-            sx={{ marginBottom: "0.5rem", marginLeft: "0.5rem" }}
           >
             Filters
           </Typography>

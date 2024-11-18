@@ -172,21 +172,7 @@ export function OpportunityCard({
             </Button>
           </Link>
 
-          <Button
-            variant="contained"
-            style={{
-              backgroundColor: "#496FFF",
-              height: "40px",
-              width: "auto",
-              borderRadius: "20px",
-              boxShadow: "none",
-            }}
-          >
-            <FontAwesomeIcon icon={faChartColumn} />
-            <Typography style={{ color: "white", marginLeft: ".5rem" }}>
-              Stats
-            </Typography>
-          </Button>
+          <OpportunityStatsModal/>
 
           <Button
             variant="contained"
@@ -215,7 +201,7 @@ export function OpportunityCard({
           >
             <FontAwesomeIcon
               icon={bookmarked ? faBookmark : regularBookmark}
-              style={{ fontSize: "2.5rem" }}
+              style={{ fontSize: "2rem" }}
               color="#496FFF"
             />
           </IconButton>
@@ -307,6 +293,7 @@ export function OpportunityCard({
           }}
         >
           <OpportunityStackedBarGraph
+            opp_id={opp_id}
             rejected={rejected}
             oa={oa}
             interviewing={interviewing}
