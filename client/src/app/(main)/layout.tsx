@@ -1,6 +1,7 @@
 import { NavBar } from "@/ui/navbar/NavBar";
 import { createSupabaseServer } from "../../lib/supabase/server";
 import InitProfile from "../../lib/store/initProfile";
+import LiveNotifications from "@/lib/store/LiveNotifications";
 
 /**
  * This layout file affects files in the (main) directory
@@ -19,6 +20,7 @@ export default async function Layout({
       <NavBar />
       {children}
       <InitProfile user={data.user} />
+      <LiveNotifications />
     </>
   );
 }
