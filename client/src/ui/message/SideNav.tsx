@@ -30,7 +30,7 @@ import { useAlert } from "@/lib/store/alert";
 export function SideNav() {
   const [isLoading, setIsLoading] = useState(true);
   const { setAlert } = useAlert();
-  const { setNotifications, setReadPrivateConversation } =
+  const { setNotifications, setReadPrivateConversation, privateNotifications } =
     useMessageNotification();
   const { profile } = useProfile();
   const pathName = usePathname();
@@ -130,6 +130,42 @@ export function SideNav() {
   useEffect(() => {
     setIsLoading(true);
     if (profile) {
+      // currentTab == "private"
+      // filter does not exist on delete.
+      const privateChannel = supabase
+        .channel("private_changes")
+        .on(
+          "postgres_changes",
+          {
+            schema: "public", // Subscribes to the "public" schema in Postgres
+            event: "INSERT", // Listen to all changes
+            table: "private_user_conversation",
+            filter: `sender_id=eq.${profile.profile_id}`,
+          },
+          (payload) => {
+            console.log("payload: ", payload);
+            setPrivateConversationNotifications(profile.profile_id);
+          }
+        )
+        .on(
+          "postgres_changes",
+          {
+            schema: "public", // Subscribes to the "public" schema in Postgres
+            event: "UPDATE", // Listen to all changes
+            table: "private_user_conversation",
+            filter: `sender_id=eq.${profile.profile_id}`,
+          },
+          (payload) => {
+            const newNotification =
+              payload.new as Database["public"]["Tables"]["private_user_conversation"]["Row"];
+            setReadPrivateConversation(
+              newNotification.conversation_id,
+              newNotification.is_read
+            );
+          }
+        )
+        .subscribe();
+
       if (currentTab === "company") {
         // filter does not exist on delete.
         const bookmarkChannel = supabase
@@ -149,47 +185,11 @@ export function SideNav() {
         return () => {
           bookmarkChannel.unsubscribe();
         };
-      } else {
-        // currentTab == "private"
-        // filter does not exist on delete.
-        const bookmarkChannel = supabase
-          .channel("private_changes")
-          .on(
-            "postgres_changes",
-            {
-              schema: "public", // Subscribes to the "public" schema in Postgres
-              event: "INSERT", // Listen to all changes
-              table: "private_user_conversation",
-              filter: `receiver_id=eq.${profile.profile_id}`,
-            },
-            (payload) => {
-              console.log("payload: ", payload);
-              setPrivateConversationNotifications(profile.profile_id);
-            }
-          )
-          .on(
-            "postgres_changes",
-            {
-              schema: "public", // Subscribes to the "public" schema in Postgres
-              event: "UPDATE", // Listen to all changes
-              table: "private_user_conversation",
-              filter: `sender_id=eq.${profile.profile_id}`,
-            },
-            (payload) => {
-              const newNotification =
-                payload.new as Database["public"]["Tables"]["private_user_conversation"]["Row"];
-              setReadPrivateConversation(
-                newNotification.conversation_id,
-                newNotification.is_read
-              );
-            }
-          )
-          .subscribe();
-
-        return () => {
-          bookmarkChannel.unsubscribe();
-        };
       }
+
+      return () => {
+        privateChannel.unsubscribe();
+      };
     }
   }, [
     currentTab,
@@ -197,14 +197,14 @@ export function SideNav() {
     supabase,
     setPrivateConversationNotifications,
     setOpportunityBookmarksNotifications,
+    setReadPrivateConversation,
   ]);
 
   // sets notifications on page load
   useEffect(() => {
     if (profile) {
-      if (currentTab === "private") {
-        setPrivateConversationNotifications(profile.profile_id);
-      } else {
+      setPrivateConversationNotifications(profile.profile_id);
+      if (currentTab === "company") {
         setOpportunityBookmarksNotifications(profile.profile_id);
       }
     }
@@ -243,7 +243,12 @@ export function SideNav() {
           Messages
         </Typography>
         <Typography>
-          Talk to other applicants in the process, or talk privately
+          Talk to other applicants in the process, or talk privately{" "}
+          {
+            privateNotifications.filter(
+              (notification) => notification.isRead === false
+            ).length
+          }
         </Typography>
         <Tabs
           value={currentTab}
