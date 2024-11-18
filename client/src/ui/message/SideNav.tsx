@@ -30,7 +30,8 @@ import { useAlert } from "@/lib/store/alert";
 export function SideNav() {
   const [isLoading, setIsLoading] = useState(true);
   const { setAlert } = useAlert();
-  const { setNotifications } = useMessageNotification();
+  const { setNotifications, setReadPrivateConversation } =
+    useMessageNotification();
   const { profile } = useProfile();
   const pathName = usePathname();
   const tabs = [
@@ -161,8 +162,26 @@ export function SideNav() {
               table: "private_user_conversation",
               filter: `receiver_id=eq.${profile.profile_id}`,
             },
-            () => {
+            (payload) => {
+              console.log("payload: ", payload);
               setPrivateConversationNotifications(profile.profile_id);
+            }
+          )
+          .on(
+            "postgres_changes",
+            {
+              schema: "public", // Subscribes to the "public" schema in Postgres
+              event: "UPDATE", // Listen to all changes
+              table: "private_user_conversation",
+              filter: `sender_id=eq.${profile.profile_id}`,
+            },
+            (payload) => {
+              const newNotification =
+                payload.new as Database["public"]["Tables"]["private_user_conversation"]["Row"];
+              setReadPrivateConversation(
+                newNotification.conversation_id,
+                newNotification.is_read
+              );
             }
           )
           .subscribe();
@@ -195,6 +214,10 @@ export function SideNav() {
     setOpportunityBookmarksNotifications,
     setPrivateConversationNotifications,
   ]);
+
+  useEffect(() => {
+    supabase.channel("");
+  }, [supabase]);
 
   return (
     <div

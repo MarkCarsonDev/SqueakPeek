@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import { MessageNotificationCardProps } from "../../ui/message/MessageNotificationCard";
-// state of the hook
 
 type NotificationType = "publicNotifications" | "privateNotifications";
 interface MessageNotificationState {
@@ -11,6 +10,10 @@ interface MessageNotificationState {
     newNotifications: MessageNotificationCardProps[]
   ) => void;
   removeNotification: (type: NotificationType, conversationId: string) => void;
+  setReadPrivateConversation: (
+    conversation_id: string,
+    readValue: boolean
+  ) => void;
 }
 
 // hook that will be access in UI components
@@ -42,6 +45,23 @@ export const useMessageNotification = create<MessageNotificationState>()(
           return { ...state, privateNotifications: filteredNotifications };
         });
       }
+    },
+
+    setReadPrivateConversation: (conversation_id, readValue) => {
+      set((state) => {
+        const { privateNotifications } = state;
+        const newNotification = privateNotifications.find(
+          (notification) => notification.conversation_id === conversation_id
+        );
+        const newNotifications = privateNotifications.filter(
+          (notification) => notification.conversation_id !== conversation_id
+        );
+
+        if (newNotification) {
+          newNotifications.push({ ...newNotification, isRead: readValue });
+        }
+        return { ...state, privateNotifications: newNotifications };
+      });
     },
   })
 );
