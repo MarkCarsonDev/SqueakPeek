@@ -15,7 +15,6 @@ export async function FetchApplication(
       company_thread!opportunity_id(thread_id),
       opportunity_tracking!opportunity_id(applied, rejected, online_assessment, interviewing, offer)
        )
-       
       `)    
     .eq('profile_id', profile.profile_id)
     .order('order', { ascending: true });
@@ -32,13 +31,15 @@ export async function FetchApplication(
   console.log(applications);
   console.log(applications[0].application);
   // Map the applications to include thread_id at the top level
-  const applicationsWithThread: Application[] = applications.map((application) => {
+  const finalApplications: Application[] = applications.map((application) => {
     const thread_id = application.application?.company_thread?.thread_id || null;
+    const application_stats = application.application?.opportunity_tracking;
     delete application.application;
-    return { ...application, thread_id };
+    //delete application.application?.company_thread;
+    return { ...application, thread_id, application_stats };
   });
-  //console.log(applicationsWithThread);
-  return { data: applicationsWithThread, error: null };
+  console.log(finalApplications);
+  return { data: finalApplications, error: null };
 }
 
 //opportunity_tracking:opportunity!opportunity_id(opportunity_tracking!opportunity_id(*))

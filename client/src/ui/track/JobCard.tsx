@@ -1,6 +1,6 @@
 "use client";
 import React, { SetStateAction, useState} from "react";
-import {Card, Typography, IconButton, Box, Select, MenuItem, SelectChangeEvent} from "@mui/material";
+import {Card, Typography, IconButton, Box, Select, MenuItem, SelectChangeEvent, Popover} from "@mui/material";
 import {
   faChartColumn,
   faLink,
@@ -15,10 +15,11 @@ import { Profile } from "@/lib/store/profile";
 import { useFetchCompanyLogo } from "@/lib/hooks/useFetchCompanyLogo";
 import { useAlert } from "@/lib/store/alert";
 import ApplicationDelete from "@/ui/track/ApplicationDeleteModal";
+import ApplicationStats from "@/ui/track/ApplicationStats";
 
 // TODO:
 // Implement the Link for chart
-// Implement the delete button.
+
 
 interface JobCardProps {
   application: Application;
@@ -64,6 +65,7 @@ export function JobCard({ application, profile, onCardClick, setPreventClick }: 
     );
   };
   
+  // Application Delete Modal
   const [deleteApplicationModalOpen, setDeleteApplicationModalOpen] = useState(false);
   const handleOpenDeleteApplicationModal = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -74,6 +76,19 @@ export function JobCard({ application, profile, onCardClick, setPreventClick }: 
     setPreventClick?.(false);
     setDeleteApplicationModalOpen(false);
   };
+  // Application stats chart
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+
+  const handleChartClick = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleChartClose = () => {
+    setAnchorEl(null);
+  };
+  const open = Boolean(anchorEl);
+  const id = open ? "simple-popover" : undefined;
   return (
     <>
     <Card
@@ -248,7 +263,8 @@ export function JobCard({ application, profile, onCardClick, setPreventClick }: 
               padding: "6px",
               borderRadius: "50%",
             }}
-            onClick={(e) => e.stopPropagation()}
+            // onClick={(e) => e.stopPropagation()}
+            onClick={handleChartClick}
           >
             <FontAwesomeIcon
               icon={faChartColumn}
@@ -293,6 +309,25 @@ export function JobCard({ application, profile, onCardClick, setPreventClick }: 
         </Box>
       </Box>
     </Card>
+    {/* ApplicationStats Popover */}
+    <Popover
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleChartClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+      >
+        <Box sx={{ p: 2 }}>
+          <ApplicationStats application={application} />
+        </Box>
+      </Popover>
     {/* ApplicationDelete Modal */}
     <ApplicationDelete
         open={deleteApplicationModalOpen}
