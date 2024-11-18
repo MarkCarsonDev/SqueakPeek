@@ -20,7 +20,8 @@ export async function insertMessage(
   isPrivateConversation: boolean,
   supabase: SupabaseClient = createSupabaseClient()
 ): Promise<PostgrestError | null> {
-  if (newMessage.message.trim() === "") { // removes leading and trailing whitespace
+  if (newMessage.message.trim() === "") {
+    // removes leading and trailing whitespace
     return {
       code: "",
       details: "",
@@ -37,6 +38,7 @@ export async function insertMessage(
       sender_username: newMessage.sender_username,
       sender_avatar: newMessage.avatar,
       created_at: new Date().toISOString(),
+      sender_id: profile.profile_id,
     };
     // Insert the public message into the database
     const { error } = await supabase.from("private_message").insert(addMsg);

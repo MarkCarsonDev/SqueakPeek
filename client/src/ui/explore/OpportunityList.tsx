@@ -73,10 +73,10 @@ export function OpportunityList() {
               // Calculate totalApplied based on tracking data
               const totalApplied =
                 (tracking.applied || 0) +
-                (tracking.interviewed || 0) +
+                (tracking.interviewing || 0) +
                 (tracking.online_assessment || 0) +
-                (tracking.offered || 0) +
-                (tracking.rejected || 0);
+                (tracking.offer || 0) +
+                (tracking.rejected || 0) || 0;
 
               return {
                 conversation_id: thread_id,
@@ -85,11 +85,10 @@ export function OpportunityList() {
                 },
                 aggregate: {
                   totalApplied,
-                  interviewed: tracking.interviewed || 0,
+                  interviewing: tracking.interviewing || 0,
                   oa: tracking.online_assessment || 0,
-                  offered: tracking.offered || 0,
+                  offered: tracking.offer || 0,
                   rejected: tracking.rejected || 0,
-                  messages: 12, // Replace with actual data if available
                 },
               };
             } else {
@@ -101,11 +100,10 @@ export function OpportunityList() {
                 },
                 aggregate: {
                   totalApplied: 0,
-                  interviewed: 0,
+                  interviewing: 0,
                   oa: 0,
                   offered: 0,
                   rejected: 0,
-                  messages: 0, // Adjust as needed
                 },
               };
             }

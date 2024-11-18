@@ -24,6 +24,26 @@
 .header-text {
     display: flex;
     flex-direction: column;
+    /* height: 100vh; */
+}
+
+.header-search-container {
+    display: flex;
+    gap: 1rem;
+    justify-content: left;
+    position: sticky;
+}
+
+.card-filter-container {
+    flex: 1; /* Added to allow this container to grow and fill available space */
+    display: grid;
+    gap: 2rem;
+    overflow: hidden; /* Prevents internal content from affecting the page height */
+}
+
+.header-text {
+    display: flex;
+    flex-direction: column;
     flex: 2;
 }
 

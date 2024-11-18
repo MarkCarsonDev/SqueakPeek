@@ -10,6 +10,7 @@ import { removeBookmarkOpportunity } from "@/lib/utils/removeBookmarkOpportunity
 import { useMessageNotification } from "@/lib/store/messageNotification";
 interface OpportunityBookmarkProps {
   conversationId: string;
+  isDisabled?: boolean;
 }
 
 /**
@@ -18,6 +19,7 @@ interface OpportunityBookmarkProps {
  * @returns
  */
 export function OpportunityBookmark({
+  isDisabled = false,
   conversationId,
 }: OpportunityBookmarkProps) {
   const [isBookmarked, setIsBookmarked] = useState<null | boolean>(null);
@@ -39,7 +41,7 @@ export function OpportunityBookmark({
         if (error) {
           // TODO: Handle Error
         } else {
-          removeNotification(conversationId);
+          removeNotification("publicNotifications", conversationId);
           setIsBookmarked(false);
         }
       } else {
@@ -124,7 +126,7 @@ export function OpportunityBookmark({
         }}
         title="Bookmark Opportunity"
       >
-        <IconButton onClick={handleBookmarkClick}>
+        <IconButton disabled={isDisabled} onClick={handleBookmarkClick}>
           <FontAwesomeIcon
             style={{
               color: "#496FFF",

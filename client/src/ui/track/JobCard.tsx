@@ -1,39 +1,36 @@
 "use client";
-import React, { SetStateAction, useEffect, useState } from "react";
-import {
-  Card,
-  Typography,
-  IconButton,
-  Box,
-  Select,
-  MenuItem,
-  SelectChangeEvent,
-} from "@mui/material";
+import React, { SetStateAction, useState} from "react";
+import {Card, Typography, IconButton, Box, Select, MenuItem, SelectChangeEvent} from "@mui/material";
 import {
   faChartColumn,
   faLink,
-  faBars,
+  faTrashCan
 } from "@fortawesome/free-solid-svg-icons";
-// import Image from "next/image";
+
 import { faMessage } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import UpdateStatus from "@/ui/track/UpdateStatus";
 import { Application, useTrack, ApplicationStage } from "@/lib/store/track";
 import { Profile } from "@/lib/store/profile";
-import { generateCompanyLogo } from "@/lib/utils/generateCompanyLogo";
+import { useFetchCompanyLogo } from "@/lib/hooks/useFetchCompanyLogo";
+import { useAlert } from "@/lib/store/alert";
+import ApplicationDelete from "@/ui/track/ApplicationDeleteModal";
 
 // TODO:
 // Implement the Link for chart
-// Implement the copy job link
+// Implement the delete button.
 
 interface JobCardProps {
   application: Application;
   profile: Profile;
+  onCardClick?: (application: Application) => void;
+  setPreventClick?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export function JobCard({ application, profile }: JobCardProps) {
-  const { moveApplication, updateApplication } = useTrack();
-  const [logoUrl, setLogoUrl] = useState("/landingpage/insight.svg");
+export function JobCard({ application, profile, onCardClick, setPreventClick }: JobCardProps) {
+  const { moveApplication, updateApplication} = useTrack();
+  const logoUrl = useFetchCompanyLogo(application.company_name);
+  const { setAlert } = useAlert();
   const {
     application_id: applicationId,
     company_name,
@@ -43,6 +40,7 @@ export function JobCard({ application, profile }: JobCardProps) {
     outOfScore,
     interviewing_round,
     thread_id,
+    link,
   } = application;
 
   const handleStatusChange = (value: SetStateAction<ApplicationStage>) => {
@@ -65,19 +63,24 @@ export function JobCard({ application, profile }: JobCardProps) {
       profile
     );
   };
-  useEffect(() => {
-    async function fetchLogo() {
-      try {
-        const url = await generateCompanyLogo(company_name);
-        if (url) setLogoUrl(url); // Only set logoUrl if fetch is successful
-      } catch (error) {
-        console.error(`Error fetching logo for ${company_name}:`, error);
-      }
-    }
-    fetchLogo();
-  }, [company_name]);
+  
+  const [deleteApplicationModalOpen, setDeleteApplicationModalOpen] = useState(false);
+  const handleOpenDeleteApplicationModal = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setPreventClick?.(true);
+    setDeleteApplicationModalOpen(true);
+  };
+  const handleCloseDeleteApplicationModal = () => {
+    setPreventClick?.(false);
+    setDeleteApplicationModalOpen(false);
+  };
   return (
+    <>
     <Card
+    onClick={() => {
+      setPreventClick?.(false);
+      onCardClick?.(application);
+    }}
       sx={{
         borderRadius: "8px",
         border: "2px solid #E0E4F2",
@@ -91,6 +94,7 @@ export function JobCard({ application, profile }: JobCardProps) {
         marginBottom: "10px",
         overflow: "hidden",
       }}
+      
     >
       {/* Column 1: Company Brand */}
       <Box
@@ -110,7 +114,6 @@ export function JobCard({ application, profile }: JobCardProps) {
         objectFit: "cover",
         borderRadius: "8px",
           }}
-          onError={() => setLogoUrl("/landingpage/insight.svg")} // Fallback on error
         />
       </Box>
 
@@ -257,36 +260,47 @@ export function JobCard({ application, profile }: JobCardProps) {
               padding: "6px",
               borderRadius: "50%",
             }}
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => {
+              e.stopPropagation()
+              if (link) {
+                navigator.clipboard.writeText(link)
+                setAlert({
+                  message: "Link copied to clipboard",
+                  type: "info",
+                })
+              } else {
+                setAlert({
+                  message: "No link available",
+                  type: "warning",
+                })
+              }
+            }}
           >
             <FontAwesomeIcon
               icon={faLink}
               style={{ fontSize: "14px", color: "#333333" }}
             />
           </IconButton>
-        </Box>
-      </Box>
-
-      {/* Column 3: 3-Bar Icon */}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "flex-end",
-          alignItems: "flex-start",
-          height: "100%",
-          position: "relative",
-          paddingRight: "8px",
-        }}
-      >
-        <IconButton
-          sx={{ padding: "4px", borderRadius: "50%", position: "relative" }}
+          <IconButton
+          sx={{ padding: "6px", borderRadius: "50%"}}
+          onClick={handleOpenDeleteApplicationModal}
         >
           <FontAwesomeIcon
-            icon={faBars}
+            icon={faTrashCan}
             style={{ fontSize: "12px", color: "#333333" }}
           />
         </IconButton>
+        </Box>
       </Box>
     </Card>
+    {/* ApplicationDelete Modal */}
+    <ApplicationDelete
+        open={deleteApplicationModalOpen}
+        handleClose={handleCloseDeleteApplicationModal}
+        application={application}
+        profile={profile}
+        status={status}
+      />
+    </>
   );
 }

@@ -14,13 +14,14 @@ import { useMessage } from "@/lib/store/message";
 import { useAlert } from "@/lib/store/alert";
 /**
  * Allows user to send a message into a private conversation or a company thread, and broadcasts the message based on the conversationId
-  * @param {string} conversationId - ID used to broadcast messages to subscribed users
-
+ * @param {string} conversationId - ID used to broadcast messages to subscribed users
  */
 export const MessageInput = memo(function MessageInput({
   conversationId,
+  isLoading,
 }: {
   conversationId: string;
+  isLoading: boolean;
 }) {
   const { profile } = useProfile();
   const [currentMessage, setCurrentMessage] = useState("");
@@ -87,12 +88,17 @@ export const MessageInput = memo(function MessageInput({
           payload: { message: newMessage },
         });
       }
+    } else {
+      setAlert({
+        message: "Profile not found",
+        type: "error",
+      });
     }
   }
 
   return (
     <TextField
-      multiline
+      disabled={isLoading}
       autoFocus
       inputRef={messageInputRef}
       value={currentMessage}
@@ -100,10 +106,11 @@ export const MessageInput = memo(function MessageInput({
       fullWidth
       slotProps={{
         input: {
-          maxRows:2,
+          maxRows: 2,
           endAdornment: (
             <InputAdornment position="end">
               <IconButton
+                disabled={isLoading}
                 onClick={() => {
                   handleSendMessage(currentMessage);
                   setCurrentMessage("");

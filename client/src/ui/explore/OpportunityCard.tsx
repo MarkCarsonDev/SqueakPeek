@@ -8,8 +8,8 @@ import {
   Typography,
   Chip,
   Button,
-  Avatar,
   IconButton,
+  Avatar
 } from "@mui/material";
 import {
   faAnglesUp,
@@ -21,24 +21,24 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark as regularBookmark } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useState} from "react";
 import { OpportunityStackedBarGraph } from "./OpportunityStackedBarGraph";
 import Link from "next/link";
+import { useFetchCompanyLogo } from "@/lib/hooks/useFetchCompanyLogo";
 
 interface jobStats {
   status: string;
   color: string;
-  quantity: number;
+  quantity: number | null;
 }
 
 // OpportunityCardProps.ts
 interface Aggregate {
-  totalApplied: number;
-  interviewed: number;
-  oa: number;
-  offered: number;
-  rejected: number;
-  messages: number;
+  rejected: number | null;
+  interviewing: number | null;
+  offered: number | null;
+  totalApplied: number | null;
+  oa: number | null;
 }
 
 export interface OpportunityCardProps {
@@ -64,32 +64,33 @@ export function OpportunityCard({
   const stats: jobStats[] = [
     {
       status: "Rejected:",
-      color: "red",
-      quantity: 12,
+      color: "#C7253E",
+      quantity: aggregate.rejected,
     },
     {
       status: "OA:",
-      color: "orange",
-      quantity: 12,
+      color: "#EB5B00",
+      quantity: aggregate.oa,
     },
     {
       status: "Interviewing:",
-      color: "gold",
-      quantity: 12,
+      color: "#F0A202",
+      quantity: aggregate.interviewing,
     },
     {
       status: "Offered:",
-      color: "green",
-      quantity: 12,
+      color: "#2E7E33",
+      quantity: aggregate.offered,
     },
   ];
 
   const { company_name, role_title, type } = opportunity;
-  const { rejected, interviewed, offered, totalApplied, oa, messages } =
+  const { rejected, interviewing, offered, totalApplied, oa } =
     aggregate;
   const [bookmarked, setBookmarked] = useState(false);
   const isAppliedColor = appliedStatus ? "green" : "red";
   const isHiringColor = hiringStatus ? "green" : "red";
+  const logoUrl = useFetchCompanyLogo(company_name);
 
   const handleBookmark = () => {
     setBookmarked((prev) => !prev); // Toggle the bookmark state
@@ -132,12 +133,13 @@ export function OpportunityCard({
       >
         {/* TODO: Add real header */}
         <CardHeader
-          style={{ margin: 0, padding: ".5rem", height: "2rem" }}
+          style={{
+            margin: 0,
+            padding: ".5rem",
+            height: "2rem",
+          }}
           avatar={
-            <Avatar
-              src={"https://www.amazon.com/favicon.ico"}
-              style={{ margin: 0 }}
-            ></Avatar>
+            <Avatar src={logoUrl} />
           }
           title={company_name}
           subheader={
@@ -145,6 +147,7 @@ export function OpportunityCard({
 
             role_title + " " + type
           }
+          // sx={{ backgroundColor: "#F6F8FF" }}
         />
 
         {/* Button to threads and button to share Still in progress */}
@@ -168,10 +171,7 @@ export function OpportunityCard({
                 boxShadow: "none",
               }}
             >
-              <FontAwesomeIcon icon={faComment} />
-              <Typography style={{ color: "white", marginLeft: ".5rem" }}>
-                {messages}
-              </Typography>
+              <FontAwesomeIcon icon={faComment} style={{fontSize: "1.2rem"}}/>
             </Button>
           </Link>
 
@@ -312,7 +312,7 @@ export function OpportunityCard({
           <OpportunityStackedBarGraph
             rejected={rejected}
             oa={oa}
-            interviewing={interviewed}
+            interviewing={interviewing}
             offered={offered}
           />
         </div>

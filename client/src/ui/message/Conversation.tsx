@@ -9,6 +9,8 @@ import { useSubscribeConversation } from "@/lib/hooks/useSubscribeConversation";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { fetchMessages } from "@/lib/utils/fetchMessages";
 import { MessageCardProps } from "./MessageCard";
+import { notFound } from "next/navigation";
+import { updatePrivateConversationIsRead } from "@/lib/utils/updatePrivateConversationIsRead";
 
 /**
  * This is a UI container that holds all messages for a particular conversation
@@ -25,6 +27,8 @@ export function Conversation({
     useMessage();
   const { profile } = useProfile();
   const [numNewMessages, setNumNewMessages] = useState(0); // used for rendering new message notification
+  const [isLoading, setIsLoading] = useState(true);
+  const [pageNotFound, setNotFound] = useState(false);
   const bottomRef = useRef<null | HTMLDivElement>(null); // used for scrolling down the page
   const supabase = useMemo(() => createSupabaseClient(), []);
 
@@ -32,6 +36,51 @@ export function Conversation({
   function resetNumNewMessages() {
     setNumNewMessages(0);
   }
+
+  // determines if conversation exists
+  useEffect(() => {
+    const doesConversationExist = async () => {
+      if (isPrivateConversation) {
+        const { data, error } = await supabase
+          .from("private_conversation")
+          .select("conversation_id")
+          .eq("conversation_id", conversationId)
+          .single();
+        if (data && profile) {
+          const { error: updateError } = await updatePrivateConversationIsRead(
+            data.conversation_id,
+            profile.profile_id,
+            supabase
+          );
+          console.log("updateError: ", updateError);
+        }
+        return { data, error };
+      } else {
+        const { data, error } = await supabase
+          .from("company_thread")
+          .select("thread_id")
+          .eq("thread_id", conversationId)
+          .single();
+        return { data, error };
+      }
+    };
+    doesConversationExist().then((res) => {
+      const { data, error } = res;
+      console.log("data res: ", data);
+      console.log("error: ", error);
+      if (error || !data) {
+        // TODO navigate to not found page
+        setNotFound(true);
+      }
+    });
+  }, [profile, supabase, conversationId, isPrivateConversation]);
+
+  // routes to not-found if conversation does not exist
+  useEffect(() => {
+    if (pageNotFound) {
+      notFound();
+    }
+  }, [pageNotFound]);
 
   useSubscribeConversation(
     supabase,
@@ -76,6 +125,7 @@ export function Conversation({
             })
           );
           setMessages(mappedData);
+          setIsLoading(false);
         }
       }
     );
@@ -91,11 +141,11 @@ export function Conversation({
       }}
     >
       {/* Header */}
-      {/* TODO: Make this consuem the metadata of an opportunity or user */}
       <ConversationHeader conversationId={conversationId} />
 
       {/* Messages */}
       <ConversationBody
+        isLoading={isLoading}
         numNewMessages={numNewMessages}
         resetNumNewMessages={() => resetNumNewMessages()}
         bottomRef={bottomRef}
@@ -109,7 +159,7 @@ export function Conversation({
           padding: "10px 10px",
         }}
       >
-        <MessageInput conversationId={conversationId} />
+        <MessageInput isLoading={isLoading} conversationId={conversationId} />
       </div>
     </div>
   );

@@ -12,6 +12,7 @@ export interface StageColumnProps {
   applications: Application[];
   handleOpenModal?: (stage: ApplicationStage) => void;
   onCardClick?: (application: Application) => void;
+  setPreventClick?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const StageColumn: React.FC<StageColumnProps> = ({
@@ -21,6 +22,7 @@ export const StageColumn: React.FC<StageColumnProps> = ({
   applications,
   handleOpenModal,
   onCardClick,
+  setPreventClick,
 }) => {
   const { profile } = useProfile(); // Retrieve profile data
   return (
@@ -115,9 +117,13 @@ export const StageColumn: React.FC<StageColumnProps> = ({
                         opacity: snapshot.isDragging ? 0.9 : 1,
                         ...provided.draggableProps.style,
                       }}
-                      onClick={() => onCardClick?.(app)}
                     >
-                      {profile && <JobCard application={app} profile={profile} />}
+                      {profile && 
+                      <JobCard 
+                        application={app} 
+                        profile={profile} 
+                        onCardClick={onCardClick}
+                        setPreventClick={setPreventClick} />}
                     </div>
                   )}
                 </Draggable>
