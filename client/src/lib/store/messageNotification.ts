@@ -12,7 +12,8 @@ interface MessageNotificationState {
   removeNotification: (type: NotificationType, conversationId: string) => void;
   setReadPrivateConversation: (
     conversation_id: string,
-    readValue: boolean
+    readValue: boolean,
+    changeOrder: boolean
   ) => void;
 }
 
@@ -47,23 +48,35 @@ export const useMessageNotification = create<MessageNotificationState>()(
       }
     },
 
-    setReadPrivateConversation: (conversation_id, readValue) => {
+    setReadPrivateConversation: (conversation_id, readValue, changeOrder) => {
       set((state) => {
         const { privateNotifications } = state;
-        const newNotification = privateNotifications.find(
-          (notification) => notification.conversation_id === conversation_id
-        );
-        let newNotifications = privateNotifications.filter(
-          (notification) => notification.conversation_id !== conversation_id
-        );
 
-        if (newNotification) {
-          newNotifications = [
-            { ...newNotification, isRead: readValue },
-            ...newNotifications,
-          ];
+        if (changeOrder) {
+          const newNotification = privateNotifications.find(
+            (notification) => notification.conversation_id === conversation_id
+          );
+          let newNotifications = privateNotifications.filter(
+            (notification) => notification.conversation_id !== conversation_id
+          );
+
+          if (newNotification) {
+            newNotifications = [
+              { ...newNotification, isRead: readValue },
+              ...newNotifications,
+            ];
+          }
+          return { ...state, privateNotifications: newNotifications };
+        } else {
+          const newNotifications = privateNotifications.map((notification) => {
+            if (notification.conversation_id === conversation_id) {
+              notification.isRead = readValue;
+            }
+            return notification;
+          });
+
+          return { ...state, privateNotifications: newNotifications };
         }
-        return { ...state, privateNotifications: newNotifications };
       });
     },
   })
