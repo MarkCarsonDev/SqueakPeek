@@ -5,6 +5,7 @@ import { OpportunityCard, OpportunityCardProps } from "./OpportunityCard";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { Database } from "@/lib/types/database.types";
 import { fetchOpportunities } from "@/lib/utils/fetchOpportunities";
+import { Typography } from "@mui/material";
 
 // TODO: Add filters to the OpportunityList component
 export function OpportunityList() {

@@ -25,6 +25,7 @@ import { useState} from "react";
 import { OpportunityStackedBarGraph } from "./OpportunityStackedBarGraph";
 import Link from "next/link";
 import { useFetchCompanyLogo } from "@/lib/hooks/useFetchCompanyLogo";
+import { OpportunityStatsModal } from "./OpportunityStatsModal";
 
 interface jobStats {
   status: string;
@@ -293,7 +294,6 @@ export function OpportunityCard({
           }}
         >
           <OpportunityStackedBarGraph
-            opp_id={opp_id}
             rejected={rejected}
             oa={oa}
             interviewing={interviewing}
