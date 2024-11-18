@@ -134,12 +134,9 @@ export function SideNav() {
           (payload) => {
             const newNotification =
               payload.new as Database["public"]["Tables"]["private_user_conversation"]["Row"];
-            const oldNotification =
-              payload.old as Database["public"]["Tables"]["private_user_conversation"]["Row"];
             setReadPrivateConversation(
               newNotification.conversation_id,
-              newNotification.is_read,
-              oldNotification.is_read !== newNotification.is_read
+              newNotification.is_read
             );
           }
         )

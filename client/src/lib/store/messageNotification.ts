@@ -13,7 +13,6 @@ interface MessageNotificationState {
   setReadPrivateConversation: (
     conversation_id: string,
     readValue: boolean,
-    changeOrder: boolean
   ) => void;
 }
 
@@ -48,14 +47,15 @@ export const useMessageNotification = create<MessageNotificationState>()(
       }
     },
 
-    setReadPrivateConversation: (conversation_id, readValue, changeOrder) => {
+    setReadPrivateConversation: (conversation_id, readValue) => {
       set((state) => {
         const { privateNotifications } = state;
+        const newNotification = privateNotifications.find(
+          (notification) => notification.conversation_id === conversation_id
+        );
+        const changeOrder = newNotification?.isRead !== readValue;
 
         if (changeOrder) {
-          const newNotification = privateNotifications.find(
-            (notification) => notification.conversation_id === conversation_id
-          );
           let newNotifications = privateNotifications.filter(
             (notification) => notification.conversation_id !== conversation_id
           );
