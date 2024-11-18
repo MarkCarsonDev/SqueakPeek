@@ -10,7 +10,7 @@ console.log("middleware.ts is always invoked!!!");
 const publicPaths = ["/","/login","/signup","/about","/auth/callback"];
 
 //whitelists auth'd user paths
-const validUserPaths = ["/message", "/explore", "/profile", "/thread", "/track", "/profile_setup"];
+const protectedPaths = ["/message", "/explore", "/profile", "/thread", "/track", "/profile_setup"];
 
 //may be a JavaScript way to do this easier with Sets... looking into it
 function hasBasePath(pathname: string, basepaths: string[]) {
@@ -32,7 +32,7 @@ function isPublicPath(pathname: string){
   return hasBasePath(pathname, publicPaths)
 }
 
-//hasBasePath on validUserPaths (protected paths)
+//hasBasePath on protectedPaths (protected paths)
 function isAllowedUserPath(pathname: string){
   console.log("start of isAllowedUserPath");
   console.log("pathname: " + typeof(pathname));
@@ -41,7 +41,7 @@ function isAllowedUserPath(pathname: string){
   //  console.log("RETURNING FALSE: pathname: signup " + pathname);
   //  return false
   // }
-  return hasBasePath(pathname, validUserPaths);
+  return hasBasePath(pathname, protectedPaths);
 }
 
 // refreshes expired Auth token
