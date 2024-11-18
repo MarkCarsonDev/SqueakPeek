@@ -22,10 +22,11 @@ export function OpportunityList() {
       if (error) {
         console.error("Error fetching opportunities:", error);
       } else if (data) {
-
-          const mappedData: OpportunityCardProps[] = data.map((item) => {
-              const { thread_id: conversation_id } = item;
-              const opportunity = item.opportunity as Database["public"]["Tables"]["opportunity"]["Row"] & {
+        const mappedData: OpportunityCardProps[] = data
+          .map((item) => {
+            const { thread_id: conversation_id } = item;
+            const opportunity =
+              item.opportunity as Database["public"]["Tables"]["opportunity"]["Row"] & {
                 opportunity_tracking?: {
                   applied?: number;
                   interviewing?: number;
@@ -34,32 +35,40 @@ export function OpportunityList() {
                   rejected?: number;
                 };
               };
-              if (!opportunity) {
-                return null;
-              }
+            if (!opportunity) {
+              return null;
+            }
 
-              const opportunityTracking  = opportunity.opportunity_tracking as Database["public"]["Tables"]["opportunity_tracking"]["Row"];
+            const opportunityTracking =
+              opportunity.opportunity_tracking as Database["public"]["Tables"]["opportunity_tracking"]["Row"];
 
-              console.log("Tracking Data: ", opportunityTracking);
-              return {
-                conversation_id,
-                opportunity,
-                aggregate: {
-                  totalApplied: opportunityTracking?.applied || 0,
-                  interviewing: opportunityTracking?.interviewed || 0,
-                  oa: opportunityTracking?.online_assessment || 0,
-                  offered: opportunityTracking?.offered || 0,
-                  rejected: opportunityTracking?.rejected || 0,
-                  messages: 12, // Placeholder for message count
-                },
-              };
-            })
-            .filter((item) => item !== null);
+            console.log("Tracking Data: ", opportunityTracking);
 
-          console.log("mappedData: ", mappedData);
-          setShownOpportunities(mappedData);
-        
-          }
+            const totalApplied =
+              (opportunityTracking?.applied || 0) +
+              (opportunityTracking?.interviewed || 0) +
+              (opportunityTracking?.online_assessment || 0) +
+              (opportunityTracking?.offered || 0) +
+              (opportunityTracking?.rejected || 0);
+
+            return {
+              conversation_id,
+              opportunity,
+              aggregate: {
+                totalApplied,
+                interviewing: opportunityTracking?.interviewed || 0,
+                oa: opportunityTracking?.online_assessment || 0,
+                offered: opportunityTracking?.offered || 0,
+                rejected: opportunityTracking?.rejected || 0,
+                messages: 12, // Placeholder for message count
+              },
+            };
+          })
+          .filter((item) => item !== null);
+
+        console.log("mappedData: ", mappedData);
+        setShownOpportunities(mappedData);
+      }
 
       setLoading(false);
     };

@@ -62,22 +62,22 @@ export function OpportunityCard({
   const stats: jobStats[] = [
     {
       status: "Rejected:",
-      color: "red",
+      color: "#C7253E",
       quantity: aggregate.rejected,
     },
     {
       status: "OA:",
-      color: "orange",
+      color: "#EB5B00",
       quantity: aggregate.oa,
     },
     {
       status: "Interviewing:",
-      color: "gold",
+      color: "#F0A202",
       quantity: aggregate.interviewing,
     },
     {
       status: "Offered:",
-      color: "green",
+      color: "#2E7E33",
       quantity: aggregate.offered,
     },
   ];
@@ -170,9 +170,6 @@ export function OpportunityCard({
               }}
             >
               <FontAwesomeIcon icon={faComment} />
-              <Typography style={{ color: "white", marginLeft: ".5rem" }}>
-                {messages}
-              </Typography>
             </Button>
           </Link>
 

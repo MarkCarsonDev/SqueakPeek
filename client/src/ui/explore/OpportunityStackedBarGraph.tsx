@@ -37,9 +37,9 @@ export function OpportunityStackedBarGraph({
     labels: ["Job Stats"],
     datasets: [
       {
-        label: "rejected",
-        data: [rejected],
-        backgroundColor: "red",
+        label: "Rejected",
+        data: [rejected ?? 0], // Handle null values
+        backgroundColor: "#C7253E",
         borderRadius: {
           topLeft: 10,
           bottomLeft: 10,
@@ -47,20 +47,34 @@ export function OpportunityStackedBarGraph({
         borderSkipped: false,
       },
       {
-        label: "QA",
-        data: [oa],
-        backgroundColor: "orange",
+        label: "OA",
+        data: [oa ?? 0], // Handle null values
+        backgroundColor: "#EB5B00",
+        borderRadius: {
+          topRight: 10,
+          bottomRight: 10,
+        },
+        borderSkipped: false,
       },
       {
         label: "Interviewing",
-        data: [interviewing],
-        backgroundColor: "gold",
+        data: [interviewing ?? 0], // Handle null values
+        backgroundColor: "#F0A202",
+        borderRadius: {
+          topRight: 10,
+          bottomRight: 10,
+        },
+        borderSkipped: false,
       },
       {
         label: "Offered",
-        data: [offered],
-        backgroundColor: "green",
-        borderRadius: 10,
+        data: [offered ?? 0], // Handle null values
+        backgroundColor: "#2E7E33",
+        borderRadius: {
+          topRight: 10,
+          bottomRight: 10,
+        },
+        borderSkipped: false,
       },
     ],
   };
