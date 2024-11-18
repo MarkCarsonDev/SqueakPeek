@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useMemo, useCallback } from "react";
+import { useEffect, useMemo, useCallback, memo } from "react";
 import { useProfile } from "@/lib/store/profile";
 import { createSupabaseClient } from "../supabase/client";
 import { fetchPrivateConversations } from "@/lib/utils/fetchPrivateConversations";
@@ -7,7 +7,8 @@ import { MessageNotificationCardProps } from "@/ui/message/MessageNotificationCa
 import { fetchLatestPrivateMessage } from "@/lib/utils/fetchLatestPrivateMessage";
 import { Database } from "@/lib/types/database.types";
 import { useMessageNotification } from "./messageNotification";
-export default function LiveNotifications() {
+
+export const LiveNotifications = memo(function LiveNotifications() {
   const { profile } = useProfile();
   const supabase = useMemo(() => createSupabaseClient(), []);
 
@@ -43,10 +44,10 @@ export default function LiveNotifications() {
     },
     [setNotifications]
   );
+
   // tracks live changes which sets message notifications in real time
   useEffect(() => {
     if (profile) {
-      console.log("reado to listen for live notifications");
       // currentTab == "private"
       // filter does not exist on delete.
       const privateChannel = supabase
@@ -59,8 +60,7 @@ export default function LiveNotifications() {
             table: "private_user_conversation",
             filter: `sender_id=eq.${profile.profile_id}`,
           },
-          (payload) => {
-            console.log("payload: ", payload);
+          () => {
             setPrivateConversationNotifications(profile.profile_id);
           }
         )
@@ -87,11 +87,13 @@ export default function LiveNotifications() {
         privateChannel.unsubscribe();
       };
     }
-  }, [
-    profile,
-    supabase,
-    setPrivateConversationNotifications,
-    setReadPrivateConversation,
-  ]);
+  }, [profile, supabase, setPrivateConversationNotifications, setReadPrivateConversation]);
+
+  // sets notifications on page load
+  useEffect(() => {
+    if (profile) {
+      setPrivateConversationNotifications(profile.profile_id);
+    }
+  }, [profile, setPrivateConversationNotifications]);
   return null;
-}
+});

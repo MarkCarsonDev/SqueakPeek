@@ -12,7 +12,7 @@ interface MessageNotificationState {
   removeNotification: (type: NotificationType, conversationId: string) => void;
   setReadPrivateConversation: (
     conversation_id: string,
-    readValue: boolean,
+    readValue: boolean
   ) => void;
 }
 
