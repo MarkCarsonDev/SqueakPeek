@@ -32,8 +32,7 @@ interface jobStats {
   quantity: number | null;
 }
 
-// OpportunityCardProps.ts
-interface Aggregate {
+export interface Aggregate {
   rejected: number | null;
   interviewing: number | null;
   offered: number | null;
@@ -48,6 +47,7 @@ export interface OpportunityCardProps {
   };
   aggregate: Aggregate;
 }
+
 
 
 export function OpportunityCard({

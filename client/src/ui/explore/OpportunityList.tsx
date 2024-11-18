@@ -12,7 +12,7 @@ export function OpportunityList() {
   const [shownOpportunities, setShownOpportunities] = useState<OpportunityCardProps[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const limit = 5;
+  const limit = 25;
   const [hasMore, setHasMore] = useState(true);
   const [totalDBCount, setTotalDBCount] = useState<number>(0);
   const supabase = useMemo(() => createSupabaseClient(), []);
@@ -59,42 +59,53 @@ export function OpportunityList() {
     if (data) {
       const mappedData: OpportunityCardProps[] = data
         .map((item) => {
-          const { thread_id, opportunity } = item;
+          const { thread_id: conversation_id } = item;
+            
+            // const trackingData = (opportunity as Database["public"]["Tables"]["opportunity"]["Row"] & {
+            //   opportunity_tracking: Database["public"]["Tables"]["opportunity_tracking"]["Row"][];
+            // }).opportunity_tracking;
 
-          // Ensure 'opportunity' is not an array and has 'opportunity_tracking'
-          if (opportunity && !Array.isArray(opportunity)) {
-            const trackingData = (opportunity as Database["public"]["Tables"]["opportunity"]["Row"] & {
-              opportunity_tracking: Database["public"]["Tables"]["opportunity_tracking"]["Row"][] | null;
-            }).opportunity_tracking;
+            const opportunity =
+              item.opportunity as unknown as Database["public"]["Tables"]["opportunity"]["Row"] & {
+                opportunity_tracking?: {
+                  applied?: number;
+                  interviewing?: number;
+                  online_assessment?: number;
+                  offered?: number;
+                  rejected?: number;
+                };
+              };
+          if (!opportunity) {
+            console.warn("Unexpected `opportunity` structure:", opportunity);
+            return null;
+          }
+            
+          const trackingData = opportunity.opportunity_tracking;
 
-            if (trackingData && trackingData.length > 0) {
-              const tracking = trackingData[0]; // Taking the first tracking entry
 
-              // Calculate totalApplied based on tracking data
-              const totalApplied =
-                (tracking.applied || 0) +
-                (tracking.interviewing || 0) +
-                (tracking.online_assessment || 0) +
-                (tracking.offer || 0) +
-                (tracking.rejected || 0) || 0;
+
+            if (trackingData && trackingData) {
+              const tracking = trackingData; // Taking the first tracking entry
+              console.log("Tracking data found for opportunity:", opportunity, tracking);
 
               return {
-                conversation_id: thread_id,
+                conversation_id,
                 opportunity: opportunity as Database["public"]["Tables"]["opportunity"]["Row"] & {
                   opportunity_tracking: Database["public"]["Tables"]["opportunity_tracking"]["Row"][] | null;
                 },
                 aggregate: {
-                  totalApplied,
+                  totalApplied: tracking.applied || 0,
                   interviewing: tracking.interviewing || 0,
                   oa: tracking.online_assessment || 0,
-                  offered: tracking.offer || 0,
+                  offered: tracking.offered || 0,
                   rejected: tracking.rejected || 0,
                 },
               };
             } else {
               // Handle cases where 'opportunity_tracking' is null or empty
+              console.log("No tracking data found for opportunity:", opportunity);
               return {
-                conversation_id: thread_id,
+                conversation_id,
                 opportunity: opportunity as Database["public"]["Tables"]["opportunity"]["Row"] & {
                   opportunity_tracking: Database["public"]["Tables"]["opportunity_tracking"]["Row"][] | null;
                 },
@@ -107,12 +118,8 @@ export function OpportunityList() {
                 },
               };
             }
-          } else {
-            console.warn("Unexpected `opportunity` structure:", opportunity);
-            return null;
-          }
         })
-        .filter((item): item is OpportunityCardProps => item !== null); // Remove any `null` values
+        .filter((item) => item !== null); // Remove any `null` values
 
       if (page === 1) {
         setShownOpportunities(mappedData);
