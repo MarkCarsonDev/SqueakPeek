@@ -38,7 +38,7 @@ export function ConversationHeader({
           const { data, error } = res;
           if (error && error.code !== ignoreErrorCode) {
             setAlert({
-              message: "Failed to fetch company thread header",
+              message: "Failed to fetch coversation header",
               type: "error",
             });
           } else if (data) {
@@ -55,7 +55,7 @@ export function ConversationHeader({
 
         if (error && error.code !== ignoreErrorCode) {
           setAlert({
-            message: "Failed to fetch conversation header",
+            message: "Failed to fetch company thread header",
             type: "error",
           });
         }
@@ -80,7 +80,9 @@ export function ConversationHeader({
         <CardHeader
           title={header}
           subheader={subHeader}
-          avatar={<ProfileAvatar width="40px" height="40px" avatar={profileAvatar!} />}
+          avatar={
+            <ProfileAvatar width="40px" height="40px" avatar={profileAvatar!} />
+          }
           sx={{
             boxShadow: "rgba(224,228,242,.7) 0px 2px 2px 0px",
             zIndex: 1,

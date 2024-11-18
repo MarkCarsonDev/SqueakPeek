@@ -22,28 +22,51 @@ export function OpportunityList() {
       if (error) {
         console.error("Error fetching opportunities:", error);
       } else if (data) {
-        const mappedData: OpportunityCardProps[] = data.map((item) => {
-          const { thread_id: conversation_id } = item;
-          const opportunity =
-            item.opportunity as unknown as Database["public"]["Tables"]["opportunity"]["Row"]; // converts opportunity of the type as listed in the database
+        const mappedData: OpportunityCardProps[] = data
+          .map((item) => {
+            const { thread_id: conversation_id } = item;
+            const opportunity =
+              item.opportunity as Database["public"]["Tables"]["opportunity"]["Row"] & {
+                opportunity_tracking?: {
+                  applied?: number;
+                  interviewing?: number;
+                  online_assessment?: number;
+                  offered?: number;
+                  rejected?: number;
+                };
+              };
+            if (!opportunity) {
+              return null;
+            }
 
-          // TODO: Replace aggregate with real data
-          return {
-            conversation_id,
-            opportunity,
-            aggregate: {
-              totalApplied: 200,
-              interviewing: 12,
-              oa: 12,
-              offered: 12,
-              rejected: 12,
-              messages: 12,
-            },
-          };
-        });
+            const opportunityTracking =
+              opportunity.opportunity_tracking as Database["public"]["Tables"]["opportunity_tracking"]["Row"];
+
+            console.log("Tracking Data: ", opportunityTracking);
+
+            const totalApplied =
+              (opportunityTracking?.applied || 0) +
+              (opportunityTracking?.interviewing || 0) +
+              (opportunityTracking?.online_assessment || 0) +
+              (opportunityTracking?.offer || 0) +
+              (opportunityTracking?.rejected || 0);
+
+            return {
+              conversation_id,
+              opportunity,
+              aggregate: {
+                totalApplied,
+                interviewing: opportunityTracking?.interviewing || 0,
+                oa: opportunityTracking?.online_assessment || 0,
+                offered: opportunityTracking?.offer || 0,
+                rejected: opportunityTracking?.rejected || 0,
+              },
+            };
+          })
+          .filter((item) => item !== null);
+
         console.log("mappedData: ", mappedData);
-
-        setShownOpportunities(mappedData); // Initially, all opportunities are shown
+        setShownOpportunities(mappedData);
       }
 
       setLoading(false);
