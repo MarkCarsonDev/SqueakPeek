@@ -33,51 +33,76 @@ export function OpportunityStackedBarGraph({
     interviewing,
     offered,
 }:jobStats) {
+  const values = [rejected ?? 0, oa ?? 0, interviewing ?? 0, offered ?? 0];
+
+  const firstNonZeroIndex = values.findIndex((value) => value > 0);
+  const lastNonZeroIndex = values.length - 1 - [...values].reverse().findIndex((value) => value > 0);
+
+  const isSingleElement =
+    firstNonZeroIndex === lastNonZeroIndex && firstNonZeroIndex !== -1;
+
   const data = {
     labels: ["Job Stats"],
     datasets: [
       {
         label: "Rejected",
-        data: [rejected ?? 0], // Handle null values
+        data: [values[0]],
         backgroundColor: "#C7253E",
-        borderRadius: {
-          topLeft: 10,
-          bottomLeft: 10,
-        },
+        borderRadius:
+          isSingleElement && firstNonZeroIndex === 0
+            ? { topLeft: 10, bottomLeft: 10, topRight: 10, bottomRight: 10 }
+            : firstNonZeroIndex === 0
+            ? { topLeft: 10, bottomLeft: 10 }
+            : lastNonZeroIndex === 0
+            ? { topRight: 10, bottomRight: 10 }
+            : 0,
         borderSkipped: false,
       },
       {
         label: "OA",
-        data: [oa ?? 0], // Handle null values
+        data: [values[1]],
         backgroundColor: "#EB5B00",
-        borderRadius: {
-          topRight: 10,
-          bottomRight: 10,
-        },
+        borderRadius:
+          isSingleElement && firstNonZeroIndex === 1
+            ? { topLeft: 10, bottomLeft: 10, topRight: 10, bottomRight: 10 }
+            : firstNonZeroIndex === 1
+            ? { topLeft: 10, bottomLeft: 10 }
+            : lastNonZeroIndex === 1
+            ? { topRight: 10, bottomRight: 10 }
+            : 0,
         borderSkipped: false,
       },
       {
         label: "Interviewing",
-        data: [interviewing ?? 0], // Handle null values
+        data: [values[2]],
         backgroundColor: "#F0A202",
-        borderRadius: {
-          topRight: 10,
-          bottomRight: 10,
-        },
+        borderRadius:
+          isSingleElement && firstNonZeroIndex === 2
+            ? { topLeft: 10, bottomLeft: 10, topRight: 10, bottomRight: 10 }
+            : firstNonZeroIndex === 2
+            ? { topLeft: 10, bottomLeft: 10 }
+            : lastNonZeroIndex === 2
+            ? { topRight: 10, bottomRight: 10 }
+            : 0,
         borderSkipped: false,
       },
       {
         label: "Offered",
-        data: [offered ?? 0], // Handle null values
+        data: [values[3]],
         backgroundColor: "#2E7E33",
-        borderRadius: {
-          topRight: 10,
-          bottomRight: 10,
-        },
+        borderRadius:
+          isSingleElement && firstNonZeroIndex === 3
+            ? { topLeft: 10, bottomLeft: 10, topRight: 10, bottomRight: 10 }
+            : firstNonZeroIndex === 3
+            ? { topLeft: 10, bottomLeft: 10 }
+            : lastNonZeroIndex === 3
+            ? { topRight: 10, bottomRight: 10 }
+            : 0,
         borderSkipped: false,
       },
     ],
   };
+
 
   const options = {
     indexAxis: "y" as const,
