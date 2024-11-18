@@ -1,32 +1,72 @@
+// OpportunityList.tsx
 import React, { useEffect, useState, useMemo } from "react";
-// import { useRouter } from 'next/navigation'; // To handle URL params
-// import { SelectedFilters } from './Filters';
+import { useSearchParams } from 'next/navigation';
 import { OpportunityCard, OpportunityCardProps } from "./OpportunityCard";
 import { createSupabaseClient } from "@/lib/supabase/client";
-import { Database } from "@/lib/types/database.types";
 import { fetchOpportunities } from "@/lib/utils/fetchOpportunities";
+import { SelectedFilters } from './Filters';
+import { Typography, Button, Box, Skeleton } from "@mui/material";
+import { Database } from "@/lib/types/database.types";
 
-// TODO: Add filters to the OpportunityList component
 export function OpportunityList() {
-  const [shownOpportunities, setShownOpportunities] = useState<
-    OpportunityCardProps[]
-  >([]);
+  const [shownOpportunities, setShownOpportunities] = useState<OpportunityCardProps[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const supabase = useMemo(() => createSupabaseClient(), []); // only creates it once when the OpportunityList components mounts
+  const [currentPage, setCurrentPage] = useState(1);
+  const limit = 25;
+  const [hasMore, setHasMore] = useState(true);
+  const [totalDBCount, setTotalDBCount] = useState<number>(0);
+  const supabase = useMemo(() => createSupabaseClient(), []);
+  const searchParams = useSearchParams();
 
-  // Fetch all opportunities once when the component mounts
+  // Parse filters from searchParams
+  const filters: SelectedFilters = useMemo(() => {
+    const company = searchParams.getAll('company');
+    const jobPosition = searchParams.getAll('jobPosition');
+    const jobType = searchParams.getAll('jobType');
+    const searchQuery = searchParams.get('searchQuery') || undefined;
+
+    return {
+      company: company.length > 0 ? company : undefined,
+      jobPosition: jobPosition.length > 0 ? jobPosition : undefined,
+      jobType: jobType.length > 0 ? jobType : undefined,
+      searchQuery,
+    };
+  }, [searchParams]);
+
   useEffect(() => {
-    const handleFetchOpportunities = async () => {
-      setLoading(true);
-      const { data, error } = await fetchOpportunities(supabase);
-      if (error) {
-        console.error("Error fetching opportunities:", error);
-      } else if (data) {
-        const mappedData: OpportunityCardProps[] = data
-          .map((item) => {
-            const { thread_id: conversation_id } = item;
+    setLoading(true);
+    console.log("Filters changed:", filters);
+    setCurrentPage(1);
+    setShownOpportunities([]);
+    setHasMore(true);
+    fetchFilteredData(1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filters]);
+
+  const fetchFilteredData = async (page: number) => {
+    setLoading(true);
+    const offset = (page - 1) * limit;
+    const { data, error, totalCount } = await fetchOpportunities(supabase, filters, limit, offset);
+
+    if (error) {
+      console.error("Error fetching opportunities:", error);
+      setLoading(false);
+      return;
+    }
+
+    setTotalDBCount(totalCount || 0);
+
+    if (data) {
+      const mappedData: OpportunityCardProps[] = data
+        .map((item) => {
+          const { thread_id: conversation_id } = item;
+            
+            // const trackingData = (opportunity as Database["public"]["Tables"]["opportunity"]["Row"] & {
+            //   opportunity_tracking: Database["public"]["Tables"]["opportunity_tracking"]["Row"][];
+            // }).opportunity_tracking;
+
             const opportunity =
-              item.opportunity as Database["public"]["Tables"]["opportunity"]["Row"] & {
+              item.opportunity as unknown as Database["public"]["Tables"]["opportunity"]["Row"] & {
                 opportunity_tracking?: {
                   applied?: number;
                   interviewing?: number;
@@ -35,59 +75,137 @@ export function OpportunityList() {
                   rejected?: number;
                 };
               };
-            if (!opportunity) {
-              return null;
+          if (!opportunity) {
+            console.warn("Unexpected `opportunity` structure:", opportunity);
+            return null;
+          }
+            
+          const trackingData = opportunity.opportunity_tracking;
+
+
+
+            if (trackingData && trackingData) {
+              const tracking = trackingData; // Taking the first tracking entry
+              console.log("Tracking data found for opportunity:", opportunity, tracking);
+
+              return {
+                conversation_id,
+                opportunity: opportunity as Database["public"]["Tables"]["opportunity"]["Row"] & {
+                  opportunity_tracking: Database["public"]["Tables"]["opportunity_tracking"]["Row"][] | null;
+                },
+                aggregate: {
+                  totalApplied: tracking.applied || 0,
+                  interviewing: tracking.interviewing || 0,
+                  oa: tracking.online_assessment || 0,
+                  offered: tracking.offered || 0,
+                  rejected: tracking.rejected || 0,
+                },
+              };
+            } else {
+              // Handle cases where 'opportunity_tracking' is null or empty
+              console.log("No tracking data found for opportunity:", opportunity);
+              return {
+                conversation_id,
+                opportunity: opportunity as Database["public"]["Tables"]["opportunity"]["Row"] & {
+                  opportunity_tracking: Database["public"]["Tables"]["opportunity_tracking"]["Row"][] | null;
+                },
+                aggregate: {
+                  totalApplied: 0,
+                  interviewing: 0,
+                  oa: 0,
+                  offered: 0,
+                  rejected: 0,
+                },
+              };
             }
+        })
+        .filter((item) => item !== null); // Remove any `null` values
 
-            const opportunityTracking =
-              opportunity.opportunity_tracking as Database["public"]["Tables"]["opportunity_tracking"]["Row"];
-
-            console.log("Tracking Data: ", opportunityTracking);
-
-            const totalApplied =
-              (opportunityTracking?.applied || 0) +
-              (opportunityTracking?.interviewing || 0) +
-              (opportunityTracking?.online_assessment || 0) +
-              (opportunityTracking?.offer || 0) +
-              (opportunityTracking?.rejected || 0);
-
-            return {
-              conversation_id,
-              opportunity,
-              aggregate: {
-                totalApplied,
-                interviewing: opportunityTracking?.interviewing || 0,
-                oa: opportunityTracking?.online_assessment || 0,
-                offered: opportunityTracking?.offer || 0,
-                rejected: opportunityTracking?.rejected || 0,
-              },
-            };
-          })
-          .filter((item) => item !== null);
-
-        console.log("mappedData: ", mappedData);
+      if (page === 1) {
         setShownOpportunities(mappedData);
+      } else {
+        setShownOpportunities((prev) => [...prev, ...mappedData]);
       }
 
-      setLoading(false);
-    };
+      setHasMore(offset + data.length < (totalCount || 0));
+    }
 
-    handleFetchOpportunities();
-  }, [supabase]);
+    setLoading(false);
+  };
 
-  if (loading) {
-    return <div>Loading...</div>;
+  useEffect(() => {
+    if (currentPage > 1) {
+      fetchFilteredData(currentPage);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage]);
+
+  const handleLoadMore = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
+
+  if (loading && currentPage === 1) {
+    return (
+      <Box>
+        <Skeleton variant="rectangular" width="100%" height={118} />
+      </Box>
+    );
   }
 
-  if (shownOpportunities.length === 0) {
-    return <div>No opportunities found that match your criterion.</div>;
+  if (totalDBCount === 0 && !loading) {
+    return (
+      <Typography
+        sx={{
+          width: '100%',
+          margin: '4rem',
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        We couldn{"'"}t find any opportunities that match your criterion...
+      </Typography>
+    );
   }
 
   return (
-    <div>
-      {shownOpportunities.map((item) => (
-        <OpportunityCard key={item.opportunity.opportunity_id} {...item} />
-      ))}
-    </div>
+    <Box>
+      {!loading && (
+        <Box
+          sx={{
+            width: '100%',
+            marginTop: '1rem',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: "flex-end",
+            justifyContent: 'end',
+          }}
+        >
+          <Typography sx={{ float: 'right' }}>
+            Found {totalDBCount} results
+          </Typography>
+        </Box>
+      )}
+      {shownOpportunities.map((item) =>
+        item.opportunity ? (
+          <OpportunityCard key={item.opportunity.opportunity_id} {...item} />
+        ) : null
+      )}
+      {loading && currentPage > 1 && (
+        <Skeleton variant="rectangular" width="100%" height={118} />
+      )}
+      {hasMore && !loading && (
+        <Button onClick={handleLoadMore}>
+          Load {Math.min(limit, totalDBCount - (currentPage * limit))} more (Showing{' '}
+          {Math.min(currentPage * limit, totalDBCount)} of {totalDBCount})
+        </Button>
+      )}
+      {!hasMore && !loading && (
+        <Typography>
+          <p>Showing all {totalDBCount} opportunities</p>
+        </Typography>
+      )}
+    </Box>
   );
 }

@@ -32,8 +32,7 @@ interface jobStats {
   quantity: number | null;
 }
 
-// TODO: Replace this with the actual database type
-interface Aggregate {
+export interface Aggregate {
   rejected: number | null;
   interviewing: number | null;
   offered: number | null;
@@ -43,9 +42,13 @@ interface Aggregate {
 
 export interface OpportunityCardProps {
   conversation_id: string;
-  opportunity: Database["public"]["Tables"]["opportunity"]["Row"];
+  opportunity: Database["public"]["Tables"]["opportunity"]["Row"] & {
+    opportunity_tracking: Database["public"]["Tables"]["opportunity_tracking"]["Row"][] | null;
+  };
   aggregate: Aggregate;
 }
+
+
 
 export function OpportunityCard({
   conversation_id,

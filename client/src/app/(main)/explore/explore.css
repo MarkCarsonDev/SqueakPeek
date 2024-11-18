@@ -1,19 +1,65 @@
-.page-container{
+
+
+.page-container {
     padding: 1rem;
-}
-
-.header-search-container{
-    display: flex;
-}
-
-.card-filter-container{
-    display: grid;
-    gap: 2rem;
-    grid-template-columns: 70% 20%;
-}
-
-
-.header-text{
     display: flex;
     flex-direction: column;
+    /* height: 100vh; */
+}
+
+.header-search-container {
+    display: flex;
+    gap: 1rem;
+    justify-content: left;
+    position: sticky;
+}
+
+.card-filter-container {
+    flex: 1; /* Added to allow this container to grow and fill available space */
+    display: grid;
+    gap: 2rem;
+    overflow: hidden; /* Prevents internal content from affecting the page height */
+}
+
+.header-text {
+    display: flex;
+    flex-direction: column;
+    /* height: 100vh; */
+}
+
+.header-search-container {
+    display: flex;
+    gap: 1rem;
+    justify-content: left;
+    position: sticky;
+}
+
+.card-filter-container {
+    flex: 1; /* Added to allow this container to grow and fill available space */
+    display: grid;
+    gap: 2rem;
+    overflow: hidden; /* Prevents internal content from affecting the page height */
+}
+
+.header-text {
+    display: flex;
+    flex-direction: column;
+    flex: 2;
+}
+
+.search-bar {
+    flex: 3;
+}
+
+/* New styles added to make the OpportunityList scrollable */
+.opportunity-list-container {
+    overflow-y: visible;
+    border-top: 1px solid #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
+    margin-top: 1rem;
+}
+
+.explore-control-button {
+    height: 3.5rem;
+    box-shadow: 0;
 }
