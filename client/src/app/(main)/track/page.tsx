@@ -43,7 +43,8 @@ export default function Page() {
     return applications.filter(
       (app) =>
         app.company_name?.toLowerCase().includes(query) ||
-        app.role_title?.toLowerCase().includes(query)
+        app.role_title?.toLowerCase().includes(query) ||
+        app.type?.toLowerCase().includes(query)
     );
   };
 
