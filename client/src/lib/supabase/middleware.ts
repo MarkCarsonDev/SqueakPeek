@@ -3,7 +3,6 @@ import { NextResponse, type NextRequest } from "next/server";
 import { userHasExistingProfile } from "@/lib/actions/profile_setup"
 
 console.log("***** BEGIN middleware.ts ******");
-console.log("middleware.ts is always invoked!!!");
 
 //looked into making these Sets but couldn't quite implement the references yet
 //allowed public paths
@@ -94,7 +93,6 @@ export async function updateSession(request: NextRequest) {
     // Only allow authorized users to access the pages under the (main) directory using whitelist strategy
     if(!(isAllowedUserPath(pathname)) && !(isPublicPath(pathname))) {
       console.log("User attempted to access a restricted path. Redirecting to /404");
-      console.log("Task 1: Only allow authorized users to access the pages under the (main) directory");
       const url = request.nextUrl.clone();
       if (url.pathname.indexOf("/404") < 0) {
         url.pathname = "/404";
@@ -107,7 +105,6 @@ export async function updateSession(request: NextRequest) {
     const url = request.nextUrl.clone();
     console.log("url: " + url);
     if (!(hasUserProfile)) {
-      console.log("Task 3: Redirect authenticated users without a profile to /profile_setup");
       console.log("USER " + user?.email + " HAS NO PROFILE");
       console.log("url.pathname.indexOf(/profile_setup): " + url.pathname.indexOf("/profile_setup"));
       
@@ -129,7 +126,6 @@ export async function updateSession(request: NextRequest) {
       // Redirect any users accessing /profile_setup that already has a profile to /404
       console.log("USER " + user?.email + " HAS PROFILE");
       if (pathname === "/profile_setup") {
-        console.log("Task 4: Redirect any users accessing /profile_setup that already has a profile to /404");
         console.log("USER " + user?.email + " ALREADY HAS PROFILE, redirecting to 404");
         const url = request.nextUrl.clone();
         url.pathname = "/404";
@@ -149,7 +145,6 @@ export async function updateSession(request: NextRequest) {
 
     // For authenticated users accessing the pages outside of (main)
     //automatically redirect them to the /404 route
-    console.log("Task 2: For authenticated users accessing the pages outside of (main) automatically redirect them to the /404 route");
     if(!isPublicPath(pathname)) {
       const url = request.nextUrl.clone();
       if (url.pathname.indexOf("/404") < 0) {
