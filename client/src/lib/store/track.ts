@@ -21,6 +21,8 @@ interface TrackState {
   "Online Assessment": Application[];
   Interviewing: Application[];
   Offer: Application[];
+  searchQuery: string; 
+  setSearchQuery: (query: string) => void; 
   addApplication: (
     to: ApplicationStage,
     application: Application,
@@ -57,6 +59,10 @@ export const useTrack = create<TrackState>()((set) => ({
   "Online Assessment": [],
   Interviewing: [],
   Offer: [],
+
+  // Search Filter
+  searchQuery: "",
+  setSearchQuery: (query: string) => set({ searchQuery: query }),
 
   addApplication: async (to, application, profile): Promise<{success: boolean; message: string}> => {   
     // Call the InsertApplication function
