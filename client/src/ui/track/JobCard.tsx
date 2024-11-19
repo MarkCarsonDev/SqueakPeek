@@ -226,7 +226,7 @@ export function JobCard({ application, profile, onCardClick, setPreventClick }: 
 
         {/* Row 2: Role Title */}
         <Typography variant="subtitle2" sx={{ fontSize: "12px" }}>
-          {role_title} - {type}
+          {role_title}, {type}
         </Typography>
 
         {/* Row 3: Icon Buttons */}
