@@ -5,7 +5,6 @@ import { userHasExistingProfile } from "@/lib/actions/profile_setup"
 console.log("***** BEGIN middleware.ts ******");
 console.log("middleware.ts is always invoked!!!");
 
-
 //looked into making these Sets but couldn't quite implement the references yet
 //allowed public paths
 const publicPaths = ["/","/login","/signup","/about","/auth/callback"];
@@ -84,8 +83,15 @@ export async function updateSession(request: NextRequest) {
   if (user) {
     const userEmail = user?.email;
     console.log("USER " + userEmail + " HAS AUTHENTICATED");
-    
-    //Task 1: Only allow authorized users to access the pages under the (main) directory using whitelist strategy
+  
+    // redirect all auth'd users to /explore
+    if (pathname === "/") {
+    const url = request.nextUrl.clone();
+    url.pathname = "/explore";
+    return NextResponse.redirect(url); 
+    }
+
+    // Only allow authorized users to access the pages under the (main) directory using whitelist strategy
     if(!(isAllowedUserPath(pathname)) && !(isPublicPath(pathname))) {
       console.log("User attempted to access a restricted path. Redirecting to /404");
       console.log("Task 1: Only allow authorized users to access the pages under the (main) directory");
@@ -96,7 +102,7 @@ export async function updateSession(request: NextRequest) {
       }
     }
 
-    // Task 3: Redirect authenticated users without a profile to /profile_setup
+    // Redirect authenticated users without a profile to /profile_setup
     const hasUserProfile = await userHasExistingProfile();
     const url = request.nextUrl.clone();
     console.log("url: " + url);
@@ -105,7 +111,7 @@ export async function updateSession(request: NextRequest) {
       console.log("USER " + user?.email + " HAS NO PROFILE");
       console.log("url.pathname.indexOf(/profile_setup): " + url.pathname.indexOf("/profile_setup"));
       
-      //if not on profile_setup, redirect to profile_setup
+      // if not on profile_setup, redirect to profile_setup
       if (url.pathname.indexOf("/profile_setup") < 0) {
         if (!isPublicPath(pathname)){
           url.pathname = "/profile_setup";
@@ -120,7 +126,7 @@ export async function updateSession(request: NextRequest) {
     } // end of handling of non auth'd users
     else {
       
-      // Task 4: Redirect any users accessing /profile_setup that already has a profile to /404
+      // Redirect any users accessing /profile_setup that already has a profile to /404
       console.log("USER " + user?.email + " HAS PROFILE");
       if (pathname === "/profile_setup") {
         console.log("Task 4: Redirect any users accessing /profile_setup that already has a profile to /404");
@@ -130,8 +136,8 @@ export async function updateSession(request: NextRequest) {
         return NextResponse.rewrite(url);
       }
       
-      // Task 5: Redirect auth users navigating to /message to /message/company first
-      if (request.nextUrl.pathname === "/message") {
+      // Redirect auth users navigating to /message to /message/company first
+      if (pathname === "/message") {
         const url = request.nextUrl.clone();
         url.pathname = "/message/company";
         return NextResponse.redirect(url);
@@ -141,7 +147,7 @@ export async function updateSession(request: NextRequest) {
   else {
     console.log("USER HAS NOT AUTHENTICATED");
 
-    //Task 2: For authenticated users accessing the pages outside of (main)
+    // For authenticated users accessing the pages outside of (main)
     //automatically redirect them to the /404 route
     console.log("Task 2: For authenticated users accessing the pages outside of (main) automatically redirect them to the /404 route");
     if(!isPublicPath(pathname)) {
