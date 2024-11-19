@@ -11,7 +11,7 @@ export default function ApplicationSearchBar() {
   return (
     <TextField
       variant="outlined"
-      placeholder="Search Companies and roles"
+      placeholder="Search companies and roles"
       onChange={handleSearchChange}
       InputProps={{
         startAdornment: (

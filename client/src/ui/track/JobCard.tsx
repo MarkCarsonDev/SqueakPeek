@@ -41,6 +41,7 @@ export function JobCard({ application, profile, onCardClick, setPreventClick }: 
     interviewing_round,
     thread_id,
     link,
+    type,
   } = application;
 
   const handleStatusChange = (value: SetStateAction<ApplicationStage>) => {
@@ -86,7 +87,7 @@ export function JobCard({ application, profile, onCardClick, setPreventClick }: 
         border: "2px solid #E0E4F2",
         backgroundColor: "#F6F8FF",
         display: "grid",
-        gridTemplateColumns: "50px auto 30px",
+        gridTemplateColumns: "50px auto",
         alignItems: "center",
         padding: "10px",
         marginX: "auto",
@@ -225,7 +226,7 @@ export function JobCard({ application, profile, onCardClick, setPreventClick }: 
 
         {/* Row 2: Role Title */}
         <Typography variant="subtitle2" sx={{ fontSize: "12px" }}>
-          {role_title}
+          {role_title} - {type}
         </Typography>
 
         {/* Row 3: Icon Buttons */}
