@@ -1,5 +1,5 @@
 "use client";
-import { useRef, memo, useEffect } from "react";
+import { useRef, memo } from "react";
 import { NewMessagesNotificationModal } from "./NewMessageNotificationModal";
 import { MutableRefObject } from "react";
 import { MessageList } from "./MessageList";
@@ -59,7 +59,6 @@ export const ConversationBody = memo(function ConversationBody({
       bottomRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }
-
 
   if (isLoading) {
     return (

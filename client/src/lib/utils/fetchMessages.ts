@@ -10,6 +10,9 @@ import { createSupabaseClient } from "../supabase/client";
 
  * @returns {data: messages, error: Postgress error} - data contains the messages from the conversation
  */
+
+
+// TODO refactor this to make it less congested
 export async function fetchMessages(
   conversation_id: string,
   isPrivateConversation: boolean,
@@ -35,7 +38,7 @@ export async function fetchMessages(
 
     const { error } = res;
     const data =
-      res.data as Database["public"]["Tables"]["public_message"]["Row"][];
+      res.data as Database["public"]["Tables"]["private_message"]["Row"][];
     if (error) {
       console.error(error);
     }
