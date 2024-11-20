@@ -39,6 +39,10 @@ export async function fetchMessages(
     if (error) {
       console.error(error);
     }
+
+    if (data) {
+      data.reverse();
+    }
     return { data, error };
   } else {
     const res = await supabase
@@ -57,14 +61,14 @@ export async function fetchMessages(
       );
 
     const { error } = res;
-    const data =
+    let data =
       res.data as Database["public"]["Tables"]["public_message"]["Row"][];
     if (error) {
       console.error(error);
     }
 
     if (data) {
-      data.reverse();
+      data = data.reverse();
     }
 
     return { data, error };
