@@ -23,11 +23,16 @@ export function Conversation({
   conversationId: string;
   isPrivateConversation?: boolean;
 }) {
-  const { addMessage, clearMessages, setConversationType, setMessages } =
-    useConversation();
+  const {
+    addMessage,
+    clearConversation,
+    setConversationType,
+    setMessages,
+    fetchCount,
+    incrementFetchCount,
+  } = useConversation();
   const { profile } = useProfile();
   const [numNewMessages, setNumNewMessages] = useState(0); // used for rendering new message notification
-  const fetchCount = useRef(0);
   const [isLoading, setIsLoading] = useState(true);
   const [pageNotFound, setNotFound] = useState(false);
   const bottomRef = useRef<null | HTMLDivElement>(null); // used for scrolling down the page
@@ -36,10 +41,6 @@ export function Conversation({
   // Resets numNewMessages to 0
   function resetNumNewMessages() {
     setNumNewMessages(0);
-  }
-
-  function incrementFetchCount() {
-    fetchCount.current += 1;
   }
 
   // determines if conversation exists
@@ -96,9 +97,9 @@ export function Conversation({
   );
 
   useEffect(() => {
-    clearMessages();
-    return () => clearMessages();
-  }, [conversationId, clearMessages]);
+    clearConversation();
+    return () => clearConversation();
+  }, [conversationId, clearConversation]);
 
   useEffect(() => {
     setConversationType(isPrivateConversation);
@@ -108,7 +109,7 @@ export function Conversation({
     fetchMessages(
       conversationId,
       isPrivateConversation,
-      fetchCount.current,
+      fetchCount,
       supabase
     ).then((res) => {
       const { error, data } = res;
