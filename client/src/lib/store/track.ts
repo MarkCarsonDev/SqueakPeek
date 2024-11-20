@@ -7,7 +7,6 @@ import { RemoveApplication} from "@/lib/utils/Application/RemoveApplication";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { Profile } from "@/lib/store/profile";
 import { PostgrestError } from "@supabase/supabase-js";
-import { boolean } from "zod";
 export type ApplicationStage =
   | "Applied"
   | "Rejected"
@@ -44,7 +43,7 @@ interface TrackState {
   ) => Promise<{ success: boolean; message: string }>;
 
    fetchApplications: (profile: Profile) => Promise<{ data: Application[] | null; error: PostgrestError | null }>;
-   checkexistApplication: (profile: Profile, application: Application) => Promise<{exist :boolean}>;
+   checkExistApplication: (opportunityId: string) => boolean;
 }
 
 // Helper function to reorder items in a list
@@ -55,7 +54,7 @@ const reorder = (list: Application[], startIndex: number, endIndex: number) => {
   return result;
 };
 
-export const useTrack = create<TrackState>()((set) => ({
+export const useTrack = create<TrackState>()((set, get) => ({
   Applied: [],
   Rejected: [],
   "Online Assessment": [],
@@ -66,13 +65,24 @@ export const useTrack = create<TrackState>()((set) => ({
   searchQuery: "",
   setSearchQuery: (query: string) => set({ searchQuery: query }),
 
-  checkexistApplication: (profile, application) {
-    for (Applied)
-    if (application.company_name){
+  checkExistApplication: (opportunityId: string): boolean => {
+    const state = get();
+    const stages: ApplicationStage[] = [
+      "Applied",
+      "Rejected",
+      "Online Assessment",
+      "Interviewing",
+      "Offer",
+    ];
 
+    for (const stage of stages) {
+      if (state[stage].some((app) => app.opportunity_id === opportunityId)) {
+        return true;
+      }
     }
-    return true,
-  }
+
+    return false;
+  },
 
   addApplication: async (to, application, profile): Promise<{success: boolean; message: string}> => {   
     // Call the InsertApplication function
