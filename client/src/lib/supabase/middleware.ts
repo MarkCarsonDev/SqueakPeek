@@ -6,18 +6,17 @@ console.log("***** BEGIN middleware.ts ******");
 
 //looked into making these Sets but couldn't quite implement the references yet
 //allowed public paths
-const publicPaths = ["/","/login","/signup","/about","/auth/callback"];
+const publicPaths = new Set(["/","/login","/signup","/about","/auth/callback"]);
 
 //whitelists auth'd user paths
-const protectedPaths = ["/message", "/explore", "/profile", "/thread", "/track", "/profile_setup"];
+const protectedPaths = new Set(["/message", "/explore", "/profile", "/thread", "/track", "/profile_setup"]);
 
 //may be a JavaScript way to do this easier with Sets... looking into it
-function hasBasePath(pathname: string, basepaths: string[]) {
-  for (let i = 0; i < basepaths.length; i++) {
-    if (pathname == "/")
-      return true 
-    if (basepaths[i] == "/") {continue}
-    if (pathname.indexOf(basepaths[i]) == 0) {
+function hasBasePath(pathname: string, basePaths: Set<string>): boolean {
+  if (pathname == "/") return true;
+  for (const basePath of basePaths) {
+    if (basePath === "/") continue;
+    if (pathname.startsWith(basePath)) {
       return true
     }
   }
