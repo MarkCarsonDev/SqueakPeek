@@ -60,10 +60,6 @@ export const ConversationBody = memo(function ConversationBody({
     }
   }
 
-  // scrolls down on first page render
-  useEffect(() => {
-    scrollDown();
-  }, []);
 
   if (isLoading) {
     return (

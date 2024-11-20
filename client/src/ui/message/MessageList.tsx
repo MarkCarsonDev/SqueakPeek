@@ -2,7 +2,7 @@ import { useMessage } from "@/lib/store/message";
 import { useProfile } from "@/lib/store/profile";
 import { DateDivider } from "./DateDivider";
 import { MessageCard } from "./MessageCard";
-import { memo } from "react";
+import { memo, useEffect } from "react";
 interface MessageListProps {
   isPageBottomFlushed: boolean;
   scrollDown: () => void;
@@ -19,6 +19,11 @@ export const MessageList = memo(function MessageList({
 }: MessageListProps) {
   const { messages } = useMessage();
   const { profile } = useProfile();
+
+  // scrolls down on first page render
+  useEffect(() => {
+    scrollDown();
+  }, []);
 
   // determines if DateDivider should be rendered
   function doRenderDateDivider(
