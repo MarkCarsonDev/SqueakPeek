@@ -11,69 +11,54 @@ import { createSupabaseClient } from "../supabase/client";
  * @returns {data: messages, error: Postgress error} - data contains the messages from the conversation
  */
 
-
-// TODO refactor this to make it less congested
 export async function fetchMessages(
   conversation_id: string,
   isPrivateConversation: boolean,
   fetchCount: number,
   supabase: SupabaseClient = createSupabaseClient()
 ) {
-  const numFetchMessage = 50;
-  if (isPrivateConversation) {
-    const res = await supabase
-      .from("private_message")
-      .select(
-        `
-      *,
-      private_conversation!inner()
-    `
-      )
-      .eq("private_conversation.conversation_id", conversation_id)
-      .order("created_at", { ascending: false })
-      .range(
-        numFetchMessage * fetchCount,
-        (fetchCount + 1) * numFetchMessage - 1
-      );
+  const numFetchMessage = 50; // range of message fetch for a conversation
+  const fromQeury = isPrivateConversation
+    ? "private_message"
+    : "public_message";
 
-    const { error } = res;
-    const data =
-      res.data as Database["public"]["Tables"]["private_message"]["Row"][];
-    if (error) {
-      console.error(error);
-    }
+  const selectQuery = isPrivateConversation
+    ? "private_conversation!inner()"
+    : "company_thread!inner()";
 
-    if (data) {
-      data.reverse();
-    }
-    return { data, error };
-  } else {
-    const res = await supabase
-      .from("public_message")
-      .select(
-        `
-        *,
-        company_thread!inner()
+  const eqQuery = isPrivateConversation
+    ? "private_conversation.conversation_id"
+    : "company_thread.thread_id";
+
+  const res = await supabase
+    .from(fromQeury)
+    .select(
       `
-      )
-      .eq("company_thread.thread_id", conversation_id)
-      .order("created_at", { ascending: false })
-      .range(
-        numFetchMessage * fetchCount,
-        (fetchCount + 1) * numFetchMessage - 1
-      );
+      *,
+      ${selectQuery}
+    `
+    )
+    .eq(eqQuery, conversation_id)
+    .order("created_at", { ascending: false })
+    .range(
+      numFetchMessage * fetchCount,
+      (fetchCount + 1) * numFetchMessage - 1
+    );
 
-    const { error } = res;
-    let data =
-      res.data as Database["public"]["Tables"]["public_message"]["Row"][];
-    if (error) {
-      console.error(error);
-    }
-
-    if (data) {
-      data = data.reverse();
-    }
-
-    return { data, error };
+  const { error } = res;
+  let data;
+  if (isPrivateConversation) {
+    data = res.data as Database["public"]["Tables"]["private_message"]["Row"][];
+  } else {
+    data = res.data as Database["public"]["Tables"]["public_message"]["Row"][];
   }
+
+  if (error) {
+    console.error(error);
+  }
+
+  if (data) {
+    data.reverse();
+  }
+  return { data, error };
 }
