@@ -7,6 +7,7 @@ import { RemoveApplication} from "@/lib/utils/Application/RemoveApplication";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { Profile } from "@/lib/store/profile";
 import { PostgrestError } from "@supabase/supabase-js";
+import { boolean } from "zod";
 export type ApplicationStage =
   | "Applied"
   | "Rejected"
@@ -43,6 +44,7 @@ interface TrackState {
   ) => Promise<{ success: boolean; message: string }>;
 
    fetchApplications: (profile: Profile) => Promise<{ data: Application[] | null; error: PostgrestError | null }>;
+   checkexistApplication: (profile: Profile, application: Application) => Promise<{exist :boolean}>;
 }
 
 // Helper function to reorder items in a list
@@ -63,6 +65,14 @@ export const useTrack = create<TrackState>()((set) => ({
   // Search Filter
   searchQuery: "",
   setSearchQuery: (query: string) => set({ searchQuery: query }),
+
+  checkexistApplication: (profile, application) {
+    for (Applied)
+    if (application.company_name){
+
+    }
+    return true,
+  }
 
   addApplication: async (to, application, profile): Promise<{success: boolean; message: string}> => {   
     // Call the InsertApplication function

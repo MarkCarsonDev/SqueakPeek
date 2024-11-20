@@ -9,7 +9,8 @@ import {
   Chip,
   Button,
   IconButton,
-  Avatar
+  Avatar,
+  Icon
 } from "@mui/material";
 import {
   faAnglesUp,
@@ -18,6 +19,7 @@ import {
   faReply,
   faBookmark,
   faChartColumn,
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark as regularBookmark } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -26,6 +28,11 @@ import { OpportunityStackedBarGraph } from "./OpportunityStackedBarGraph";
 import Link from "next/link";
 import { useFetchCompanyLogo } from "@/lib/hooks/useFetchCompanyLogo";
 import { OpportunityStatsModal } from "./OpportunityStatsModal";
+import { OpportunityBookmark } from "../message/OpportunityBookmark";
+import { ApplicationStage, useTrack, Application } from "@/lib/store/track";
+import { useProfile } from "@/lib/store/profile";
+import { convertToYYYYMMDD } from "@/lib/utils/dateUtils";
+import { useAlert } from "@/lib/store/alert";
 
 interface jobStats {
   status: string;
@@ -51,6 +58,7 @@ export interface OpportunityCardProps {
 
 
 
+
 export function OpportunityCard({
   conversation_id,
   opportunity,
@@ -60,7 +68,16 @@ export function OpportunityCard({
   const appliedStatus = false;
   const hiringStatus = false;
 
-  // TODO: Add real quantity
+  
+  const { addApplication } = useTrack();
+  const { profile } = useProfile();
+  if (!profile) {
+    //onSuccess("User must be authenticated to add an application.", "error");
+    return;
+  }
+
+  
+
   // Array for mapping the job stats
   const stats: jobStats[] = [
     {
@@ -88,14 +105,28 @@ export function OpportunityCard({
   const { company_name, role_title, type } = opportunity;
   const { rejected, interviewing, offered, totalApplied, oa } =
     aggregate;
-  const [bookmarked, setBookmarked] = useState(false);
   const isAppliedColor = appliedStatus ? "green" : "red";
   const isHiringColor = hiringStatus ? "green" : "red";
   const logoUrl = useFetchCompanyLogo(company_name);
 
-  const handleBookmark = () => {
-    setBookmarked((prev) => !prev); // Toggle the bookmark state
+  
+
+  const today = new Date();
+  const formattedDate = today.toLocaleDateString();
+
+  const updatedFields: Partial<Application> = {
+    created_at: convertToYYYYMMDD(formattedDate),
+    role_title: role_title,
+    type: type,
+    company_name: company_name,
+    status: "Applied",
+    profile_id: profile.profile_id,
   };
+
+
+  const  handleaddapplication = () => {
+    addApplication("Applied", updatedFields as Application, profile);
+  }
 
   const handleShareClick = () => {
     if (navigator.share) {
@@ -199,16 +230,7 @@ export function OpportunityCard({
           </Button>
 
           {/* Bookmark button */}
-          <IconButton
-            onClick={handleBookmark}
-            sx={{ "&:hover": { background: "none" } }}
-          >
-            <FontAwesomeIcon
-              icon={bookmarked ? faBookmark : regularBookmark}
-              style={{ fontSize: "2rem" }}
-              color="#496FFF"
-            />
-          </IconButton>
+          <OpportunityBookmark conversationId={conversation_id} size="2rem"/>
         </div>
       </div>
 
@@ -306,6 +328,11 @@ export function OpportunityCard({
         <Typography variant="h6" sx={{ textAlign: "center" }}>
           Total Applied: {totalApplied}
         </Typography>
+
+        <IconButton onClick={handleaddapplication}>
+          <FontAwesomeIcon icon={faPlus}/>
+
+        </IconButton>
       </CardContent>
     </Card>
   );
