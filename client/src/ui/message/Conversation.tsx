@@ -27,7 +27,7 @@ export function Conversation({
     useMessage();
   const { profile } = useProfile();
   const [numNewMessages, setNumNewMessages] = useState(0); // used for rendering new message notification
-  const [fetchCount, setFetchCount] = useState(0);
+  const fetchCount = useRef(0);
   const [isLoading, setIsLoading] = useState(true);
   const [pageNotFound, setNotFound] = useState(false);
   const bottomRef = useRef<null | HTMLDivElement>(null); // used for scrolling down the page
@@ -104,7 +104,7 @@ export function Conversation({
     fetchMessages(
       conversationId,
       isPrivateConversation,
-      fetchCount,
+      fetchCount.current,
       supabase
     ).then((res) => {
       const { error, data } = res;
