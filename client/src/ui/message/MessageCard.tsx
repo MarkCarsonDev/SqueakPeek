@@ -2,7 +2,7 @@ import { Card, CardHeader, Typography } from "@mui/material";
 import { AvatarTypes, ProfileAvatar } from "../ProfileAvatar";
 import { memo, useEffect, useState } from "react";
 import { useProfile } from "../../lib/store/profile";
-import { useMessage } from "@/lib/store/message";
+import { useConversation } from "@/lib/store/conversation";
 import { PrivateMessageModal } from "./PrivateMessageModal";
 export interface MessageCardProps {
   avatar: AvatarTypes;
@@ -34,7 +34,7 @@ export const MessageCard = memo(function MessageCard({
 }: MessageCardProps) {
   // TODO: Add upVotes and downVotes component
   const { profile } = useProfile();
-  const { isPrivateConversation: isPrivateMessage } = useMessage();
+  const { isPrivateConversation: isPrivateMessage } = useConversation();
   const messageDate = new Date(timestamp);
 
   const [openModal, setOpenModal] = useState(false);

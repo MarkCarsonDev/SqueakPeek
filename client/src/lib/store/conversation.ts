@@ -12,7 +12,7 @@ interface MessageState {
 }
 
 // hook that will be access in UI components
-export const useMessage = create<MessageState>()((set) => ({
+export const useConversation = create<MessageState>()((set) => ({
   messages: [],
   isPrivateConversation: false,
   addMessage: (newMessage) =>

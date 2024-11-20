@@ -2,7 +2,7 @@
 import { MessageInput } from "./MessageInput";
 import { ConversationHeader } from "./ConversationHeader";
 import { ConversationBody } from "./ConversationBody";
-import { useMessage } from "../../lib/store/message";
+import { useConversation } from "../../lib/store/conversation";
 import { useState, useRef, useEffect, useMemo } from "react";
 import { useProfile } from "../../lib/store/profile";
 import { useSubscribeConversation } from "@/lib/hooks/useSubscribeConversation";
@@ -24,7 +24,7 @@ export function Conversation({
   isPrivateConversation?: boolean;
 }) {
   const { addMessage, clearMessages, setConversationType, setMessages } =
-    useMessage();
+    useConversation();
   const { profile } = useProfile();
   const [numNewMessages, setNumNewMessages] = useState(0); // used for rendering new message notification
   const fetchCount = useRef(0);
@@ -36,6 +36,10 @@ export function Conversation({
   // Resets numNewMessages to 0
   function resetNumNewMessages() {
     setNumNewMessages(0);
+  }
+
+  function incrementFetchCount() {
+    fetchCount.current += 1;
   }
 
   // determines if conversation exists
@@ -130,6 +134,7 @@ export function Conversation({
           })
         );
         setMessages(mappedData);
+        incrementFetchCount();
         setIsLoading(false);
       }
     });

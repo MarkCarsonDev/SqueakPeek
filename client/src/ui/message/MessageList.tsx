@@ -1,4 +1,4 @@
-import { useMessage } from "@/lib/store/message";
+import { useConversation } from "@/lib/store/conversation";
 import { useProfile } from "@/lib/store/profile";
 import { DateDivider } from "./DateDivider";
 import { MessageCard } from "./MessageCard";
@@ -17,7 +17,7 @@ export const MessageList = memo(function MessageList({
   isPageBottomFlushed,
   scrollDown,
 }: MessageListProps) {
-  const { messages } = useMessage();
+  const { messages } = useConversation();
   const { profile } = useProfile();
 
   // scrolls down on first page render

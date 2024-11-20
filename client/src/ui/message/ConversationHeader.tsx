@@ -1,5 +1,5 @@
 import { CardHeader, Avatar, Skeleton } from "@mui/material";
-import { useMessage } from "@/lib/store/message";
+import { useConversation } from "@/lib/store/conversation";
 import { useEffect, useState } from "react";
 import { useProfile, Profile } from "@/lib/store/profile";
 import { ProfileAvatar, AvatarTypes } from "../ProfileAvatar";
@@ -21,7 +21,7 @@ interface ConversationHeaderProps {
 export function ConversationHeader({
   conversationId,
 }: ConversationHeaderProps) {
-  const { isPrivateConversation } = useMessage();
+  const { isPrivateConversation } = useConversation();
   const { profile } = useProfile();
   const [header, setHeader] = useState("");
   const [subHeader, setSubHeader] = useState("");
