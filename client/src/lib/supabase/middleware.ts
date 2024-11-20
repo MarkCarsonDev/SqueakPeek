@@ -2,8 +2,6 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { userHasExistingProfile } from "@/lib/actions/profile_setup"
 
-console.log("***** BEGIN middleware.ts ******");
-
 //looked into making these Sets but couldn't quite implement the references yet
 //allowed public paths
 const publicPaths = new Set(["/","/login","/signup","/about","/auth/callback"]);
@@ -30,13 +28,6 @@ function isPublicPath(pathname: string){
 
 //hasBasePath on protectedPaths (protected paths)
 function isAllowedUserPath(pathname: string){
-  console.log("start of isAllowedUserPath");
-  console.log("pathname: " + typeof(pathname));
-  //TODO: should we keep Auth'd users off of signup?
-  //if (pathname === "/signup"){
-  //  console.log("RETURNING FALSE: pathname: signup " + pathname);
-  //  return false
-  // }
   return hasBasePath(pathname, protectedPaths);
 }
 
@@ -73,7 +64,6 @@ export async function updateSession(request: NextRequest) {
 
   //simple pathname variable
   const pathname = request.nextUrl.pathname;
-  console.log("USER REQUEST PATHNAME: "+ pathname);
   
   //Auth user
   if (user) {
@@ -89,7 +79,6 @@ export async function updateSession(request: NextRequest) {
 
     // Only allow authorized users to access the pages under the (main) directory using whitelist strategy
     if(!(isAllowedUserPath(pathname)) && !(isPublicPath(pathname))) {
-      console.log("User attempted to access a restricted path. Redirecting to /404");
       const url = request.nextUrl.clone();
       if (url.pathname.indexOf("/404") < 0) {
         url.pathname = "/404";
@@ -100,22 +89,15 @@ export async function updateSession(request: NextRequest) {
     // Redirect authenticated users without a profile to /profile_setup
     const hasUserProfile = await userHasExistingProfile();
     const url = request.nextUrl.clone();
-    console.log("url: " + url);
     if (!(hasUserProfile)) {
       console.log("USER " + user?.email + " HAS NO PROFILE");
-      console.log("url.pathname.indexOf(/profile_setup): " + url.pathname.indexOf("/profile_setup"));
       
       //if not on profile_setup, redirect to profile_setup
       if (url.pathname.indexOf("/profile_setup") < 0) {
         if (!isPublicPath(pathname)){
           url.pathname = "/profile_setup";
-          console.log("redirecting to /profile_setup: user has no profile");
           return NextResponse.redirect(url);
         }
-      }
-      else {
-        console.log("user is trying to access: " + url.pathname);
-        console.log("User accessing profile_setup");
       }
     } // end of handling of non auth'd users
     else {
