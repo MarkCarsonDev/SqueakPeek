@@ -12,6 +12,7 @@ import { Database } from "@/lib/types/database.types";
 import {companies} from "@/lib/data/companies";
 import { roles } from "@/lib/data/roles";
 import { useAlert } from "@/lib/store/alert";
+import { convertToYYYYMMDD, convertToMMDDYYYY } from "@/lib/utils/dateUtils";
 interface NewApplicationModalProps {
   open: boolean;
   handleClose: () => void;
@@ -52,7 +53,9 @@ export default function NewApplicationModal({
     location: existingApplication?.location || "",
     type: existingApplication?.type || "",
     company_name: existingApplication?.company_name || "",
-    dateApplied: existingApplication?.created_at || "",
+    dateApplied: existingApplication?.created_at
+    ? convertToMMDDYYYY(existingApplication.created_at)
+    : "",
     jobLink: existingApplication?.link || "",
     testProvider: existingApplication?.test_provider || "",
     currentScore: existingApplication?.currentScore || "",
@@ -90,6 +93,7 @@ export default function NewApplicationModal({
 
     const updatedFields: Partial<Application> = {
       application_id: existingApplication?.application_id,
+      created_at: dateApplied ? convertToYYYYMMDD(dateApplied) : undefined,
       role_title: role_title,
       location: location,
       type: type,

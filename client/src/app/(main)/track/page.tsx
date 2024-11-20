@@ -7,6 +7,7 @@ import NewApplicationModal from "@/ui/track/NewApplicationModal";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import { StageColumn, StageColumnProps } from "@/ui/track/StageColumn"; 
 import { Application, ApplicationStage, useTrack } from "@/lib/store/track";
+import ApplicationSearchBar from "@/ui/track/ApplicationSearchBar";
 import { useProfile } from "@/lib/store/profile"; 
 import "./tracking.css";
 
@@ -24,7 +25,8 @@ export default function Page() {
     Offer,
     moveApplication,
     updateApplication,
-    fetchApplications
+    fetchApplications,
+    searchQuery
   } = useTrack();
   const { profile } = useProfile();
 
@@ -35,13 +37,24 @@ export default function Page() {
     }
   }, [profile, fetchApplications]);
 
+  // Helper function to filter applications based on search query
+  const filterBySearch = (applications: Application[]) => {
+    const query = searchQuery.toLowerCase();
+    return applications.filter(
+      (app) =>
+        app.company_name?.toLowerCase().includes(query) ||
+        app.role_title?.toLowerCase().includes(query) ||
+        app.type?.toLowerCase().includes(query)
+    );
+  };
+
   // Stage configuration for displaying columns
   const stages: StageColumnProps[] = [
-    { stage: "Applied", stageName: "Initial Screen", stageColor: "#769FCD", applications: Applied },
-    { stage: "Rejected", stageName: "Rejected", stageColor: "#C7253E", applications: Rejected },
-    { stage: "Online Assessment", stageName: "Online Assessment", stageColor: "#EB5B00", applications: OnlineAssessment },
-    { stage: "Interviewing", stageName: "Interviewing", stageColor: "#F0A202", applications: Interviewing },
-    { stage: "Offer", stageName: "Offer", stageColor: "#2E7E33", applications: Offer },
+    { stage: "Applied", stageName: "Initial Screen", stageColor: "#769FCD", applications: filterBySearch(Applied) },
+    { stage: "Rejected", stageName: "Rejected", stageColor: "#C7253E", applications: filterBySearch(Rejected) },
+    { stage: "Online Assessment", stageName: "Online Assessment", stageColor: "#EB5B00", applications: filterBySearch(OnlineAssessment) },
+    { stage: "Interviewing", stageName: "Interviewing", stageColor: "#F0A202", applications: filterBySearch(Interviewing) },
+    { stage: "Offer", stageName: "Offer", stageColor: "#2E7E33", applications: filterBySearch(Offer) },
   ];
 
   // Function to open the modal and set the application status
@@ -92,7 +105,6 @@ export default function Page() {
         Total Applications:{" "}
         {stages.reduce((acc, stage) => acc + stage.applications.length, 0)}
       </Typography>
-
       {/* Button to open modal for adding a new application */}
       <Button
         variant="contained"
@@ -112,6 +124,9 @@ export default function Page() {
       >
         New Application
       </Button>
+
+      {/* Search Bar for filtering */}
+      <ApplicationSearchBar />
 
       {/* New Application Modal */}
       {openModal && (

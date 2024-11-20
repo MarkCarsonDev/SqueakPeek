@@ -5,12 +5,13 @@ import { userHasExistingProfile } from "@/lib/actions/profile_setup"
 console.log("***** BEGIN middleware.ts ******");
 console.log("middleware.ts is always invoked!!!");
 
+
 //looked into making these Sets but couldn't quite implement the references yet
 //allowed public paths
-const publicPaths = ["/","/login","/signup","/about"];
+const publicPaths = ["/","/login","/signup","/about","/auth/callback"];
 
 //whitelists auth'd user paths
-const validUserPaths = ["/message", "/explore", "/profile", "/thread", "/track", "/profile_setup"];
+const protectedPaths = ["/message", "/explore", "/profile", "/thread", "/track", "/profile_setup"];
 
 //may be a JavaScript way to do this easier with Sets... looking into it
 function hasBasePath(pathname: string, basepaths: string[]) {
@@ -32,7 +33,7 @@ function isPublicPath(pathname: string){
   return hasBasePath(pathname, publicPaths)
 }
 
-//hasBasePath on validUserPaths (protected paths)
+//hasBasePath on protectedPaths (protected paths)
 function isAllowedUserPath(pathname: string){
   console.log("start of isAllowedUserPath");
   console.log("pathname: " + typeof(pathname));
@@ -41,7 +42,7 @@ function isAllowedUserPath(pathname: string){
   //  console.log("RETURNING FALSE: pathname: signup " + pathname);
   //  return false
   // }
-  return hasBasePath(pathname, validUserPaths);
+  return hasBasePath(pathname, protectedPaths);
 }
 
 // refreshes expired Auth token
