@@ -31,11 +31,20 @@ export const MessageList = memo(function MessageList({
     return false;
   }
 
-  return messages.map((message, index) => {
-    const doScrollDown =
+  function doScrollDown(index: number, sender_username: string) {
+    if (
       (index === messages.length - 1 &&
-        profile?.username === message.sender_username) ||
-      isPageBottomFlushed;
+        profile?.username === sender_username) ||
+      isPageBottomFlushed
+    )
+      return (
+        (index === messages.length - 1 &&
+          profile?.username === sender_username) ||
+        isPageBottomFlushed
+      );
+  }
+
+  return messages.map((message, index) => {
     let prevDate: undefined | Date;
     if (index > 0) prevDate = new Date(messages[index - 1].timestamp);
     return (
@@ -45,7 +54,11 @@ export const MessageList = memo(function MessageList({
         )}
         <MessageCard
           {...message}
-          scrollDown={doScrollDown ? scrollDown : undefined}
+          scrollDown={
+            doScrollDown(index, message.sender_username)
+              ? scrollDown
+              : undefined
+          }
         />
       </div>
     );
