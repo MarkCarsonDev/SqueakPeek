@@ -27,6 +27,7 @@ export function Conversation({
     useMessage();
   const { profile } = useProfile();
   const [numNewMessages, setNumNewMessages] = useState(0); // used for rendering new message notification
+  const [fetchCount, setFetchCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [pageNotFound, setNotFound] = useState(false);
   const bottomRef = useRef<null | HTMLDivElement>(null); // used for scrolling down the page
@@ -100,35 +101,38 @@ export function Conversation({
   }, [setConversationType, isPrivateConversation]);
 
   useEffect(() => {
-    fetchMessages(conversationId, isPrivateConversation, supabase).then(
-      (res) => {
-        const { error, data } = res;
+    fetchMessages(
+      conversationId,
+      isPrivateConversation,
+      fetchCount,
+      supabase
+    ).then((res) => {
+      const { error, data } = res;
 
-        if (error) {
-          // do something on the UI
-        } else {
-          const mappedData: MessageCardProps[] = data.map(
-            ({
-              created_at,
-              sender_avatar,
-              sender_username,
-              message,
-              message_id,
-              sender_id,
-            }) => ({
-              avatar: sender_avatar,
-              sender_username,
-              timestamp: created_at,
-              message,
-              messageId: message_id,
-              sender_id: sender_id!,
-            })
-          );
-          setMessages(mappedData);
-          setIsLoading(false);
-        }
+      if (error) {
+        // do something on the UI
+      } else {
+        const mappedData: MessageCardProps[] = data.map(
+          ({
+            created_at,
+            sender_avatar,
+            sender_username,
+            message,
+            message_id,
+            sender_id,
+          }) => ({
+            avatar: sender_avatar,
+            sender_username,
+            timestamp: created_at,
+            message,
+            messageId: message_id,
+            sender_id: sender_id!,
+          })
+        );
+        setMessages(mappedData);
+        setIsLoading(false);
       }
-    );
+    });
   }, [supabase, conversationId, setMessages, isPrivateConversation]);
 
   return (

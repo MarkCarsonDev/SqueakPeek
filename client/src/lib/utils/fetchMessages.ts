@@ -13,8 +13,10 @@ import { createSupabaseClient } from "../supabase/client";
 export async function fetchMessages(
   conversation_id: string,
   isPrivateConversation: boolean,
+  fetchCount: number,
   supabase: SupabaseClient = createSupabaseClient()
 ) {
+  const numFetchMessage = 50;
   if (isPrivateConversation) {
     const res = await supabase
       .from("private_message")
@@ -25,7 +27,12 @@ export async function fetchMessages(
     `
       )
       .eq("private_conversation.conversation_id", conversation_id)
-      .order("created_at", { ascending: true });
+      .order("created_at", { ascending: false })
+      .range(
+        numFetchMessage * fetchCount,
+        (fetchCount + 1) * numFetchMessage - 1
+      );
+
     const { error } = res;
     const data =
       res.data as Database["public"]["Tables"]["public_message"]["Row"][];
@@ -43,7 +50,11 @@ export async function fetchMessages(
       `
       )
       .eq("company_thread.thread_id", conversation_id)
-      .order("created_at", { ascending: true });
+      .order("created_at", { ascending: false })
+      .range(
+        numFetchMessage * fetchCount,
+        (fetchCount + 1) * numFetchMessage - 1
+      );
 
     const { error } = res;
     const data =
@@ -51,6 +62,11 @@ export async function fetchMessages(
     if (error) {
       console.error(error);
     }
+
+    if (data) {
+      data.reverse();
+    }
+
     return { data, error };
   }
 }
