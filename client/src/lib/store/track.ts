@@ -77,10 +77,11 @@ export const useTrack = create<TrackState>()((set, get) => ({
 
     for (const stage of stages) {
       if (state[stage].some((app) => app.opportunity_id === opportunityId)) {
+        console.log("Application already exists in stage:", stage);
         return true;
       }
     }
-
+    console.log("Application does not exist in any stage");
     return false;
   },
 

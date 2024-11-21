@@ -68,8 +68,8 @@ export function OpportunityCard({
   const appliedStatus = false;
   const hiringStatus = false;
 
-  
-  const { addApplication } = useTrack();
+  const { setAlert } = useAlert();
+  const { addApplication, checkExistApplication } = useTrack();
   const { profile } = useProfile();
   if (!profile) {
     //onSuccess("User must be authenticated to add an application.", "error");
@@ -123,9 +123,22 @@ export function OpportunityCard({
     profile_id: profile.profile_id,
   };
 
+  // TODO: You should run checkExistApplication(opportunity.opportunity_id) before adding application
+  // if it returns false, then can make the button visiable to add application then convert grey out button
+  // if it return true, then make the button grey out and not visiable
+  // 
+
 
   const  handleaddapplication = () => {
-    addApplication("Applied", updatedFields as Application, profile);
+    if (checkExistApplication(opportunity.opportunity_id) === false) {
+      addApplication("Applied" as ApplicationStage, updatedFields as Application, profile);
+      setAlert({ message: "Application added successfully", type: "success" });
+    } else {
+      setAlert({ message: "Application already exists", type: "error" });
+    }
+    // addApplication("Applied" as ApplicationStage, updatedFields as Application, profile);
+    
+    
   }
 
   const handleShareClick = () => {
