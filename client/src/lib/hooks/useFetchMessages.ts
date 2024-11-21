@@ -3,22 +3,26 @@ import { MessageCardProps } from "@/ui/message/MessageCard";
 import { useEffect } from "react";
 import { useConversation } from "../store/conversation";
 import { createSupabaseClient } from "../supabase/client";
+
+/**
+ * Fetches messages for a particular conversation and sets the message into store
+ * @param conversationId - id of the conversation
+ * @param supabase - client to make supabase queries
+ */
 export const useFetchMessage = (
   conversationId: string,
-  setIsLoading: (isLoading: boolean) => void,
   supabase = createSupabaseClient()
 ) => {
-  const {
-    isPrivateConversation,
-    fetchCount,
-    setMessages,
-    incrementFetchCount,
-  } = useConversation();
+  const { setMessages, incrementFetchCount, clearConversation, setIsLoading } =
+    useConversation();
+
   useEffect(() => {
+    setIsLoading(true);
+    clearConversation();
     fetchMessages(
       conversationId,
-      isPrivateConversation,
-      fetchCount,
+      useConversation.getState().isPrivateConversation,
+      useConversation.getState().fetchCount,
       supabase
     ).then((res) => {
       const { error, data } = res;
@@ -44,9 +48,16 @@ export const useFetchMessage = (
           })
         );
         setMessages(mappedData);
-        incrementFetchCount();
         setIsLoading(false);
+        incrementFetchCount();
       }
     });
-  }, [supabase, conversationId, setMessages, isPrivateConversation, fetchCount, incrementFetchCount, setIsLoading]);
+  }, [
+    supabase,
+    conversationId,
+    setMessages,
+    incrementFetchCount,
+    clearConversation,
+    setIsLoading,
+  ]);
 };

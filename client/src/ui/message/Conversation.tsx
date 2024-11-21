@@ -7,10 +7,10 @@ import { useState, useRef, useEffect, useMemo } from "react";
 import { useProfile } from "../../lib/store/profile";
 import { useSubscribeConversation } from "@/lib/hooks/useSubscribeConversation";
 import { createSupabaseClient } from "@/lib/supabase/client";
-import { fetchMessages } from "@/lib/utils/fetchMessages";
-import { MessageCardProps } from "./MessageCard";
+
 import { notFound } from "next/navigation";
 import { updatePrivateConversationIsRead } from "@/lib/utils/updatePrivateConversationIsRead";
+import { useFetchMessage } from "@/lib/hooks/useFetchMessages";
 
 /**
  * This is a UI container that holds all messages for a particular conversation
@@ -23,16 +23,10 @@ export function Conversation({
   conversationId: string;
   isPrivateConversation?: boolean;
 }) {
-  const {
-    addMessage,
-    clearConversation,
-    setConversationType,
-    setMessages,
-    incrementFetchCount,
-  } = useConversation();
+  const { addMessage, clearConversation, setConversationType, isLoading } =
+    useConversation();
   const { profile } = useProfile();
   const [numNewMessages, setNumNewMessages] = useState(0); // used for rendering new message notification
-  const [isLoading, setIsLoading] = useState(true);
   const [pageNotFound, setNotFound] = useState(false);
   const bottomRef = useRef<null | HTMLDivElement>(null); // used for scrolling down the page
   const supabase = useMemo(() => createSupabaseClient(), []);
@@ -103,44 +97,9 @@ export function Conversation({
     return () => {
       clearConversation();
     };
-  }, []);
+  }, [clearConversation]);
 
-  useEffect(() => {
-    clearConversation();
-    fetchMessages(
-      conversationId,
-      useConversation.getState().isPrivateConversation,
-      useConversation.getState().fetchCount,
-      supabase
-    ).then((res) => {
-      const { error, data } = res;
-
-      if (error) {
-        // do something on the UI
-      } else {
-        const mappedData: MessageCardProps[] = data.map(
-          ({
-            created_at,
-            sender_avatar,
-            sender_username,
-            message,
-            message_id,
-            sender_id,
-          }) => ({
-            avatar: sender_avatar,
-            sender_username,
-            timestamp: created_at,
-            message,
-            messageId: message_id,
-            sender_id: sender_id!,
-          })
-        );
-        setMessages(mappedData);
-        incrementFetchCount();
-        setIsLoading(false);
-      }
-    });
-  }, [supabase, conversationId, setMessages, isPrivateConversation]);
+  useFetchMessage(conversationId);
 
   return (
     <div

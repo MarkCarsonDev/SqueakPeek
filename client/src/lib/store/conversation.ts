@@ -6,11 +6,13 @@ interface MessageState {
   messages: MessageCardProps[];
   fetchCount: number;
   isPrivateConversation: boolean;
+  isLoading: boolean;
   addMessage: (newMessage: MessageCardProps) => void;
   incrementFetchCount: () => void;
   clearConversation: () => void;
   setConversationType: (conversationType: boolean) => void;
   setMessages: (newMessages: MessageCardProps[]) => void;
+  setIsLoading: (isLoading: boolean) => void;
 }
 
 // hook that will be access in UI components
@@ -18,6 +20,7 @@ export const useConversation = create<MessageState>()((set) => ({
   messages: [],
   fetchCount: 0,
   isPrivateConversation: false,
+  isLoading: false,
   addMessage: (newMessage) =>
     set((state) => ({ messages: [...state.messages, newMessage] })),
   incrementFetchCount: () =>
@@ -29,4 +32,5 @@ export const useConversation = create<MessageState>()((set) => ({
   setMessages: (newMessages) => {
     set((state) => ({ ...state, messages: newMessages }));
   },
+  setIsLoading: (isLoading) => set(() => ({ isLoading })),
 }));
