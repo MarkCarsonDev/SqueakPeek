@@ -4,9 +4,11 @@ import { MessageCardProps } from "@/ui/message/MessageCard";
 // state of the hook
 interface MessageState {
   messages: MessageCardProps[];
+  fetchCount: number;
   isPrivateConversation: boolean;
   addMessage: (newMessage: MessageCardProps) => void;
-  clearMessages: () => void;
+  incrementFetchCount: () => void;
+  clearConversation: () => void;
   setConversationType: (conversationType: boolean) => void;
   setMessages: (newMessages: MessageCardProps[]) => void;
 }
@@ -14,10 +16,13 @@ interface MessageState {
 // hook that will be access in UI components
 export const useConversation = create<MessageState>()((set) => ({
   messages: [],
+  fetchCount: 0,
   isPrivateConversation: false,
   addMessage: (newMessage) =>
     set((state) => ({ messages: [...state.messages, newMessage] })),
-  clearMessages: () => set(() => ({ messages: [] })),
+  incrementFetchCount: () =>
+    set((state) => ({ ...state, fetchCount: state.fetchCount + 1 })),
+  clearConversation: () => set(() => ({ messages: [], fetchCount: 0 })),
   setConversationType: (conversationType) => {
     set((state) => ({ ...state, isPrivateConversation: conversationType }));
   },
