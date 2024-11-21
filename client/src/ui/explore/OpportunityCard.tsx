@@ -71,9 +71,9 @@ export function OpportunityCard({
   const { setAlert } = useAlert();
   const { addApplication, checkExistApplication } = useTrack();
   const { profile } = useProfile();
+
   if (!profile) {
-    //onSuccess("User must be authenticated to add an application.", "error");
-    return;
+    return null; // Return `null` explicitly for clarity
   }
 
   
