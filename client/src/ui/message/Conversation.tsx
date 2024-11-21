@@ -3,7 +3,7 @@ import { MessageInput } from "./MessageInput";
 import { ConversationHeader } from "./ConversationHeader";
 import { ConversationBody } from "./ConversationBody";
 import { useConversation } from "../../lib/store/conversation";
-import { useState, useRef, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useProfile } from "../../lib/store/profile";
 import { useSubscribeConversation } from "@/lib/hooks/useSubscribeConversation";
 import { createSupabaseClient } from "@/lib/supabase/client";
@@ -28,7 +28,6 @@ export function Conversation({
   const { profile } = useProfile();
   const [numNewMessages, setNumNewMessages] = useState(0); // used for rendering new message notification
   const [pageNotFound, setNotFound] = useState(false);
-  const bottomRef = useRef<null | HTMLDivElement>(null); // used for scrolling down the page
   const supabase = useMemo(() => createSupabaseClient(), []);
 
   // Resets numNewMessages to 0
@@ -118,7 +117,6 @@ export function Conversation({
         isLoading={isLoading}
         numNewMessages={numNewMessages}
         resetNumNewMessages={() => resetNumNewMessages()}
-        bottomRef={bottomRef}
       />
 
       {/* Message Input */}
