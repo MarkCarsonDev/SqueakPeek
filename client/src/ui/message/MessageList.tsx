@@ -5,7 +5,7 @@ import { MessageCard } from "./MessageCard";
 import { memo, useEffect } from "react";
 interface MessageListProps {
   isPageBottomFlushed: boolean;
-  scrollDown: () => void;
+  scrollDown: (isSmooth: boolean) => void;
 }
 /**
  * Handles rendering a list of messages from zustand store
@@ -22,7 +22,7 @@ export const MessageList = memo(function MessageList({
 
   // scrolls down on first page render
   useEffect(() => {
-    scrollDown();
+    scrollDown(false);
   }, []);
 
   // determines if DateDivider should be rendered
@@ -61,7 +61,7 @@ export const MessageList = memo(function MessageList({
           {...message}
           scrollDown={
             doScrollDown(index, message.sender_username)
-              ? scrollDown
+              ? () => scrollDown(true)
               : undefined
           }
         />

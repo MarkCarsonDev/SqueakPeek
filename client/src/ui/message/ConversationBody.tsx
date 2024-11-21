@@ -1,5 +1,5 @@
 "use client";
-import { useRef, memo } from "react";
+import { useRef, memo, useEffect } from "react";
 import { NewMessagesNotificationModal } from "./NewMessageNotificationModal";
 import { MessageList } from "./MessageList";
 import { CircularProgress } from "@mui/material";
@@ -21,6 +21,7 @@ export const ConversationBody = memo(function ConversationBody({
 }) {
   // Scroll to the bottom of the element
   const scrollContainerRef = useRef<null | HTMLDivElement>(null);
+  const topRef = useRef<null | HTMLDivElement>(null); // used for scrolling down the page
   const bottomRef = useRef<null | HTMLDivElement>(null); // used for scrolling down the page
   const scrollThreshold = 20; // threshold for determining on whether page scrolls down on new messages
 
@@ -46,11 +47,19 @@ export const ConversationBody = memo(function ConversationBody({
   }
 
   // scrolls down to the latest message on page mount"
-  function scrollDown() {
+  function scrollDown(isSmooth: boolean) {
     if (bottomRef.current) {
-      bottomRef.current.scrollIntoView({ behavior: "smooth" });
+      bottomRef.current.scrollIntoView({
+        behavior: isSmooth ? "smooth" : "instant",
+      });
     }
   }
+
+  // useEffect(() => {
+  //   scrollContainerRef.current?.addEventListener("scroll", () => {
+  //     console.log("yeaha");
+  //   });
+  // }, [scrollContainerRef.current]);
 
   if (isLoading) {
     return (
@@ -78,10 +87,15 @@ export const ConversationBody = memo(function ConversationBody({
       >
         <NewMessagesNotificationModal
           numNewMessages={numNewMessages}
-          scrollDown={scrollDown}
+          scrollDown={() => scrollDown(true)}
           resetNumNewMessages={resetNumNewMessages}
         />
-
+        <div
+          ref={topRef}
+          style={{
+            height: `${scrollThreshold}px`,
+          }}
+        />
         <MessageList
           isPageBottomFlushed={isRefVisible(bottomRef, scrollContainerRef)}
           scrollDown={scrollDown}
