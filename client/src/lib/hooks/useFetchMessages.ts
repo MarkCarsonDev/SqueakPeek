@@ -13,12 +13,15 @@ export const useFetchMessage = (
   conversationId: string,
   supabase = createSupabaseClient()
 ) => {
-  const { setMessages, incrementFetchCount, clearConversation, setIsLoading } =
-    useConversation();
+  const {
+    setMessages,
+    incrementFetchCount,
+    clearConversation,
+    setIsLoading,
+  } = useConversation();
 
   useEffect(() => {
     setIsLoading(true);
-    clearConversation();
     fetchMessages(
       conversationId,
       useConversation.getState().isPrivateConversation,

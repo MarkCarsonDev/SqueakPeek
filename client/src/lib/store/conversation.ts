@@ -30,7 +30,7 @@ export const useConversation = create<MessageState>()((set) => ({
     set((state) => ({ ...state, isPrivateConversation: conversationType }));
   },
   setMessages: (newMessages) => {
-    set((state) => ({ ...state, messages: newMessages }));
+    set((state) => ({ messages: newMessages.concat(state.messages) }));
   },
   setIsLoading: (isLoading) => set(() => ({ isLoading })),
 }));

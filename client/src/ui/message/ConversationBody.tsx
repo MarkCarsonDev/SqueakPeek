@@ -55,11 +55,13 @@ export const ConversationBody = memo(function ConversationBody({
     }
   }
 
-  // useEffect(() => {
-  //   scrollContainerRef.current?.addEventListener("scroll", () => {
-  //     console.log("yeaha");
-  //   });
-  // }, [scrollContainerRef.current]);
+  useEffect(() => {
+    scrollContainerRef.current?.addEventListener("scroll", () => {
+      if (isRefVisible(topRef, scrollContainerRef)) {
+        console.log("top is visible");
+      }
+    });
+  }, [scrollContainerRef.current]);
 
   if (isLoading) {
     return (
