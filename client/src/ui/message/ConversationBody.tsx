@@ -61,7 +61,7 @@ export const ConversationBody = memo(function ConversationBody({
         console.log("top is visible");
       }
     });
-  }, [scrollContainerRef.current]);
+  }, []);
 
   if (isLoading) {
     return (
