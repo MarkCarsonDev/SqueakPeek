@@ -74,8 +74,8 @@ export async function updateSession(request: NextRequest) {
     // Only allow authorized users to access the pages under the (main) directory using whitelist strategy
     if(!(isAllowedUserPath(pathname)) && !(isPublicPath(pathname))) {
       const url = request.nextUrl.clone();
-      if (url.pathname.indexOf("/404") < 0) {
-        url.pathname = "/404";
+      if (url.pathname.indexOf("/401") < 0) {
+        url.pathname = "/401";
         return NextResponse.redirect(url);
       }
     }
@@ -116,12 +116,12 @@ export async function updateSession(request: NextRequest) {
   else {
     console.log("USER HAS NOT AUTHENTICATED");
 
-    // For authenticated users accessing the pages outside of (main) automatically redirect them to the /404 route
+    // For authenticated users accessing the pages outside of (main) automatically redirect them to the /401 route
     if(!isPublicPath(pathname)) {
       const url = request.nextUrl.clone();
-      if (url.pathname.indexOf("/404") < 0) {
-        console.log(pathname  + " is not a public path. Redirect to 404");
-        url.pathname = "/404";
+      if (url.pathname.indexOf("/401") < 0) {
+        console.log(pathname  + " is not a public path. Redirect to 401");
+        url.pathname = "/401";
         return NextResponse.redirect(url); 
       }
     }
