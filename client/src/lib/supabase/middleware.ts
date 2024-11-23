@@ -9,6 +9,7 @@ const publicPaths = new Set(["/","/login","/signup","/about","/auth/callback"]);
 //whitelists auth'd user paths
 const protectedPaths = new Set(["/message", "/explore", "/profile", "/thread", "/track", "/profile_setup"]);
 
+//basePaths.has(pathname)
 //may be a JavaScript way to do this easier with Sets... looking into it
 function hasBasePath(pathname: string, basePaths: Set<string>): boolean {
   if (pathname == "/") return true;
