@@ -17,13 +17,9 @@ import {
   faAnglesDown,
   faComment,
   faReply,
-  faBookmark,
-  faChartColumn,
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
-import { faBookmark as regularBookmark } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState} from "react";
 import { OpportunityStackedBarGraph } from "./OpportunityStackedBarGraph";
 import Link from "next/link";
 import { useFetchCompanyLogo } from "@/lib/hooks/useFetchCompanyLogo";
