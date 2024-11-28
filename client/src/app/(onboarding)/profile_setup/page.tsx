@@ -8,11 +8,14 @@ import {
 } from "../../../lib/actions/profile_setup";
 import { useFormState } from "react-dom"; // Assuming this is available for form state management
 import "./profile_setup.css";
+import { SearchDropdown } from "@/ui/track/SearchDropdown";
+import {schools} from "../../../lib/data/schools";
 
 export default function ProfilePage() {
   const initialState: ProfileSetupState = { message: null, errors: {} };
   const [state, formAction] = useFormState(createProfile, initialState); // Use form state hook
   const [chosenAvatar, setAvatar] = useState("");
+  const [profileSchool, setSchool] = useState("");
 
   // TODO: Change with the real profile assets
   const avatars = [
@@ -108,7 +111,7 @@ export default function ProfilePage() {
         />
 
         {/* School */}
-        <InputField
+        {/* <InputField
           fullWidth
           label="School"
           placeholder="Enter your school"
@@ -116,7 +119,21 @@ export default function ProfilePage() {
           name="school"
           helperText={state.errors?.school} // Display first school error
           sx={{ marginBottom: "15px" }}
-        />
+        /> */}
+        {/* School */}
+        <SearchDropdown
+            label="School"
+            placeholder="Enter your school"
+            name="School"
+            options={schools}
+            value={profileSchool || ""}
+            onValueChange={(newValue) =>
+              setSchool(newValue || "")
+            }
+            helperText={state.errors?.school} // Display first school error
+            fullWidth
+            style={{ marginBottom: "10px" }}
+          />
 
         {/* Button container */}
         <div className="button-links">
