@@ -111,25 +111,13 @@ export default function ProfilePage() {
         />
 
         {/* School */}
-        {/* <InputField
-          fullWidth
-          label="School"
-          placeholder="Enter your school"
-          variant="outlined"
-          name="school"
-          helperText={state.errors?.school} // Display first school error
-          sx={{ marginBottom: "15px" }}
-        /> */}
-        {/* School */}
         <SearchDropdown
             label="School"
             placeholder="Enter your school"
-            name="School"
+            name="school"
             options={schools}
-            value={profileSchool || ""}
-            onValueChange={(newValue) =>
-              setSchool(newValue || "")
-            }
+            value={profileSchool ?? ""}
+            onValueChange={(newValue) => setSchool(newValue ?? "")}
             helperText={state.errors?.school} // Display first school error
             fullWidth
             style={{ marginBottom: "10px" }}
