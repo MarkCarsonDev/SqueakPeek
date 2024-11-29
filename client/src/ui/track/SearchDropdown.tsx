@@ -5,7 +5,6 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { CircularProgress,TextFieldProps } from "@mui/material";
 import { InputField } from "@/ui/InputField"; // Custom InputField component
 import axios from "axios";
-import { set } from "zod";
 
 /**
  * A custom version of the Autocomplete component with the label designed similarly to the InputField.
@@ -54,7 +53,7 @@ export function SearchDropdown({
       const response = await axios.get(apiEndpoint as string, {
         params: { [queryKey]: query },
       });
-      const fetchedOptions = response.data.map((item: any) => item.name); // Map API response to options
+      const fetchedOptions = response.data.map((item: { name: string }) => item.name); // Map API response to options
       setDynamicOptions(fetchedOptions);
     } catch (error) {
       console.error("Error fetching options:", error);
