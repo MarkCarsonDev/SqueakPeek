@@ -7,6 +7,7 @@ import { createSupabaseClient } from "@/lib/supabase/client";
 import { useProfile } from "@/lib/store/profile";
 import { useRouter } from "next/navigation";
 import { SearchDropdown } from "@/ui/track/SearchDropdown";
+import { schools } from "@/lib/data/schools";
 
 export default function Page() {
   //Router Creation
@@ -14,10 +15,6 @@ export default function Page() {
 
   // Creates Supabase Client
   const supabase = useMemo(() => createSupabaseClient(), []);
-
-  //TODO replace with API data
-  const SchoolOptions = ["Cal State Long Beach", "Cal State Fullerton", "USC", "UCSB", "UC Berkley", "UC Riverside"];
-
   //Avatar data
   const avatars: {
     profile: string;
@@ -183,18 +180,18 @@ export default function Page() {
 
           {/* School */}
           <SearchDropdown
-            label="School"
-            placeholder="Enter your school"
-            name="School"
-            options={SchoolOptions}
+            label="School Name"
+            placeholder="Enter your school name"
+            options = {schools} // Static options if API failed
+            apiEndpoint="http://universities.hipolabs.com/search"
+            queryKey="name"
             value={profileSchool || ""}
             onValueChange={(newValue) =>
               setSchool(newValue || "")
             }
-            fullWidth
+            useApi={true} // Enable API integration
             style={{ marginBottom: "10px" }}
           />
-
           {/* Button container */}
           <div className="button-links">
             <Button
