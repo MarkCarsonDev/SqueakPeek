@@ -28,7 +28,7 @@ export function SearchDropdown({
   label, 
   placeholder, 
   style, 
-  options = ["Others", "N/A"], 
+  options = [], 
   apiEndpoint,
   queryKey = "name", //default to name since right now we are only fetching name of school
   value, 
@@ -37,12 +37,12 @@ export function SearchDropdown({
   useApi = false, //default to false since not everytime we will use API
   disabled = false, 
   ...restProps }: SearchDropdownProps & TextFieldProps) {
-    const [dynamicOptions, setDynamicOptions] = useState<string[]>([]); // Options fetched from API
+  const [dynamicOptions, setDynamicOptions] = useState<string[]>([]); // Options fetched from API
   const [loading, setLoading] = useState(false); // Loading state
   const [query, setQuery] = useState<string>(""); // User's search query
  
   // Fetch options from the API based on the user's input
-  const fetchOptions = async (query: string) => {
+  const fetchOptions = async (query?: string) => {
     if (!query) {
       setDynamicOptions([]); // Clear options if the query is empty
       return;
@@ -62,6 +62,14 @@ export function SearchDropdown({
       setLoading(false);
     }
   };
+
+
+  // Fetch initial options when `useApi` is enabled
+  useEffect(() => {
+    if (useApi && apiEndpoint) {
+      fetchOptions(); // Fetch default API options without a query
+    }
+  }, [useApi, apiEndpoint]);
 
   // Debounce input to minimize API calls
   useEffect(() => {

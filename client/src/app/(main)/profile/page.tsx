@@ -7,7 +7,7 @@ import { createSupabaseClient } from "@/lib/supabase/client";
 import { useProfile } from "@/lib/store/profile";
 import { useRouter } from "next/navigation";
 import { SearchDropdown } from "@/ui/track/SearchDropdown";
-import { schools } from "@/lib/data/schools";
+
 
 export default function Page() {
   //Router Creation
@@ -182,7 +182,6 @@ export default function Page() {
           <SearchDropdown
             label="School Name"
             placeholder="Enter your school name"
-            options = {schools} // Static options if API failed
             apiEndpoint="http://universities.hipolabs.com/search"
             queryKey="name"
             value={profileSchool || ""}

@@ -9,7 +9,6 @@ import {
 import { useFormState } from "react-dom"; // Assuming this is available for form state management
 import "./profile_setup.css";
 import { SearchDropdown } from "@/ui/track/SearchDropdown";
-import { schools } from "@/lib/data/schools";
 
 export default function ProfilePage() {
   const initialState: ProfileSetupState = { message: null, errors: {} };
@@ -115,7 +114,6 @@ export default function ProfilePage() {
             label="School"
             placeholder="Enter your school"
             name="school"
-            options = {schools} // Use static school data if API failed
             apiEndpoint="http://universities.hipolabs.com/search"
             queryKey="name"
             value={profileSchool ?? ""}
