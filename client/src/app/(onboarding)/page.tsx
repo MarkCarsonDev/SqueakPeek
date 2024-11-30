@@ -3,6 +3,12 @@ import { LandingPageHero } from "@/ui/landingpage/LandingPageHero";
 import { Typography } from "@mui/material";
 import Image from "next/image";
 
+export const metadata = {
+  title: "Home",
+  description:
+    "Home.",
+};
+
 export default function Home() {
   return (
     <div>

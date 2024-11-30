@@ -6,6 +6,8 @@ import { LoginState, loginAccount } from "../../../lib/actions/login";
 import { useFormState } from "react-dom";
 import { handleGoogleLoginClientSide } from "../../../lib/supabase/auth/handleGoogleLoginClientSide";
 
+
+
 export default function Page() {
   const initialState: LoginState = { message: null, errors: {} };
   const [state, formAction] = useFormState(loginAccount, initialState);
