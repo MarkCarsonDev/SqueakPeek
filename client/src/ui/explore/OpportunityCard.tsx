@@ -8,9 +8,7 @@ import {
   Typography,
   Chip,
   Button,
-  IconButton,
   Avatar,
-  Icon,
 } from "@mui/material";
 import {
   faAnglesUp,
@@ -44,6 +42,7 @@ export interface Aggregate {
   offered: number | null;
   totalApplied: number | null;
   oa: number | null;
+  month?: number | null;
 }
 
 export interface OpportunityCardProps {
@@ -69,9 +68,7 @@ export function OpportunityCard({
   const { addApplication, checkExistApplication } = useTrack();
   const { profile } = useProfile();
 
-  if (!profile) {
-    return null; // Return `null` explicitly for clarity
-  }
+  
 
   // Array for mapping the job stats
   const stats: jobStats[] = [
@@ -98,7 +95,7 @@ export function OpportunityCard({
   ];
 
   const { company_name, role_title, type, opportunity_id } = opportunity;
-  const { rejected, interviewing, offered, totalApplied, oa } = aggregate;
+  const { rejected, interviewing, offered, totalApplied, oa, month } = aggregate;
   const isAppliedColor = appliedStatus ? "green" : "red";
   const isHiringColor = hiringStatus ? "green" : "red";
 
@@ -107,6 +104,8 @@ export function OpportunityCard({
   const [addApp, setAddApp] = useState(() =>
     checkExistApplication(opportunity_id)
   );
+
+  
 
   useEffect(() => {
     setAddApp(checkExistApplication(opportunity_id));
@@ -123,13 +122,17 @@ export function OpportunityCard({
     type: type,
     company_name: company_name,
     status: "Applied",
-    profile_id: profile.profile_id,
+    profile_id: profile?.profile_id,
   };
 
   // TODO: You should run checkExistApplication(opportunity.opportunity_id) before adding application
   // if it returns false, then can make the button visiable to add application then convert grey out button
   // if it return true, then make the button grey out and not visiable
   //
+
+  if (!profile) {
+    return null; // Return `null` explicitly for clarity
+  }
 
   const handleaddapplication = () => {
     if (checkExistApplication(opportunity_id) === false) {

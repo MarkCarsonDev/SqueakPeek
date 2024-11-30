@@ -60,10 +60,6 @@ export function OpportunityList() {
       const mappedData: OpportunityCardProps[] = data
         .map((item) => {
           const { thread_id: conversation_id } = item;
-            
-            // const trackingData = (opportunity as Database["public"]["Tables"]["opportunity"]["Row"] & {
-            //   opportunity_tracking: Database["public"]["Tables"]["opportunity_tracking"]["Row"][];
-            // }).opportunity_tracking;
 
             const opportunity =
               item.opportunity as unknown as Database["public"]["Tables"]["opportunity"]["Row"] & {
@@ -73,6 +69,7 @@ export function OpportunityList() {
                   online_assessment?: number;
                   offered?: number;
                   rejected?: number;
+                  month?: number;
                 };
               };
           if (!opportunity) {
@@ -99,6 +96,7 @@ export function OpportunityList() {
                   oa: tracking.online_assessment || 0,
                   offered: tracking.offered || 0,
                   rejected: tracking.rejected || 0,
+                  month: tracking.month || 0
                 },
               };
             } else {
