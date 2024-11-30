@@ -232,7 +232,7 @@ export type Database = {
           created_at: string
           message: string
           message_id: string
-          sender_avatar: Database["public"]["Enums"]["Avatar"] | null
+          sender_avatar: Database["public"]["Enums"]["Avatar"]
           sender_id: string
           sender_username: string
         }
@@ -241,7 +241,7 @@ export type Database = {
           created_at?: string
           message?: string
           message_id?: string
-          sender_avatar?: Database["public"]["Enums"]["Avatar"] | null
+          sender_avatar: Database["public"]["Enums"]["Avatar"]
           sender_id: string
           sender_username: string
         }
@@ -250,7 +250,7 @@ export type Database = {
           created_at?: string
           message?: string
           message_id?: string
-          sender_avatar?: Database["public"]["Enums"]["Avatar"] | null
+          sender_avatar?: Database["public"]["Enums"]["Avatar"]
           sender_id?: string
           sender_username?: string
         }
