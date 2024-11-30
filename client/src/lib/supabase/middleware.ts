@@ -103,7 +103,7 @@ export async function updateSession(request: NextRequest) {
     } // end handling of auth'd users
   }
   else {
-    console.log("USER HAS NOT AUTHENTICATED");
+    //console.log("USER HAS NOT AUTHENTICATED");
 
     // For authenticated users accessing the pages outside of (main) automatically redirect them to the /401 route
     if(!hasBasePath(pathname, publicPaths)) {
