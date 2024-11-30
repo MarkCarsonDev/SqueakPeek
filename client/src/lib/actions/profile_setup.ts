@@ -124,7 +124,7 @@ export async function createProfile( prevState: ProfileSetupState, formData: For
     else {
       // get user from supabase
       const supabase = createSupabaseServer();
-      const { data: {user}, error: userError } =  await supabase.auth.getUser();
+      const { data: {user} } =  await supabase.auth.getUser();
       const { username, school, avatar } = validatedFields.data;
       
       //error handling for profile data
