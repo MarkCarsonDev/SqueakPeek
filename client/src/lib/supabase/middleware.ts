@@ -2,22 +2,17 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { userHasExistingProfile } from "@/lib/actions/profile_setup"
 
-//allowed public paths
+// allowed public paths
 const publicPaths = new Set(["/","/login","/signup","/about","/auth/callback"]);
 
-//whitelists auth'd user paths
+// whitelists auth'd user paths
 const protectedPaths = new Set(["/message", "/explore", "/profile", "/thread", "/track", "/profile_setup", "/404"]);
 
+// hasBasePaths
 function hasBasePath(pathname: string, basePaths: Set<string>): boolean {
   const res = basePaths.has(pathname);
   return res
 }
-
-// //hasBasePath on protectedPaths
-// function isAllowedUserPath(pathname: string){
-//   if (pathname.startsWith("/message")) return true;
-//   return hasBasePath(pathname, protectedPaths);
-// }
 
 // refreshes expired Auth token
 export async function updateSession(request: NextRequest) {
@@ -55,8 +50,8 @@ export async function updateSession(request: NextRequest) {
   
   //Auth user
   if (user) {
-    const userEmail = user?.email;
-    console.log("USER " + userEmail + " HAS AUTHENTICATED");
+    //const userEmail = user?.email;
+    //console.log("USER " + userEmail + " HAS AUTHENTICATED");
     
     // redirect authenticated users from home, login, and signup to explore
     if (pathname === "/" || pathname === "/signup" || pathname === "/login") {
@@ -78,7 +73,7 @@ export async function updateSession(request: NextRequest) {
     const hasUserProfile = await userHasExistingProfile();
     const url = request.nextUrl.clone();
     if (!(hasUserProfile)) {
-      console.log("USER " + user?.email + " HAS NO PROFILE");
+      //console.log("USER " + user?.email + " HAS NO PROFILE");
       
       //if not on profile_setup, redirect to profile_setup
       if (url.pathname.indexOf("/profile_setup") < 0) {
@@ -91,9 +86,9 @@ export async function updateSession(request: NextRequest) {
     else {
       
       // Redirect any users accessing /profile_setup that already has a profile to /404
-      console.log("USER " + user?.email + " HAS PROFILE");
+      //console.log("USER " + user?.email + " HAS PROFILE");
       if (pathname === "/profile_setup") {
-        console.log("USER " + user?.email + " ALREADY HAS PROFILE, redirecting to 404");
+        //console.log("USER " + user?.email + " ALREADY HAS PROFILE, redirecting to 404");
         const url = request.nextUrl.clone();
         url.pathname = "/404";
         return NextResponse.redirect(url);
@@ -114,14 +109,14 @@ export async function updateSession(request: NextRequest) {
     if(!hasBasePath(pathname, publicPaths)) {
       const url = request.nextUrl.clone();
       if (url.pathname.indexOf("/401") < 0) {
-        console.log(pathname  + " is not a public path. Redirect to 401");
+        //console.log(pathname  + " is not a public path. Redirect to 401");
         url.pathname = "/401";
         return NextResponse.redirect(url); 
       }
     }
-    else {
-      console.log(pathname  + " is a public path. Allowing access");
-    }
+    //else {
+      //console.log(pathname  + " is a public path. Allowing access");
+    //}
   }
   return supabaseResponse;
 } // end updateSession
