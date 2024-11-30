@@ -19,7 +19,6 @@ interface NewApplicationModalProps {
   applicationStatus: ApplicationStage;
   setApplicationStatus: React.Dispatch<React.SetStateAction<ApplicationStage>>;
   existingApplication?: Application;
-  // onSuccess: (message: string, severity: "success" | "error" | "info" | "warning") => void; // Updated onSuccess prop
   
 }
 
