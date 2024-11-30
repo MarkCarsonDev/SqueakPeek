@@ -8,7 +8,7 @@ const publicPaths = new Set(["/","/login","/signup","/about","/auth/callback"]);
 // whitelists auth'd user paths
 const protectedPaths = new Set(["/message", "/explore", "/profile", "/thread", "/track", "/profile_setup", "/404"]);
 
-// hasBasePaths
+// hasBasePaths for Set lookups
 function hasBasePath(pathname: string, basePaths: Set<string>): boolean {
   const res = basePaths.has(pathname);
   return res
@@ -50,9 +50,7 @@ export async function updateSession(request: NextRequest) {
   
   //Auth user
   if (user) {
-    //const userEmail = user?.email;
-    //console.log("USER " + userEmail + " HAS AUTHENTICATED");
-    
+
     // redirect authenticated users from home, login, and signup to explore
     if (pathname === "/" || pathname === "/signup" || pathname === "/login") {
       const url = request.nextUrl.clone();
@@ -63,8 +61,9 @@ export async function updateSession(request: NextRequest) {
     // Only allow authorized users to access the pages under the (main) directory using whitelist strategy
     if(!(hasBasePath(pathname, protectedPaths)) && !(hasBasePath(pathname, publicPaths)) && !(pathname.startsWith("/message"))) {
       const url = request.nextUrl.clone();
-      if (url.pathname.indexOf("/401") < 0) {
-      url.pathname = "/401";
+      //keep redirect from looping
+      if (url.pathname.indexOf("/404") < 0) {
+      url.pathname = "/404";
       return NextResponse.redirect(url);
       }
     }
@@ -73,8 +72,7 @@ export async function updateSession(request: NextRequest) {
     const hasUserProfile = await userHasExistingProfile();
     const url = request.nextUrl.clone();
     if (!(hasUserProfile)) {
-      //console.log("USER " + user?.email + " HAS NO PROFILE");
-      
+
       //if not on profile_setup, redirect to profile_setup
       if (url.pathname.indexOf("/profile_setup") < 0) {
         if (!hasBasePath(pathname, publicPaths)){
@@ -86,9 +84,7 @@ export async function updateSession(request: NextRequest) {
     else {
       
       // Redirect any users accessing /profile_setup that already has a profile to /404
-      //console.log("USER " + user?.email + " HAS PROFILE");
       if (pathname === "/profile_setup") {
-        //console.log("USER " + user?.email + " ALREADY HAS PROFILE, redirecting to 404");
         const url = request.nextUrl.clone();
         url.pathname = "/404";
         return NextResponse.redirect(url);
@@ -102,21 +98,17 @@ export async function updateSession(request: NextRequest) {
       }
     } // end handling of auth'd users
   }
+  //non Auth'd users
   else {
-    //console.log("USER HAS NOT AUTHENTICATED");
 
     // For authenticated users accessing the pages outside of (main) automatically redirect them to the /401 route
     if(!hasBasePath(pathname, publicPaths)) {
       const url = request.nextUrl.clone();
-      if (url.pathname.indexOf("/401") < 0) {
-        //console.log(pathname  + " is not a public path. Redirect to 401");
-        url.pathname = "/401";
+      if (url.pathname.indexOf("/404") < 0) {
+        url.pathname = "/404";
         return NextResponse.redirect(url); 
       }
     }
-    //else {
-      //console.log(pathname  + " is a public path. Allowing access");
-    //}
   }
   return supabaseResponse;
 } // end updateSession
