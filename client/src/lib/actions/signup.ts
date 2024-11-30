@@ -10,7 +10,7 @@ const SignUpFormSchema = z
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Password do not match",
+    message: "Passwords do not match",
     path: ["confirmPassword"],
   }); // form validation if confirm password does not equal password
 
@@ -29,7 +29,7 @@ export async function createAccount(
   prevState: SignUpState,
   formData: FormData
 ): Promise<SignUpState> {
-  console.log("createAccount: Signing up");
+  //console.log("createAccount: Signing up");
 
   const validatedFields = SignUpFormSchema.safeParse({
     email: formData.get("email"),
@@ -57,7 +57,7 @@ export async function createAccount(
   if (error) {
     let errorMessage = error + "";
     errorMessage = errorMessage.replace("AuthApiError: ", "") + ": Please choose another email";
-    console.log("errorMessage: ", errorMessage);
+    //console.log("errorMessage: ", errorMessage);
     
     return {
       errors: {
