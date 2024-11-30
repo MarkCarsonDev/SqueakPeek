@@ -2,7 +2,6 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { userHasExistingProfile } from "@/lib/actions/profile_setup"
 
-//looked into making these Sets but couldn't quite implement the references yet
 //allowed public paths
 const publicPaths = new Set(["/","/login","/signup","/about","/auth/callback"]);
 
@@ -12,11 +11,6 @@ const protectedPaths = new Set(["/message", "/explore", "/profile", "/thread", "
 function hasBasePath(pathname: string, basePaths: Set<string>): boolean {
   const res = basePaths.has(pathname);
   return res
-}
-
-//hasBasePath on publicPaths
-function isPublicPath(pathname: string){
-  return hasBasePath(pathname, publicPaths)
 }
 
 //hasBasePath on protectedPaths
@@ -72,7 +66,7 @@ export async function updateSession(request: NextRequest) {
     }
 
     // Only allow authorized users to access the pages under the (main) directory using whitelist strategy
-    if(!(isAllowedUserPath(pathname)) && !(isPublicPath(pathname))) {
+    if(!(isAllowedUserPath(pathname)) && !(hasBasePath(pathname, publicPaths))) {
       const url = request.nextUrl.clone();
       if (url.pathname.indexOf("/401") < 0) {
         url.pathname = "/401";
@@ -88,7 +82,7 @@ export async function updateSession(request: NextRequest) {
       
       //if not on profile_setup, redirect to profile_setup
       if (url.pathname.indexOf("/profile_setup") < 0) {
-        if (!isPublicPath(pathname)){
+        if (!hasBasePath(pathname, publicPaths)){
           url.pathname = "/profile_setup";
           return NextResponse.redirect(url);
         }
@@ -117,7 +111,7 @@ export async function updateSession(request: NextRequest) {
     console.log("USER HAS NOT AUTHENTICATED");
 
     // For authenticated users accessing the pages outside of (main) automatically redirect them to the /401 route
-    if(!isPublicPath(pathname)) {
+    if(!hasBasePath(pathname, publicPaths)) {
       const url = request.nextUrl.clone();
       if (url.pathname.indexOf("/401") < 0) {
         console.log(pathname  + " is not a public path. Redirect to 401");
