@@ -10,7 +10,7 @@ import {
   Button,
   IconButton,
   Avatar,
-  Icon
+  Icon,
 } from "@mui/material";
 import {
   faAnglesUp,
@@ -21,9 +21,7 @@ import {
   faChartColumn,
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
-import { faBookmark as regularBookmark } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState} from "react";
 import { OpportunityStackedBarGraph } from "./OpportunityStackedBarGraph";
 import Link from "next/link";
 import { useFetchCompanyLogo } from "@/lib/hooks/useFetchCompanyLogo";
@@ -33,6 +31,8 @@ import { ApplicationStage, useTrack, Application } from "@/lib/store/track";
 import { useProfile } from "@/lib/store/profile";
 import { convertToYYYYMMDD } from "@/lib/utils/dateUtils";
 import { useAlert } from "@/lib/store/alert";
+import { useState } from "react";
+import { useEffect } from "react";
 
 interface jobStats {
   status: string;
@@ -51,13 +51,12 @@ export interface Aggregate {
 export interface OpportunityCardProps {
   conversation_id: string;
   opportunity: Database["public"]["Tables"]["opportunity"]["Row"] & {
-    opportunity_tracking: Database["public"]["Tables"]["opportunity_tracking"]["Row"][] | null;
+    opportunity_tracking:
+      | Database["public"]["Tables"]["opportunity_tracking"]["Row"][]
+      | null;
   };
   aggregate: Aggregate;
 }
-
-
-
 
 export function OpportunityCard({
   conversation_id,
@@ -75,8 +74,6 @@ export function OpportunityCard({
   if (!profile) {
     return null; // Return `null` explicitly for clarity
   }
-
-  
 
   // Array for mapping the job stats
   const stats: jobStats[] = [
@@ -102,14 +99,22 @@ export function OpportunityCard({
     },
   ];
 
-  const { company_name, role_title, type } = opportunity;
-  const { rejected, interviewing, offered, totalApplied, oa } =
-    aggregate;
+  const { company_name, role_title, type, opportunity_id } = opportunity;
+  const { rejected, interviewing, offered, totalApplied, oa } = aggregate;
   const isAppliedColor = appliedStatus ? "green" : "red";
   const isHiringColor = hiringStatus ? "green" : "red";
+
   const logoUrl = useFetchCompanyLogo(company_name);
 
-  
+  const [addApp, setAddApp] = useState(() =>
+    checkExistApplication(opportunity_id)
+  );
+
+  useEffect(() => {
+    setAddApp(checkExistApplication(opportunity_id));
+  }, [opportunity_id, checkExistApplication]);
+
+  const added = addApp ? "Added" : "Add";
 
   const today = new Date();
   const formattedDate = today.toLocaleDateString();
@@ -126,20 +131,21 @@ export function OpportunityCard({
   // TODO: You should run checkExistApplication(opportunity.opportunity_id) before adding application
   // if it returns false, then can make the button visiable to add application then convert grey out button
   // if it return true, then make the button grey out and not visiable
-  // 
+  //
 
-
-  const  handleaddapplication = () => {
-    if (checkExistApplication(opportunity.opportunity_id) === false) {
-      addApplication("Applied" as ApplicationStage, updatedFields as Application, profile);
-      setAlert({ message: "Application added successfully", type: "success" });
+  const handleaddapplication = () => {
+    if (checkExistApplication(opportunity_id) === false) {
+      addApplication(
+        "Applied" as ApplicationStage,
+        updatedFields as Application,
+        profile
+      );
+      setAlert({ message: "Application added to your tracker", type: "success" });
     } else {
-      setAlert({ message: "Application already exists", type: "error" });
+      setAlert({ message: "Application already exists in your tracker", type: "error" });
     }
     // addApplication("Applied" as ApplicationStage, updatedFields as Application, profile);
-    
-    
-  }
+  };
 
   const handleShareClick = () => {
     if (navigator.share) {
@@ -183,9 +189,7 @@ export function OpportunityCard({
             padding: ".5rem",
             height: "2rem",
           }}
-          avatar={
-            <Avatar src={logoUrl} />
-          }
+          avatar={<Avatar src={logoUrl} />}
           title={company_name}
           subheader={
             // Job Postion and Job Type in header
@@ -216,11 +220,14 @@ export function OpportunityCard({
                 boxShadow: "none",
               }}
             >
-              <FontAwesomeIcon icon={faComment} style={{fontSize: "1.2rem"}}/>
+              <FontAwesomeIcon
+                icon={faComment}
+                style={{ fontSize: "1.2rem" }}
+              />
             </Button>
           </Link>
 
-          <OpportunityStatsModal/>
+          <OpportunityStatsModal />
 
           <Button
             variant="contained"
@@ -243,7 +250,7 @@ export function OpportunityCard({
           </Button>
 
           {/* Bookmark button */}
-          <OpportunityBookmark conversationId={conversation_id} size="2rem"/>
+          <OpportunityBookmark conversationId={conversation_id} size="2rem" />
         </div>
       </div>
 
@@ -338,14 +345,35 @@ export function OpportunityCard({
             offered={offered}
           />
         </div>
-        <Typography variant="h6" sx={{ textAlign: "center" }}>
-          Total Applied: {totalApplied}
-        </Typography>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            width: "100%",
+          }}
+        >
+          <div></div>
+          <Typography variant="h6" sx={{ textAlign: "center" }}>
+            Total Applied: {totalApplied}
+          </Typography>
 
-        <IconButton onClick={handleaddapplication}>
-          <FontAwesomeIcon icon={faPlus}/>
-
-        </IconButton>
+          <Button
+            onClick={handleaddapplication}
+            disabled={addApp}
+            variant="contained"
+            style={{
+              height: "40px",
+              width: "auto",
+              borderRadius: "20px",
+              boxShadow: "none",
+              backgroundColor: addApp ? "gray" : "#496FFF",
+            }}
+          >
+            <FontAwesomeIcon icon={faPlus} style={{ color: "white", marginRight: "5px", fontSize: "1.5rem" }} />
+            <Typography style={{color: "white"}}>{added}</Typography>
+          </Button>
+        </div>
       </CardContent>
     </Card>
   );
