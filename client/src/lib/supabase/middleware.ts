@@ -6,18 +6,18 @@ import { userHasExistingProfile } from "@/lib/actions/profile_setup"
 const publicPaths = new Set(["/","/login","/signup","/about","/auth/callback"]);
 
 //whitelists auth'd user paths
-const protectedPaths = new Set(["/message", "/explore", "/profile", "/thread", "/track", "/profile_setup"]);
+const protectedPaths = new Set(["/message", "/explore", "/profile", "/thread", "/track", "/profile_setup", "/404"]);
 
 function hasBasePath(pathname: string, basePaths: Set<string>): boolean {
   const res = basePaths.has(pathname);
   return res
 }
 
-//hasBasePath on protectedPaths
-function isAllowedUserPath(pathname: string){
-  if (pathname.startsWith("/message")) return true;
-  return hasBasePath(pathname, protectedPaths);
-}
+// //hasBasePath on protectedPaths
+// function isAllowedUserPath(pathname: string){
+//   if (pathname.startsWith("/message")) return true;
+//   return hasBasePath(pathname, protectedPaths);
+// }
 
 // refreshes expired Auth token
 export async function updateSession(request: NextRequest) {
@@ -66,11 +66,11 @@ export async function updateSession(request: NextRequest) {
     }
 
     // Only allow authorized users to access the pages under the (main) directory using whitelist strategy
-    if(!(isAllowedUserPath(pathname)) && !(hasBasePath(pathname, publicPaths))) {
+    if(!(hasBasePath(pathname, protectedPaths)) && !(hasBasePath(pathname, publicPaths)) && !(pathname.startsWith("/message"))) {
       const url = request.nextUrl.clone();
       if (url.pathname.indexOf("/401") < 0) {
-        url.pathname = "/401";
-        return NextResponse.redirect(url);
+      url.pathname = "/401";
+      return NextResponse.redirect(url);
       }
     }
 
@@ -96,7 +96,7 @@ export async function updateSession(request: NextRequest) {
         console.log("USER " + user?.email + " ALREADY HAS PROFILE, redirecting to 404");
         const url = request.nextUrl.clone();
         url.pathname = "/404";
-        return NextResponse.rewrite(url);
+        return NextResponse.redirect(url);
       }
       
       // Task 5: Redirect auth users navigating to /message to /message/company first
