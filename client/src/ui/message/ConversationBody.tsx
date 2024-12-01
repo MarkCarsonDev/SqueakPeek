@@ -4,6 +4,7 @@ import { NewMessagesNotificationModal } from "./NewMessageNotificationModal";
 import { MessageList } from "./MessageList";
 import { CircularProgress } from "@mui/material";
 import { MutableRefObject } from "react";
+import { useConversation } from "@/lib/store/conversation";
 /**
  * Renders new message notifications, message list, and the message input
  * Handles the page scrolling for new messages and message input
@@ -24,7 +25,7 @@ export const ConversationBody = memo(function ConversationBody({
   const topRef = useRef<null | HTMLDivElement>(null); // used for scrolling down the page
   const bottomRef = useRef<null | HTMLDivElement>(null); // used for scrolling down the page
   const scrollThreshold = 20; // threshold for determining on whether page scrolls down on new messages
-
+  const { incrementFetchCount } = useConversation();
   function isRefVisible(
     targetRef: MutableRefObject<HTMLDivElement | null>,
     containerRef: MutableRefObject<HTMLDivElement | null>
@@ -58,7 +59,7 @@ export const ConversationBody = memo(function ConversationBody({
   useEffect(() => {
     scrollContainerRef.current?.addEventListener("scroll", () => {
       if (isRefVisible(topRef, scrollContainerRef)) {
-        console.log("top is visible");
+        incrementFetchCount();
       }
     });
   }, []);

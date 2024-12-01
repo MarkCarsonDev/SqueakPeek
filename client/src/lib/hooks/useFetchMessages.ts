@@ -1,6 +1,6 @@
 import { fetchMessages } from "@/lib/utils/fetchMessages";
 import { MessageCardProps } from "@/ui/message/MessageCard";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useConversation } from "../store/conversation";
 import { createSupabaseClient } from "../supabase/client";
 
@@ -18,7 +18,9 @@ export const useFetchMessage = (
     incrementFetchCount,
     clearConversation,
     setIsLoading,
+    fetchCount,
   } = useConversation();
+  const seenMessageIds = useRef(new Set<string>());
 
   useEffect(() => {
     setIsLoading(true);
@@ -50,9 +52,21 @@ export const useFetchMessage = (
             sender_id: sender_id!,
           })
         );
-        setMessages(mappedData);
+
+        // TODO: Remove this duplicate check hack if you have the brainpower to implement the solution :)
+        // added hack to check for duplicates
+        const hasDuplicates = mappedData.some((msg) =>
+          seenMessageIds.current.has(msg.messageId)
+        );
+
+        if (!hasDuplicates) {
+          mappedData.forEach((msg) =>
+            seenMessageIds.current.add(msg.messageId)
+          );
+          setMessages(mappedData);
+        }
+
         setIsLoading(false);
-        incrementFetchCount();
       }
     });
   }, [
@@ -62,5 +76,6 @@ export const useFetchMessage = (
     incrementFetchCount,
     clearConversation,
     setIsLoading,
+    fetchCount,
   ]);
 };
