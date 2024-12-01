@@ -42,6 +42,7 @@ export interface Aggregate {
   offered: number | null;
   totalApplied: number | null;
   oa: number | null;
+  applied: number | null;
   month?: number | null;
 }
 
@@ -65,13 +66,16 @@ export function OpportunityCard({
   const hiringStatus = false;
 
   const { setAlert } = useAlert();
-  const { addApplication, checkExistApplication } = useTrack();
+  const { addApplication, checkExistApplication, fetchApplications } = useTrack();
   const { profile } = useProfile();
-
-  
 
   // Array for mapping the job stats
   const stats: jobStats[] = [
+    {
+      status: "Initial Screen:",
+      color: "#769FCD",
+      quantity: aggregate.applied,
+    },
     {
       status: "Rejected:",
       color: "#C7253E",
@@ -95,21 +99,33 @@ export function OpportunityCard({
   ];
 
   const { company_name, role_title, type, opportunity_id } = opportunity;
-  const { rejected, interviewing, offered, totalApplied, oa, month } = aggregate;
+  const { rejected, interviewing, offered, totalApplied, oa } = aggregate;
   const isAppliedColor = appliedStatus ? "green" : "red";
   const isHiringColor = hiringStatus ? "green" : "red";
 
   const logoUrl = useFetchCompanyLogo(company_name);
 
-  const [addApp, setAddApp] = useState(() =>
-    checkExistApplication(opportunity_id)
-  );
-
-  
+  const [addApp, setAddApp] = useState(false);
 
   useEffect(() => {
-    setAddApp(checkExistApplication(opportunity_id));
-  }, [opportunity_id, checkExistApplication]);
+    if (profile) {
+      fetchApplications(profile);
+    }
+  }, [profile, fetchApplications]);
+
+  useEffect(() => {
+    fetchApplicationStatus();
+  }, [opportunity_id]);
+
+  const fetchApplicationStatus = () => {
+    if (opportunity_id) {
+      const exists = checkExistApplication(opportunity_id);
+      setAddApp(exists);
+    }
+  };
+
+  // Fetch the application status when the component mounts or opportunity_id changes
+  
 
   const added = addApp ? "Added" : "Add";
 
@@ -125,11 +141,6 @@ export function OpportunityCard({
     profile_id: profile?.profile_id,
   };
 
-  // TODO: You should run checkExistApplication(opportunity.opportunity_id) before adding application
-  // if it returns false, then can make the button visiable to add application then convert grey out button
-  // if it return true, then make the button grey out and not visiable
-  //
-
   if (!profile) {
     return null; // Return `null` explicitly for clarity
   }
@@ -141,9 +152,15 @@ export function OpportunityCard({
         updatedFields as Application,
         profile
       );
-      setAlert({ message: "Application added to your tracker", type: "success" });
+      setAlert({
+        message: "Application added to your tracker",
+        type: "success",
+      });
     } else {
-      setAlert({ message: "Application already exists in your tracker", type: "error" });
+      setAlert({
+        message: "Application already exists in your tracker",
+        type: "error",
+      });
     }
     // addApplication("Applied" as ApplicationStage, updatedFields as Application, profile);
   };
@@ -228,7 +245,7 @@ export function OpportunityCard({
             </Button>
           </Link>
 
-          <OpportunityStatsModal />
+          <OpportunityStatsModal opportunity={opportunity} />
 
           <Button
             variant="contained"
@@ -371,8 +388,11 @@ export function OpportunityCard({
               backgroundColor: addApp ? "gray" : "#496FFF",
             }}
           >
-            <FontAwesomeIcon icon={faPlus} style={{ color: "white", marginRight: "5px", fontSize: "1.5rem" }} />
-            <Typography style={{color: "white"}}>{added}</Typography>
+            <FontAwesomeIcon
+              icon={faPlus}
+              style={{ color: "white", marginRight: "5px", fontSize: "1.5rem" }}
+            />
+            <Typography style={{ color: "white" }}>{added}</Typography>
           </Button>
         </div>
       </CardContent>

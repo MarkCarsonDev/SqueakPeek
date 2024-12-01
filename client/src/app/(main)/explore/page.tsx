@@ -27,7 +27,6 @@ export default function Page() {
   const { fetchApplications } = useTrack();
   const { profile } = useProfile();
 
-  // Fetch applications to the store.
   useEffect(() => {
     if (profile) {
       fetchApplications(profile);
