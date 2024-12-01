@@ -69,14 +69,9 @@ export function OpportunityList() {
                     console.warn("Unexpected `opportunity` structure:", opportunity);
                     return null;
                 }
-
-                console.log("Opp ID:", opportunity.opportunity_id)
-                console.log("Opportunity Tracking:", opportunity.opportunity_tracking)
-
                 // Sum up the fields from all `opportunity_tracking` entries
                 const aggregate = opportunity.opportunity_tracking?.reduce(
                     (totals, tracking) => {
-                      console.log("track data", tracking)
                         return {
                             rejected: totals.rejected + (tracking.rejected || 0),
                             interviewing: totals.interviewing + (tracking.interviewing || 0),
@@ -112,6 +107,8 @@ export function OpportunityList() {
                 };
             })
             .filter((item) => item !== null); // Remove any `null` values
+
+            
 
       if (page === 1) {
         setShownOpportunities(mappedData);

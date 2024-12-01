@@ -4,7 +4,7 @@ import "@/app/(main)/explore/explore.css";
 import { OpportunityList } from "@/ui/explore/OpportunityList";
 import { Filters } from "@/ui/explore/Filters";
 import { SearchBar } from "@/ui/explore/SearchBar";
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
 import { useTrack } from "@/lib/store/track";
 import { useProfile } from "@/lib/store/profile"; 

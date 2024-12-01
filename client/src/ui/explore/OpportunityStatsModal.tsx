@@ -48,8 +48,6 @@ export function OpportunityStatsModal({opportunity}:OpportunityStatsModalProps) 
     if (opportunity.opportunity_tracking) {
       const tracking = opportunity.opportunity_tracking;
 
-      console.log("Stats Modal Tracking Data:", tracking)
-
       // Map month data into the desired dataset format
       const monthData = months.map((month, index) => {
         const trackingData = tracking.find(

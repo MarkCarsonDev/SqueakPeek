@@ -15,7 +15,6 @@ import {
   faAnglesDown,
   faComment,
   faReply,
-  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { OpportunityStackedBarGraph } from "./OpportunityStackedBarGraph";
@@ -23,12 +22,10 @@ import Link from "next/link";
 import { useFetchCompanyLogo } from "@/lib/hooks/useFetchCompanyLogo";
 import { OpportunityStatsModal } from "./OpportunityStatsModal";
 import { OpportunityBookmark } from "../message/OpportunityBookmark";
-import { ApplicationStage, useTrack, Application } from "@/lib/store/track";
+// import { useTrack, Application } from "@/lib/store/track";
 import { useProfile } from "@/lib/store/profile";
-import { convertToYYYYMMDD } from "@/lib/utils/dateUtils";
-import { useAlert } from "@/lib/store/alert";
-import { useState } from "react";
-import { useEffect } from "react";
+// import { convertToYYYYMMDD } from "@/lib/utils/dateUtils";
+// import { useAlert } from "@/lib/store/alert";
 
 interface jobStats {
   status: string;
@@ -65,8 +62,8 @@ export function OpportunityCard({
   const appliedStatus = false;
   const hiringStatus = false;
 
-  const { setAlert } = useAlert();
-  const { addApplication, checkExistApplication, fetchApplications } = useTrack();
+  // const { setAlert } = useAlert();
+  // const { addApplication, checkExistApplication } = useTrack();
   const { profile } = useProfile();
 
   // Array for mapping the job stats
@@ -98,72 +95,60 @@ export function OpportunityCard({
     },
   ];
 
-  const { company_name, role_title, type, opportunity_id } = opportunity;
+  const { company_name, role_title, type } = opportunity;
   const { rejected, interviewing, offered, totalApplied, oa } = aggregate;
   const isAppliedColor = appliedStatus ? "green" : "red";
   const isHiringColor = hiringStatus ? "green" : "red";
 
   const logoUrl = useFetchCompanyLogo(company_name);
 
-  const [addApp, setAddApp] = useState(false);
+  // const [addApp, setAddApp] = useState(false);
 
-  useEffect(() => {
-    if (profile) {
-      fetchApplications(profile);
-    }
-  }, [profile, fetchApplications]);
+  // useEffect(() => {
+  //   if (opportunity_id) {
+  //     const exists = checkExistApplication(opportunity_id);
+  //     setAddApp(exists);
+  //   }
+  // }, [opportunity_id, checkExistApplication]);
 
-  useEffect(() => {
-    fetchApplicationStatus();
-  }, [opportunity_id]);
+  // const added = addApp ? "Added" : "Add";
 
-  const fetchApplicationStatus = () => {
-    if (opportunity_id) {
-      const exists = checkExistApplication(opportunity_id);
-      setAddApp(exists);
-    }
-  };
+  // const today = new Date();
+  // const formattedDate = today.toLocaleDateString();
 
-  // Fetch the application status when the component mounts or opportunity_id changes
-  
+  // const updatedFields: Partial<Application> = {
+  //   created_at: convertToYYYYMMDD(formattedDate),
+  //   role_title: role_title,
+  //   type: type,
+  //   company_name: company_name,
+  //   status: "Applied",
+  //   profile_id: profile?.profile_id,
+  // };
 
-  const added = addApp ? "Added" : "Add";
-
-  const today = new Date();
-  const formattedDate = today.toLocaleDateString();
-
-  const updatedFields: Partial<Application> = {
-    created_at: convertToYYYYMMDD(formattedDate),
-    role_title: role_title,
-    type: type,
-    company_name: company_name,
-    status: "Applied",
-    profile_id: profile?.profile_id,
-  };
 
   if (!profile) {
     return null; // Return `null` explicitly for clarity
   }
 
-  const handleaddapplication = () => {
-    if (checkExistApplication(opportunity_id) === false) {
-      addApplication(
-        "Applied" as ApplicationStage,
-        updatedFields as Application,
-        profile
-      );
-      setAlert({
-        message: "Application added to your tracker",
-        type: "success",
-      });
-    } else {
-      setAlert({
-        message: "Application already exists in your tracker",
-        type: "error",
-      });
-    }
-    // addApplication("Applied" as ApplicationStage, updatedFields as Application, profile);
-  };
+  // const handleaddapplication = () => {
+  //   if (checkExistApplication(opportunity_id) === false) {
+  //     addApplication(
+  //       "Applied" as ApplicationStage,
+  //       updatedFields as Application,
+  //       profile
+  //     );
+  //     setAlert({
+  //       message: "Application added to your tracker",
+  //       type: "success",
+  //     });
+  //   } else {
+  //     setAlert({
+  //       message: "Application already exists in your tracker",
+  //       type: "error",
+  //     });
+  //   }
+  //   // addApplication("Applied" as ApplicationStage, updatedFields as Application, profile);
+  // };
 
   const handleShareClick = () => {
     if (navigator.share) {
@@ -363,22 +348,13 @@ export function OpportunityCard({
             offered={offered}
           />
         </div>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            width: "100%",
-          }}
-        >
-          <div></div>
-          <Typography variant="h6" sx={{ textAlign: "center" }}>
+        
+          <Typography variant="h6" sx={{ textAlign: "center", justifyContent: "center" }}>
             Total Applied: {totalApplied}
           </Typography>
 
-          <Button
+          {/* <Button
             onClick={handleaddapplication}
-            disabled={addApp}
             variant="contained"
             style={{
               height: "40px",
@@ -393,8 +369,7 @@ export function OpportunityCard({
               style={{ color: "white", marginRight: "5px", fontSize: "1.5rem" }}
             />
             <Typography style={{ color: "white" }}>{added}</Typography>
-          </Button>
-        </div>
+          </Button> */}
       </CardContent>
     </Card>
   );
