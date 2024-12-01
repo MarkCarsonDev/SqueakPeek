@@ -6,7 +6,7 @@ import { userHasExistingProfile } from "@/lib/actions/profile_setup"
 const publicPaths = new Set(["/","/login","/signup","/about","/auth/callback"]);
 
 // whitelists auth'd user paths
-const protectedPaths = new Set(["/message", "/explore", "/profile", "/thread", "/track", "/profile_setup", "/404"]);
+const protectedPaths = new Set(["/message", "/explore", "/profile", "/thread", "/track", "/profile_setup","/setting", "/404"]);
 
 // hasBasePaths for Set lookups
 function hasBasePath(pathname: string, basePaths: Set<string>): boolean {
