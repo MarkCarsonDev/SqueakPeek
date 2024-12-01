@@ -21,7 +21,7 @@ import { OpportunityStackedBarGraph } from "./OpportunityStackedBarGraph";
 import Link from "next/link";
 import { useFetchCompanyLogo } from "@/lib/hooks/useFetchCompanyLogo";
 import { OpportunityStatsModal } from "./OpportunityStatsModal";
-import { OpportunityBookmark } from "../message/OpportunityBookmark";
+// import { OpportunityBookmark } from "../message/OpportunityBookmark";
 // import { useTrack, Application } from "@/lib/store/track";
 import { useProfile } from "@/lib/store/profile";
 // import { convertToYYYYMMDD } from "@/lib/utils/dateUtils";
@@ -59,7 +59,7 @@ export function OpportunityCard({
   aggregate,
 }: OpportunityCardProps) {
   // TODO: Replace this with real status from props
-  const appliedStatus = false;
+  // const appliedStatus = false;
   const hiringStatus = false;
 
   // const { setAlert } = useAlert();
@@ -97,7 +97,7 @@ export function OpportunityCard({
 
   const { company_name, role_title, type } = opportunity;
   const { rejected, interviewing, offered, totalApplied, oa } = aggregate;
-  const isAppliedColor = appliedStatus ? "green" : "red";
+  // const isAppliedColor = appliedStatus ? "green" : "red";
   const isHiringColor = hiringStatus ? "green" : "red";
 
   const logoUrl = useFetchCompanyLogo(company_name);
@@ -253,7 +253,7 @@ export function OpportunityCard({
           </Button>
 
           {/* Bookmark button */}
-          <OpportunityBookmark conversationId={conversation_id} size="2rem" />
+          {/* <OpportunityBookmark conversationId={conversation_id} size="2rem" /> */}
         </div>
       </div>
 
@@ -277,7 +277,7 @@ export function OpportunityCard({
             justifyContent: "flex-start",
           }}
         >
-          <Chip
+          {/* <Chip
             label={appliedStatus ? "Applied" : "Not Applied"}
             variant="outlined"
             style={{
@@ -285,7 +285,7 @@ export function OpportunityCard({
               borderColor: isAppliedColor,
               margin: 0,
             }}
-          />
+          /> */}
 
           <Chip
             icon={
