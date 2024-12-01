@@ -8,23 +8,24 @@ import {
   Typography,
   Chip,
   Button,
-  IconButton,
-  Avatar
+  Avatar,
 } from "@mui/material";
 import {
   faAnglesUp,
   faAnglesDown,
   faComment,
   faReply,
-  faBookmark,
-  faChartColumn,
 } from "@fortawesome/free-solid-svg-icons";
-import { faBookmark as regularBookmark } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState} from "react";
 import { OpportunityStackedBarGraph } from "./OpportunityStackedBarGraph";
 import Link from "next/link";
 import { useFetchCompanyLogo } from "@/lib/hooks/useFetchCompanyLogo";
+import { OpportunityStatsModal } from "./OpportunityStatsModal";
+// import { OpportunityBookmark } from "../message/OpportunityBookmark";
+// import { useTrack, Application } from "@/lib/store/track";
+import { useProfile } from "@/lib/store/profile";
+// import { convertToYYYYMMDD } from "@/lib/utils/dateUtils";
+// import { useAlert } from "@/lib/store/alert";
 
 interface jobStats {
   status: string;
@@ -38,17 +39,19 @@ export interface Aggregate {
   offered: number | null;
   totalApplied: number | null;
   oa: number | null;
+  applied: number | null;
+  month?: number | null;
 }
 
 export interface OpportunityCardProps {
   conversation_id: string;
   opportunity: Database["public"]["Tables"]["opportunity"]["Row"] & {
-    opportunity_tracking: Database["public"]["Tables"]["opportunity_tracking"]["Row"][] | null;
+    opportunity_tracking:
+      | Database["public"]["Tables"]["opportunity_tracking"]["Row"][]
+      | null;
   };
   aggregate: Aggregate;
 }
-
-
 
 export function OpportunityCard({
   conversation_id,
@@ -56,12 +59,20 @@ export function OpportunityCard({
   aggregate,
 }: OpportunityCardProps) {
   // TODO: Replace this with real status from props
-  const appliedStatus = false;
+  // const appliedStatus = false;
   const hiringStatus = false;
 
-  // TODO: Add real quantity
+  // const { setAlert } = useAlert();
+  // const { addApplication, checkExistApplication } = useTrack();
+  const { profile } = useProfile();
+
   // Array for mapping the job stats
   const stats: jobStats[] = [
+    {
+      status: "Initial Screen:",
+      color: "#769FCD",
+      quantity: aggregate.applied,
+    },
     {
       status: "Rejected:",
       color: "#C7253E",
@@ -85,16 +96,59 @@ export function OpportunityCard({
   ];
 
   const { company_name, role_title, type } = opportunity;
-  const { rejected, interviewing, offered, totalApplied, oa } =
-    aggregate;
-  const [bookmarked, setBookmarked] = useState(false);
-  const isAppliedColor = appliedStatus ? "green" : "red";
+  const { rejected, interviewing, offered, totalApplied, oa } = aggregate;
+  // const isAppliedColor = appliedStatus ? "green" : "red";
   const isHiringColor = hiringStatus ? "green" : "red";
+
   const logoUrl = useFetchCompanyLogo(company_name);
 
-  const handleBookmark = () => {
-    setBookmarked((prev) => !prev); // Toggle the bookmark state
-  };
+  // const [addApp, setAddApp] = useState(false);
+
+  // useEffect(() => {
+  //   if (opportunity_id) {
+  //     const exists = checkExistApplication(opportunity_id);
+  //     setAddApp(exists);
+  //   }
+  // }, [opportunity_id, checkExistApplication]);
+
+  // const added = addApp ? "Added" : "Add";
+
+  // const today = new Date();
+  // const formattedDate = today.toLocaleDateString();
+
+  // const updatedFields: Partial<Application> = {
+  //   created_at: convertToYYYYMMDD(formattedDate),
+  //   role_title: role_title,
+  //   type: type,
+  //   company_name: company_name,
+  //   status: "Applied",
+  //   profile_id: profile?.profile_id,
+  // };
+
+
+  if (!profile) {
+    return null; // Return `null` explicitly for clarity
+  }
+
+  // const handleaddapplication = () => {
+  //   if (checkExistApplication(opportunity_id) === false) {
+  //     addApplication(
+  //       "Applied" as ApplicationStage,
+  //       updatedFields as Application,
+  //       profile
+  //     );
+  //     setAlert({
+  //       message: "Application added to your tracker",
+  //       type: "success",
+  //     });
+  //   } else {
+  //     setAlert({
+  //       message: "Application already exists in your tracker",
+  //       type: "error",
+  //     });
+  //   }
+  //   // addApplication("Applied" as ApplicationStage, updatedFields as Application, profile);
+  // };
 
   const handleShareClick = () => {
     if (navigator.share) {
@@ -138,9 +192,7 @@ export function OpportunityCard({
             padding: ".5rem",
             height: "2rem",
           }}
-          avatar={
-            <Avatar src={logoUrl} />
-          }
+          avatar={<Avatar src={logoUrl} />}
           title={company_name}
           subheader={
             // Job Postion and Job Type in header
@@ -171,25 +223,14 @@ export function OpportunityCard({
                 boxShadow: "none",
               }}
             >
-              <FontAwesomeIcon icon={faComment} style={{fontSize: "1.2rem"}}/>
+              <FontAwesomeIcon
+                icon={faComment}
+                style={{ fontSize: "1.2rem" }}
+              />
             </Button>
           </Link>
 
-          <Button
-            variant="contained"
-            style={{
-              backgroundColor: "#496FFF",
-              height: "40px",
-              width: "auto",
-              borderRadius: "20px",
-              boxShadow: "none",
-            }}
-          >
-            <FontAwesomeIcon icon={faChartColumn} />
-            <Typography style={{ color: "white", marginLeft: ".5rem" }}>
-              Stats
-            </Typography>
-          </Button>
+          <OpportunityStatsModal opportunity={opportunity} />
 
           <Button
             variant="contained"
@@ -212,16 +253,7 @@ export function OpportunityCard({
           </Button>
 
           {/* Bookmark button */}
-          <IconButton
-            onClick={handleBookmark}
-            sx={{ "&:hover": { background: "none" } }}
-          >
-            <FontAwesomeIcon
-              icon={bookmarked ? faBookmark : regularBookmark}
-              style={{ fontSize: "2.5rem" }}
-              color="#496FFF"
-            />
-          </IconButton>
+          {/* <OpportunityBookmark conversationId={conversation_id} size="2rem" /> */}
         </div>
       </div>
 
@@ -245,7 +277,7 @@ export function OpportunityCard({
             justifyContent: "flex-start",
           }}
         >
-          <Chip
+          {/* <Chip
             label={appliedStatus ? "Applied" : "Not Applied"}
             variant="outlined"
             style={{
@@ -253,7 +285,7 @@ export function OpportunityCard({
               borderColor: isAppliedColor,
               margin: 0,
             }}
-          />
+          /> */}
 
           <Chip
             icon={
@@ -316,9 +348,28 @@ export function OpportunityCard({
             offered={offered}
           />
         </div>
-        <Typography variant="h6" sx={{ textAlign: "center" }}>
-          Total Applied: {totalApplied}
-        </Typography>
+        
+          <Typography variant="h6" sx={{ textAlign: "center", justifyContent: "center" }}>
+            Total Applied: {totalApplied}
+          </Typography>
+
+          {/* <Button
+            onClick={handleaddapplication}
+            variant="contained"
+            style={{
+              height: "40px",
+              width: "auto",
+              borderRadius: "20px",
+              boxShadow: "none",
+              backgroundColor: addApp ? "gray" : "#496FFF",
+            }}
+          >
+            <FontAwesomeIcon
+              icon={faPlus}
+              style={{ color: "white", marginRight: "5px", fontSize: "1.5rem" }}
+            />
+            <Typography style={{ color: "white" }}>{added}</Typography>
+          </Button> */}
       </CardContent>
     </Card>
   );
