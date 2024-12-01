@@ -10,7 +10,6 @@ import { useFormState } from "react-dom"; // Assuming this is available for form
 import "./profile_setup.css";
 import { SearchDropdown } from "@/ui/track/SearchDropdown";
 import { useEffect } from "react";
-import Head from "next/head";
 
 export default function ProfilePage() {
   const initialState: ProfileSetupState = { message: null, errors: {} };
@@ -49,135 +48,128 @@ export default function ProfilePage() {
   }, []);
 
   return (
-    <>
-      <Head>
-        <title>Profile Setup - Complete Your Profile</title>
-        <meta name="description" content="Complete your profile setup by selecting an avatar and filling out the details." />
-      </Head>
+    <div className="main-container">
+      <form action={formAction} className="profile-setup">
+        <Typography
+          variant="h5"
+          sx={{ marginBottom: "20px", fontWeight: "bold" }}
+        >
+          Profile Setup
+        </Typography>
 
-      <div className="main-container">
-        <form action={formAction} className="profile-setup">
-          <Typography
-            variant="h5"
-            sx={{ marginBottom: "20px", fontWeight: "bold" }}
-          >
-            Profile Setup
-          </Typography>
-
-          {/* Avatar Images sections */}
-          <div className="avatar-container">
-            {avatars.map(({ profile, avatarType }) => (
-              <Avatar
-                key={avatarType}
-                src={profile}
-                sx={{
-                  width: 80,
-                  height: 80,
-                  cursor: "pointer",
-                  margin: "0 10px",
-                  border:
-                    avatarType === chosenAvatar
-                      ? "4px solid #496FFF" // Highlight selected avatar
-                      : "4px solid #E0E4F2", // Default border for unselected avatars
-                  opacity: avatarType === chosenAvatar ? 1 : 0.85,
-                  ":hover": {
-                    opacity: 1,
-                  },
-                }}
-                onClick={() => setAvatar(avatarType)} // Select avatar on click
-              />
-            ))}
-          </div>
-
-          <Typography
-            variant="h6"
-            sx={{
-              marginTop: "10px",
-              marginBottom: "20px",
-              fontWeight: "bold",
-              alignSelf: "center",
-            }}
-          >
-            Select an avatar
-          </Typography>
-          {/* Hidden input field for avatar */}
-          <input type="hidden" name="avatar" value={chosenAvatar} />
-          {/* Full Name */}
-          <InputField
-            fullWidth
-            label="Full Name"
-            placeholder="Enter your full name"
-            variant="outlined"
-            name="name"
-            required
-            helperText={state.errors?.name} // Display first name error
-            sx={{ marginBottom: "15px" }}
-          />
-
-          {/* Username */}
-          <InputField
-            fullWidth
-            label="Username"
-            placeholder="Enter your username"
-            variant="outlined"
-            name="username"
-            required
-            helperText={state.errors?.username} // Display first username error
-            sx={{ marginBottom: "15px" }}
-          />
-
-          {/* School */}
-          <SearchDropdown
-              label="School"
-              placeholder="Enter your school"
-              name="school"
-              apiEndpoint="http://universities.hipolabs.com/search"
-              queryKey="name"
-              value={profileSchool ?? ""}
-              onValueChange={(newValue) => setSchool(newValue ?? "")}
-              helperText={state.errors?.school} // Display first school error
-              fullWidth
-              useApi={true} // Enable API integration
-              style={{ marginBottom: "10px" }}
-            />
-
-          {/* Button container */}
-          <div className="button-links">
-            <Button
-              className="borderline"
-              variant="contained"
-              type="submit"
+        {/* Avatar Images sections */}
+        <div className="avatar-container">
+          {avatars.map(({ profile, avatarType }) => (
+            <Avatar
+              key={avatarType}
+              src={profile}
               sx={{
-                mt: 2,
-                width: "200px",
-                boxShadow: "none",
-                backgroundColor: "#496FFF",
-                borderRadius: "8px",
+                width: 80,
+                height: 80,
+                cursor: "pointer",
+                margin: "0 10px",
+                border:
+                  avatarType === chosenAvatar
+                    ? "4px solid #496FFF" // Highlight selected avatar
+                    : "4px solid #E0E4F2", // Default border for unselected avatars
+                opacity: avatarType === chosenAvatar ? 1 : 0.85,
                 ":hover": {
-                  backgroundColor: "#3B5AC6",
-                  boxShadow: "none",
+                  opacity: 1,
                 },
               }}
-            >
-              Create Profile
-            </Button>
-          </div>
+              onClick={() => setAvatar(avatarType)} // Select avatar on click
+            />
+          ))}
+        </div>
 
-          {/* Anonymity text */}
-          <Typography
-            variant="subtitle2"
+        <Typography
+          variant="h6"
+          sx={{
+            marginTop: "10px",
+            marginBottom: "20px",
+            fontWeight: "bold",
+            alignSelf: "center",
+          }}
+        >
+          Select an avatar
+        </Typography>
+        {/* Hidden input field for avatar */}
+        <input type="hidden" name="avatar" value={chosenAvatar} />
+        {/* Full Name */}
+        <InputField
+          fullWidth
+          label="Full Name"
+          placeholder="Enter your full name"
+          variant="outlined"
+          name="name"
+          required
+          helperText={state.errors?.name} // Display first name error
+          sx={{ marginBottom: "15px" }}
+        />
+
+        {/* Username */}
+        <InputField
+          fullWidth
+          label="Username"
+          placeholder="Enter your username"
+          variant="outlined"
+          name="username"
+          required
+          helperText={state.errors?.username} // Display first username error
+          sx={{ marginBottom: "15px" }}
+        />
+
+        {/* School */}
+        <SearchDropdown
+            label="School"
+            placeholder="Enter your school"
+            name="school"
+            apiEndpoint="http://universities.hipolabs.com/search"
+            queryKey="name"
+            value={profileSchool ?? ""}
+            onValueChange={(newValue) => setSchool(newValue ?? "")}
+            helperText={state.errors?.school} // Display first school error
+            fullWidth
+            useApi={true} // Enable API integration
+            style={{ marginBottom: "10px" }}
+          />
+
+        {/* Button container */}
+        <div className="button-links">
+          <Button
+            className="borderline"
+            variant="contained"
+            type="submit"
             sx={{
-              marginTop: "40px",
-              textAlign: "center",
-              color: "#6E7191",
+              mt: 2,
+              width: "200px",
+              boxShadow: "none",
+              backgroundColor: "#496FFF",
+              borderRadius: "8px",
+              ":hover": {
+                backgroundColor: "#3B5AC6",
+                boxShadow: "none",
+              },
             }}
           >
-            Your anonymity is valued.
-            <br />
-            Information we collect will not be shared.
-          </Typography>
-        </form>
-      </div>
-    </>
+            Create Profile
+          </Button>
+        </div>
+
+        {/* Anonymity text */}
+        <Typography
+          variant="subtitle2"
+          sx={{
+            marginTop: "40px",
+            textAlign: "center",
+            color: "#6E7191",
+          }}
+        >
+          Your anonymity is valued.
+          <br />
+          Information we collect will not be shared.
+        </Typography>
+      </form>
+    </div>
   );
 }
