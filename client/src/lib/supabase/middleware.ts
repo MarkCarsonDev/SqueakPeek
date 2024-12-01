@@ -63,8 +63,8 @@ export async function updateSession(request: NextRequest) {
     // Only allow authorized users to access the pages under the (main) directory using whitelist strategy
     if(!(hasBasePath(pathname, protectedPaths)) && !(hasBasePath(pathname, publicPaths)) && !(pathname.startsWith("/message"))) {
       const url = request.nextUrl.clone();
-      if (url.pathname.indexOf("/401") < 0) {
-      url.pathname = "/401";
+      if (url.pathname.indexOf("/404") < 0) {
+      url.pathname = "/404";
       return NextResponse.redirect(url);
       }
     }
@@ -108,9 +108,9 @@ export async function updateSession(request: NextRequest) {
     // For authenticated users accessing the pages outside of (main) automatically redirect them to the /401 route
     if(!hasBasePath(pathname, publicPaths)) {
       const url = request.nextUrl.clone();
-      if (url.pathname.indexOf("/401") < 0) {
+      if (url.pathname.indexOf("/404") < 0) {
         //console.log(pathname  + " is not a public path. Redirect to 401");
-        url.pathname = "/401";
+        url.pathname = "/404";
         return NextResponse.redirect(url); 
       }
     }

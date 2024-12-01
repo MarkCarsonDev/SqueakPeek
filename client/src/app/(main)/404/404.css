@@ -1,0 +1,38 @@
+/* 404.css */
+
+.main-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #ffffff;
+    color: #000000;
+    font-family: Arial, sans-serif;
+    margin: 0;
+  }
+  
+  .error-content {
+    text-align: center;
+  }
+  
+  .error-title {
+    font-size: 6rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .error-message {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+  
+  .back-link {
+    color: #000000;
+    text-decoration: underline;
+    font-size: 1rem;
+  }
+  
+  .back-link:hover {
+    color: #ddd;
+  }
+  
