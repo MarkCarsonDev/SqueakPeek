@@ -31,9 +31,9 @@ interface OpportunityTrackingData {
   }
 
 export interface ApplicationStatsModalProps {
-  open: boolean; // Controls the modal visibility
-  onClose: () => void; // Handler to close the modal
-  opportunity_id: string; // ID of the opportunity to fetch stats for
+  open: boolean; 
+  onClose: () => void; 
+  opportunity_id: string; 
 }
 
 export function ApplicationStatsModal({
@@ -41,9 +41,9 @@ export function ApplicationStatsModal({
   onClose,
   opportunity_id,
 }: ApplicationStatsModalProps) {
-  const [opportunityData, setOpportunityData] = useState<OpportunityTrackingData[]>([]); // State for fetched tracking data
+  const [opportunityData, setOpportunityData] = useState<OpportunityTrackingData[]>([]); 
   const [loading, setLoading] = useState(false); // Loading state
-  const [error, setError] = useState<string | null>(null); // Error state
+  const [error, setError] = useState<string | null>(null); 
 
   const months = [
     "Jan", "Feb", "Mar", "Apr", "May", "June", 
