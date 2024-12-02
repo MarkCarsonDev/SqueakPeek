@@ -1,5 +1,4 @@
 'use client';
-
 import { Typography, Button } from "@mui/material";
 import "@/app/(main)/explore/explore.css";
 import { OpportunityList } from "@/ui/explore/OpportunityList";
@@ -7,6 +6,8 @@ import { Filters } from "@/ui/explore/Filters";
 import { SearchBar } from "@/ui/explore/SearchBar";
 import { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
+import { useTrack } from "@/lib/store/track";
+import { useProfile } from "@/lib/store/profile"; 
 
 export default function Page() {
   const [isFilterModalOpen, setFilterModalOpen] = useState(false);
@@ -23,14 +24,14 @@ export default function Page() {
     setResetSearch(false);
   };
 
-    useEffect(() => {
-    // Dynamically setting title and description using next/head
-    document.title = "Explore Opportunities - Discover Entry-Level Roles";
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute("content", "Explore entry-level job opportunities, discover the application process, and connect with other applicants in company threads.");
+  const { fetchApplications } = useTrack();
+  const { profile } = useProfile();
+
+  useEffect(() => {
+    if (profile) {
+      fetchApplications(profile);
     }
-  }, []);
+  }, [profile, fetchApplications]);
 
   return (
     <div className="page-container">

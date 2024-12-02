@@ -12,7 +12,7 @@ export function OpportunityList() {
   const [shownOpportunities, setShownOpportunities] = useState<OpportunityCardProps[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const limit = 25;
+  const limit = 33;
   const [hasMore, setHasMore] = useState(true);
   const [totalDBCount, setTotalDBCount] = useState<number>(0);
   const supabase = useMemo(() => createSupabaseClient(), []);
@@ -58,68 +58,57 @@ export function OpportunityList() {
 
     if (data) {
       const mappedData: OpportunityCardProps[] = data
-        .map((item) => {
-          const { thread_id: conversation_id } = item;
-            
-            // const trackingData = (opportunity as Database["public"]["Tables"]["opportunity"]["Row"] & {
-            //   opportunity_tracking: Database["public"]["Tables"]["opportunity_tracking"]["Row"][];
-            // }).opportunity_tracking;
+            .map((item) => {
+                const { thread_id: conversation_id } = item;
 
-            const opportunity =
-              item.opportunity as unknown as Database["public"]["Tables"]["opportunity"]["Row"] & {
-                opportunity_tracking?: {
-                  applied?: number;
-                  interviewing?: number;
-                  online_assessment?: number;
-                  offered?: number;
-                  rejected?: number;
+                const opportunity =
+                    item.opportunity as unknown as Database["public"]["Tables"]["opportunity"]["Row"] & {
+                        opportunity_tracking?: Database["public"]["Tables"]["opportunity_tracking"]["Row"][] | null;
+                    };
+                if (!opportunity) {
+                    console.warn("Unexpected `opportunity` structure:", opportunity);
+                    return null;
+                }
+                // Sum up the fields from all `opportunity_tracking` entries
+                const aggregate = opportunity.opportunity_tracking?.reduce(
+                    (totals, tracking) => {
+                        return {
+                            rejected: totals.rejected + (tracking.rejected || 0),
+                            interviewing: totals.interviewing + (tracking.interviewing || 0),
+                            offered: totals.offered + (tracking.offer || 0),
+                            oa: totals.oa + (tracking.online_assessment || 0),
+                            applied: totals.applied + (tracking.applied || 0),
+                            totalApplied: totals.totalApplied + (tracking.total_applied || 0),
+                        };
+                    },
+                    {
+                        rejected: 0,
+                        interviewing: 0,
+                        offered: 0,
+                        oa: 0,
+                        applied: 0,
+                        totalApplied: 0,
+                    }
+                );
+
+                return {
+                    conversation_id,
+                    opportunity: opportunity as Database["public"]["Tables"]["opportunity"]["Row"] & {
+                        opportunity_tracking: Database["public"]["Tables"]["opportunity_tracking"]["Row"][] | null;
+                    },
+                    aggregate: aggregate || {
+                        rejected: 0,
+                        interviewing: 0,
+                        offered: 0,
+                        oa: 0,
+                        applied: 0,
+                        totalApplied: 0,
+                    },
                 };
-              };
-          if (!opportunity) {
-            console.warn("Unexpected `opportunity` structure:", opportunity);
-            return null;
-          }
+            })
+            .filter((item) => item !== null); // Remove any `null` values
+
             
-          const trackingData = opportunity.opportunity_tracking;
-
-
-
-            if (trackingData && trackingData) {
-              const tracking = trackingData; // Taking the first tracking entry
-              console.log("Tracking data found for opportunity:", opportunity, tracking);
-
-              return {
-                conversation_id,
-                opportunity: opportunity as Database["public"]["Tables"]["opportunity"]["Row"] & {
-                  opportunity_tracking: Database["public"]["Tables"]["opportunity_tracking"]["Row"][] | null;
-                },
-                aggregate: {
-                  totalApplied: tracking.applied || 0,
-                  interviewing: tracking.interviewing || 0,
-                  oa: tracking.online_assessment || 0,
-                  offered: tracking.offered || 0,
-                  rejected: tracking.rejected || 0,
-                },
-              };
-            } else {
-              // Handle cases where 'opportunity_tracking' is null or empty
-              console.log("No tracking data found for opportunity:", opportunity);
-              return {
-                conversation_id,
-                opportunity: opportunity as Database["public"]["Tables"]["opportunity"]["Row"] & {
-                  opportunity_tracking: Database["public"]["Tables"]["opportunity_tracking"]["Row"][] | null;
-                },
-                aggregate: {
-                  totalApplied: 0,
-                  interviewing: 0,
-                  oa: 0,
-                  offered: 0,
-                  rejected: 0,
-                },
-              };
-            }
-        })
-        .filter((item) => item !== null); // Remove any `null` values
 
       if (page === 1) {
         setShownOpportunities(mappedData);
