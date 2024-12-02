@@ -62,7 +62,7 @@ export const ConversationBody = memo(function ConversationBody({
         incrementFetchCount();
       }
     });
-  }, []);
+  }, [incrementFetchCount]);
 
   useEffect(() => {
     const fetchCount = useConversation.getState().fetchCount;

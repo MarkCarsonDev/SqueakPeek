@@ -23,7 +23,7 @@ export const MessageList = memo(function MessageList({
   // scrolls down on first page render
   useEffect(() => {
     scrollDown(false);
-  }, []);
+  }, [scrollDown]);
 
   // determines if DateDivider should be rendered
   function doRenderDateDivider(
