@@ -96,7 +96,7 @@ export function OpportunityCard({
   ];
 
   const { company_name, role_title, type } = opportunity;
-  const { rejected, interviewing, offered, totalApplied, oa } = aggregate;
+  const { rejected, interviewing, offered, totalApplied, oa, applied } = aggregate;
   // const isAppliedColor = appliedStatus ? "green" : "red";
   const isHiringColor = hiringStatus ? "green" : "red";
 
@@ -346,6 +346,7 @@ export function OpportunityCard({
             oa={oa}
             interviewing={interviewing}
             offered={offered}
+            applied={applied}
           />
         </div>
         
