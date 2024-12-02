@@ -2,6 +2,7 @@
 import React from "react";
 import "./404.css";  // Import the CSS file
 
+//fixed error
 const NotFound = () => {
   return (
     <div className="main-container">
