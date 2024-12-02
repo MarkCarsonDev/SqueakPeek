@@ -96,7 +96,7 @@ export function Conversation({
     return () => {
       clearConversation();
     };
-  }, [clearConversation]);
+  }, [clearConversation, conversationId]);
 
   useFetchMessage(conversationId);
 
