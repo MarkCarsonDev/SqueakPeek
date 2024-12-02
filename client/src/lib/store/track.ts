@@ -14,7 +14,7 @@ export type ApplicationStage =
   | "Interviewing"
   | "Offer";
 
-export type Application = Database["public"]["Tables"]["application"]["Row"] & { thread_id: string | null };
+export type Application = Database["public"]["Tables"]["application"]["Row"] & { thread_id: string | null, opportunity_id: string | null };
 interface TrackState {
   Applied: Application[];
   Rejected: Application[];
@@ -95,6 +95,9 @@ export const useTrack = create<TrackState>()((set, get) => ({
     if (data) {
       application.application_id = data.application_id;
       application.thread_id = data.thread_id;
+      if (data.opportunity_id) {
+        application.opportunity_id = data.opportunity_id;
+      }
     }
     
     set((state) => {
