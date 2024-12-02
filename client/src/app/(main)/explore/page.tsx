@@ -28,6 +28,15 @@ export default function Page() {
   const { profile } = useProfile();
 
   useEffect(() => {
+    // Dynamically setting title and description using next/head
+    document.title = "Explore Opportunities - Discover Entry-Level Roles";
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute("content", "Explore entry-level job opportunities, discover the application process, and connect with other applicants in company threads.");
+    }
+  }, []);
+
+  useEffect(() => {
     if (profile) {
       fetchApplications(profile);
     }
