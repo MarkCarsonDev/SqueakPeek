@@ -4,28 +4,61 @@ import { Typography, Button, TextField, InputAdornment } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import "@/app/(main)/explore/explore.css";
 import { OpportunityList } from "@/ui/explore/OpportunityList";
+import { useSearchParams, useRouter } from 'next/navigation';
 import { Filters } from "@/ui/explore/Filters";
-import { useRouter } from 'next/navigation';
 import { useTrack } from "@/lib/store/track";
 import { useProfile } from "@/lib/store/profile"; 
 import { faFilter, faRedo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-function SearchBar({ resetSearch, onResetComplete }: { resetSearch: boolean; onResetComplete: () => void }) {
-  const setSearchQuery = useTrack((state) => state.setSearchQuery);
+interface SearchBarProps {
+  resetSearch: boolean;
+  onResetComplete: () => void;
+}
+
+function SearchBar({ resetSearch, onResetComplete }: SearchBarProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [inputValue, setInputValue] = useState<string>("");
+
+  // Populate input value from URL params on load
+  useEffect(() => {
+    const initialQuery = searchParams.get('searchQuery') || "";
+    setInputValue(initialQuery);
+  }, [searchParams]);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.value);
-    setSearchQuery(event.target.value);
+    const query = event.target.value;
+    setInputValue(query);
+
+    // Update the URL's searchParams
+    const params = new URLSearchParams(searchParams.toString());
+    if (query) {
+      params.set('searchQuery', query);
+    } else {
+      params.delete('searchQuery');
+    }
+
+    router.replace(`?${params.toString()}`);
+
     if (resetSearch) {
       onResetComplete();
     }
   };
 
+  // Reset the search input when resetSearch is triggered
+  useEffect(() => {
+    if (resetSearch) {
+      setInputValue("");
+      onResetComplete();
+    }
+  }, [resetSearch, onResetComplete]);
+
   return (
     <TextField
       variant="outlined"
       placeholder="Search companies and roles"
+      value={inputValue}
       onChange={handleSearchChange}
       InputProps={{
         startAdornment: (
@@ -35,19 +68,20 @@ function SearchBar({ resetSearch, onResetComplete }: { resetSearch: boolean; onR
         ),
         sx: {
           mt: 1,
-          height: "38px",
-          backgroundColor: "white",
-          borderRadius: "4px",
+          height: '38px',
+          backgroundColor: 'white',
+          borderRadius: '4px',
         },
       }}
       sx={{
-        marginLeft: "10px",
-        borderRadius: "4px",
-        width: "40%",
+        marginLeft: '10px',
+        borderRadius: '4px',
+        width: '40%',
       }}
     />
   );
 }
+
 
 export default function Page() {
   const [isFilterModalOpen, setFilterModalOpen] = useState(false);
