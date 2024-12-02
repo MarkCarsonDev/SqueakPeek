@@ -69,7 +69,7 @@ export const ConversationBody = memo(function ConversationBody({
     if (!isLoading) {
       const messages = useConversation.getState().messages;
       const jumpMessageIndex = messages.length - 50 * fetchCount;
-      if (messages.length > jumpMessageIndex) {
+      if (messages.length > jumpMessageIndex && messages[jumpMessageIndex]) {
         document
           .getElementById(messages[jumpMessageIndex].messageId)
           ?.scrollIntoView({ behavior: "instant" });
