@@ -2,7 +2,7 @@ import { useConversation } from "@/lib/store/conversation";
 import { useProfile } from "@/lib/store/profile";
 import { DateDivider } from "./DateDivider";
 import { MessageCard } from "./MessageCard";
-import { memo, useEffect } from "react";
+import { memo } from "react";
 interface MessageListProps {
   isPageBottomFlushed: boolean;
   scrollDown: (isSmooth: boolean) => void;
