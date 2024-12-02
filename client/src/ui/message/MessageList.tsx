@@ -20,11 +20,6 @@ export const MessageList = memo(function MessageList({
   const { messages } = useConversation();
   const { profile } = useProfile();
 
-  // scrolls down on first page render
-  // useEffect(() => {
-  //   scrollDown(false);
-  // }, [scrollDown]);
-
   // determines if DateDivider should be rendered
   function doRenderDateDivider(
     index: number,
