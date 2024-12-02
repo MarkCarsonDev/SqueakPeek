@@ -1,11 +1,11 @@
-import { useMessage } from "@/lib/store/message";
+import { useConversation } from "@/lib/store/conversation";
 import { useProfile } from "@/lib/store/profile";
 import { DateDivider } from "./DateDivider";
 import { MessageCard } from "./MessageCard";
-import { memo } from "react";
+import { memo, useEffect } from "react";
 interface MessageListProps {
   isPageBottomFlushed: boolean;
-  scrollDown: () => void;
+  scrollDown: (isSmooth: boolean) => void;
 }
 /**
  * Handles rendering a list of messages from zustand store
@@ -17,8 +17,13 @@ export const MessageList = memo(function MessageList({
   isPageBottomFlushed,
   scrollDown,
 }: MessageListProps) {
-  const { messages } = useMessage();
+  const { messages } = useConversation();
   const { profile } = useProfile();
+
+  // scrolls down on first page render
+  useEffect(() => {
+    scrollDown(false);
+  }, [scrollDown]);
 
   // determines if DateDivider should be rendered
   function doRenderDateDivider(
@@ -31,21 +36,34 @@ export const MessageList = memo(function MessageList({
     return false;
   }
 
-  return messages.map((message, index) => {
-    const doScrollDown =
+  function doScrollDown(index: number, sender_username: string) {
+    if (
       (index === messages.length - 1 &&
-        profile?.username === message.sender_username) ||
-      isPageBottomFlushed;
+        profile?.username === sender_username) ||
+      isPageBottomFlushed
+    )
+      return (
+        (index === messages.length - 1 &&
+          profile?.username === sender_username) ||
+        isPageBottomFlushed
+      );
+  }
+
+  return messages.map((message, index) => {
     let prevDate: undefined | Date;
     if (index > 0) prevDate = new Date(messages[index - 1].timestamp);
     return (
-      <div key={message.messageId}>
+      <div key={message.messageId} id={message.messageId}>
         {doRenderDateDivider(index, new Date(message.timestamp), prevDate) && (
           <DateDivider messageDate={new Date(message.timestamp)} />
         )}
         <MessageCard
           {...message}
-          scrollDown={doScrollDown ? scrollDown : undefined}
+          scrollDown={
+            doScrollDown(index, message.sender_username)
+              ? () => scrollDown(true)
+              : undefined
+          }
         />
       </div>
     );
