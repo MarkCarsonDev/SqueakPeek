@@ -1,12 +1,13 @@
 'use client';
-
 import { Typography, Button } from "@mui/material";
 import "@/app/(main)/explore/explore.css";
 import { OpportunityList } from "@/ui/explore/OpportunityList";
 import { Filters } from "@/ui/explore/Filters";
 import { SearchBar } from "@/ui/explore/SearchBar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
+import { useTrack } from "@/lib/store/track";
+import { useProfile } from "@/lib/store/profile"; 
 
 export default function Page() {
   const [isFilterModalOpen, setFilterModalOpen] = useState(false);
@@ -22,6 +23,15 @@ export default function Page() {
   const handleSearchResetComplete = () => {
     setResetSearch(false);
   };
+
+  const { fetchApplications } = useTrack();
+  const { profile } = useProfile();
+
+  useEffect(() => {
+    if (profile) {
+      fetchApplications(profile);
+    }
+  }, [profile, fetchApplications]);
 
   return (
     <div className="page-container">
