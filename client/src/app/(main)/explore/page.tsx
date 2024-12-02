@@ -21,7 +21,6 @@ function SearchBar({ resetSearch, onResetComplete }: SearchBarProps) {
   const searchParams = useSearchParams();
   const [inputValue, setInputValue] = useState<string>("");
 
-  // Populate input value from URL params on load
   useEffect(() => {
     const initialQuery = searchParams.get('searchQuery') || "";
     setInputValue(initialQuery);
@@ -31,7 +30,6 @@ function SearchBar({ resetSearch, onResetComplete }: SearchBarProps) {
     const query = event.target.value;
     setInputValue(query);
 
-    // Update the URL's searchParams
     const params = new URLSearchParams(searchParams.toString());
     if (query) {
       params.set('searchQuery', query);
@@ -40,13 +38,8 @@ function SearchBar({ resetSearch, onResetComplete }: SearchBarProps) {
     }
 
     router.replace(`?${params.toString()}`);
-
-    if (resetSearch) {
-      onResetComplete();
-    }
   };
 
-  // Reset the search input when resetSearch is triggered
   useEffect(() => {
     if (resetSearch) {
       setInputValue("");
@@ -66,12 +59,6 @@ function SearchBar({ resetSearch, onResetComplete }: SearchBarProps) {
             <SearchIcon />
           </InputAdornment>
         ),
-        sx: {
-          mt: 1,
-          height: '38px',
-          backgroundColor: 'white',
-          borderRadius: '4px',
-        },
       }}
       sx={{
         marginLeft: '10px',
