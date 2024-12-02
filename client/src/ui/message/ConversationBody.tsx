@@ -64,54 +64,50 @@ export const ConversationBody = memo(function ConversationBody({
     });
   }, []);
 
-  if (isLoading) {
-    return (
+  return (
+    <div
+      style={{
+        overflowY: "auto", // allows vertical scrolling on the messages
+      }}
+      ref={scrollContainerRef}
+    >
+      <NewMessagesNotificationModal
+        numNewMessages={numNewMessages}
+        scrollDown={() => scrollDown(true)}
+        resetNumNewMessages={resetNumNewMessages}
+      />
       <div
+        ref={topRef}
         style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+          height: `${scrollThreshold}px`,
         }}
-      >
-        <CircularProgress
-          sx={{
-            color: "#496FFF",
-          }}
-        />
-      </div>
-    );
-  } else {
-    return (
-      <div
-        style={{
-          overflowY: "auto", // allows vertical scrolling on the messages
-        }}
-        ref={scrollContainerRef}
-      >
-        <NewMessagesNotificationModal
-          numNewMessages={numNewMessages}
-          scrollDown={() => scrollDown(true)}
-          resetNumNewMessages={resetNumNewMessages}
-        />
+      />
+      {isLoading && (
         <div
-          ref={topRef}
           style={{
-            height: `${scrollThreshold}px`,
+            display: "flex",
+            justifyContent: "center",
           }}
-        />
-        <MessageList
-          isPageBottomFlushed={isRefVisible(bottomRef, scrollContainerRef)}
-          scrollDown={scrollDown}
-        />
+        >
+          <CircularProgress
+            sx={{
+              color: "#496FFF",
+            }}
+          />
+        </div>
+      )}
+      <MessageList
+        isPageBottomFlushed={isRefVisible(bottomRef, scrollContainerRef)}
+        scrollDown={scrollDown}
+      />
 
-        {/* Used as a reference to scroll down the page */}
-        <div
-          ref={bottomRef}
-          style={{
-            height: `${scrollThreshold}px`,
-          }}
-        />
-      </div>
-    );
-  }
+      {/* Used as a reference to scroll down the page */}
+      <div
+        ref={bottomRef}
+        style={{
+          height: `${scrollThreshold}px`,
+        }}
+      />
+    </div>
+  );
 });
