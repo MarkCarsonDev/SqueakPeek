@@ -18,7 +18,7 @@ export async function fetchMessages(
   supabase: SupabaseClient = createSupabaseClient()
 ) {
   // TODO Revert numFetchMessage back to 50 after pagination feature is implemented
-  const numFetchMessage = 10; // range of message fetch for a conversation
+  const numFetchMessage = 50; // range of message fetch for a conversation
   const fromQeury = isPrivateConversation
     ? "private_message"
     : "public_message";
