@@ -14,6 +14,7 @@ import { Application, useTrack, ApplicationStage } from "@/lib/store/track";
 import { Profile } from "@/lib/store/profile";
 import { useFetchCompanyLogo } from "@/lib/hooks/useFetchCompanyLogo";
 import { useAlert } from "@/lib/store/alert";
+import { ApplicationStatsModal } from "@/ui/track/ApplicationStatsModal";
 import ApplicationDelete from "@/ui/track/ApplicationDeleteModal";
 
 // TODO:
@@ -74,6 +75,16 @@ export function JobCard({ application, profile, onCardClick, setPreventClick }: 
   const handleCloseDeleteApplicationModal = () => {
     setPreventClick?.(false);
     setDeleteApplicationModalOpen(false);
+  };
+
+  const [statsModalOpen, setStatsModalOpen] = useState(false);
+  const handleOpenStatsModal = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setStatsModalOpen(true);
+  };
+
+  const handleCloseStatsModal = () => {
+    setStatsModalOpen(false);
   };
   return (
     <>
@@ -249,7 +260,7 @@ export function JobCard({ application, profile, onCardClick, setPreventClick }: 
               padding: "6px",
               borderRadius: "50%",
             }}
-            onClick={(e) => e.stopPropagation()}
+            onClick={handleOpenStatsModal}
           >
             <FontAwesomeIcon
               icon={faChartColumn}
@@ -301,6 +312,12 @@ export function JobCard({ application, profile, onCardClick, setPreventClick }: 
         application={application}
         profile={profile}
         status={status}
+      />
+    {/* Stats Modal */}
+    <ApplicationStatsModal
+        open={statsModalOpen}
+        onClose={handleCloseStatsModal}
+        opportunity_id={application.opportunity_id}
       />
     </>
   );
