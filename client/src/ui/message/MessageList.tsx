@@ -53,7 +53,7 @@ export const MessageList = memo(function MessageList({
     let prevDate: undefined | Date;
     if (index > 0) prevDate = new Date(messages[index - 1].timestamp);
     return (
-      <div key={message.messageId}>
+      <div key={message.messageId} id={message.messageId}>
         {doRenderDateDivider(index, new Date(message.timestamp), prevDate) && (
           <DateDivider messageDate={new Date(message.timestamp)} />
         )}

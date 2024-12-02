@@ -64,6 +64,19 @@ export const ConversationBody = memo(function ConversationBody({
     });
   }, []);
 
+  useEffect(() => {
+    const fetchCount = useConversation.getState().fetchCount;
+    if (!isLoading && fetchCount !== 0) {
+      const messages = useConversation.getState().messages;
+      const jumpMessageIndex = messages.length - 50 * fetchCount;
+      if (messages.length > jumpMessageIndex) {
+        document
+          .getElementById(messages[jumpMessageIndex].messageId)
+          ?.scrollIntoView();
+      }
+    }
+  }, [isLoading]);
+
   return (
     <div
       style={{
