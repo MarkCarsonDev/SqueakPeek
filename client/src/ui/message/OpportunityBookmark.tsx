@@ -11,6 +11,7 @@ import { useMessageNotification } from "@/lib/store/messageNotification";
 interface OpportunityBookmarkProps {
   conversationId: string;
   isDisabled?: boolean;
+  size: string;
 }
 
 /**
@@ -21,6 +22,7 @@ interface OpportunityBookmarkProps {
 export function OpportunityBookmark({
   isDisabled = false,
   conversationId,
+  size,
 }: OpportunityBookmarkProps) {
   const [isBookmarked, setIsBookmarked] = useState<null | boolean>(null);
   const [opportunityId, setOpportunityId] = useState<null | string>(null);
@@ -130,6 +132,7 @@ export function OpportunityBookmark({
           <FontAwesomeIcon
             style={{
               color: "#496FFF",
+              fontSize: size,
             }}
             icon={isBookmarked ? bookmarkSolid : bookmarkRegular}
           />

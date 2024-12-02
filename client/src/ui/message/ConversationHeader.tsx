@@ -96,6 +96,7 @@ export function ConversationHeader({
             <OpportunityBookmark
               isDisabled={isLoading}
               conversationId={conversationId}
+              size=""
             />
           }
           title={header}

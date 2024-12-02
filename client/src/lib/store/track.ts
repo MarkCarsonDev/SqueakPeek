@@ -30,6 +30,8 @@ interface TrackState {
   "Online Assessment": Application[];
   Interviewing: Application[];
   Offer: Application[];
+  searchQuery: string; 
+  setSearchQuery: (query: string) => void; 
   addApplication: (
     to: ApplicationStage,
     application: Application,
@@ -53,9 +55,8 @@ interface TrackState {
     profile: Profile
   ) => Promise<{ success: boolean; message: string }>;
 
-  fetchApplications: (
-    profile: Profile
-  ) => Promise<{ data: Application[] | null; error: PostgrestError | null }>;
+   fetchApplications: (profile: Profile) => Promise<{ data: Application[] | null; error: PostgrestError | null }>;
+   checkExistApplication: (opportunityId: string) => boolean;
 }
 
 // Helper function to reorder items in a list
@@ -66,18 +67,38 @@ const reorder = (list: Application[], startIndex: number, endIndex: number) => {
   return result;
 };
 
-export const useTrack = create<TrackState>()((set) => ({
+export const useTrack = create<TrackState>()((set, get) => ({
   Applied: [],
   Rejected: [],
   "Online Assessment": [],
   Interviewing: [],
   Offer: [],
 
-  addApplication: async (
-    to,
-    application,
-    profile
-  ): Promise<{ success: boolean; message: string }> => {
+  // Search Filter
+  searchQuery: "",
+  setSearchQuery: (query: string) => set({ searchQuery: query }),
+
+  checkExistApplication: (opportunityId: string): boolean => {
+    const state = get();
+    const stages: ApplicationStage[] = [
+      "Applied",
+      "Rejected",
+      "Online Assessment",
+      "Interviewing",
+      "Offer",
+    ];
+
+    for (const stage of stages) {
+      if (state[stage].some((app) => app.opportunity_id === opportunityId)) {
+        console.log("Application already exists in stage:", stage);
+        return true;
+      }
+    }
+    console.log("Application does not exist in any stage");
+    return false;
+  },
+
+  addApplication: async (to, application, profile): Promise<{success: boolean; message: string}> => {   
     // Call the InsertApplication function
     const { data, error } = await InsertApplication(profile, application);
     if (error) {

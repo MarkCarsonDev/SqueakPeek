@@ -63,7 +63,7 @@ export async function InsertApplication(
     interviewing_round: application.interviewing_round,
     link: application.link,
     location: application.location,
-    created_at: new Date().toISOString(),
+    created_at: application.created_at? application.created_at: new Date().toISOString(),
     outOfScore: application.outOfScore,
     status_update_date: new Date().toISOString(),
     test_provider: application.test_provider,

@@ -149,7 +149,7 @@ export type Database = {
           created_at: string
           opportunity_id: string
           role_title: string
-          type: Database["public"]["Enums"]["OpportunityType"] 
+          type: Database["public"]["Enums"]["OpportunityType"]
         }
         Insert: {
           company_name: string
@@ -177,6 +177,7 @@ export type Database = {
           online_assessment: number | null
           opportunity_id: string
           rejected: number | null
+          total_applied: number | null
           tracking_id: number
         }
         Insert: {
@@ -188,6 +189,7 @@ export type Database = {
           online_assessment?: number | null
           opportunity_id?: string
           rejected?: number | null
+          total_applied?: number | null
           tracking_id?: number
         }
         Update: {
@@ -199,6 +201,7 @@ export type Database = {
           online_assessment?: number | null
           opportunity_id?: string
           rejected?: number | null
+          total_applied?: number | null
           tracking_id?: number
         }
         Relationships: [
@@ -229,7 +232,7 @@ export type Database = {
           created_at: string
           message: string
           message_id: string
-          sender_avatar: Database["public"]["Enums"]["Avatar"] | null
+          sender_avatar: Database["public"]["Enums"]["Avatar"]
           sender_id: string
           sender_username: string
         }
@@ -238,7 +241,7 @@ export type Database = {
           created_at?: string
           message?: string
           message_id?: string
-          sender_avatar?: Database["public"]["Enums"]["Avatar"] | null
+          sender_avatar: Database["public"]["Enums"]["Avatar"]
           sender_id: string
           sender_username: string
         }
@@ -247,7 +250,7 @@ export type Database = {
           created_at?: string
           message?: string
           message_id?: string
-          sender_avatar?: Database["public"]["Enums"]["Avatar"] | null
+          sender_avatar?: Database["public"]["Enums"]["Avatar"]
           sender_id?: string
           sender_username?: string
         }

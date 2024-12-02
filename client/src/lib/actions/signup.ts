@@ -3,16 +3,19 @@ import { z } from "zod";
 import { createSupabaseServer } from "../supabase/server";
 import { redirect } from "next/navigation";
 
+// zod schema
 const SignUpFormSchema = z
   .object({
     email: z.string(),
     password: z.string(),
     confirmPassword: z.string(),
   })
+
+  // check if passwords match
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Password do not match",
+    message: "Passwords do not match",
     path: ["confirmPassword"],
-  }); // form validation if confirm password does not equal password
+  });
 
 // Used for getting errors for each field during form validation
 export type SignUpState = {
@@ -29,8 +32,8 @@ export async function createAccount(
   prevState: SignUpState,
   formData: FormData
 ): Promise<SignUpState> {
-  console.log("createAccount: Signing up");
 
+  // safeParse to async. get validated fields
   const validatedFields = SignUpFormSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
@@ -39,6 +42,7 @@ export async function createAccount(
 
   // form validation fails
   if (!validatedFields.success) {
+    
     // add error meesages
     return {
       errors: validatedFields.error.flatten().fieldErrors, // returns error for each field
@@ -46,6 +50,7 @@ export async function createAccount(
     };
   }
 
+  // consts for email and password
   const { email, password } = validatedFields.data;
 
   // call supabase to create account
@@ -54,10 +59,13 @@ export async function createAccount(
     email: email,
     password: password,
   });
+
+  // error handling
   if (error) {
+
+    // error message
     let errorMessage = error + "";
     errorMessage = errorMessage.replace("AuthApiError: ", "") + ": Please choose another email";
-    console.log("errorMessage: ", errorMessage);
     
     return {
       errors: {
@@ -65,5 +73,6 @@ export async function createAccount(
       } 
     };
   }
+  // redirect after successful account creation
   redirect("/profile_setup");
 }

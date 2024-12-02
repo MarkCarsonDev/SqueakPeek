@@ -8,11 +8,13 @@ import {
 } from "../../../lib/actions/profile_setup";
 import { useFormState } from "react-dom"; // Assuming this is available for form state management
 import "./profile_setup.css";
+import { SearchDropdown } from "@/ui/track/SearchDropdown";
 
 export default function ProfilePage() {
   const initialState: ProfileSetupState = { message: null, errors: {} };
   const [state, formAction] = useFormState(createProfile, initialState); // Use form state hook
   const [chosenAvatar, setAvatar] = useState("");
+  const [profileSchool, setSchool] = useState("");
 
   // TODO: Change with the real profile assets
   const avatars = [
@@ -108,15 +110,19 @@ export default function ProfilePage() {
         />
 
         {/* School */}
-        <InputField
-          fullWidth
-          label="School"
-          placeholder="Enter your school"
-          variant="outlined"
-          name="school"
-          helperText={state.errors?.school} // Display first school error
-          sx={{ marginBottom: "15px" }}
-        />
+        <SearchDropdown
+            label="School"
+            placeholder="Enter your school"
+            name="school"
+            apiEndpoint="http://universities.hipolabs.com/search"
+            queryKey="name"
+            value={profileSchool ?? ""}
+            onValueChange={(newValue) => setSchool(newValue ?? "")}
+            helperText={state.errors?.school} // Display first school error
+            fullWidth
+            useApi={true} // Enable API integration
+            style={{ marginBottom: "10px" }}
+          />
 
         {/* Button container */}
         <div className="button-links">
