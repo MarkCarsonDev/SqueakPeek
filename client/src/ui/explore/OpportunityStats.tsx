@@ -1,24 +1,76 @@
 "use client";
+import React, { useEffect, useState } from "react";
 import { Typography } from "@mui/material";
 import { PieChart, pieArcLabelClasses } from "@mui/x-charts";
-
+import { FetchOpportunityStats } from "@/lib/utils/Application/FetchOpportunityStats";
 /**
  * Shows stats based on the opportunity
  */
 export function OpportunityStats() {
+// opportunityID: string
   // TODO: Replace with real data
-  const mockData = [
-    { id: 0, value: 90, label: "Applied", color: "#779fcd" },
-    { id: 1, value: 190, label: "Rejected", color: "#c7253e" },
-    {
-      id: 2,
-      value: 30,
-      label: "OA",
-      color: "#eb5a02",
-    },
-    { id: 3, value: 20, label: "Interviewing", color: "#ffbf63" },
+  const [data, setData] = useState<
+    | {
+        applied: number | null;
+        created_at: string;
+        interviewing: number | null;
+        month: number | null;
+        offer: number | null;
+        online_assessment: number | null;
+        opportunity_id: string;
+        rejected: number | null;
+        total_applied: number | null;
+        tracking_id: number;
+      }[]
+    | null
+  >(null);
+  const [error, setError] = useState<string | null>(null);
 
-    { id: 4, value: 10, label: "Offered", color: "#2e7e33" },
+  useEffect(() => {
+    async function fetchData() {
+      const { data, error } = await FetchOpportunityStats( "23d0e50d-6adc-4d70-b8cd-9ef651b479eb" );
+      if (error) {
+        console.error("Error fetching opportunity stats:", error);
+        setError(error);
+        return;
+      }
+      setData(data);
+    }
+    fetchData();
+  }, []);
+
+  if (error) {
+    return <div>Error loading stats</div>;
+  }
+
+  if (!data) {
+    return <div>No data available</div>;
+  }
+  // Combine the total numbers
+  const totals = data.reduce(
+    (acc, curr) => {
+      acc.applied += curr.applied ?? 0;
+      acc.rejected += curr.rejected ?? 0;
+      acc.online_assessment += curr.online_assessment ?? 0;
+      acc.interviewing += curr.interviewing ?? 0;
+      acc.offer += curr.offer ?? 0;
+      acc.total_applied += curr.total_applied ?? 0;
+      return acc;
+    },
+    { applied: 0, rejected: 0, online_assessment: 0, interviewing: 0, offer: 0, total_applied: 0 }
+  );
+
+  const mockData = [
+    { id: 0, value: totals.applied, label: "Applied", color: "#779fcd" },
+    { id: 1, value: totals.rejected, label: "Rejected", color: "#c7253e" },
+    { id: 2, value: totals.online_assessment, label: "OA", color: "#eb5a02" },
+    {
+      id: 3,
+      value: totals.interviewing,
+      label: "Interviewing",
+      color: "#ffbf63",
+    },
+    { id: 4, value: totals.offer, label: "Offered", color: "#2e7e33" },
   ];
   return (
     <div
