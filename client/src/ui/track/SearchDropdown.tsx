@@ -98,6 +98,9 @@ export function SearchDropdown({
         onChange={(event, newValue) => {onValueChange(newValue);}} // Handle the change event
         disabled={disabled} // Pass the disabled prop
         loading={useApi && loading} // Pass the loading
+        renderOption={(props, option, index) => (
+          <li {...props} key={`${option}-${index}`}>{option}</li>
+        )}
         PaperComponent={(props) => (
           <div
             {...props}
