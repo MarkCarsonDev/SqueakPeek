@@ -114,7 +114,8 @@ export default function ProfilePage() {
             label="School"
             placeholder="Enter your school"
             name="school"
-            apiEndpoint="http://universities.hipolabs.com/search"
+            // apiEndpoint="http://universities.hipolabs.com/search"
+            apiEndpoint="https://raw.githubusercontent.com/Hipo/university-domains-list/master/world_universities_and_domains.json"
             queryKey="name"
             value={profileSchool ?? ""}
             onValueChange={(newValue) => setSchool(newValue ?? "")}
