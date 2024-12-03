@@ -6,7 +6,9 @@ import { FetchOpportunityStats } from "@/lib/utils/Application/FetchOpportunityS
 /**
  * Shows stats based on the opportunity
  */
-export function OpportunityStats() {
+export function OpportunityStats(
+  { opportunity_id }: { opportunity_id: string }
+) {
 // opportunityID: string
   // TODO: Replace with real data
   const [data, setData] = useState<
@@ -28,7 +30,9 @@ export function OpportunityStats() {
 
   useEffect(() => {
     async function fetchData() {
-      const { data, error } = await FetchOpportunityStats( "23d0e50d-6adc-4d70-b8cd-9ef651b479eb" );
+      // Replac
+      // const { data, error } = await FetchOpportunityStats( "23d0e50d-6adc-4d70-b8cd-9ef651b479eb" ); 
+      const { data, error } = await FetchOpportunityStats( opportunity_id ); 
       if (error) {
         console.error("Error fetching opportunity stats:", error);
         setError(error);

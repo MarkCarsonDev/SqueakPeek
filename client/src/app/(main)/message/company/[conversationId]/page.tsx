@@ -1,12 +1,12 @@
 import React from "react";
-import { OpportunityStats } from "@/ui/explore/OpportunityStats";
+import { OpportunityStats } from "@/ui/message/OpportunityStats";
 import { Conversation } from "@/ui/message/Conversation";
 export default function Page({
   params,
 }: {
-  params: { conversationId: string };
+  params: { conversationId: string, opportunity_id: string };
 }) {
-  const { conversationId } = params;
+  const { conversationId, opportunity_id } = params;
   return (
     <div
       style={{
@@ -15,7 +15,7 @@ export default function Page({
       }}
     >
       <Conversation conversationId={conversationId} />
-      <OpportunityStats />
+      <OpportunityStats opportunity_id={opportunity_id} />
     </div>
   );
 }
