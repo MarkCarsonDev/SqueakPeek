@@ -2,7 +2,10 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { Button, Typography } from "@mui/material";
+import { InputField } from "@/ui/InputField"; // Assuming you're using the same InputField component
 import { createSupabaseClient } from "@/lib/supabase/client"; // Client-side supabase initialization
+import "./reset_password.css"; // Import CSS for styling
 
 const ResetPasswordPage = () => {
   const [password, setPassword] = useState("");
@@ -71,35 +74,54 @@ const ResetPasswordPage = () => {
   };
 
   return (
-    <div>
-      <h2>Reset Your Password</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {message && <p style={{ color: "green" }}>{message}</p>}
+    <div className="main-container">
+      <Typography variant="h4" sx={{ marginBottom: "40px" }}>
+        Reset Your Password
+      </Typography>
+      {error && <Typography sx={{ color: "red", marginBottom: "20px" }}>{error}</Typography>}
+      {message && <Typography sx={{ color: "green", marginBottom: "20px" }}>{message}</Typography>}
 
       {/* Form to reset the password */}
       {isTokenVerified && (
-        <form onSubmit={handleSubmit}>
-          <label>
-            New Password
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </label>
-          <label>
-            Confirm Password
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
-          </label>
-          <button type="submit">Reset Password</button>
+        <form onSubmit={handleSubmit} className="reset-password-form">
+          <InputField
+            fullWidth
+            label="New Password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            sx={{ marginBottom: "20px" }}
+          />
+          <InputField
+            fullWidth
+            label="Confirm New Password"
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+            sx={{ marginBottom: "20px" }}
+          />
+          <Button
+            type="submit"
+            variant="contained"
+            sx={{
+              width: "100%",
+              backgroundColor: "#496FFF",
+              ":hover": { backgroundColor: "#3B5AC6" },
+              boxShadow: "none",
+              borderRadius: "8px",
+            }}
+          >
+            Reset Password
+          </Button>
         </form>
       )}
+      <Typography variant="subtitle2" className="subtitle">
+        Your anonymity is valued.
+        <br />
+        Information we collect will not be shared.
+      </Typography>
     </div>
   );
 };
