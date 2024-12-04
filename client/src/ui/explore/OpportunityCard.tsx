@@ -97,8 +97,8 @@ export function OpportunityCard({
   ];
 
   const { company_name, role_title, type, opportunity_id } = opportunity;
-  const { rejected, interviewing, offered, totalApplied, oa, applied } = aggregate;
-  // const isAppliedColor = appliedStatus ? "green" : "red";
+  const { rejected, interviewing, offered, totalApplied, oa, applied } =
+    aggregate;
   const isHiringColor = hiringStatus ? "green" : "red";
 
   const logoUrl = useFetchCompanyLogo(company_name);
@@ -113,6 +113,7 @@ export function OpportunityCard({
   }, [opportunity_id, checkExistApplication]);
 
   const added = addApp ? "Added" : "Add";
+  const isAppliedColor = addApp ? "green" : "red";
 
   const today = new Date();
   const formattedDate = today.toLocaleDateString();
@@ -125,7 +126,6 @@ export function OpportunityCard({
     status: "Applied",
     profile_id: profile?.profile_id,
   };
-
 
   if (!profile) {
     return null; // Return `null` explicitly for clarity
@@ -279,15 +279,15 @@ export function OpportunityCard({
             justifyContent: "flex-start",
           }}
         >
-          {/* <Chip
-            label={appliedStatus ? "Applied" : "Not Applied"}
+          <Chip
+            label={addApp ? "Applied" : "Not Applied"}
             variant="outlined"
             style={{
               color: isAppliedColor,
               borderColor: isAppliedColor,
               margin: 0,
             }}
-          /> */}
+          />
 
           <Chip
             icon={
@@ -351,28 +351,48 @@ export function OpportunityCard({
             applied={applied}
           />
         </div>
-        
-          <Typography variant="h6" sx={{ textAlign: "center", justifyContent: "center" }}>
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            width: "100%",
+            alignItems: "center",
+          }}
+        >
+          <div style={{ flex: 1 }}></div>
+          <Typography
+            variant="h6"
+            sx={{ textAlign: "center", justifyContent: "center", flex: 1 }}
+          >
             Total Applied: {totalApplied}
           </Typography>
 
-          <Button
-            onClick={handleaddapplication}
-            variant="contained"
-            style={{
-              height: "40px",
-              width: "auto",
-              borderRadius: "20px",
-              boxShadow: "none",
-              backgroundColor: addApp ? "gray" : "#496FFF",
-            }}
-          >
-            <FontAwesomeIcon
-              icon={faPlus}
-              style={{ color: "white", marginRight: "5px", fontSize: "1.5rem" }}
-            />
-            <Typography style={{ color: "white" }}>{added}</Typography>
-          </Button>
+          <div style={{ flex: 1, display: "flex", justifyContent: "flex-end" }}>
+            <Button
+              onClick={handleaddapplication}
+              variant="contained"
+              style={{
+                height: "40px",
+                width: "auto",
+                borderRadius: "20px",
+                boxShadow: "none",
+                backgroundColor: addApp ? "gray" : "#496FFF",
+
+              }}
+            >
+              <FontAwesomeIcon
+                icon={faPlus}
+                style={{
+                  color: "white",
+                  marginRight: "5px",
+                  fontSize: "1.5rem",
+                }}
+              />
+              <Typography style={{ color: "white" }}>{added}</Typography>
+            </Button>
+          </div>
+        </div>
       </CardContent>
     </Card>
   );
