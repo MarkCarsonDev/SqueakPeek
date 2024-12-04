@@ -28,7 +28,6 @@ export function OpportunityStats(
 
   useEffect(() => {
     async function fetchData() {
-      // const { data, error } = await FetchOpportunityStats( "23d0e50d-6adc-4d70-b8cd-9ef651b479eb" ); 
       const { data, error } = await FetchOpportunityStats( opportunity_id ); 
       if (error) {
         console.error("Error fetching opportunity stats:", error);

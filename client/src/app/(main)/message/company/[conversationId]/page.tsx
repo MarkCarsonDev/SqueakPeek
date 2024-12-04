@@ -4,9 +4,9 @@ import { Conversation } from "@/ui/message/Conversation";
 export default function Page({
   params,
 }: {
-  params: { conversationId: string, opportunity_id: string };
+  params: { conversationId: string };
 }) {
-  const { conversationId, opportunity_id } = params;
+  const { conversationId } = params;
   return (
     <div
       style={{
@@ -15,8 +15,8 @@ export default function Page({
       }}
     >
       <Conversation conversationId={conversationId} />
-      {/* TODO: NEED ACTUAL A WAY TO PASS IN THE opportunity_id */}
-      <OpportunityStats opportunity_id={opportunity_id} />
+      {/* Pass a random opportunity_id */}
+      <OpportunityStats opportunity_id = "23d0e50d-6adc-4d70-b8cd-9ef651b479eb"/>
     </div>
   );
 }
