@@ -1,7 +1,7 @@
-
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { createSupabaseClient } from '@/lib/supabase/client';
+
 const ResetPasswordPage = () => {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
