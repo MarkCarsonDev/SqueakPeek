@@ -50,6 +50,7 @@ export function Conversation({
             profile.profile_id,
             supabase
           );
+          console.log("updateError: ", updateError);
         }
         return { data, error };
       } else {
