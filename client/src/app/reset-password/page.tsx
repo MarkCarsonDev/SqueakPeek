@@ -1,4 +1,4 @@
-// pages/reset-password.tsx
+
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { createSupabaseClient } from '@/lib/supabase/client';
