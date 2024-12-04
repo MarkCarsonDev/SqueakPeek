@@ -1,4 +1,5 @@
 "use client";
+
 import { Button, Typography } from "@mui/material";
 import "./forgot_password.css";
 import { InputField } from "@/ui/InputField";
