@@ -26,7 +26,6 @@ export const ConversationBody = memo(function ConversationBody({
   const bottomRef = useRef<null | HTMLDivElement>(null); // used for scrolling down the page
   const scrollThreshold = 20; // threshold for determining on whether page scrolls down on new messages
   const { incrementFetchCount } = useConversation();
-  const prevMessageId = useRef("");
   function isRefVisible(
     targetRef: MutableRefObject<HTMLDivElement | null>,
     containerRef: MutableRefObject<HTMLDivElement | null>
@@ -51,7 +50,6 @@ export const ConversationBody = memo(function ConversationBody({
   // scrolls down to the latest message on page mount"
   function scrollDown(isSmooth: boolean) {
     if (bottomRef.current) {
-      console.log("scroll down conversation");
       bottomRef.current.scrollIntoView({
         behavior: isSmooth ? "smooth" : "instant",
       });
@@ -60,10 +58,6 @@ export const ConversationBody = memo(function ConversationBody({
 
   useEffect(() => {
     scrollContainerRef.current?.addEventListener("scroll", () => {
-      console.log(
-        "fetchCount on scroll: ",
-        useConversation.getState().fetchCount
-      );
       if (isRefVisible(topRef, scrollContainerRef)) {
         incrementFetchCount();
       }
@@ -74,14 +68,7 @@ export const ConversationBody = memo(function ConversationBody({
     if (!isLoading) {
       const messages = useConversation.getState().messages;
       const jumpMessageIndex = 50;
-      console.log("jumpMessageIndex: ", jumpMessageIndex);
-      if (
-        messages.length > jumpMessageIndex &&
-        messages[jumpMessageIndex] &&
-        messages[jumpMessageIndex].messageId !== prevMessageId.current
-      ) {
-        console.log("scroll to: ", messages[jumpMessageIndex].message);
-        prevMessageId.current = messages[jumpMessageIndex].messageId;
+      if (messages.length > jumpMessageIndex && messages[jumpMessageIndex]) {
         document
           .getElementById(messages[jumpMessageIndex].messageId)
           ?.scrollIntoView({ behavior: "instant" });
