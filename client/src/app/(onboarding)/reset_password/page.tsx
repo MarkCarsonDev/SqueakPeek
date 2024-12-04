@@ -1,61 +1,96 @@
 "use client";
-import { Button, Typography } from "@mui/material";
-import "./reset_password.css";
-import { InputField } from "@/ui/InputField";
-import { useFormState } from "react-dom";
-import { resetPassword } from "@/lib/actions/reset_password";
-import { useEffect } from "react";
 
-export default function ResetPasswordPage() {
-  const initialState = { message: "", errors: {} as Record<string, string[]> };
-  const [state, formAction] = useFormState(resetPassword, initialState);
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { createSupabaseClient } from "@/lib/supabase/client"; // Client-side supabase initialization
 
-  useEffect(() => {
-    document.title = "Reset Password - Set a New Password";
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute("content", "Reset your account password.");
+const ResetPasswordPage = () => {
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+  const router = useRouter();
+
+  // Get the 'code' parameter from the URL query string
+  const urlParams = new URLSearchParams(window.location.search);
+  const code = urlParams.get("code");
+
+  const supabase = createSupabaseClient(); // Use the Supabase client for client-side
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
     }
-  }, []);
+
+    try {
+      // Use the resetPasswordForEmail method instead of updateUser
+      const { error } = await supabase.auth.updateUser({
+        password, // Only the password
+      });
+
+      if (error) {
+        setError("Failed to reset password.");
+      } else {
+        setMessage("Password reset successfully.");
+        router.push("/login"); // Redirect to login page after successful reset
+      }
+    } catch (err) {
+      setError("An unexpected error occurred while resetting password.");
+    }
+  };
+
+  // Optionally, you can verify the token if needed
+  useEffect(() => {
+    if (code) {
+      const verifyToken = async () => {
+        try {
+          // Use resetPasswordForEmail with the token code
+          const { error } = await supabase.auth.resetPasswordForEmail(code);
+          if (error) {
+            setError("Invalid or expired reset link.");
+          } else {
+            setMessage("Token verified, you can now reset your password.");
+          }
+        } catch (err) {
+          setError("Failed to verify token.");
+        }
+      };
+
+      verifyToken();
+    }
+  }, [code]);
 
   return (
-    <div className="main-container">
-      <Typography variant="h4" sx={{ marginBottom: "20px", marginTop: "110px" }}>
-        Reset Your Password
-      </Typography>
-      <form action={formAction} className="reset-password-form">
-        <InputField
-          type="password"
-          placeholder="New Password"
-          required
-          label="New Password"
-          name="newPassword"
-          helperText={state.errors?.newPassword?.[0]}
-          style={{ marginBottom: "20px" }}
-        />
-        <InputField
-          type="password"
-          placeholder="Confirm Password"
-          required
-          label="Confirm Password"
-          name="confirmPassword"
-          helperText={state.errors?.confirmPassword?.[0]}
-          style={{ marginBottom: "20px" }}
-        />
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          sx={{
-            width: "100%",
-            backgroundColor: "#496FFF",
-            ":hover": { backgroundColor: "#3B5AC6" },
-          }}
-        >
-          Reset Password
-        </Button>
-        {state.message && <Typography sx={{ marginTop: "10px" }}>{state.message}</Typography>}
+    <div>
+      <h2>Reset Your Password</h2>
+      {error && <p>{error}</p>}
+      {message && <p>{message}</p>}
+      
+      <form onSubmit={handleSubmit}>
+        <label>
+          New Password
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </label>
+        <label>
+          Confirm Password
+          <input
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          />
+        </label>
+        <button type="submit">Reset Password</button>
       </form>
     </div>
   );
-}
+};
+
+export default ResetPasswordPage;
