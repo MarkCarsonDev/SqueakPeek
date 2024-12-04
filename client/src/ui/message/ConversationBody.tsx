@@ -50,6 +50,7 @@ export const ConversationBody = memo(function ConversationBody({
   // scrolls down to the latest message on page mount"
   function scrollDown(isSmooth: boolean) {
     if (bottomRef.current) {
+      console.log("scroll down conversation");
       bottomRef.current.scrollIntoView({
         behavior: isSmooth ? "smooth" : "instant",
       });
@@ -65,13 +66,12 @@ export const ConversationBody = memo(function ConversationBody({
   }, [incrementFetchCount]);
 
   useEffect(() => {
-    const fetchCount = useConversation.getState().fetchCount;
     if (!isLoading) {
       const messages = useConversation.getState().messages;
-      const jumpMessageIndex = messages.length - 50 * fetchCount;
+      const jumpMessageIndex = 50;
       console.log("jumpMessageIndex: ", jumpMessageIndex);
       if (messages.length > jumpMessageIndex && messages[jumpMessageIndex]) {
-        console.log("jump to: ", messages[jumpMessageIndex].message);
+        console.log("scroll to: ", messages[jumpMessageIndex].message);
         document
           .getElementById(messages[jumpMessageIndex].messageId)
           ?.scrollIntoView({ behavior: "instant" });

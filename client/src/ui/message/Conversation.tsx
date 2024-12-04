@@ -93,6 +93,7 @@ export function Conversation({
   }, [setConversationType, isPrivateConversation]);
 
   useEffect(() => {
+    clearConversation();
     return () => {
       clearConversation();
     };
