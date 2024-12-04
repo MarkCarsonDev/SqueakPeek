@@ -26,6 +26,7 @@ export const ConversationBody = memo(function ConversationBody({
   const bottomRef = useRef<null | HTMLDivElement>(null); // used for scrolling down the page
   const scrollThreshold = 20; // threshold for determining on whether page scrolls down on new messages
   const { incrementFetchCount } = useConversation();
+  const prevMessageId = useRef("");
   function isRefVisible(
     targetRef: MutableRefObject<HTMLDivElement | null>,
     containerRef: MutableRefObject<HTMLDivElement | null>
@@ -74,8 +75,13 @@ export const ConversationBody = memo(function ConversationBody({
       const messages = useConversation.getState().messages;
       const jumpMessageIndex = 50;
       console.log("jumpMessageIndex: ", jumpMessageIndex);
-      if (messages.length > jumpMessageIndex && messages[jumpMessageIndex]) {
+      if (
+        messages.length > jumpMessageIndex &&
+        messages[jumpMessageIndex] &&
+        messages[jumpMessageIndex].messageId !== prevMessageId.current
+      ) {
         console.log("scroll to: ", messages[jumpMessageIndex].message);
+        prevMessageId.current = messages[jumpMessageIndex].messageId;
         document
           .getElementById(messages[jumpMessageIndex].messageId)
           ?.scrollIntoView({ behavior: "instant" });
