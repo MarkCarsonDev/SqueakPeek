@@ -68,6 +68,21 @@ function SearchBar({ resetSearch, onResetComplete }: SearchBarProps) {
     />
   );
 }
+const LoadingSpinner: React.FC = () => {
+  return (
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+      }}
+    >
+      <div className="custom-spinner" />
+    </div>
+  );
+};
+
 
 
 export default function Page() {
@@ -82,12 +97,17 @@ export default function Page() {
 
   const { fetchApplications } = useTrack();
   const { profile } = useProfile();
-
+  const [applicationsLoaded, setApplicationsLoaded] = useState(false);
   useEffect(() => {
     if (profile) {
-      fetchApplications(profile);
+      console.log("Fetching applications...");
+      fetchApplications(profile).finally(() => setApplicationsLoaded(true));
     }
   }, [profile, fetchApplications]);
+
+  if (!applicationsLoaded) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="page-container">
@@ -146,7 +166,7 @@ export default function Page() {
       </div>
       <div className="card-filter-container">
         <div className="opportunity-list-container">
-          <OpportunityList />
+          <OpportunityList applicationsLoaded={applicationsLoaded} />
         </div>
         <Filters open={isFilterModalOpen} handleClose={() => setFilterModalOpen(false)} />
       </div>

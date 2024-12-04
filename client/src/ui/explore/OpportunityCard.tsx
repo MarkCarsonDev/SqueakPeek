@@ -138,6 +138,7 @@ export function OpportunityCard({
         updatedFields as Application,
         profile
       );
+      setAddApp(true);
       setAlert({
         message: "Application added to your tracker",
         type: "success",
