@@ -50,7 +50,6 @@ export function Conversation({
             profile.profile_id,
             supabase
           );
-          console.log("updateError: ", updateError);
         }
         return { data, error };
       } else {
@@ -64,8 +63,6 @@ export function Conversation({
     };
     doesConversationExist().then((res) => {
       const { data, error } = res;
-      console.log("data res: ", data);
-      console.log("error: ", error);
       if (error || !data) {
         // TODO navigate to not found page
         setNotFound(true);
