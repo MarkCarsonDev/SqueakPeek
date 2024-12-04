@@ -192,7 +192,7 @@ export default function Page() {
           <SearchDropdown
             label="School Name"
             placeholder="Enter your school name"
-            apiEndpoint="http://universities.hipolabs.com/search"
+            apiEndpoint="https://raw.githubusercontent.com/Hipo/university-domains-list/master/world_universities_and_domains.json"
             queryKey="name"
             value={profileSchool || ""}
             onValueChange={(newValue) =>

@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from "uuid";
 import { memo, useMemo } from "react";
 import { insertMessage } from "../../lib/utils/insertMessage";
 import { AvatarTypes } from "../ProfileAvatar";
-import { useMessage } from "@/lib/store/message";
+import { useConversation } from "@/lib/store/conversation";
 import { useAlert } from "@/lib/store/alert";
 /**
  * Allows user to send a message into a private conversation or a company thread, and broadcasts the message based on the conversationId
@@ -26,7 +26,7 @@ export const MessageInput = memo(function MessageInput({
   const { profile } = useProfile();
   const [currentMessage, setCurrentMessage] = useState("");
   const messageInputRef = useRef<null | HTMLDivElement>(null);
-  const { isPrivateConversation } = useMessage();
+  const { isPrivateConversation } = useConversation();
   const { setAlert } = useAlert();
 
   // Memoize the Supabase client and the sender channel to prevent changing it's value when MessageInput re-renders

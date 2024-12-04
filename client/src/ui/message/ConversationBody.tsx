@@ -1,40 +1,38 @@
 "use client";
 import { useRef, memo, useEffect } from "react";
 import { NewMessagesNotificationModal } from "./NewMessageNotificationModal";
-import { MutableRefObject } from "react";
 import { MessageList } from "./MessageList";
 import { CircularProgress } from "@mui/material";
-
+import { MutableRefObject } from "react";
+import { useConversation } from "@/lib/store/conversation";
 /**
  * Renders new message notifications, message list, and the message input
  * Handles the page scrolling for new messages and message input
  * @param {number} numNewMessages - The number of new messages received
  * @param {() => void} resetNumNewMessages - Resets the number of new messages when invoked
- * @param { MutableRefObject<HTMLDivElement | null>} bottomRef - Used as a reference to be able to scroll down the page when scrollDown is invoked
  */
 export const ConversationBody = memo(function ConversationBody({
   numNewMessages,
   resetNumNewMessages,
-  bottomRef,
   isLoading,
 }: {
   numNewMessages: number;
   resetNumNewMessages: () => void;
-  bottomRef: MutableRefObject<HTMLDivElement | null>;
   isLoading: boolean;
 }) {
   // Scroll to the bottom of the element
   const scrollContainerRef = useRef<null | HTMLDivElement>(null);
-
+  const topRef = useRef<null | HTMLDivElement>(null); // used for scrolling down the page
+  const bottomRef = useRef<null | HTMLDivElement>(null); // used for scrolling down the page
   const scrollThreshold = 20; // threshold for determining on whether page scrolls down on new messages
-
-  // determines if the scroll page is flushed in the bottom
-  const pageIsBottomFlushed = () => {
-    if (bottomRef.current && scrollContainerRef.current) {
-      const elementRect = bottomRef.current.getBoundingClientRect();
-      const containerRect = scrollContainerRef.current.getBoundingClientRect();
-      // console.log("elementRect: ", elementRect.top);
-      // console.log("containerRect: ", containerRect.top);
+  const { incrementFetchCount } = useConversation();
+  function isRefVisible(
+    targetRef: MutableRefObject<HTMLDivElement | null>,
+    containerRef: MutableRefObject<HTMLDivElement | null>
+  ) {
+    if (targetRef.current && containerRef.current) {
+      const elementRect = targetRef.current.getBoundingClientRect();
+      const containerRect = containerRef.current.getBoundingClientRect();
 
       // Calculate if the element is within the visible bounds of the container
       const isVisible =
@@ -43,71 +41,86 @@ export const ConversationBody = memo(function ConversationBody({
         elementRect.left >= containerRect.left &&
         elementRect.right <= containerRect.right;
 
-      if (isVisible) {
-        console.log("isVisible");
-        // console.log("elementRect: ", elementRect.bottom);
-        // console.log("containerRect: ", containerRect.bottom);
-      }
       return isVisible;
     }
+
     return false;
-  };
+  }
 
   // scrolls down to the latest message on page mount"
-  function scrollDown() {
+  function scrollDown(isSmooth: boolean) {
     if (bottomRef.current) {
-      bottomRef.current.scrollIntoView({ behavior: "smooth" });
+      bottomRef.current.scrollIntoView({
+        behavior: isSmooth ? "smooth" : "instant",
+      });
     }
   }
 
-  // scrolls down on first page render
   useEffect(() => {
-    scrollDown();
-  }, []);
+    scrollContainerRef.current?.addEventListener("scroll", () => {
+      if (isRefVisible(topRef, scrollContainerRef)) {
+        incrementFetchCount();
+      }
+    });
+  }, [incrementFetchCount]);
 
-  if (isLoading) {
-    return (
+  useEffect(() => {
+    const fetchCount = useConversation.getState().fetchCount;
+    if (!isLoading) {
+      const messages = useConversation.getState().messages;
+      const jumpMessageIndex = messages.length - 50 * fetchCount;
+      if (messages.length > jumpMessageIndex && messages[jumpMessageIndex]) {
+        document
+          .getElementById(messages[jumpMessageIndex].messageId)
+          ?.scrollIntoView({ behavior: "instant" });
+      }
+    }
+  }, [isLoading]);
+
+  return (
+    <div
+      style={{
+        overflowY: "auto", // allows vertical scrolling on the messages
+      }}
+      ref={scrollContainerRef}
+    >
+      <NewMessagesNotificationModal
+        numNewMessages={numNewMessages}
+        scrollDown={() => scrollDown(true)}
+        resetNumNewMessages={resetNumNewMessages}
+      />
       <div
+        ref={topRef}
         style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+          height: `${scrollThreshold}px`,
         }}
-      >
-        <CircularProgress
-          sx={{
-            color: "#496FFF",
-          }}
-        />
-      </div>
-    );
-  } else {
-    return (
-      <div
-        style={{
-          overflowY: "auto", // allows vertical scrolling on the messages
-        }}
-        ref={scrollContainerRef}
-      >
-        <NewMessagesNotificationModal
-          numNewMessages={numNewMessages}
-          scrollDown={scrollDown}
-          resetNumNewMessages={resetNumNewMessages}
-        />
-
-        <MessageList
-          isPageBottomFlushed={pageIsBottomFlushed()}
-          scrollDown={scrollDown}
-        />
-
-        {/* Used as a reference to scroll down the page */}
+      />
+      {isLoading && (
         <div
-          ref={bottomRef}
           style={{
-            height: `${scrollThreshold}px`,
+            display: "flex",
+            justifyContent: "center",
           }}
-        />
-      </div>
-    );
-  }
+        >
+          <CircularProgress
+            sx={{
+              color: "#496FFF",
+            }}
+          />
+        </div>
+      )}
+      <MessageList
+        isPageBottomFlushed={isRefVisible(bottomRef, scrollContainerRef)}
+        scrollDown={scrollDown}
+      />
+
+      {/* Used as a reference to scroll down the page */}
+      <div
+        ref={bottomRef}
+        style={{
+          height: `${scrollThreshold}px`,
+        }}
+      />
+    </div>
+  );
 });
