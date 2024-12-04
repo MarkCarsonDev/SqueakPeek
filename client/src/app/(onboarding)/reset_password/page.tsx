@@ -7,7 +7,7 @@ import { resetPassword } from "@/lib/actions/reset_password";
 import { useEffect } from "react";
 
 export default function ResetPasswordPage() {
-  const initialState = { message: null, errors: {} };
+  const initialState = { message: "", errors: {} as Record<string, string[]> };
   const [state, formAction] = useFormState(resetPassword, initialState);
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export default function ResetPasswordPage() {
           required
           label="New Password"
           name="newPassword"
-          helperText={state.errors?.newPassword}
+          helperText={state.errors?.newPassword?.[0]}
           style={{ marginBottom: "20px" }}
         />
         <InputField
@@ -39,7 +39,7 @@ export default function ResetPasswordPage() {
           required
           label="Confirm Password"
           name="confirmPassword"
-          helperText={state.errors?.confirmPassword}
+          helperText={state.errors?.confirmPassword?.[0]}
           style={{ marginBottom: "20px" }}
         />
         <Button

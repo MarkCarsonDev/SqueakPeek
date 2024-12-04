@@ -6,25 +6,6 @@ const ForgotPasswordSchema = z.object({
   email: z.string().email("Invalid email address"),
 });
 
-export async function sendPasswordResetEmail(prevState, formData: FormData) {
-  const validated = ForgotPasswordSchema.safeParse({
-    email: formData.get("email"),
-  });
-
-  if (!validated.success) {
-    return { errors: validated.error.flatten().fieldErrors, message: "Invalid email" };
-  }
-
-  const supabase = createSupabaseServer();
-  const { error } = await supabase.auth.api.resetPasswordForEmail(validated.data.email);
-
-  if (error) {
-    return { errors: { email: [error.message] }, message: "Failed to send reset email." };
-  }
-
-  return { message: "Password reset email sent successfully!" };
-}
-
 const ResetPasswordSchema = z
   .object({
     newPassword: z.string().min(6, "Password must be at least 6 characters long"),
@@ -35,24 +16,84 @@ const ResetPasswordSchema = z
     path: ["confirmPassword"],
   });
 
-export async function resetPassword(prevState, formData: FormData) {
-  const validated = ResetPasswordSchema.safeParse({
-    newPassword: formData.get("newPassword"),
-    confirmPassword: formData.get("confirmPassword"),
-  });
+export const sendPasswordResetEmail = async (
+  state: { errors: { email?: string[] } | undefined; message: string },
+  formData: FormData
+): Promise<{ errors: { email?: string[] } | undefined; message: string }> => {
+  const email = formData.get("email") as string | null;
 
-  if (!validated.success) {
-    return { errors: validated.error.flatten().fieldErrors, message: "Invalid fields" };
+  // Zod validation
+  const parseResult = ForgotPasswordSchema.safeParse({ email });
+
+  if (!parseResult.success) {
+    const errors = parseResult.error.format();
+    return {
+      errors: { email: errors.email?._errors }, // Extract the error messages from Zod's format
+      message: "Validation Error",
+    };
   }
+
+  // Safely extract validated email
+  const validatedEmail = parseResult.data.email;
 
   const supabase = createSupabaseServer();
-  const { error } = await supabase.auth.api.updateUser({
-    password: validated.data.newPassword,
-  });
 
-  if (error) {
-    return { errors: { newPassword: [error.message] }, message: "Failed to reset password." };
+  try {
+    await supabase.auth.resetPasswordForEmail(validatedEmail); // validatedEmail is guaranteed to be a string
+    return {
+      errors: undefined,
+      message: "Password reset email sent successfully.",
+    };
+  } catch (error) {
+    return {
+      errors: { email: [error instanceof Error ? error.message : "An error occurred."] },
+      message: "Error",
+    };
+  }
+};
+
+export const resetPassword = async (
+  state: {
+    errors: { newPassword?: string[]; confirmPassword?: string[] } | undefined;
+    message: string;
+  },
+  formData: FormData
+): Promise<{
+  errors: { newPassword?: string[]; confirmPassword?: string[] } | undefined;
+  message: string;
+}> => {
+  const newPassword = formData.get("newPassword") as string | null;
+  const confirmPassword = formData.get("confirmPassword") as string | null;
+
+  // Zod validation
+  const parseResult = ResetPasswordSchema.safeParse({ newPassword, confirmPassword });
+
+  if (!parseResult.success) {
+    const errors = parseResult.error.format();
+    return {
+      errors: {
+        newPassword: errors.newPassword?._errors,
+        confirmPassword: errors.confirmPassword?._errors,
+      }, // Extract the error messages from Zod's format
+      message: "Validation Error",
+    };
   }
 
-  return { message: "Password reset successfully!" };
-}
+  // Safely extract validated data
+  const validatedData = parseResult.data;
+
+  const supabase = createSupabaseServer();
+
+  try {
+    await supabase.auth.updateUser({ password: validatedData.newPassword }); // validatedData.newPassword is guaranteed to be a string
+    return {
+      errors: undefined,
+      message: "Password reset successfully.",
+    };
+  } catch (error) {
+    return {
+      errors: { newPassword: [error instanceof Error ? error.message : "An error occurred."] },
+      message: "Error",
+    };
+  }
+};

@@ -7,7 +7,7 @@ import { sendPasswordResetEmail } from "@/lib/actions/reset_password";
 import { useEffect } from "react";
 
 export default function ForgotPasswordPage() {
-  const initialState = { message: null, errors: {} };
+  const initialState = { message: "", errors: {} as Record<string, string[]> };
   const [state, formAction] = useFormState(sendPasswordResetEmail, initialState);
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export default function ForgotPasswordPage() {
           required
           label="Email"
           name="email"
-          helperText={state.errors?.email}
+          helperText={state.errors?.email?.[0]}
           style={{ marginBottom: "20px" }}
         />
         <Button
