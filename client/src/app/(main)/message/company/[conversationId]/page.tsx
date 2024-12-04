@@ -15,6 +15,7 @@ export default function Page({
       }}
     >
       <Conversation conversationId={conversationId} />
+      {/* TODO: NEED ACTUAL A WAY TO PASS IN THE opportunity_id */}
       <OpportunityStats opportunity_id={opportunity_id} />
     </div>
   );
