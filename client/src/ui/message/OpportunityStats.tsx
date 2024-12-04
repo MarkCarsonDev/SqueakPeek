@@ -29,7 +29,7 @@ export function OpportunityStats({
       setIsLoading(false);
     }
     fetchData();
-  }, []);
+  }, [opportunity_id]);
 
   // Combine the total numbers
   const totals = data.reduce(
