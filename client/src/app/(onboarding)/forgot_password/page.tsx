@@ -6,6 +6,7 @@ import { InputField } from "@/ui/InputField";
 import { useFormState } from "react-dom";
 import { sendPasswordResetEmail } from "@/lib/actions/reset_password";
 import { useEffect } from "react";
+import { NodeNextRequest } from "next/dist/server/base-http/node";
 
 export default function ForgotPasswordPage() {
   const initialState = { message: "", errors: {} as Record<string, string[]> };
@@ -21,7 +22,7 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="main-container">
-      <Typography variant="h4" sx={{ marginBottom: "20px", marginTop: "110px" }}>
+      <Typography variant="h4" sx={{ marginTop: "80px", marginBottom: "20px" }}>
         Forgot Your Password?
       </Typography>
       <form action={formAction} className="forgot-password-form">
@@ -41,7 +42,8 @@ export default function ForgotPasswordPage() {
           sx={{
             width: "100%",
             backgroundColor: "#496FFF",
-            ":hover": { backgroundColor: "#3B5AC6" },
+            boxShadow: "none",
+            ":hover": { backgroundColor: "#3B5AC6", boxShadow: "none" },
           }}
         >
           Send Reset Email
