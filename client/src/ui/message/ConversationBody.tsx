@@ -59,6 +59,10 @@ export const ConversationBody = memo(function ConversationBody({
 
   useEffect(() => {
     scrollContainerRef.current?.addEventListener("scroll", () => {
+      console.log(
+        "fetchCount on scroll: ",
+        useConversation.getState().fetchCount
+      );
       if (isRefVisible(topRef, scrollContainerRef)) {
         incrementFetchCount();
       }
