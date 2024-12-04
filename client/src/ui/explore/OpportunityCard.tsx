@@ -61,7 +61,6 @@ export function OpportunityCard({
 }: OpportunityCardProps) {
   // TODO: Replace this with real status from props
   // const appliedStatus = false;
-  const hiringStatus = false;
 
   const { setAlert } = useAlert();
   const { addApplication, checkExistApplication } = useTrack();
@@ -96,10 +95,10 @@ export function OpportunityCard({
     },
   ];
 
-  const { company_name, role_title, type, opportunity_id } = opportunity;
+  const { company_name, role_title, type, opportunity_id, hiring } = opportunity;
   const { rejected, interviewing, offered, totalApplied, oa, applied } =
     aggregate;
-  const isHiringColor = hiringStatus ? "green" : "red";
+  const isHiringColor = hiring ? "green" : "red";
 
   const logoUrl = useFetchCompanyLogo(company_name);
 
@@ -296,10 +295,10 @@ export function OpportunityCard({
                   marginLeft: ".5rem",
                   color: isHiringColor,
                 }}
-                icon={hiringStatus ? faAnglesUp : faAnglesDown}
+                icon={hiring ? faAnglesUp : faAnglesDown}
               />
             }
-            label={hiringStatus ? "Actively Hiring" : "Not Hiring"}
+            label={hiring ? "Actively Hiring" : "Not Hiring"}
             variant="outlined"
             style={{
               color: isHiringColor,
