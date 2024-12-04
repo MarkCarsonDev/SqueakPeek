@@ -1,71 +1,58 @@
 "use server";
 import { z } from "zod";
 import { createSupabaseServer } from "../supabase/server";
-import { redirect } from "next/navigation";
 
-// zod schema
+const ForgotPasswordSchema = z.object({
+  email: z.string().email("Invalid email address"),
+});
+
+export async function sendPasswordResetEmail(prevState, formData: FormData) {
+  const validated = ForgotPasswordSchema.safeParse({
+    email: formData.get("email"),
+  });
+
+  if (!validated.success) {
+    return { errors: validated.error.flatten().fieldErrors, message: "Invalid email" };
+  }
+
+  const supabase = createSupabaseServer();
+  const { error } = await supabase.auth.api.resetPasswordForEmail(validated.data.email);
+
+  if (error) {
+    return { errors: { email: [error.message] }, message: "Failed to send reset email." };
+  }
+
+  return { message: "Password reset email sent successfully!" };
+}
+
 const ResetPasswordSchema = z
   .object({
-    password: z.string(),
+    newPassword: z.string().min(6, "Password must be at least 6 characters long"),
     confirmPassword: z.string(),
   })
-  // check if passwords match
-  .refine((data) => data.password === data.confirmPassword, {
+  .refine((data) => data.newPassword === data.confirmPassword, {
     message: "Passwords do not match",
     path: ["confirmPassword"],
   });
 
-// Used for getting errors for each field during form validation
-export type ResetPasswordState = {
-    errors?: {
-      password?: string[];
-      confirmPassword?: string[];
-    };
-    message?: string | null;
-  };
-
-export async function resetPassword (
-    prevState: ResetPasswordState,
-    formData: FormData
-): Promise<ResetPasswordState> {
-
-  // safeParse to async. get validated fields
-  const validatedFields = ResetPasswordSchema.safeParse({
-    password: formData.get("password"),
+export async function resetPassword(prevState, formData: FormData) {
+  const validated = ResetPasswordSchema.safeParse({
+    newPassword: formData.get("newPassword"),
     confirmPassword: formData.get("confirmPassword"),
   });
 
-  // form validation fails
-  if (!validatedFields.success) {
-    
-    // add error meesages
-    return {
-      errors: validatedFields.error.flatten().fieldErrors, // returns error for each field
-      message: "Incorrect Fields. Sign Up Failed",
-    };
+  if (!validated.success) {
+    return { errors: validated.error.flatten().fieldErrors, message: "Invalid fields" };
   }
 
-  // consts for password
-  const { password } = validatedFields.data;
-
-  // call supabase to reset password
   const supabase = createSupabaseServer();
-  const { error } = await supabase.auth.updateUser({
-    password: password
+  const { error } = await supabase.auth.api.updateUser({
+    password: validated.data.newPassword,
   });
 
-  // error handling
   if (error) {
-
-    // error message
-    let errorMessage = error + "";
-    errorMessage = errorMessage.replace("AuthApiError: ", "");
-    
-    return {
-      errors: {
-      } 
-    };
+    return { errors: { newPassword: [error.message] }, message: "Failed to reset password." };
   }
-  // redirect after successful password reset
-  redirect("/");
+
+  return { message: "Password reset successfully!" };
 }
