@@ -8,7 +8,6 @@ import { useProfile } from "@/lib/store/profile";
 import { useRouter } from "next/navigation";
 import { SearchDropdown } from "@/ui/track/SearchDropdown";
 
-
 export default function Page() {
   //Router Creation
   const router = useRouter();
@@ -37,6 +36,17 @@ export default function Page() {
       avatarType: "avatar4",
     },
   ];
+
+  useEffect(() => {
+    document.title = "Edit Profile - Personalize Your Account";
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute(
+        "content",
+        "Edit your profile to personalize your account. Update your username, school, and avatar to create a unique profile."
+      );
+    }
+  }, []);
 
   //Gets user profile using useProfile function
   const { profile } = useProfile();

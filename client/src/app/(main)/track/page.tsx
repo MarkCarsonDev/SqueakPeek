@@ -30,6 +30,18 @@ export default function Page() {
   } = useTrack();
   const { profile } = useProfile();
 
+  useEffect(() => {
+    // Dynamically setting title and description
+    document.title = "Track Applications - Manage Your Job Search";
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute(
+        "content",
+        "Track your job applications efficiently across various stages. Manage your pipeline from applied to offer, and stay organized throughout your job search."
+      );
+    }
+  }, []);
+
   // Fetch applications when profile is available
   useEffect(() => {
     if (profile) {

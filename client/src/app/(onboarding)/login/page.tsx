@@ -5,10 +5,21 @@ import { InputField } from "@/ui/InputField";
 import { LoginState, loginAccount } from "../../../lib/actions/login";
 import { useFormState } from "react-dom";
 import { handleGoogleLoginClientSide } from "../../../lib/supabase/auth/handleGoogleLoginClientSide";
+import { useEffect } from "react";
 
 export default function Page() {
   const initialState: LoginState = { message: null, errors: {} };
   const [state, formAction] = useFormState(loginAccount, initialState);
+  
+  useEffect(() => {
+    // Dynamically setting title and description using next/head
+    document.title = "Login - Welcome Back";
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute("content", "Sign in to access your account");
+    }
+  }, []);
+  
   return (
     <div className="main-container">
       {/* Welcome Back section */}

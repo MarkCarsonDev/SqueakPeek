@@ -5,10 +5,21 @@ import { InputField } from "@/ui/InputField";
 import { SignUpState, createAccount } from "../../../lib/actions/signup";
 import { useFormState } from "react-dom";
 import { handleGoogleLoginClientSide } from "../../../lib/supabase/auth/handleGoogleLoginClientSide";
+import { useEffect } from "react";
 
 export default function Page() {
   const initialState: SignUpState = { message: null, errors: {} };
   const [state, formAction] = useFormState(createAccount, initialState);
+  
+  useEffect(() => {
+    // Dynamically setting title and description using next/head
+    document.title = "Sign Up - Create an Account";
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute("content", "Create a new account to get started");
+    }
+  }, []);
+  
   return (
     <div className="main-container">
       {/* Let's get started section */}

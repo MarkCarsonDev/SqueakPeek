@@ -9,6 +9,7 @@ import {
 import { useFormState } from "react-dom"; // Assuming this is available for form state management
 import "./profile_setup.css";
 import { SearchDropdown } from "@/ui/track/SearchDropdown";
+import { useEffect } from "react";
 
 export default function ProfilePage() {
   const initialState: ProfileSetupState = { message: null, errors: {} };
@@ -36,6 +37,15 @@ export default function ProfilePage() {
       avatarType: "avatar4",
     },
   ];
+
+  useEffect(() => {
+    // Dynamically setting title and description using next/head
+    document.title = "Profile Setup - Complete Your Profile";
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute("content", "Complete your profile setup by selecting an avatar and filling out the details.");
+    }
+  }, []);
 
   return (
     <div className="main-container">
