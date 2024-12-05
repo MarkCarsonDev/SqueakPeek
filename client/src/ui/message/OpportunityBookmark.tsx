@@ -8,6 +8,7 @@ import { useProfile } from "@/lib/store/profile";
 import { useState, useEffect } from "react";
 import { removeBookmarkOpportunity } from "@/lib/utils/removeBookmarkOpportunity";
 import { useMessageNotification } from "@/lib/store/messageNotification";
+import { useFetchOpportunityFromConversation } from "@/lib/hooks/useFetchOpportunityFromConversation";
 interface OpportunityBookmarkProps {
   conversationId: string;
   isDisabled?: boolean;
@@ -25,7 +26,6 @@ export function OpportunityBookmark({
   size,
 }: OpportunityBookmarkProps) {
   const [isBookmarked, setIsBookmarked] = useState<null | boolean>(null);
-  const [opportunityId, setOpportunityId] = useState<null | string>(null);
   const { profile } = useProfile();
   const { removeNotification } = useMessageNotification();
   // handles inserting or removing bookmarks depending on it's current state
@@ -65,34 +65,7 @@ export function OpportunityBookmark({
     }
   }
 
-  // fetches opportunity id based on the conversationId
-  useEffect(() => {
-    // retrieves opportunityId based on conversationId if it exists
-    async function fetchOpportunityId() {
-      const supabase = createSupabaseClient();
-      const { data: opportunity, error } = await supabase
-        .from("company_thread")
-        .select("opportunity_id")
-        .eq("thread_id", conversationId)
-        .single();
-
-      if (error) {
-        // TODO handle error
-        return null;
-      }
-      return opportunity.opportunity_id;
-    }
-
-    fetchOpportunityId().then((id) => {
-      if (id) {
-        console.log("id: ", id);
-        setOpportunityId(id);
-        console.log("opp ID exists");
-      } else {
-        console.log("opp id does not exist");
-      }
-    });
-  }, [conversationId]);
+  const { opportunityId } = useFetchOpportunityFromConversation(conversationId);
 
   // checks and sets bookmark state if it's a bookmaked opportunity
   useEffect(() => {
