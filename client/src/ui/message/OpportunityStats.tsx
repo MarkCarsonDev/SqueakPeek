@@ -1,12 +1,21 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Typography } from "@mui/material";
-import { PieChart, pieArcLabelClasses } from "@mui/x-charts";
+import { Pie } from "react-chartjs-2";
 import { FetchOpportunityStats } from "@/lib/utils/Application/FetchOpportunityStats";
 import { Database } from "@/lib/types/database.types";
-/**
- * Shows stats based on the opportunity
- */
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  ChartOptions,
+  TooltipItem,
+} from "chart.js";
+import ChartDataLabels from "chartjs-plugin-datalabels";
+
+ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
+
 export function OpportunityStats({
   opportunity_id,
 }: {
@@ -31,7 +40,6 @@ export function OpportunityStats({
     fetchData();
   }, [opportunity_id]);
 
-  // Combine the total numbers
   const totals = data.reduce(
     (acc, curr) => {
       acc.applied += curr.applied ?? 0;
@@ -39,7 +47,6 @@ export function OpportunityStats({
       acc.online_assessment += curr.online_assessment ?? 0;
       acc.interviewing += curr.interviewing ?? 0;
       acc.offer += curr.offer ?? 0;
-      acc.total_applied += curr.total_applied ?? 0;
       return acc;
     },
     {
@@ -48,22 +55,55 @@ export function OpportunityStats({
       online_assessment: 0,
       interviewing: 0,
       offer: 0,
-      total_applied: 0,
     }
   );
 
-  const graphData = [
-    { id: 0, value: totals.applied, label: "Applied", color: "#779fcd" },
-    { id: 1, value: totals.rejected, label: "Rejected", color: "#c7253e" },
-    { id: 2, value: totals.online_assessment, label: "OA", color: "#eb5a02" },
-    {
-      id: 3,
-      value: totals.interviewing,
-      label: "Interviewing",
-      color: "#ffbf63",
+  const chartData = {
+    labels: ["Applied", "Rejected", "OA", "Interviewing", "Offered"],
+    datasets: [
+      {
+        data: [
+          totals.applied,
+          totals.rejected,
+          totals.online_assessment,
+          totals.interviewing,
+          totals.offer,
+        ],
+        backgroundColor: [
+          "#779fcd",
+          "#c7253e",
+          "#eb5a02",
+          "#ffbf63",
+          "#2e7e33",
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const options: ChartOptions<"pie"> = {
+    plugins: {
+      legend: {
+        position: "bottom",
+      },
+      tooltip: {
+        callbacks: {
+          label: (tooltipItem: TooltipItem<"pie">) => {
+            const value = tooltipItem.raw;
+            return `${tooltipItem.label}: ${value}`;
+          },
+        },
+      },
+      datalabels: {
+        color: "white",
+        font: {
+          weight: "bold",
+          size: 20,
+        },
+        formatter: (value: number) => value,
+      },
     },
-    { id: 4, value: totals.offer, label: "Offered", color: "#2e7e33" },
-  ];
+  };
 
   if (isLoading) {
     return <div>Is Loading...</div>;
@@ -73,40 +113,11 @@ export function OpportunityStats({
     return <div>No One has applied yet</div>;
   } else {
     return (
-      <div
-        style={{
-          borderLeft: "3px solid #E0E4F2",
-        }}
-      >
-        <Typography
-          style={{
-            padding: "30px 0px 30px 30px",
-          }}
-          variant="h3"
-        >
+      <div style={{ borderLeft: "3px solid #E0E4F2" }}>
+        <Typography style={{ padding: "30px 0px 30px 30px" }} variant="h3">
           Stats
         </Typography>
-        <PieChart
-          // TODO: Adjust the data with real data, based on the opportunityID
-          series={[
-            {
-              arcLabel: (item) => `${item.value}`,
-              arcLabelMinAngle: 35,
-              data: graphData,
-            },
-          ]}
-          sx={{
-            display: "flex",
-            fontFamily: "", // for some reason fontFamily is default to something else. This make font change to inter
-            // TODO Figure out how to fix the font for hover tooltip
-            [`& .${pieArcLabelClasses.root}`]: {
-              fontWeight: "bold",
-              fill: "white",
-              color: "white",
-            },
-          }}
-          height={175}
-        />
+        <Pie data={chartData} options={options} height={175} />
       </div>
     );
   }
