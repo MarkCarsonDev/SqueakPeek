@@ -105,7 +105,12 @@ export function OpportunityStats({
           weight: "bold",
           size: 20,
         },
-        formatter: (value: number) => value,
+        formatter: (value: number) => {
+          return value === 0 ? null : value;
+        },
+        display: (context) => {
+          return context.dataset.data[context.dataIndex] !== 0;
+        },
       },
     },
   };
