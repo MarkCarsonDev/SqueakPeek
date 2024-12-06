@@ -13,29 +13,34 @@ import {
   TooltipItem,
 } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
+import { useFetchOpportunityFromConversation } from "@/lib/hooks/useFetchOpportunityFromConversation";
 
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
 export function OpportunityStats({
-  opportunity_id,
+  conversation_id,
 }: {
-  opportunity_id: string;
+  conversation_id: string;
 }) {
   const [data, setData] = useState<
     Database["public"]["Tables"]["opportunity_tracking"]["Row"][]
   >([]);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const { opportunityId: opportunity_id } =
+    useFetchOpportunityFromConversation(conversation_id);
 
   useEffect(() => {
     async function fetchData() {
-      setIsLoading(true);
-      const { data, error } = await FetchOpportunityStats(opportunity_id);
-      if (error) {
-        setError(error);
-      } else if (data) setData(data);
+      if (opportunity_id) {
+        setIsLoading(true);
+        const { data, error } = await FetchOpportunityStats(opportunity_id);
+        if (error) {
+          setError(error);
+        } else if (data) setData(data);
 
-      setIsLoading(false);
+        setIsLoading(false);
+      }
     }
     fetchData();
   }, [opportunity_id]);

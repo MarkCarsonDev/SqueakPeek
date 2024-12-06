@@ -16,7 +16,7 @@ export default function Page({
     >
       <Conversation conversationId={conversationId} />
       {/* Pass a random opportunity_id */}
-      <OpportunityStats opportunity_id = "23d0e50d-6adc-4d70-b8cd-9ef651b479eb"/>
+      <OpportunityStats conversation_id={conversationId}/>
     </div>
   );
 }
