@@ -1,15 +1,16 @@
-'use client';
+"use client";
 import React, { useState, useEffect } from "react";
 import { Typography, Button, TextField, InputAdornment } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import "@/app/(main)/explore/explore.css";
 import { OpportunityList } from "@/ui/explore/OpportunityList";
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams, useRouter } from "next/navigation";
 import { Filters } from "@/ui/explore/Filters";
 import { useTrack } from "@/lib/store/track";
-import { useProfile } from "@/lib/store/profile"; 
+import { useProfile } from "@/lib/store/profile";
 import { faFilter, faRedo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { OpportunityCardSkeleton } from "@/ui/explore/OpportunityCardSkeleton";
 
 interface SearchBarProps {
   resetSearch: boolean;
@@ -22,7 +23,7 @@ function SearchBar({ resetSearch, onResetComplete }: SearchBarProps) {
   const [inputValue, setInputValue] = useState<string>("");
 
   useEffect(() => {
-    const initialQuery = searchParams.get('searchQuery') || "";
+    const initialQuery = searchParams.get("searchQuery") || "";
     setInputValue(initialQuery);
   }, [searchParams]);
 
@@ -32,9 +33,9 @@ function SearchBar({ resetSearch, onResetComplete }: SearchBarProps) {
 
     const params = new URLSearchParams(searchParams.toString());
     if (query) {
-      params.set('searchQuery', query);
+      params.set("searchQuery", query);
     } else {
-      params.delete('searchQuery');
+      params.delete("searchQuery");
     }
 
     router.replace(`?${params.toString()}`);
@@ -61,9 +62,9 @@ function SearchBar({ resetSearch, onResetComplete }: SearchBarProps) {
         ),
       }}
       sx={{
-        marginLeft: '10px',
-        borderRadius: '4px',
-        width: '40%',
+        marginLeft: "10px",
+        borderRadius: "4px",
+        width: "40%",
       }}
     />
   );
@@ -72,18 +73,16 @@ const LoadingSpinner: React.FC = () => {
   return (
     <div
       style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
       }}
     >
       <div className="custom-spinner" />
     </div>
   );
 };
-
-
 
 export default function Page() {
   const [isFilterModalOpen, setFilterModalOpen] = useState(false);
@@ -105,9 +104,10 @@ export default function Page() {
     }
   }, [profile, fetchApplications]);
 
-  if (!applicationsLoaded) {
-    return <LoadingSpinner />;
-  }
+  // TODO ADD skeleton list here here
+  // if (!applicationsLoaded) {
+  //   return <LoadingSpinner />;
+  // }
 
   return (
     <div className="page-container">
@@ -124,7 +124,10 @@ export default function Page() {
             <span style={{ fontWeight: "bold" }}>company threads</span>.
           </Typography>
         </div>
-        <SearchBar resetSearch={resetSearch} onResetComplete={() => setResetSearch(false)} />
+        <SearchBar
+          resetSearch={resetSearch}
+          onResetComplete={() => setResetSearch(false)}
+        />
         <Button
           variant="contained"
           style={{
@@ -166,9 +169,13 @@ export default function Page() {
       </div>
       <div className="card-filter-container">
         <div className="opportunity-list-container">
-          <OpportunityList applicationsLoaded={applicationsLoaded} />
+          <OpportunityCardSkeleton />
+          {/* <OpportunityList applicationsLoaded={applicationsLoaded} /> */}
         </div>
-        <Filters open={isFilterModalOpen} handleClose={() => setFilterModalOpen(false)} />
+        <Filters
+          open={isFilterModalOpen}
+          handleClose={() => setFilterModalOpen(false)}
+        />
       </div>
     </div>
   );

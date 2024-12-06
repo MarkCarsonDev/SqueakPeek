@@ -8,13 +8,16 @@ import { fetchOpportunities } from "@/lib/utils/fetchOpportunities";
 import { SelectedFilters } from "./Filters";
 import { Typography, Button, Box, Skeleton } from "@mui/material";
 import { Database } from "@/lib/types/database.types";
+import { OpportunityCardSkeleton } from "./OpportunityCardSkeleton";
 
 interface OpportunityListProps {
   applicationsLoaded: boolean; // Prop to ensure data loads after applications are fetched
 }
 
 export function OpportunityList({ applicationsLoaded }: OpportunityListProps) {
-  const [shownOpportunities, setShownOpportunities] = useState<OpportunityCardProps[]>([]);
+  const [shownOpportunities, setShownOpportunities] = useState<
+    OpportunityCardProps[]
+  >([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalDBCount, setTotalDBCount] = useState<number>(0);
@@ -60,7 +63,12 @@ export function OpportunityList({ applicationsLoaded }: OpportunityListProps) {
     setLoading(true);
     const offset = (page - 1) * limit;
 
-    const { data, error, totalCount } = await fetchOpportunities(supabase, filters, limit, offset);
+    const { data, error, totalCount } = await fetchOpportunities(
+      supabase,
+      filters,
+      limit,
+      offset
+    );
 
     if (error) {
       console.error("Error fetching opportunities:", error);
@@ -72,55 +80,62 @@ export function OpportunityList({ applicationsLoaded }: OpportunityListProps) {
 
     if (data) {
       const mappedData: OpportunityCardProps[] = data
-            .map((item) => {
-                const { thread_id: conversation_id } = item;
+        .map((item) => {
+          const { thread_id: conversation_id } = item;
 
-                const opportunity =
-                    item.opportunity as unknown as Database["public"]["Tables"]["opportunity"]["Row"] & {
-                        opportunity_tracking?: Database["public"]["Tables"]["opportunity_tracking"]["Row"][] | null;
-                    };
-                if (!opportunity) {
-                    console.warn("Unexpected opportunity structure:", opportunity);
-                    return null;
-                }
-                // Sum up the fields from all `opportunity_tracking` entries
-                const aggregate = opportunity.opportunity_tracking?.reduce(
-                    (totals, tracking) => {
-                        return {
-                            rejected: totals.rejected + (tracking.rejected || 0),
-                            interviewing: totals.interviewing + (tracking.interviewing || 0),
-                            offered: totals.offered + (tracking.offer || 0),
-                            oa: totals.oa + (tracking.online_assessment || 0),
-                            applied: totals.applied + (tracking.applied || 0),
-                            totalApplied: totals.totalApplied + (tracking.total_applied || 0),
-                        };
-                    },
-                    {
-                        rejected: 0,
-                        interviewing: 0,
-                        offered: 0,
-                        oa: 0,
-                        applied: 0,
-                        totalApplied: 0,
-                    }
-                );
+          const opportunity =
+            item.opportunity as unknown as Database["public"]["Tables"]["opportunity"]["Row"] & {
+              opportunity_tracking?:
+                | Database["public"]["Tables"]["opportunity_tracking"]["Row"][]
+                | null;
+            };
+          if (!opportunity) {
+            console.warn("Unexpected opportunity structure:", opportunity);
+            return null;
+          }
+          // Sum up the fields from all `opportunity_tracking` entries
+          const aggregate = opportunity.opportunity_tracking?.reduce(
+            (totals, tracking) => {
+              return {
+                rejected: totals.rejected + (tracking.rejected || 0),
+                interviewing:
+                  totals.interviewing + (tracking.interviewing || 0),
+                offered: totals.offered + (tracking.offer || 0),
+                oa: totals.oa + (tracking.online_assessment || 0),
+                applied: totals.applied + (tracking.applied || 0),
+                totalApplied:
+                  totals.totalApplied + (tracking.total_applied || 0),
+              };
+            },
+            {
+              rejected: 0,
+              interviewing: 0,
+              offered: 0,
+              oa: 0,
+              applied: 0,
+              totalApplied: 0,
+            }
+          );
 
-                return {
-                    conversation_id,
-                    opportunity: opportunity as Database["public"]["Tables"]["opportunity"]["Row"] & {
-                        opportunity_tracking: Database["public"]["Tables"]["opportunity_tracking"]["Row"][] | null;
-                    },
-                    aggregate: aggregate || {
-                        rejected: 0,
-                        interviewing: 0,
-                        offered: 0,
-                        oa: 0,
-                        applied: 0,
-                        totalApplied: 0,
-                    },
-                };
-            })
-            .filter((item) => item !== null); // Remove any `null` values
+          return {
+            conversation_id,
+            opportunity:
+              opportunity as Database["public"]["Tables"]["opportunity"]["Row"] & {
+                opportunity_tracking:
+                  | Database["public"]["Tables"]["opportunity_tracking"]["Row"][]
+                  | null;
+              },
+            aggregate: aggregate || {
+              rejected: 0,
+              interviewing: 0,
+              offered: 0,
+              oa: 0,
+              applied: 0,
+              totalApplied: 0,
+            },
+          };
+        })
+        .filter((item) => item !== null); // Remove any `null` values
 
       setShownOpportunities((prev) =>
         page === 1 ? mappedData : [...prev, ...mappedData]
@@ -136,13 +151,10 @@ export function OpportunityList({ applicationsLoaded }: OpportunityListProps) {
     setCurrentPage((prevPage) => prevPage + 1);
   };
 
+  // TODO Add Skeleton list here
   // Render Skeleton while loading the first page
   if (loading && currentPage === 1) {
-    return (
-      <Box>
-        <Skeleton variant="rectangular" width="100%" height={118} />
-      </Box>
-    );
+    return <OpportunityCardSkeleton />;
   }
 
   // Display a message if no results are found
@@ -156,7 +168,9 @@ export function OpportunityList({ applicationsLoaded }: OpportunityListProps) {
           justifyContent: "center",
           alignItems: "center",
         }}
-      > We couldn&apos;t find any opportunities that match your criteria...
+      >
+        {" "}
+        We couldn&apos;t find any opportunities that match your criteria...
       </Typography>
     );
   }
@@ -178,14 +192,15 @@ export function OpportunityList({ applicationsLoaded }: OpportunityListProps) {
       {/* Load more button */}
       {hasMore && !loading && (
         <Button onClick={handleLoadMore}>
-          Load More ({Math.min(limit, totalDBCount - currentPage * limit)} remaining)
+          Load More ({Math.min(limit, totalDBCount - currentPage * limit)}{" "}
+          remaining)
         </Button>
       )}
 
       {/* End of results message */}
       {!hasMore && !loading && (
         <Typography sx={{ textAlign: "center", marginTop: "2rem" }}>
-        You&apos;ve reached the end of the list!
+          You&apos;ve reached the end of the list!
         </Typography>
       )}
     </Box>
