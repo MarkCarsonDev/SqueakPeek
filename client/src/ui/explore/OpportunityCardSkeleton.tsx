@@ -1,10 +1,4 @@
-import {
-  Card,
-  Skeleton,
-  CardHeader,
-  CardContent,
-  IconButton,
-} from "@mui/material";
+import { Card, Skeleton, CardHeader, CardContent } from "@mui/material";
 export function OpportunityCardSkeleton() {
   return (
     <Card

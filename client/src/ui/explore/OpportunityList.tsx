@@ -6,9 +6,8 @@ import { OpportunityCard, OpportunityCardProps } from "./OpportunityCard";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { fetchOpportunities } from "@/lib/utils/fetchOpportunities";
 import { SelectedFilters } from "./Filters";
-import { Typography, Button, Box, Skeleton } from "@mui/material";
+import { Typography, Button, Box } from "@mui/material";
 import { Database } from "@/lib/types/database.types";
-import { OpportunityCardSkeleton } from "./OpportunityCardSkeleton";
 import { OpportunityCardSkeletonList } from "./OpportunityCardSkeletonList";
 
 interface OpportunityListProps {
