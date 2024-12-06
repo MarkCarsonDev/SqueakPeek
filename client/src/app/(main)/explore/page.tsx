@@ -10,7 +10,6 @@ import { useTrack } from "@/lib/store/track";
 import { useProfile } from "@/lib/store/profile";
 import { faFilter, faRedo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { OpportunityCardSkeleton } from "@/ui/explore/OpportunityCardSkeleton";
 
 interface SearchBarProps {
   resetSearch: boolean;
@@ -105,9 +104,9 @@ export default function Page() {
   }, [profile, fetchApplications]);
 
   // TODO ADD skeleton list here here
-  // if (!applicationsLoaded) {
-  //   return <LoadingSpinner />;
-  // }
+  if (!applicationsLoaded) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="page-container">
@@ -169,8 +168,7 @@ export default function Page() {
       </div>
       <div className="card-filter-container">
         <div className="opportunity-list-container">
-          <OpportunityCardSkeleton />
-          {/* <OpportunityList applicationsLoaded={applicationsLoaded} /> */}
+          <OpportunityList applicationsLoaded={applicationsLoaded} />
         </div>
         <Filters
           open={isFilterModalOpen}

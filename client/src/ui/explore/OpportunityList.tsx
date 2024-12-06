@@ -9,6 +9,7 @@ import { SelectedFilters } from "./Filters";
 import { Typography, Button, Box, Skeleton } from "@mui/material";
 import { Database } from "@/lib/types/database.types";
 import { OpportunityCardSkeleton } from "./OpportunityCardSkeleton";
+import { OpportunityCardSkeletonList } from "./OpportunityCardSkeletonList";
 
 interface OpportunityListProps {
   applicationsLoaded: boolean; // Prop to ensure data loads after applications are fetched
@@ -154,7 +155,7 @@ export function OpportunityList({ applicationsLoaded }: OpportunityListProps) {
   // TODO Add Skeleton list here
   // Render Skeleton while loading the first page
   if (loading && currentPage === 1) {
-    return <OpportunityCardSkeleton />;
+    return <OpportunityCardSkeletonList />;
   }
 
   // Display a message if no results are found
