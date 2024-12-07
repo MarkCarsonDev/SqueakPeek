@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Typography } from "@mui/material";
 import { InputField } from "@/ui/InputField"; // Assuming you're using the same InputField component
 import { createSupabaseClient } from "@/lib/supabase/client"; // Client-side supabase initialization
 import "./reset_password.css"; // Import CSS for styling
+
 
 const ResetPasswordPage = () => {
   const [password, setPassword] = useState("");
@@ -13,14 +14,21 @@ const ResetPasswordPage = () => {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [isTokenVerified, setIsTokenVerified] = useState(false); // Track token verification status
+  const [code, setCode] = useState<string | null>(null);
   const router = useRouter();
-
-  // Get the 'code' parameter from the URL query string
-  const urlParams = new URLSearchParams(window.location.search);
-  const code = urlParams.get("code");
-
   const supabase = createSupabaseClient(); // Use the Supabase client for client-side
 
+  // Get the 'code' parameter from the URL query string
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const urlParams = new URLSearchParams(window.location.search);
+      setCode(urlParams.get("code"));
+    }
+    
+    //const code = urlParams.get("code");
+  }, []);
+
+  
   // Token verification process
   useEffect(() => {
     if (code) {
