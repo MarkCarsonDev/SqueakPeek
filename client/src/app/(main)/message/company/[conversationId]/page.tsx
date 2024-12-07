@@ -1,8 +1,9 @@
-"use client"
-import React from "react";
+"use client";
+import React, { useEffect } from "react";
 import { OpportunityStats } from "@/ui/message/OpportunityStats";
 import { Conversation } from "@/ui/message/Conversation";
-import { useEffect } from "react";
+import usePageHeader from "@/lib/hooks/usePageHeader"; // Import the custom hook
+
 export default function Page({
   params,
 }: {
@@ -10,17 +11,11 @@ export default function Page({
 }) {
   const { conversationId } = params;
 
-  useEffect(() => {
-    // Dynamically setting title and description
-    document.title = "Company Conversation - Engage in Discussions";
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute(
-        "content",
-        "Participate in company-specific conversations, share insights, and connect with other applicants in this thread."
-      );
-    }
-  }, []);
+  // Set page title and meta description
+  usePageHeader(
+    "Company Conversation - Engage in Discussions",
+    "Participate in company-specific conversations, share insights, and connect with other applicants in this thread."
+  );
 
   return (
     <div

@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Typography, Button } from "@mui/material";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import usePageHeader from "@/lib/hooks/usePageHeader"; // Import the custom hook
 
 /**
  * Company Threads section in the messages page
@@ -11,17 +11,11 @@ import { useEffect } from "react";
 export default function Page() {
   const router = useRouter();
 
-  useEffect(() => {
-    // Dynamically setting title and description
-    document.title = "Company Threads - Chat with Applicants";
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute(
-        "content",
-        "Join company-specific threads to chat with other applicants, share insights, and discuss the application process."
-      );
-    }
-  }, []);
+  // Set page title and meta description
+  usePageHeader(
+    "Company Threads - Chat with Applicants",
+    "Join company-specific threads to chat with other applicants, share insights, and discuss the application process."
+  );
 
   return (
     <div
