@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import { OpportunityStats } from "@/ui/message/OpportunityStats";
 import { Conversation } from "@/ui/message/Conversation";
 import usePageHeader from "@/lib/hooks/usePageHeader"; // Import the custom hook

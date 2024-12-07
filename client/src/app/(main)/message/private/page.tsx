@@ -2,23 +2,17 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Typography } from "@mui/material";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
-import { useEffect } from "react";
+import usePageHeader from "@/lib/hooks/usePageHeader"; // Import the custom hook
+
 /**
  * Private Message section in the messages page
  */
 export default function Page() {
-
-  useEffect(() => {
-    // Dynamically setting title and description
-    document.title = "Private Messages - Chat Privately with Applicants";
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute(
-        "content",
-        "Send and receive private messages with other applicants to discuss opportunities, share insights, or network."
-      );
-    }
-  }, []);
+  // Set page title and meta description
+  usePageHeader(
+    "Private Messages - Chat Privately with Applicants",
+    "Send and receive private messages with other applicants to discuss opportunities, share insights, or network."
+  );
 
   return (
     <div
