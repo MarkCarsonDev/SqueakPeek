@@ -1,20 +1,14 @@
 "use client";
 
 import { Typography } from "@mui/material";
-import { useEffect } from "react";
+import usePageHeader from "@/lib/hooks/usePageHeader"; // Import the custom hook
 
 export default function Page() {
-  useEffect(() => {
-    // Dynamically setting title and description
-    document.title = "Thread - Discuss and Collaborate";
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute(
-        "content",
-        "Join the discussion and collaborate with others in various threads. Share insights, ask questions, and connect with the community."
-      );
-    }
-  }, []);
+  // Set page title and meta description using the custom hook
+  usePageHeader(
+    "Thread - Discuss and Collaborate",
+    "Join the discussion and collaborate with others in various threads. Share insights, ask questions, and connect with the community."
+  );
 
   return <Typography variant="h2">Thread</Typography>;
 }

@@ -1,14 +1,15 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Button, Typography} from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileCirclePlus } from "@fortawesome/free-solid-svg-icons";
 import NewApplicationModal from "@/ui/track/NewApplicationModal";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
-import { StageColumn, StageColumnProps } from "@/ui/track/StageColumn"; 
+import { StageColumn, StageColumnProps } from "@/ui/track/StageColumn";
 import { Application, ApplicationStage, useTrack } from "@/lib/store/track";
 import ApplicationSearchBar from "@/ui/track/ApplicationSearchBar";
-import { useProfile } from "@/lib/store/profile"; 
+import { useProfile } from "@/lib/store/profile";
+import usePageHeader from "@/lib/hooks/usePageHeader"; // Import the custom hook
 import "./tracking.css";
 
 export default function Page() {
@@ -16,6 +17,13 @@ export default function Page() {
   const [applicationStatus, setApplicationStatus] = useState<ApplicationStage>("Applied");
   const [selectedApplication, setSelectedApplication] = useState<Application | undefined>();
   const [preventClick, setPreventClick] = useState(false);
+  
+  // Set page title and meta description using the custom hook
+  usePageHeader(
+    "Track Applications - Manage Your Job Search",
+    "Track your job applications efficiently across various stages. Manage your pipeline from applied to offer, and stay organized throughout your job search."
+  );
+
   // Retrieve application data and actions from the Zustand store
   const {
     Applied,
@@ -31,19 +39,7 @@ export default function Page() {
   const { profile } = useProfile();
 
   useEffect(() => {
-    // Dynamically setting title and description
-    document.title = "Track Applications - Manage Your Job Search";
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute(
-        "content",
-        "Track your job applications efficiently across various stages. Manage your pipeline from applied to offer, and stay organized throughout your job search."
-      );
-    }
-  }, []);
-
-  // Fetch applications when profile is available
-  useEffect(() => {
+    // Fetch applications when profile is available
     if (profile) {
       fetchApplications(profile);
     }
@@ -75,9 +71,9 @@ export default function Page() {
       setPreventClick(false); // Reset preventClick to allow subsequent clicks
       return;
     }
-    setApplicationStatus(stage); 
-    setSelectedApplication(application); 
-    setOpenModal(true); 
+    setApplicationStatus(stage);
+    setSelectedApplication(application);
+    setOpenModal(true);
   };
 
   // Function to close the modal and reset the selected application
@@ -170,7 +166,7 @@ export default function Page() {
               stageColor={stage.stageColor}
               applications={stage.applications}
               handleOpenModal={handleOpenModal}
-              onCardClick={(application) => {if (!preventClick) {handleOpenModal(stage.stage, application)}}}
+              onCardClick={(application) => { if (!preventClick) { handleOpenModal(stage.stage, application) }}}
               setPreventClick={setPreventClick}
             />
           ))}
