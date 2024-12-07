@@ -110,11 +110,11 @@ export default function Page() {
 
   return (
     <div className="page-container">
+       <Typography sx={{ margin: "1rem 1rem", width: "100%", textAlign: "left" }} variant="h5">
+            <span style={{ fontWeight: "bold" }}>Explore</span> Opportunities
+        </Typography>
       <div className="header-search-container">
         <div className="header-text">
-          <Typography sx={{ margin: "1rem 1rem" }} variant="h5">
-            <span style={{ fontWeight: "bold" }}>Explore</span> Opportunities
-          </Typography>
           <Typography sx={{ marginLeft: "1rem" }} variant="body1">
             Explore entry-level roles, discover the application pipeline,
           </Typography>
@@ -135,6 +135,7 @@ export default function Page() {
             width: "auto",
             borderRadius: "20px",
             boxShadow: "none",
+            margin: "0.5rem 0",
           }}
           onClick={() => setFilterModalOpen(true)}
         >
@@ -154,6 +155,7 @@ export default function Page() {
             width: "auto",
             borderRadius: "20px",
             boxShadow: "none",
+            margin: "0.5rem 0",
           }}
           onClick={handleResetFilters}
         >
