@@ -10,6 +10,7 @@ import { useTrack } from "@/lib/store/track";
 import { useProfile } from "@/lib/store/profile";
 import { faFilter, faRedo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import usePageHeader from "@/lib/hooks/usePageHeader"; // Import the custom hook
 
 interface SearchBarProps {
   resetSearch: boolean;
@@ -68,6 +69,7 @@ function SearchBar({ resetSearch, onResetComplete }: SearchBarProps) {
     />
   );
 }
+
 const LoadingSpinner: React.FC = () => {
   return (
     <div
@@ -96,14 +98,12 @@ export default function Page() {
   const { fetchApplications } = useTrack();
   const { profile } = useProfile();
   const [applicationsLoaded, setApplicationsLoaded] = useState(false);
-  useEffect(() => {
-    // Dynamically setting title and description using next/head
-    document.title = "Explore Opportunities - Discover Entry-Level Roles";
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute("content", "Explore entry-level job opportunities, discover the application process, and connect with other applicants in company threads.");
-    }
-  }, []);
+
+  // Set page title and meta description
+  usePageHeader(
+    "Explore Opportunities - Discover Entry-Level Roles",
+    "Explore entry-level job opportunities, discover the application process, and connect with other applicants in company threads."
+  );
 
   useEffect(() => {
     if (profile) {
@@ -119,9 +119,9 @@ export default function Page() {
 
   return (
     <div className="page-container">
-       <Typography sx={{ margin: "1rem 1rem", width: "100%", textAlign: "left" }} variant="h5">
-            <span style={{ fontWeight: "bold" }}>Explore</span> Opportunities
-        </Typography>
+      <Typography sx={{ margin: "1rem 1rem", width: "100%", textAlign: "left" }} variant="h5">
+        <span style={{ fontWeight: "bold" }}>Explore</span> Opportunities
+      </Typography>
       <div className="header-search-container">
         <div className="header-text">
           <Typography sx={{ marginLeft: "1rem" }} variant="body1">
