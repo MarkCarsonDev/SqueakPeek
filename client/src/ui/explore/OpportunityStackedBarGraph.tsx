@@ -158,6 +158,9 @@ export function OpportunityStackedBarGraph({
       legend: {
         display: false, // Hide dataset labels (legend)
       },
+      datalabels: {
+        display: false,
+      },
     },
   };
 

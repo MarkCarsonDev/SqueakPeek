@@ -15,17 +15,18 @@ import {
   faAnglesDown,
   faComment,
   faReply,
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { OpportunityStackedBarGraph } from "./OpportunityStackedBarGraph";
 import Link from "next/link";
 import { useFetchCompanyLogo } from "@/lib/hooks/useFetchCompanyLogo";
 import { OpportunityStatsModal } from "./OpportunityStatsModal";
-// import { OpportunityBookmark } from "../message/OpportunityBookmark";
-// import { useTrack, Application } from "@/lib/store/track";
+import { useTrack, Application, ApplicationStage } from "@/lib/store/track";
 import { useProfile } from "@/lib/store/profile";
-// import { convertToYYYYMMDD } from "@/lib/utils/dateUtils";
-// import { useAlert } from "@/lib/store/alert";
+import { convertToYYYYMMDD } from "@/lib/utils/dateUtils";
+import { useAlert } from "@/lib/store/alert";
+import { useState, useEffect } from "react";
 
 interface jobStats {
   status: string;
@@ -60,10 +61,9 @@ export function OpportunityCard({
 }: OpportunityCardProps) {
   // TODO: Replace this with real status from props
   // const appliedStatus = false;
-  const hiringStatus = false;
 
-  // const { setAlert } = useAlert();
-  // const { addApplication, checkExistApplication } = useTrack();
+  const { setAlert } = useAlert();
+  const { addApplication, checkExistApplication } = useTrack();
   const { profile } = useProfile();
 
   // Array for mapping the job stats
@@ -95,60 +95,61 @@ export function OpportunityCard({
     },
   ];
 
-  const { company_name, role_title, type } = opportunity;
-  const { rejected, interviewing, offered, totalApplied, oa, applied } = aggregate;
-  // const isAppliedColor = appliedStatus ? "green" : "red";
-  const isHiringColor = hiringStatus ? "green" : "red";
+  const { company_name, role_title, type, opportunity_id, hiring } = opportunity;
+  const { rejected, interviewing, offered, totalApplied, oa, applied } =
+    aggregate;
+  const isHiringColor = hiring ? "green" : "red";
 
   const logoUrl = useFetchCompanyLogo(company_name);
 
-  // const [addApp, setAddApp] = useState(false);
+  const [addApp, setAddApp] = useState(false);
 
-  // useEffect(() => {
-  //   if (opportunity_id) {
-  //     const exists = checkExistApplication(opportunity_id);
-  //     setAddApp(exists);
-  //   }
-  // }, [opportunity_id, checkExistApplication]);
+  useEffect(() => {
+    if (opportunity_id) {
+      const exists = checkExistApplication(opportunity_id);
+      setAddApp(exists);
+    }
+  }, [opportunity_id, checkExistApplication]);
 
-  // const added = addApp ? "Added" : "Add";
+  const added = addApp ? "Added" : "Add";
+  const isAppliedColor = addApp ? "green" : "red";
 
-  // const today = new Date();
-  // const formattedDate = today.toLocaleDateString();
+  const today = new Date();
+  const formattedDate = today.toLocaleDateString();
 
-  // const updatedFields: Partial<Application> = {
-  //   created_at: convertToYYYYMMDD(formattedDate),
-  //   role_title: role_title,
-  //   type: type,
-  //   company_name: company_name,
-  //   status: "Applied",
-  //   profile_id: profile?.profile_id,
-  // };
-
+  const updatedFields: Partial<Application> = {
+    created_at: convertToYYYYMMDD(formattedDate),
+    role_title: role_title,
+    type: type,
+    company_name: company_name,
+    status: "Applied",
+    profile_id: profile?.profile_id,
+  };
 
   if (!profile) {
     return null; // Return `null` explicitly for clarity
   }
 
-  // const handleaddapplication = () => {
-  //   if (checkExistApplication(opportunity_id) === false) {
-  //     addApplication(
-  //       "Applied" as ApplicationStage,
-  //       updatedFields as Application,
-  //       profile
-  //     );
-  //     setAlert({
-  //       message: "Application added to your tracker",
-  //       type: "success",
-  //     });
-  //   } else {
-  //     setAlert({
-  //       message: "Application already exists in your tracker",
-  //       type: "error",
-  //     });
-  //   }
-  //   // addApplication("Applied" as ApplicationStage, updatedFields as Application, profile);
-  // };
+  const handleaddapplication = () => {
+    if (checkExistApplication(opportunity_id) === false) {
+      addApplication(
+        "Applied" as ApplicationStage,
+        updatedFields as Application,
+        profile
+      );
+      setAddApp(true);
+      setAlert({
+        message: "Application added to your tracker",
+        type: "success",
+      });
+    } else {
+      setAlert({
+        message: "Application already exists in your tracker",
+        type: "error",
+      });
+    }
+    // addApplication("Applied" as ApplicationStage, updatedFields as Application, profile);
+  };
 
   const handleShareClick = () => {
     if (navigator.share) {
@@ -277,15 +278,15 @@ export function OpportunityCard({
             justifyContent: "flex-start",
           }}
         >
-          {/* <Chip
-            label={appliedStatus ? "Applied" : "Not Applied"}
+          <Chip
+            label={addApp ? "Applied" : "Not Applied"}
             variant="outlined"
             style={{
               color: isAppliedColor,
               borderColor: isAppliedColor,
               margin: 0,
             }}
-          /> */}
+          />
 
           <Chip
             icon={
@@ -294,10 +295,10 @@ export function OpportunityCard({
                   marginLeft: ".5rem",
                   color: isHiringColor,
                 }}
-                icon={hiringStatus ? faAnglesUp : faAnglesDown}
+                icon={hiring ? faAnglesUp : faAnglesDown}
               />
             }
-            label={hiringStatus ? "Actively Hiring" : "Not Hiring"}
+            label={hiring ? "Actively Hiring" : "Not Hiring"}
             variant="outlined"
             style={{
               color: isHiringColor,
@@ -349,28 +350,48 @@ export function OpportunityCard({
             applied={applied}
           />
         </div>
-        
-          <Typography variant="h6" sx={{ textAlign: "center", justifyContent: "center" }}>
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            width: "100%",
+            alignItems: "center",
+          }}
+        >
+          <div style={{ flex: 1 }}></div>
+          <Typography
+            variant="h6"
+            sx={{ textAlign: "center", justifyContent: "center", flex: 1 }}
+          >
             Total Applied: {totalApplied}
           </Typography>
 
-          {/* <Button
-            onClick={handleaddapplication}
-            variant="contained"
-            style={{
-              height: "40px",
-              width: "auto",
-              borderRadius: "20px",
-              boxShadow: "none",
-              backgroundColor: addApp ? "gray" : "#496FFF",
-            }}
-          >
-            <FontAwesomeIcon
-              icon={faPlus}
-              style={{ color: "white", marginRight: "5px", fontSize: "1.5rem" }}
-            />
-            <Typography style={{ color: "white" }}>{added}</Typography>
-          </Button> */}
+          <div style={{ flex: 1, display: "flex", justifyContent: "flex-end" }}>
+            <Button
+              onClick={handleaddapplication}
+              variant="contained"
+              style={{
+                height: "40px",
+                width: "auto",
+                borderRadius: "20px",
+                boxShadow: "none",
+                backgroundColor: addApp ? "gray" : "#496FFF",
+
+              }}
+            >
+              <FontAwesomeIcon
+                icon={faPlus}
+                style={{
+                  color: "white",
+                  marginRight: "5px",
+                  fontSize: "1.5rem",
+                }}
+              />
+              <Typography style={{ color: "white" }}>{added}</Typography>
+            </Button>
+          </div>
+        </div>
       </CardContent>
     </Card>
   );

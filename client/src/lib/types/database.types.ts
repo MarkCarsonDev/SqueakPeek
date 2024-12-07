@@ -147,6 +147,7 @@ export type Database = {
         Row: {
           company_name: string
           created_at: string
+          hiring: boolean | null
           opportunity_id: string
           role_title: string
           type: Database["public"]["Enums"]["OpportunityType"]
@@ -154,6 +155,7 @@ export type Database = {
         Insert: {
           company_name: string
           created_at?: string
+          hiring?: boolean | null
           opportunity_id?: string
           role_title: string
           type: Database["public"]["Enums"]["OpportunityType"]
@@ -161,6 +163,7 @@ export type Database = {
         Update: {
           company_name?: string
           created_at?: string
+          hiring?: boolean | null
           opportunity_id?: string
           role_title?: string
           type?: Database["public"]["Enums"]["OpportunityType"]
@@ -208,7 +211,7 @@ export type Database = {
           {
             foreignKeyName: "opportunity_tracking_opportunity_id_fkey"
             columns: ["opportunity_id"]
-            isOneToOne: true
+            isOneToOne: false
             referencedRelation: "opportunity"
             referencedColumns: ["opportunity_id"]
           },

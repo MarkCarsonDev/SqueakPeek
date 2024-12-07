@@ -64,8 +64,6 @@ export function Conversation({
     };
     doesConversationExist().then((res) => {
       const { data, error } = res;
-      console.log("data res: ", data);
-      console.log("error: ", error);
       if (error || !data) {
         // TODO navigate to not found page
         setNotFound(true);
@@ -93,6 +91,7 @@ export function Conversation({
   }, [setConversationType, isPrivateConversation]);
 
   useEffect(() => {
+    clearConversation();
     return () => {
       clearConversation();
     };
