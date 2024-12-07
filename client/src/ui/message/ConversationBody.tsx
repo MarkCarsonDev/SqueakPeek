@@ -65,10 +65,9 @@ export const ConversationBody = memo(function ConversationBody({
   }, [incrementFetchCount]);
 
   useEffect(() => {
-    const fetchCount = useConversation.getState().fetchCount;
     if (!isLoading) {
       const messages = useConversation.getState().messages;
-      const jumpMessageIndex = messages.length - 50 * fetchCount;
+      const jumpMessageIndex = 50;
       if (messages.length > jumpMessageIndex && messages[jumpMessageIndex]) {
         document
           .getElementById(messages[jumpMessageIndex].messageId)

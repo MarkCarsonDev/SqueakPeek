@@ -1,13 +1,13 @@
-'use client';
+"use client";
 import React, { useState, useEffect } from "react";
 import { Typography, Button, TextField, InputAdornment } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import "@/app/(main)/explore/explore.css";
 import { OpportunityList } from "@/ui/explore/OpportunityList";
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams, useRouter } from "next/navigation";
 import { Filters } from "@/ui/explore/Filters";
 import { useTrack } from "@/lib/store/track";
-import { useProfile } from "@/lib/store/profile"; 
+import { useProfile } from "@/lib/store/profile";
 import { faFilter, faRedo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -22,7 +22,7 @@ function SearchBar({ resetSearch, onResetComplete }: SearchBarProps) {
   const [inputValue, setInputValue] = useState<string>("");
 
   useEffect(() => {
-    const initialQuery = searchParams.get('searchQuery') || "";
+    const initialQuery = searchParams.get("searchQuery") || "";
     setInputValue(initialQuery);
   }, [searchParams]);
 
@@ -32,9 +32,9 @@ function SearchBar({ resetSearch, onResetComplete }: SearchBarProps) {
 
     const params = new URLSearchParams(searchParams.toString());
     if (query) {
-      params.set('searchQuery', query);
+      params.set("searchQuery", query);
     } else {
-      params.delete('searchQuery');
+      params.delete("searchQuery");
     }
 
     router.replace(`?${params.toString()}`);
@@ -61,14 +61,27 @@ function SearchBar({ resetSearch, onResetComplete }: SearchBarProps) {
         ),
       }}
       sx={{
-        marginLeft: '10px',
-        borderRadius: '4px',
-        width: '40%',
+        marginLeft: "10px",
+        borderRadius: "4px",
+        width: "40%",
       }}
     />
   );
 }
-
+const LoadingSpinner: React.FC = () => {
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+      }}
+    >
+      <div className="custom-spinner" />
+    </div>
+  );
+};
 
 export default function Page() {
   const [isFilterModalOpen, setFilterModalOpen] = useState(false);
@@ -82,7 +95,7 @@ export default function Page() {
 
   const { fetchApplications } = useTrack();
   const { profile } = useProfile();
-
+  const [applicationsLoaded, setApplicationsLoaded] = useState(false);
   useEffect(() => {
     // Dynamically setting title and description using next/head
     document.title = "Explore Opportunities - Discover Entry-Level Roles";
@@ -94,17 +107,23 @@ export default function Page() {
 
   useEffect(() => {
     if (profile) {
-      fetchApplications(profile);
+      console.log("Fetching applications...");
+      fetchApplications(profile).finally(() => setApplicationsLoaded(true));
     }
   }, [profile, fetchApplications]);
 
+  // TODO ADD skeleton list here here
+  if (!applicationsLoaded) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <div className="page-container">
+       <Typography sx={{ margin: "1rem 1rem", width: "100%", textAlign: "left" }} variant="h5">
+            <span style={{ fontWeight: "bold" }}>Explore</span> Opportunities
+        </Typography>
       <div className="header-search-container">
         <div className="header-text">
-          <Typography sx={{ margin: "1rem 1rem" }} variant="h5">
-            <span style={{ fontWeight: "bold" }}>Explore</span> Opportunities
-          </Typography>
           <Typography sx={{ marginLeft: "1rem" }} variant="body1">
             Explore entry-level roles, discover the application pipeline,
           </Typography>
@@ -113,7 +132,10 @@ export default function Page() {
             <span style={{ fontWeight: "bold" }}>company threads</span>.
           </Typography>
         </div>
-        <SearchBar resetSearch={resetSearch} onResetComplete={() => setResetSearch(false)} />
+        <SearchBar
+          resetSearch={resetSearch}
+          onResetComplete={() => setResetSearch(false)}
+        />
         <Button
           variant="contained"
           style={{
@@ -122,6 +144,7 @@ export default function Page() {
             width: "auto",
             borderRadius: "20px",
             boxShadow: "none",
+            margin: "0.5rem 0",
           }}
           onClick={() => setFilterModalOpen(true)}
         >
@@ -141,6 +164,7 @@ export default function Page() {
             width: "auto",
             borderRadius: "20px",
             boxShadow: "none",
+            margin: "0.5rem 0",
           }}
           onClick={handleResetFilters}
         >
@@ -155,9 +179,12 @@ export default function Page() {
       </div>
       <div className="card-filter-container">
         <div className="opportunity-list-container">
-          <OpportunityList />
+          <OpportunityList applicationsLoaded={applicationsLoaded} />
         </div>
-        <Filters open={isFilterModalOpen} handleClose={() => setFilterModalOpen(false)} />
+        <Filters
+          open={isFilterModalOpen}
+          handleClose={() => setFilterModalOpen(false)}
+        />
       </div>
     </div>
   );
