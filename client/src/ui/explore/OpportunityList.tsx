@@ -1,73 +1,208 @@
+"use client";
+
 import React, { useEffect, useState, useMemo } from "react";
-// import { useRouter } from 'next/navigation'; // To handle URL params
-// import { SelectedFilters } from './Filters';
+import { useSearchParams } from "next/navigation";
 import { OpportunityCard, OpportunityCardProps } from "./OpportunityCard";
 import { createSupabaseClient } from "@/lib/supabase/client";
+import { fetchOpportunities } from "@/lib/utils/fetchOpportunities";
+import { SelectedFilters } from "./Filters";
+import { Typography, Button, Box } from "@mui/material";
 import { Database } from "@/lib/types/database.types";
+import { OpportunityCardSkeletonList } from "./OpportunityCardSkeletonList";
 
-// TODO: Add filters to the OpportunityList component
-export function OpportunityList() {
+interface OpportunityListProps {
+  applicationsLoaded: boolean; // Prop to ensure data loads after applications are fetched
+}
+
+export function OpportunityList({ applicationsLoaded }: OpportunityListProps) {
   const [shownOpportunities, setShownOpportunities] = useState<
     OpportunityCardProps[]
   >([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const supabase = useMemo(() => createSupabaseClient(), []); // only creates it once when the OpportunityList components mounts
+  const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalDBCount, setTotalDBCount] = useState<number>(0);
+  const [hasMore, setHasMore] = useState(true);
+  const supabase = useMemo(() => createSupabaseClient(), []);
+  const searchParams = useSearchParams();
 
-  // Fetch all opportunities once when the component mounts
+  const limit = 33; // Number of opportunities per page
+
+  // Parse filters from searchParams
+  const filters: SelectedFilters = useMemo(() => {
+    const company = searchParams.getAll("company");
+    const jobPosition = searchParams.getAll("jobPosition");
+    const jobType = searchParams.getAll("jobType");
+    const searchQuery = searchParams.get("searchQuery") || undefined;
+
+    return {
+      company: company.length > 0 ? company : undefined,
+      jobPosition: jobPosition.length > 0 ? jobPosition : undefined,
+      jobType: jobType.length > 0 ? jobType : undefined,
+      searchQuery,
+    };
+  }, [searchParams]);
+
+  // Fetch opportunities when filters change
   useEffect(() => {
-    const fetchOpportunities = async () => {
-      setLoading(true);
-      const { data, error } = await supabase.from("conversation").select(`
-        *,
-        opportunity:opportunity_id (*)
-      `);
+    if (!applicationsLoaded) return; // Wait for applications to load
+    setLoading(true);
+    setCurrentPage(1);
+    setShownOpportunities([]);
+    setHasMore(true);
+    fetchFilteredData(1); // Fetch the first page
+  }, [filters, applicationsLoaded]);
 
-      if (error) {
-        console.error("Error fetching opportunities:", error);
-      } else if (data) {
-        const mappedData: OpportunityCardProps[] = data.map((item) => {
-          const { conversation_id } = item;
+  // Fetch additional pages when currentPage changes
+  useEffect(() => {
+    if (!applicationsLoaded || currentPage === 1) return; // Skip on initial load or if not ready
+    fetchFilteredData(currentPage);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage]);
+
+  const fetchFilteredData = async (page: number) => {
+    setLoading(true);
+    const offset = (page - 1) * limit;
+
+    const { data, error, totalCount } = await fetchOpportunities(
+      supabase,
+      filters,
+      limit,
+      offset
+    );
+
+    if (error) {
+      console.error("Error fetching opportunities:", error);
+      setLoading(false);
+      return;
+    }
+
+    setTotalDBCount(totalCount || 0);
+
+    if (data) {
+      const mappedData: OpportunityCardProps[] = data
+        .map((item) => {
+          const { thread_id: conversation_id } = item;
+
           const opportunity =
-            item.opportunity as unknown as Database["public"]["Tables"]["opportunity"]["Row"]; // converts opportunity of the type as listed in the database
+            item.opportunity as unknown as Database["public"]["Tables"]["opportunity"]["Row"] & {
+              opportunity_tracking?:
+                | Database["public"]["Tables"]["opportunity_tracking"]["Row"][]
+                | null;
+            };
+          if (!opportunity) {
+            console.warn("Unexpected opportunity structure:", opportunity);
+            return null;
+          }
+          // Sum up the fields from all `opportunity_tracking` entries
+          const aggregate = opportunity.opportunity_tracking?.reduce(
+            (totals, tracking) => {
+              return {
+                rejected: totals.rejected + (tracking.rejected || 0),
+                interviewing:
+                  totals.interviewing + (tracking.interviewing || 0),
+                offered: totals.offered + (tracking.offer || 0),
+                oa: totals.oa + (tracking.online_assessment || 0),
+                applied: totals.applied + (tracking.applied || 0),
+                totalApplied:
+                  totals.totalApplied + (tracking.total_applied || 0),
+              };
+            },
+            {
+              rejected: 0,
+              interviewing: 0,
+              offered: 0,
+              oa: 0,
+              applied: 0,
+              totalApplied: 0,
+            }
+          );
 
-          // TODO: Replace aggregate with real data
           return {
             conversation_id,
-            opportunity,
-            aggregate: {
-              totalApplied: 200,
-              interviewing: 12,
-              oa: 12,
-              offered: 12,
-              rejected: 12,
-              messages: 12,
+            opportunity:
+              opportunity as Database["public"]["Tables"]["opportunity"]["Row"] & {
+                opportunity_tracking:
+                  | Database["public"]["Tables"]["opportunity_tracking"]["Row"][]
+                  | null;
+              },
+            aggregate: aggregate || {
+              rejected: 0,
+              interviewing: 0,
+              offered: 0,
+              oa: 0,
+              applied: 0,
+              totalApplied: 0,
             },
           };
-        });
-        console.log("mappedData: ", mappedData);
+        })
+        .filter((item) => item !== null); // Remove any `null` values
 
-        setShownOpportunities(mappedData); // Initially, all opportunities are shown
-      }
+      setShownOpportunities((prev) =>
+        page === 1 ? mappedData : [...prev, ...mappedData]
+      );
 
-      setLoading(false);
-    };
+      setHasMore(offset + data.length < (totalCount || 0));
+    }
 
-    fetchOpportunities();
-  }, [supabase]);
+    setLoading(false);
+  };
 
-  if (loading) {
-    return <div>Loading...</div>;
+  const handleLoadMore = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
+
+  // TODO Add Skeleton list here
+  // Render Skeleton while loading the first page
+  if (loading && currentPage === 1) {
+    return <OpportunityCardSkeletonList />;
   }
 
-  if (shownOpportunities.length === 0) {
-    return <div>No opportunities found that match your criterion.</div>;
+  // Display a message if no results are found
+  if (!loading && totalDBCount === 0) {
+    return (
+      <Typography
+        sx={{
+          width: "100%",
+          margin: "4rem",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        {" "}
+        We couldn&apos;t find any opportunities that match your criteria...
+      </Typography>
+    );
   }
 
   return (
-    <div>
+    <Box>
+      {/* Results summary */}
+      {!loading && (
+        <Box sx={{ textAlign: "right", marginBottom: "1rem" }}>
+          <Typography>Found {totalDBCount} opportunities</Typography>
+        </Box>
+      )}
+
+      {/* Opportunity cards */}
       {shownOpportunities.map((item) => (
         <OpportunityCard key={item.opportunity.opportunity_id} {...item} />
       ))}
-    </div>
+
+      {/* Load more button */}
+      {hasMore && !loading && (
+        <Button onClick={handleLoadMore}>
+          Load More ({Math.min(limit, totalDBCount - currentPage * limit)}{" "}
+          remaining)
+        </Button>
+      )}
+
+      {/* End of results message */}
+      {!hasMore && !loading && (
+        <Typography sx={{ textAlign: "center", marginTop: "2rem" }}>
+          You&apos;ve reached the end of the list!
+        </Typography>
+      )}
+    </Box>
   );
 }

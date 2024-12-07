@@ -2,11 +2,12 @@ import { Card, CardHeader, Typography } from "@mui/material";
 import { AvatarTypes, ProfileAvatar } from "../ProfileAvatar";
 import { memo, useEffect, useState } from "react";
 import { useProfile } from "../../lib/store/profile";
-import { useMessage } from "@/lib/store/message";
+import { useConversation } from "@/lib/store/conversation";
 import { PrivateMessageModal } from "./PrivateMessageModal";
 export interface MessageCardProps {
   avatar: AvatarTypes;
   sender_username: string;
+  sender_id: string;
   timestamp: string;
   message: string;
   upVotes?: number;
@@ -14,7 +15,6 @@ export interface MessageCardProps {
   messageId: string;
   scrollDown?: () => void;
 }
-
 
 /**
  * UI that contains the metadata of a message
@@ -27,13 +27,14 @@ export interface MessageCardProps {
 export const MessageCard = memo(function MessageCard({
   avatar,
   sender_username,
+  sender_id,
   timestamp,
   message,
   scrollDown,
 }: MessageCardProps) {
   // TODO: Add upVotes and downVotes component
   const { profile } = useProfile();
-  const { isPrivateConversation: isPrivateMessage } = useMessage();
+  const { isPrivateConversation: isPrivateMessage } = useConversation();
   const messageDate = new Date(timestamp);
 
   const [openModal, setOpenModal] = useState(false);
@@ -126,7 +127,8 @@ export const MessageCard = memo(function MessageCard({
       <PrivateMessageModal
         isOpen={openModal}
         onClose={handleCloseModal}
-        receiverUsername={sender_username}
+        receiver_username={sender_username}
+        receiver_id={sender_id}
       />
     </>
   );

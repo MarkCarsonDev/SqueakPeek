@@ -3,42 +3,19 @@ import { z } from "zod";
 import { createSupabaseServer } from "../supabase/server";
 import { redirect } from "next/navigation";
 
-// add form validation here
-// error validation from signup.tsx
-/**
-    //     const formErrors = { email: "", password: "", confirmPassword: "" };
-  //     let isValid = true;
-
-  //     if (!email) {
-  //       formErrors.email = "Email is required";
-  //       isValid = false;
-  //     }
-
-  //     if (!password) {
-  //       formErrors.password = "Password is required";
-  //       isValid = false;
-  //     }
-
-  //     if (password !== confirmPassword) {
-  //       formErrors.confirmPassword = "Passwords do not match";
-  //       isValid = false;
-  //     } else if (!confirmPassword) {
-  //       formErrors.confirmPassword = "Confirm password is required";
-  //       isValid = false;
-  //     }
- */
-
-//TODO add form validation here. Assuming the forms are valid for now
+// zod schema
 const SignUpFormSchema = z
   .object({
     email: z.string(),
     password: z.string(),
     confirmPassword: z.string(),
   })
+
+  // check if passwords match
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Password don't match",
+    message: "Passwords do not match",
     path: ["confirmPassword"],
-  }); // form validation if confirm password does not equal password
+  });
 
 // Used for getting errors for each field during form validation
 export type SignUpState = {
@@ -55,8 +32,8 @@ export async function createAccount(
   prevState: SignUpState,
   formData: FormData
 ): Promise<SignUpState> {
-  console.log("createAccount");
 
+  // safeParse to async. get validated fields
   const validatedFields = SignUpFormSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
@@ -65,6 +42,7 @@ export async function createAccount(
 
   // form validation fails
   if (!validatedFields.success) {
+    
     // add error meesages
     return {
       errors: validatedFields.error.flatten().fieldErrors, // returns error for each field
@@ -72,6 +50,7 @@ export async function createAccount(
     };
   }
 
+  // consts for email and password
   const { email, password } = validatedFields.data;
 
   // call supabase to create account
@@ -80,10 +59,20 @@ export async function createAccount(
     email: email,
     password: password,
   });
-  if (error) {
-    console.log("error occured creating account: ", error);
-    return { message: "Database Error" };
-  }
 
+  // error handling
+  if (error) {
+
+    // error message
+    let errorMessage = error + "";
+    errorMessage = errorMessage.replace("AuthApiError: ", "") + ": Please choose another email";
+    
+    return {
+      errors: {
+        email: [errorMessage],
+      } 
+    };
+  }
+  // redirect after successful account creation
   redirect("/profile_setup");
 }

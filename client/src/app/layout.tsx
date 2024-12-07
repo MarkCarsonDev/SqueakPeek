@@ -11,6 +11,7 @@ config.autoAddCss = false;
 
 // this makes the global.css accessible in all pages
 import "@/theme/global.css";
+import { AlertToast } from "@/ui/AlertToast";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -46,6 +47,7 @@ export default function RootLayout({
       >
         <AppRouterCacheProvider>
           <ThemeProvider theme={customTheme}>{children}</ThemeProvider>
+          <AlertToast />
         </AppRouterCacheProvider>
       </body>
     </html>

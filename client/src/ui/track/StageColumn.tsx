@@ -3,6 +3,7 @@ import { Typography, Button } from "@mui/material";
 import { Droppable, Draggable } from "@hello-pangea/dnd";
 import { Application, ApplicationStage } from "@/lib/store/track";
 import { JobCard } from "./JobCard";
+import { useProfile } from "@/lib/store/profile";
 
 export interface StageColumnProps {
   stage: ApplicationStage;
@@ -11,6 +12,7 @@ export interface StageColumnProps {
   applications: Application[];
   handleOpenModal?: (stage: ApplicationStage) => void;
   onCardClick?: (application: Application) => void;
+  setPreventClick?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const StageColumn: React.FC<StageColumnProps> = ({
@@ -19,8 +21,10 @@ export const StageColumn: React.FC<StageColumnProps> = ({
   stageColor,
   applications,
   handleOpenModal,
-  onCardClick
+  onCardClick,
+  setPreventClick,
 }) => {
+  const { profile } = useProfile(); // Retrieve profile data
   return (
     <Droppable droppableId={stage} key={stage}>
       {(provided, snapshot) => {
@@ -99,7 +103,7 @@ export const StageColumn: React.FC<StageColumnProps> = ({
             >
               {/* Job Cards */}
               {applications.map((app, index) => (
-                <Draggable key={app.id} draggableId={app.id} index={index}>
+                <Draggable key={app.application_id} draggableId={app.application_id} index={index}>
                   {(provided, snapshot) => (
                     <div
                       ref={provided.innerRef}
@@ -113,11 +117,13 @@ export const StageColumn: React.FC<StageColumnProps> = ({
                         opacity: snapshot.isDragging ? 0.9 : 1,
                         ...provided.draggableProps.style,
                       }}
-                      onClick={() => onCardClick?.(app)}
                     >
-                      <JobCard
-                        application= {app}   
-                      />
+                      {profile && 
+                      <JobCard 
+                        application={app} 
+                        profile={profile} 
+                        onCardClick={onCardClick}
+                        setPreventClick={setPreventClick} />}
                     </div>
                   )}
                 </Draggable>

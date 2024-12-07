@@ -2,14 +2,15 @@
 import { MessageInput } from "./MessageInput";
 import { ConversationHeader } from "./ConversationHeader";
 import { ConversationBody } from "./ConversationBody";
-import Image from "next/image";
-import { useMessage } from "../../lib/store/message";
-import { useState, useRef, useEffect, useMemo } from "react";
+import { useConversation } from "../../lib/store/conversation";
+import { useState, useEffect, useMemo } from "react";
 import { useProfile } from "../../lib/store/profile";
 import { useSubscribeConversation } from "@/lib/hooks/useSubscribeConversation";
 import { createSupabaseClient } from "@/lib/supabase/client";
-import { fetchPublicMessages } from "@/lib/utils/fetchPublicMessages";
-import { MessageCardProps } from "./MessageCard";
+
+import { notFound } from "next/navigation";
+import { updatePrivateConversationIsRead } from "@/lib/utils/updatePrivateConversationIsRead";
+import { useFetchMessage } from "@/lib/hooks/useFetchMessages";
 
 /**
  * This is a UI container that holds all messages for a particular conversation
@@ -22,17 +23,60 @@ export function Conversation({
   conversationId: string;
   isPrivateConversation?: boolean;
 }) {
-  const { addMessage, clearMessages, setConversationType, setMessages } =
-    useMessage();
+  const { addMessage, clearConversation, setConversationType, isLoading } =
+    useConversation();
   const { profile } = useProfile();
   const [numNewMessages, setNumNewMessages] = useState(0); // used for rendering new message notification
-  const bottomRef = useRef<null | HTMLDivElement>(null); // used for scrolling down the page
+  const [pageNotFound, setNotFound] = useState(false);
   const supabase = useMemo(() => createSupabaseClient(), []);
 
   // Resets numNewMessages to 0
   function resetNumNewMessages() {
     setNumNewMessages(0);
   }
+
+  // determines if conversation exists
+  useEffect(() => {
+    const doesConversationExist = async () => {
+      if (isPrivateConversation) {
+        const { data, error } = await supabase
+          .from("private_conversation")
+          .select("conversation_id")
+          .eq("conversation_id", conversationId)
+          .single();
+        if (data && profile) {
+          const { error: updateError } = await updatePrivateConversationIsRead(
+            data.conversation_id,
+            profile.profile_id,
+            supabase
+          );
+          console.log("updateError: ", updateError);
+        }
+        return { data, error };
+      } else {
+        const { data, error } = await supabase
+          .from("company_thread")
+          .select("thread_id")
+          .eq("thread_id", conversationId)
+          .single();
+        return { data, error };
+      }
+    };
+    doesConversationExist().then((res) => {
+      const { data, error } = res;
+      if (error || !data) {
+        // TODO navigate to not found page
+        setNotFound(true);
+      }
+    });
+  }, [profile, supabase, conversationId, isPrivateConversation]);
+
+  // routes to not-found if conversation does not exist
+  useEffect(() => {
+    if (pageNotFound) {
+      notFound();
+    }
+  }, [pageNotFound]);
 
   useSubscribeConversation(
     supabase,
@@ -43,40 +87,17 @@ export function Conversation({
   );
 
   useEffect(() => {
-    clearMessages();
-    return () => clearMessages();
-  }, [conversationId, clearMessages]);
-
-  useEffect(() => {
     setConversationType(isPrivateConversation);
   }, [setConversationType, isPrivateConversation]);
 
   useEffect(() => {
-    fetchPublicMessages(supabase, conversationId).then((res) => {
-      const { error, data } = res;
+    clearConversation();
+    return () => {
+      clearConversation();
+    };
+  }, [clearConversation, conversationId]);
 
-      if (error) {
-        // do something on the UI
-      } else {
-        const mappedData: MessageCardProps[] = data.map(
-          ({
-            created_at,
-            sender_avatar,
-            sender_username,
-            message,
-            message_id,
-          }) => ({
-            avatar: sender_avatar,
-            sender_username,
-            timestamp: created_at,
-            message,
-            messageId: message_id,
-          })
-        );
-        setMessages(mappedData);
-      }
-    });
-  }, [supabase, conversationId, setMessages]);
+  useFetchMessage(conversationId);
 
   return (
     <div
@@ -88,25 +109,13 @@ export function Conversation({
       }}
     >
       {/* Header */}
-      {/* TODO: Make this consuem the metadata of an opportunity or user */}
-      <ConversationHeader
-        title="Amazon"
-        subheader="Software Engineering, Internship"
-        avatar={
-          <Image
-            alt="Profile of {company}"
-            src="https://www.amazon.com/favicon.ico"
-            width={50}
-            height={50}
-          />
-        }
-      />
+      <ConversationHeader conversationId={conversationId} />
 
       {/* Messages */}
       <ConversationBody
+        isLoading={isLoading}
         numNewMessages={numNewMessages}
         resetNumNewMessages={() => resetNumNewMessages()}
-        bottomRef={bottomRef}
       />
 
       {/* Message Input */}
@@ -117,7 +126,7 @@ export function Conversation({
           padding: "10px 10px",
         }}
       >
-        <MessageInput conversationId={conversationId} />
+        <MessageInput isLoading={isLoading} conversationId={conversationId} />
       </div>
     </div>
   );

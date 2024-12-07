@@ -10,19 +10,24 @@ import { v4 as uuidv4 } from "uuid";
 import { memo, useMemo } from "react";
 import { insertMessage } from "../../lib/utils/insertMessage";
 import { AvatarTypes } from "../ProfileAvatar";
+import { useConversation } from "@/lib/store/conversation";
+import { useAlert } from "@/lib/store/alert";
 /**
- * Allows user to send a message into a conversation, and broadcasts the message based on the conversationId
-  * @param {string} conversationId - ID used to broadcast messages to subscribed users
-
+ * Allows user to send a message into a private conversation or a company thread, and broadcasts the message based on the conversationId
+ * @param {string} conversationId - ID used to broadcast messages to subscribed users
  */
 export const MessageInput = memo(function MessageInput({
   conversationId,
+  isLoading,
 }: {
   conversationId: string;
+  isLoading: boolean;
 }) {
   const { profile } = useProfile();
   const [currentMessage, setCurrentMessage] = useState("");
   const messageInputRef = useRef<null | HTMLDivElement>(null);
+  const { isPrivateConversation } = useConversation();
+  const { setAlert } = useAlert();
 
   // Memoize the Supabase client and the sender channel to prevent changing it's value when MessageInput re-renders
   const supabase = useMemo(() => createSupabaseClient(), []);
@@ -48,30 +53,52 @@ export const MessageInput = memo(function MessageInput({
   //   return () => document.removeEventListener("click", handleFocus);
   // }, []);
 
-  function handleSendMessage(message: string) {
+  async function handleSendMessage(message: string) {
     // only allows to add message if profile is made
     if (profile) {
       const newMessage: MessageCardProps = {
-        avatar: (profile.avatar as AvatarTypes),
+        avatar: profile.avatar as AvatarTypes,
         sender_username: profile.username!,
+        sender_id: profile.profile_id,
         timestamp: new Date().toUTCString(),
         messageId: uuidv4(),
         message,
       };
 
-      // TODO: need to check state of channel before sending message
-      senderChannel.send({
-        type: "broadcast",
-        event: "conversation",
-        payload: { message: newMessage },
-      });
+      const error = await insertMessage(
+        newMessage,
+        conversationId,
+        profile,
+        isPrivateConversation,
+        supabase
+      );
 
-      insertMessage(supabase, newMessage, conversationId, profile);
+      if (error) {
+        setAlert({
+          message: error.message,
+          type: "error",
+        });
+      }
+
+      // TODO: need to check state of channel before sending message
+      else {
+        senderChannel.send({
+          type: "broadcast",
+          event: "conversation",
+          payload: { message: newMessage },
+        });
+      }
+    } else {
+      setAlert({
+        message: "Profile not found",
+        type: "error",
+      });
     }
   }
 
   return (
     <TextField
+      disabled={isLoading}
       autoFocus
       inputRef={messageInputRef}
       value={currentMessage}
@@ -79,9 +106,11 @@ export const MessageInput = memo(function MessageInput({
       fullWidth
       slotProps={{
         input: {
+          maxRows: 2,
           endAdornment: (
             <InputAdornment position="end">
               <IconButton
+                disabled={isLoading}
                 onClick={() => {
                   handleSendMessage(currentMessage);
                   setCurrentMessage("");

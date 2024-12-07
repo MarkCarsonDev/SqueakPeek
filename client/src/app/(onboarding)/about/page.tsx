@@ -22,7 +22,7 @@ export default function Page() {
     },
     {
       name: "David Serrano",
-      role: "Frontend",
+      role: "Full-Stack",
       description:
         "David Serrano is an aspiring software developer and or IT technician with a passion for fitness and a constant drive to learn and grow.",
       linkedInURl: "https://www.linkedin.com/in/david-serrano-0a6a5523a/",
@@ -38,7 +38,7 @@ export default function Page() {
     },
     {
       name: "Hao Phan",
-      role: "Frontend",
+      role: "Full-Stack",
       description:
         "Hao Phan is a full-stack developer with experience in IT and automated flow, as well as a passion for web development. In his free time, he likes watching soccer and Formula 1.",
       linkedInURl: "https://www.linkedin.com/in/hao-phan-b049b91aa/",

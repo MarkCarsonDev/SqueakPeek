@@ -3,13 +3,13 @@ import { z } from "zod";
 import { createSupabaseServer } from "../supabase/server";
 import { redirect } from "next/navigation";
 
-//TODO add form validation here. Assuming the forms are valid for now
+// Login zod schema
 const LoginFormSchema = z.object({
   email: z.string(),
   password: z.string(),
 });
 
-// TODO: Make this a 'FormState' rather than having to create this type for every single form
+// Used for getting errors for each field during form validation
 export type LoginState = {
   errors?: {
     email?: string[];
@@ -24,8 +24,8 @@ export async function loginAccount(
   prevState: LoginState,
   formData: FormData
 ): Promise<LoginState> {
-  console.log("createAccount");
 
+  // safeParse to async. get validated fields
   const validatedFields = LoginFormSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
@@ -33,6 +33,7 @@ export async function loginAccount(
 
   // form validation fails
   if (!validatedFields.success) {
+    
     // add error meesages
     return {
       errors: validatedFields.error.flatten().fieldErrors, // returns error for each field
@@ -40,6 +41,7 @@ export async function loginAccount(
     };
   }
 
+  // consts for email and password
   const { email, password } = validatedFields.data;
 
   // call supabase to create account
@@ -48,10 +50,12 @@ export async function loginAccount(
     email: email,
     password: password,
   });
+
+  // error handling
   if (error) {
-    console.log("Error loging in: ", error);
     return { message: "Login Failed" };
   }
 
+  // redirect to explore if successful login
   redirect("/explore");
 }

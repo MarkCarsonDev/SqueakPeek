@@ -9,9 +9,13 @@ export type AvatarTypes = Database["public"]["Enums"]["Avatar"];
  */
 export function ProfileAvatar({
   avatar,
+  width = "55px",
+  height = "55px",
   ...props
 }: {
   avatar: AvatarTypes;
+  width?: string;
+  height?: string;
 } & AvatarProps) {
   // TODO: Change this to the actual mapping to the correct avatar images
   // TODO (BUG): On page refresh, or any situation that turns profile = null, it defaults to the image, creating a janky look when profile is initialize
@@ -24,8 +28,8 @@ export function ProfileAvatar({
   return (
     <Avatar
       style={{
-        width: "55px",
-        height: "55px",
+        width: width,
+        height: height,
       }}
       src={avatar ? avatarMaps[avatar] : "/landingpage/track.svg"}
       {...props}
