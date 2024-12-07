@@ -7,14 +7,16 @@ import { createSupabaseClient } from "@/lib/supabase/client";
 import { useProfile } from "@/lib/store/profile";
 import { useRouter } from "next/navigation";
 import { SearchDropdown } from "@/ui/track/SearchDropdown";
+import usePageHeader from "@/lib/hooks/usePageHeader"; // Import the custom hook
 
 export default function Page() {
-  //Router Creation
+  // Router creation
   const router = useRouter();
 
   // Creates Supabase Client
   const supabase = useMemo(() => createSupabaseClient(), []);
-  //Avatar data
+  
+  // Avatar data
   const avatars: {
     profile: string;
     avatarType: "avatar1" | "avatar2" | "avatar3" | "avatar4";
@@ -37,18 +39,13 @@ export default function Page() {
     },
   ];
 
-  useEffect(() => {
-    document.title = "Edit Profile - Personalize Your Account";
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute(
-        "content",
-        "Edit your profile to personalize your account. Update your username, school, and avatar to create a unique profile."
-      );
-    }
-  }, []);
+  // Set page title and meta description using the custom hook
+  usePageHeader(
+    "Edit Profile - Personalize Your Account",
+    "Edit your profile to personalize your account. Update your username, school, and avatar to create a unique profile."
+  );
 
-  //Gets user profile using useProfile function
+  // Gets user profile using useProfile function
   const { profile } = useProfile();
   const [profileData, setProfileData] = useState<
     | {
@@ -60,7 +57,7 @@ export default function Page() {
     | null
   >(null);
 
-  // Creates chosenAvatar, username, school, and Profile ID Constants
+  // Creates chosenAvatar, username, school, and Profile ID constants
   const [chosenAvatar, setAvatar] = useState<
     "avatar1" | "avatar2" | "avatar3" | "avatar4" | undefined
   >(undefined);
@@ -68,14 +65,14 @@ export default function Page() {
   const [profileSchool, setSchool] = useState<string | null>(null);
   const [profileId, setProfileId] = useState<string | null>(null);
 
-  // checks if profile is null then calls fetchUserprofile
+  // Checks if profile is null then calls fetchUserProfile
   useEffect(() => {
     if (profile && profile.profile_id) {
       fetchUserProfile(profile);
     }
   }, [profile?.profile_id]);
 
-  // Checks if data is not null then sets username, school, and avater to values from profile table
+  // Checks if data is not null then sets username, school, and avatar to values from profile table
   useEffect(() => {
     if (profileData && profileData.length > 0) {
       setUsername(profileData[0].username);
@@ -105,7 +102,7 @@ export default function Page() {
     }
   }
 
-  //Update profile table with new data using their profile ID
+  // Update profile table with new data using their profile ID
   const handleSubmit = async () => {
     if (profileUsername !== null && profileId) {
       const { data, error } = await supabase
@@ -121,7 +118,7 @@ export default function Page() {
         console.error("Error updating profile:", error);
       } else {
         console.log("Profile updated successfully:", data);
-        router.back()
+        router.back();
       }
     } else {
       console.warn("Profile username or profile ID is missing.");
@@ -151,14 +148,14 @@ export default function Page() {
                   margin: "0 10px",
                   border:
                     avatarType === chosenAvatar
-                      ? "4px solid #496FFF" 
-                      : "4px solid #E0E4F2", 
+                      ? "4px solid #496FFF"
+                      : "4px solid #E0E4F2",
                   opacity: avatarType === chosenAvatar ? 1 : 0.85,
                   ":hover": {
                     opacity: 1,
                   },
                 }}
-                onClick={() => setAvatar(avatarType)} 
+                onClick={() => setAvatar(avatarType)}
               />
             ))}
           </div>
@@ -195,9 +192,7 @@ export default function Page() {
             apiEndpoint="https://raw.githubusercontent.com/Hipo/university-domains-list/master/world_universities_and_domains.json"
             queryKey="name"
             value={profileSchool || ""}
-            onValueChange={(newValue) =>
-              setSchool(newValue || "")
-            }
+            onValueChange={(newValue) => setSchool(newValue || "")}
             useApi={true} // Enable API integration
             style={{ marginBottom: "10px" }}
           />
