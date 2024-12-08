@@ -64,7 +64,7 @@ export function ApplicationStatsModal({
         }
         setOpportunityData(data || []); // Store fetched data or empty array
       } catch (err) {
-        console.error("Error fetching opportunity stats:", err);
+        //console.error("Error fetching opportunity stats:", err);
         setError("Failed to fetch opportunity stats.");
       } finally {
         setLoading(false);

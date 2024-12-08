@@ -20,7 +20,7 @@ export async function FetchOpportunityStats(
         .order("month", { ascending: true });
 
     if (error) {
-        console.error("Error fetching opportunity tracking data:", error.message);
+        //console.error("Error fetching opportunity tracking data:", error.message);
         return { data: null, error: error.message };
     }
     console.log(data);

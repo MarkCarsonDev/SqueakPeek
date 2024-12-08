@@ -14,7 +14,7 @@ export async function RemoveApplication(
     .eq("profile_id", profile.profile_id);
 
   if (error) {
-    console.error("Error:", error.message);
+    //console.error("Error:", error.message);
     return error;
   }
 

@@ -56,7 +56,7 @@ export function SearchDropdown({
       const fetchedOptions = response.data.map((item: { name: string }) => item.name); // Map API response to options
       setDynamicOptions(fetchedOptions);
     } catch (error) {
-      console.error("Error fetching options:", error);
+      //console.error("Error fetching options:", error);
       setDynamicOptions([]);
     } finally {
       setLoading(false);

@@ -116,7 +116,7 @@ export async function InsertApplication(
     .single();
 
   if (threadError) {
-    console.error("Error fetching thread_id:", threadError.message);
+    //console.error("Error fetching thread_id:", threadError.message);
     return { data: { application_id, thread_id: null, opportunity_id }, error: threadError };
   }
   const thread_id = threadData?.thread_id || null;
