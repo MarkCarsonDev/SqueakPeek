@@ -9,19 +9,12 @@ import {
 import { useFormState } from "react-dom";
 import "./profile_setup.css";
 import { SearchDropdown } from "@/ui/track/SearchDropdown";
-import usePageHeader from "@/lib/hooks/usePageHeader"; // Import the custom hook
 
 export default function ProfilePage() {
   const initialState: ProfileSetupState = { message: null, errors: {} };
   const [state, formAction] = useFormState(createProfile, initialState);
   const [chosenAvatar, setAvatar] = useState("");
   const [profileSchool, setSchool] = useState("");
-
-  // Set page title and meta description
-  usePageHeader(
-    "Profile Setup - Complete Your Profile",
-    "Complete your profile setup by selecting an avatar and filling out the details."
-  );
 
   // TODO: Change with the real profile assets
   const avatars = [

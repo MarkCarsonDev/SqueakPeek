@@ -1,18 +1,11 @@
-"use client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Typography } from "@mui/material";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
-import usePageHeader from "@/lib/hooks/usePageHeader"; // Import the custom hook
 
 /**
  * Private Message section in the messages page
  */
 export default function Page() {
-  // Set page title and meta description
-  usePageHeader(
-    "Private Messages - Chat Privately with Applicants",
-    "Send and receive private messages with other applicants to discuss opportunities, share insights, or network."
-  );
 
   return (
     <div

@@ -9,7 +9,6 @@ import { StageColumn, StageColumnProps } from "@/ui/track/StageColumn";
 import { Application, ApplicationStage, useTrack } from "@/lib/store/track";
 import ApplicationSearchBar from "@/ui/track/ApplicationSearchBar";
 import { useProfile } from "@/lib/store/profile";
-import usePageHeader from "@/lib/hooks/usePageHeader"; // Import the custom hook
 import "./tracking.css";
 
 export default function Page() {
@@ -17,12 +16,6 @@ export default function Page() {
   const [applicationStatus, setApplicationStatus] = useState<ApplicationStage>("Applied");
   const [selectedApplication, setSelectedApplication] = useState<Application | undefined>();
   const [preventClick, setPreventClick] = useState(false);
-  
-  // Set page title and meta description using the custom hook
-  usePageHeader(
-    "Track Applications - Manage Your Job Search",
-    "Track your job applications efficiently across various stages. Manage your pipeline from applied to offer, and stay organized throughout your job search."
-  );
 
   // Retrieve application data and actions from the Zustand store
   const {

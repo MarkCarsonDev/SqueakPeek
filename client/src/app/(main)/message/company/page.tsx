@@ -1,21 +1,14 @@
-"use client";
+"use client"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Typography, Button } from "@mui/material";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/navigation";
-import usePageHeader from "@/lib/hooks/usePageHeader"; // Import the custom hook
 
 /**
  * Company Threads section in the messages page
  */
 export default function Page() {
   const router = useRouter();
-
-  // Set page title and meta description
-  usePageHeader(
-    "Company Threads - Chat with Applicants",
-    "Join company-specific threads to chat with other applicants, share insights, and discuss the application process."
-  );
 
   return (
     <div

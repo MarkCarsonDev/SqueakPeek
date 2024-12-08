@@ -6,14 +6,10 @@ import { InputField } from "@/ui/InputField";
 import { LoginState, loginAccount } from "../../../lib/actions/login";
 import { useFormState } from "react-dom";
 import { handleGoogleLoginClientSide } from "../../../lib/supabase/auth/handleGoogleLoginClientSide";
-import usePageHeader from "@/lib/hooks/usePageHeader"; // Import the custom hook
 
 export default function Page() {
   const initialState: LoginState = { message: null, errors: {} };
   const [state, formAction] = useFormState(loginAccount, initialState);
-
-  // Use the custom hook to set the page title and description
-  usePageHeader("Login - Welcome Back", "Sign in to access your account");
 
   return (
     <div className="main-container">

@@ -6,14 +6,10 @@ import { InputField } from "@/ui/InputField";
 import { SignUpState, createAccount } from "../../../lib/actions/signup";
 import { useFormState } from "react-dom";
 import { handleGoogleLoginClientSide } from "../../../lib/supabase/auth/handleGoogleLoginClientSide";
-import usePageHeader from "@/lib/hooks/usePageHeader"; // Import the custom hook
 
 export default function Page() {
   const initialState: SignUpState = { message: null, errors: {} };
   const [state, formAction] = useFormState(createAccount, initialState);
-
-  // Use the custom hook to set the page title and description
-  usePageHeader("Sign Up - Create an Account", "Create a new account to get started");
 
   return (
     <div className="main-container">

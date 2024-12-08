@@ -7,7 +7,6 @@ import { createSupabaseClient } from "@/lib/supabase/client";
 import { useProfile } from "@/lib/store/profile";
 import { useRouter } from "next/navigation";
 import { SearchDropdown } from "@/ui/track/SearchDropdown";
-import usePageHeader from "@/lib/hooks/usePageHeader"; // Import the custom hook
 
 export default function Page() {
   // Router creation
@@ -38,12 +37,6 @@ export default function Page() {
       avatarType: "avatar4",
     },
   ];
-
-  // Set page title and meta description using the custom hook
-  usePageHeader(
-    "Edit Profile - Personalize Your Account",
-    "Edit your profile to personalize your account. Update your username, school, and avatar to create a unique profile."
-  );
 
   // Gets user profile using useProfile function
   const { profile } = useProfile();
