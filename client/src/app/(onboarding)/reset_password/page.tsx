@@ -109,7 +109,8 @@ const ResetPasswordPage = () => {
           sx={{
             width: "100%",
             backgroundColor: "#496FFF",
-            ":hover": { backgroundColor: "#3B5AC6" },
+            
+            ":hover": { backgroundColor: "#3B5AC6", boxShadow: "none", },
             boxShadow: "none",
             borderRadius: "8px",
           }}
@@ -117,12 +118,6 @@ const ResetPasswordPage = () => {
           Reset Password
         </Button>
       </form>
-
-      <Typography variant="subtitle2" className="subtitle">
-        Your anonymity is valued.
-        <br />
-        Information we collect will not be shared.
-      </Typography>
     </div>
   );
 };
