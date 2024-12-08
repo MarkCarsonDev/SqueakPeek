@@ -4,7 +4,9 @@ import { useState, useEffect } from "react";
 import Autocomplete from "@mui/material/Autocomplete";
 import { CircularProgress,TextFieldProps } from "@mui/material";
 import { InputField } from "@/ui/InputField"; // Custom InputField component
+import { useAlert } from "@/lib/store/alert";
 import axios from "axios";
+
 
 /**
  * A custom version of the Autocomplete component with the label designed similarly to the InputField.
@@ -40,7 +42,7 @@ export function SearchDropdown({
   const [dynamicOptions, setDynamicOptions] = useState<string[]>([]); // Options fetched from API
   const [loading, setLoading] = useState(false); // Loading state
   const [query, setQuery] = useState<string>(""); // User's search query
- 
+  const { setAlert } = useAlert();
   // Fetch options from the API based on the user's input
   const fetchOptions = async (query?: string) => {
     if (!query) {
@@ -56,7 +58,8 @@ export function SearchDropdown({
       const fetchedOptions = response.data.map((item: { name: string }) => item.name); // Map API response to options
       setDynamicOptions(fetchedOptions);
     } catch (error) {
-      console.error("Error fetching options:", error);
+      //console.error("Error fetching options:", error);
+      setAlert({ message: `Failed to fetch options: ${error}`, type: "error" });
       setDynamicOptions([]);
     } finally {
       setLoading(false);

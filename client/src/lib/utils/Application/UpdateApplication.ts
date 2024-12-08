@@ -18,16 +18,13 @@ export async function UpdateApplication(
       .eq("profile_id", profile.profile_id);
 
   if (existingApplicationError) {
-    console.error(updatedFields.application_id, profile.profile_id);
-    console.error(
-      "Error checking existing application:",
-      existingApplicationError.message
-    );
+    //console.error(updatedFields.application_id, profile.profile_id);
+    //console.error( "Error checking existing application:", existingApplicationError.message);
     return { data: null, error: existingApplicationError };
   }
 
   if (!existingApplicationData || existingApplicationData.length === 0) {
-    console.error("Application not found or does not belong to the profile");
+    //console.error("Application not found or does not belong to the profile");
     return {
       data: null,
       error: {
@@ -48,15 +45,12 @@ export async function UpdateApplication(
       .select("application_id");
 
   if (updateApplicationError) {
-    console.error(
-      "Error updating application:",
-      updateApplicationError.message
-    );
+    //console.error("Error updating application:",updateApplicationError.message);
     return { data: null, error: updateApplicationError };
   }
 
   if (updateApplication && updateApplication.length > 0) {
-    console.log("Application updated:", updateApplication[0].application_id);
+    //console.log("Application updated:", updateApplication[0].application_id);
     return { data: updateApplication[0].application_id, error: null };
   }
 
