@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import { Box, Modal, Typography, CircularProgress } from "@mui/material";
 import { BarChart } from "@mui/x-charts";
 import { FetchOpportunityStats } from "@/lib/utils/Application/FetchOpportunityStats";
+import { useAlert } from "@/lib/store/alert";
 
 const style = {
   position: "absolute",
@@ -44,7 +45,7 @@ export function ApplicationStatsModal({
   const [opportunityData, setOpportunityData] = useState<OpportunityTrackingData[]>([]); 
   const [loading, setLoading] = useState(false); // Loading state
   const [error, setError] = useState<string | null>(null); 
-
+  const { setAlert } = useAlert();
   const months = [
     "Jan", "Feb", "Mar", "Apr", "May", "June", 
     "July", "Aug", "Sept", "Oct", "Nov", "Dec",
@@ -65,6 +66,7 @@ export function ApplicationStatsModal({
         setOpportunityData(data || []); // Store fetched data or empty array
       } catch (err) {
         //console.error("Error fetching opportunity stats:", err);
+        setAlert({ message: `Failed to fetch opportunity stats: ${err}`, type: "error" });
         setError("Failed to fetch opportunity stats.");
       } finally {
         setLoading(false);
