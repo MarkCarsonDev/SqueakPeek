@@ -1,83 +1,78 @@
 "use client";
 
-import React, { useState, useEffect, use } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState, useEffect } from "react";
 import { Button, Typography } from "@mui/material";
-import { InputField } from "@/ui/InputField"; // Assuming you're using the same InputField component
-import { createSupabaseClient } from "@/lib/supabase/client"; // Client-side supabase initialization
+import { InputField } from "@/ui/InputField"; // Assuming you're using this custom InputField
+import { createSupabaseClient } from "@/lib/supabase/client"; // Client-side Supabase initialization
 import "./reset_password.css"; // Import CSS for styling
-
 
 const ResetPasswordPage = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
-  const [isTokenVerified, setIsTokenVerified] = useState(false); // Track token verification status
   const [code, setCode] = useState<string | null>(null);
-  const router = useRouter();
-  const supabase = createSupabaseClient(); // Use the Supabase client for client-side
+  const [session, setSession] = useState<any>(null); // Define session state
+  const supabase = createSupabaseClient(); // Initialize the Supabase client
 
-  // Get the 'code' parameter from the URL query string
+  // Get the 'code' parameter from the URL query string and set the session
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const urlParams = new URLSearchParams(window.location.search);
-      setCode(urlParams.get("code"));
-    }
-    
-    //const code = urlParams.get("code");
-  }, []);
+    const fetchSession = async () => {
+      const currentSession = await supabase.auth.getSession();
+      console.log("Fetched session:", currentSession); // Log the session for debugging
+      setSession(currentSession.data.session); // Store session
+    };
 
-  
-  // Token verification process
-  useEffect(() => {
-    if (code) {
-      const verifyToken = async () => {
-        try {
-          // Verify the reset token with Supabase
-          const { error } = await supabase.auth.resetPasswordForEmail(code);
+    fetchSession();
 
-          if (error) {
-            setError("Invalid or expired reset link.");
-          } else {
-            setMessage("Token verified, you can now reset your password.");
-            setIsTokenVerified(true); // Mark token as verified
-          }
-        } catch (err) {
-          setError("Failed to verify token.");
-        }
-      };
-
-      verifyToken();
-    }
-  }, [code]);
+    const urlParams = new URLSearchParams(window.location.search);
+    const codeParam = urlParams.get("code");
+    console.log("Code from URL:", codeParam); // Log the reset code from URL for debugging
+    setCode(codeParam);
+  }, [supabase]);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+
+    // Log the session and code when form is submitted
+    console.log("Session at submit:", session); // Debugging the session
+    console.log("Reset code at submit:", code); // Debugging the reset code
+
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
       return;
     }
 
-    if (!isTokenVerified) {
+    if (!code) {
       setError("Invalid or expired reset link.");
       return;
     }
 
+    // Check if session or email is available
+    if (!session?.user?.email) {
+      console.log("Session or email is missing:", session); // Debugging the session
+      setError("Password recovery requires an email.");
+      return;
+    }
+
+    // Debugging the email address from the session
+    console.log("Resetting password for email:", session.user.email); // Debugging the email value
+
     try {
-      // Use the code to reset password with Supabase
-      const { error } = await supabase.auth.updateUser({
-        password, // Only the password
+      // Use resetPasswordForEmail method to reset password
+      const { error } = await supabase.auth.resetPasswordForEmail(session.user.email, {
+        redirectTo: "/login", // Redirect to login page after password reset
       });
 
       if (error) {
-        setError("Failed to reset password.");
+        console.log("Error from Supabase:", error); // Log error for debugging
+        setError("Failed to reset password: " + error.message);
       } else {
-        setMessage("Password reset successfully.");
-        router.push("/login"); // Redirect to login page after successful reset
+        setMessage("Password reset successfully. You can now log in.");
       }
     } catch (err) {
-      setError("An unexpected error occurred while resetting password.");
+      console.error("Unexpected error during reset:", err); // Log unexpected errors
+      setError("An unexpected error occurred while resetting the password.");
     }
   };
 
@@ -89,42 +84,40 @@ const ResetPasswordPage = () => {
       {error && <Typography sx={{ color: "red", marginBottom: "20px" }}>{error}</Typography>}
       {message && <Typography sx={{ color: "green", marginBottom: "20px" }}>{message}</Typography>}
 
-      {/* Form to reset the password */}
-      {isTokenVerified && (
-        <form onSubmit={handleSubmit} className="reset-password-form">
-          <InputField
-            fullWidth
-            label="New Password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            sx={{ marginBottom: "20px" }}
-          />
-          <InputField
-            fullWidth
-            label="Confirm New Password"
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-            sx={{ marginBottom: "20px" }}
-          />
-          <Button
-            type="submit"
-            variant="contained"
-            sx={{
-              width: "100%",
-              backgroundColor: "#496FFF",
-              ":hover": { backgroundColor: "#3B5AC6" },
-              boxShadow: "none",
-              borderRadius: "8px",
-            }}
-          >
-            Reset Password
-          </Button>
-        </form>
-      )}
+      <form onSubmit={handleSubmit} className="reset-password-form">
+        <InputField
+          fullWidth
+          label="New Password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          sx={{ marginBottom: "20px" }}
+        />
+        <InputField
+          fullWidth
+          label="Confirm New Password"
+          type="password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          required
+          sx={{ marginBottom: "20px" }}
+        />
+        <Button
+          type="submit"
+          variant="contained"
+          sx={{
+            width: "100%",
+            backgroundColor: "#496FFF",
+            ":hover": { backgroundColor: "#3B5AC6" },
+            boxShadow: "none",
+            borderRadius: "8px",
+          }}
+        >
+          Reset Password
+        </Button>
+      </form>
+
       <Typography variant="subtitle2" className="subtitle">
         Your anonymity is valued.
         <br />

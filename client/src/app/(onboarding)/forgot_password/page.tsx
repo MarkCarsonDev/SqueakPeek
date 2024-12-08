@@ -1,55 +1,39 @@
 "use client";
 
-import { Button, Typography } from "@mui/material";
-import "./forgot_password.css";
-import { InputField } from "@/ui/InputField";
-import { useFormState } from "react-dom";
+import { useState } from "react";
 import { sendPasswordResetEmail } from "@/lib/actions/reset_password";
-import { useEffect } from "react";
-import { NodeNextRequest } from "next/dist/server/base-http/node";
+import { TextField, Button, Typography } from "@mui/material";
 
-export default function ForgotPasswordPage() {
-  const initialState = { message: "", errors: {} as Record<string, string[]> };
-  const [state, formAction] = useFormState(sendPasswordResetEmail, initialState);
+const ForgotPasswordPage = () => {
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
 
-  useEffect(() => {
-    document.title = "Forgot Password - Reset Your Account";
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute("content", "Request a password reset email.");
-    }
-  }, []);
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    const formData = new FormData();
+    formData.append("email", email);
+
+    const { message } = await sendPasswordResetEmail(formData);
+    setMessage(message);
+  };
 
   return (
-    <div className="main-container">
-      <Typography variant="h4" sx={{ marginTop: "80px", marginBottom: "20px" }}>
-        Forgot Your Password?
-      </Typography>
-      <form action={formAction} className="forgot-password-form">
-        <InputField
-          fullWidth
-          placeholder="Enter your email"
-          required
+    <div>
+      <Typography variant="h5">Forgot Password</Typography>
+      <form onSubmit={handleSubmit}>
+        <TextField
           label="Email"
-          name="email"
-          helperText={state.errors?.email?.[0]}
-          style={{ marginBottom: "20px" }}
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
         />
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          sx={{
-            width: "100%",
-            backgroundColor: "#496FFF",
-            boxShadow: "none",
-            ":hover": { backgroundColor: "#3B5AC6", boxShadow: "none" },
-          }}
-        >
-          Send Reset Email
-        </Button>
-        {state.message && <Typography sx={{ marginTop: "10px" }}>{state.message}</Typography>}
+        <Button type="submit">Send Reset Email</Button>
       </form>
+      {message && <Typography>{message}</Typography>}
     </div>
   );
-}
+};
+
+export default ForgotPasswordPage;
