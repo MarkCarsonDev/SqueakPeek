@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Typography } from "@mui/material";
 import { InputField } from "@/ui/InputField"; // Assuming you're using this custom InputField
 import { createSupabaseClient } from "@/lib/supabase/client"; // Client-side Supabase initialization
+import { Session } from "@supabase/supabase-js"; // Import Session type
 import "./reset_password.css"; // Import CSS for styling
 
 const ResetPasswordPage = () => {
@@ -12,7 +13,7 @@ const ResetPasswordPage = () => {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [code, setCode] = useState<string | null>(null);
-  const [session, setSession] = useState<any>(null); // Define session state
+  const [session, setSession] = useState<Session | null>(null); // Define session state
   const supabase = createSupabaseClient(); // Initialize the Supabase client
 
   // Get the 'code' parameter from the URL query string and set the session
