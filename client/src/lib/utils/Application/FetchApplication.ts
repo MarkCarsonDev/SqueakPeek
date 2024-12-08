@@ -18,7 +18,7 @@ export async function FetchApplication(
     .order('order', { ascending: true });
 
   if (applicationsError) {
-    console.error('Error fetching applications:', applicationsError.message);
+    //console.error('Error fetching applications:', applicationsError.message);
     return { data: null, error: applicationsError };
   }
 

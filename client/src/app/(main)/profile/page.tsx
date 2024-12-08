@@ -20,19 +20,19 @@ export default function Page() {
     avatarType: "avatar1" | "avatar2" | "avatar3" | "avatar4";
   }[] = [
     {
-      profile: "/landingpage/track.svg",
+      profile: "/avatars/cool_rat.svg",
       avatarType: "avatar1",
     },
     {
-      profile: "/landingpage/insight.svg",
+      profile: "/avatars/incognito_rat.svg",
       avatarType: "avatar2",
     },
     {
-      profile: "/landingpage/message.svg",
+      profile: "/avatars/peephole_rat.svg",
       avatarType: "avatar3",
     },
     {
-      profile: "/landingpage/track.svg",
+      profile: "/avatars/professional_rat.svg",
       avatarType: "avatar4",
     },
   ];
@@ -121,7 +121,7 @@ export default function Page() {
         console.error("Error updating profile:", error);
       } else {
         console.log("Profile updated successfully:", data);
-        router.back()
+        router.back();
       }
     } else {
       console.warn("Profile username or profile ID is missing.");
@@ -151,14 +151,14 @@ export default function Page() {
                   margin: "0 10px",
                   border:
                     avatarType === chosenAvatar
-                      ? "4px solid #496FFF" 
-                      : "4px solid #E0E4F2", 
+                      ? "4px solid #496FFF"
+                      : "4px solid #E0E4F2",
                   opacity: avatarType === chosenAvatar ? 1 : 0.85,
                   ":hover": {
                     opacity: 1,
                   },
                 }}
-                onClick={() => setAvatar(avatarType)} 
+                onClick={() => setAvatar(avatarType)}
               />
             ))}
           </div>
@@ -195,9 +195,7 @@ export default function Page() {
             apiEndpoint="https://raw.githubusercontent.com/Hipo/university-domains-list/master/world_universities_and_domains.json"
             queryKey="name"
             value={profileSchool || ""}
-            onValueChange={(newValue) =>
-              setSchool(newValue || "")
-            }
+            onValueChange={(newValue) => setSchool(newValue || "")}
             useApi={true} // Enable API integration
             style={{ marginBottom: "10px" }}
           />

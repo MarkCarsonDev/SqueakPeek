@@ -38,7 +38,7 @@ export async function createOpportunity(
     return { data: null, error };
   }
 
-  console.log("Opportunity initialized:", data);
+  //console.log("Opportunity initialized:", data);
 
   return { data, error: null };
 }

@@ -77,11 +77,11 @@ export const useTrack = create<TrackState>()((set, get) => ({
 
     for (const stage of stages) {
       if (state[stage].some((app) => app.opportunity_id === opportunityId)) {
-        console.log("Application already exists in stage:", stage);
+        //console.log("Application already exists in stage:", stage);
         return true;
       }
     }
-    console.log("Application does not exist in any stage");
+    //console.log("Application does not exist in any stage");
     return false;
   },
 
@@ -189,7 +189,7 @@ export const useTrack = create<TrackState>()((set, get) => ({
     updateApplication: async (applicationId, updates, profile): Promise<{success: boolean; message: string}> => {
       // Ensure profile is defined and has profile_id
     if (!profile || !profile.profile_id) {
-      console.error("Profile is not defined or missing profile_id");
+      //console.error("Profile is not defined or missing profile_id");
       return {
         success: false,
         message: "Profile is not defined or missing profile_id",
@@ -203,7 +203,7 @@ export const useTrack = create<TrackState>()((set, get) => ({
       // Call the UpdateApplication function
     const { data, error } = await UpdateApplication(profile, applicationId, filteredUpdates);
     if (error) {
-      console.error("Error updating application:", error.message);
+      //console.error("Error updating application:", error.message);
       return { success: false, message: "Failed to update application." };
     }
 
@@ -229,7 +229,7 @@ export const useTrack = create<TrackState>()((set, get) => ({
 
   fetchApplications: async (profile) => {
     if (!profile) {
-      console.error("Profile is required to fetch applications");
+      //console.error("Profile is required to fetch applications");
       return { data: null, error: null };
     }
     const { data, error } = await FetchApplication(profile);
