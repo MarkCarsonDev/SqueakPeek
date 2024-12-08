@@ -1,8 +1,6 @@
-"use client";
 import React from "react";
 import { OpportunityStats } from "@/ui/message/OpportunityStats";
 import { Conversation } from "@/ui/message/Conversation";
-import usePageHeader from "@/lib/hooks/usePageHeader"; // Import the custom hook
 
 export default function Page({
   params,
@@ -10,12 +8,6 @@ export default function Page({
   params: { conversationId: string };
 }) {
   const { conversationId } = params;
-
-  // Set page title and meta description
-  usePageHeader(
-    "Company Conversation - Engage in Discussions",
-    "Participate in company-specific conversations, share insights, and connect with other applicants in this thread."
-  );
 
   return (
     <div
