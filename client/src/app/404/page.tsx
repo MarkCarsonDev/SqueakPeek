@@ -1,7 +1,6 @@
-"use client";
 import React from "react";
-import { Typography, Button } from "@mui/material"; // Using MUI for consistency
-import "./404.css";  // Import the CSS file
+import { Typography, Button } from "@mui/material";
+import "./404.css"; // Import the CSS file
 
 const NotFound = () => {
   return (
