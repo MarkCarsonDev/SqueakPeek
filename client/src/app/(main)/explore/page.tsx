@@ -10,7 +10,6 @@ import { useTrack } from "@/lib/store/track";
 import { useProfile } from "@/lib/store/profile";
 import { faFilter, faRedo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import usePageHeader from "@/lib/hooks/usePageHeader"; // Import the custom hook
 
 interface SearchBarProps {
   resetSearch: boolean;
@@ -98,12 +97,6 @@ export default function Page() {
   const { fetchApplications } = useTrack();
   const { profile } = useProfile();
   const [applicationsLoaded, setApplicationsLoaded] = useState(false);
-
-  // Set page title and meta description
-  usePageHeader(
-    "Explore Opportunities - Discover Entry-Level Roles",
-    "Explore entry-level job opportunities, discover the application process, and connect with other applicants in company threads."
-  );
 
   useEffect(() => {
     if (profile) {
