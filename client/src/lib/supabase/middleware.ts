@@ -3,7 +3,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { userHasExistingProfile } from "@/lib/actions/profile_setup"
 
 // allowed public paths
-const publicPaths = new Set(["/","/login","/signup","/about","/auth/callback","/forgot-password","/reset-password"]);
+const publicPaths = new Set(["/","/login","/signup","/about","/auth/callback"]);
 
 // whitelists auth'd user paths
 const protectedPaths = new Set(["/message", "/explore", "/profile", "/thread", "/track", "/profile_setup", "/404"]);
