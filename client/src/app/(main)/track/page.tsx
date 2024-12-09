@@ -1,14 +1,14 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Button, Typography} from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileCirclePlus } from "@fortawesome/free-solid-svg-icons";
 import NewApplicationModal from "@/ui/track/NewApplicationModal";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
-import { StageColumn, StageColumnProps } from "@/ui/track/StageColumn"; 
+import { StageColumn, StageColumnProps } from "@/ui/track/StageColumn";
 import { Application, ApplicationStage, useTrack } from "@/lib/store/track";
 import ApplicationSearchBar from "@/ui/track/ApplicationSearchBar";
-import { useProfile } from "@/lib/store/profile"; 
+import { useProfile } from "@/lib/store/profile";
 import "./tracking.css";
 
 export default function Page() {
@@ -16,6 +16,7 @@ export default function Page() {
   const [applicationStatus, setApplicationStatus] = useState<ApplicationStage>("Applied");
   const [selectedApplication, setSelectedApplication] = useState<Application | undefined>();
   const [preventClick, setPreventClick] = useState(false);
+
   // Retrieve application data and actions from the Zustand store
   const {
     Applied,
@@ -30,8 +31,8 @@ export default function Page() {
   } = useTrack();
   const { profile } = useProfile();
 
-  // Fetch applications when profile is available
   useEffect(() => {
+    // Fetch applications when profile is available
     if (profile) {
       fetchApplications(profile);
     }
@@ -63,9 +64,9 @@ export default function Page() {
       setPreventClick(false); // Reset preventClick to allow subsequent clicks
       return;
     }
-    setApplicationStatus(stage); 
-    setSelectedApplication(application); 
-    setOpenModal(true); 
+    setApplicationStatus(stage);
+    setSelectedApplication(application);
+    setOpenModal(true);
   };
 
   // Function to close the modal and reset the selected application
@@ -158,7 +159,7 @@ export default function Page() {
               stageColor={stage.stageColor}
               applications={stage.applications}
               handleOpenModal={handleOpenModal}
-              onCardClick={(application) => {if (!preventClick) {handleOpenModal(stage.stage, application)}}}
+              onCardClick={(application) => { if (!preventClick) { handleOpenModal(stage.stage, application) }}}
               setPreventClick={setPreventClick}
             />
           ))}

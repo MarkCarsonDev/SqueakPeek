@@ -2,6 +2,7 @@ import { AboutHero } from "@/ui/about/AboutHero";
 import { Typography } from "@mui/material";
 import { AboutProfile, IAboutProfile } from "@/ui/about/AboutProfile";
 import { AboutMission } from "@/ui/about/AboutMission";
+
 export default function Page() {
   const aboutProfiles: IAboutProfile[] = [
     {

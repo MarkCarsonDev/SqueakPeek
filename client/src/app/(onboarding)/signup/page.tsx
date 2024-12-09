@@ -1,4 +1,5 @@
 "use client";
+
 import { Button, Typography, Link, Divider } from "@mui/material";
 import "./signup.css";
 import { InputField } from "@/ui/InputField";
@@ -9,22 +10,18 @@ import { handleGoogleLoginClientSide } from "../../../lib/supabase/auth/handleGo
 export default function Page() {
   const initialState: SignUpState = { message: null, errors: {} };
   const [state, formAction] = useFormState(createAccount, initialState);
+
   return (
     <div className="main-container">
       {/* Let's get started section */}
-      <Typography
-        variant="h4"
-        sx={{ marginBottom: "20px", marginTop: "110px" }}
-      >
+      <Typography variant="h4" sx={{ marginBottom: "20px", marginTop: "110px" }}>
         Let’s Get Started.
       </Typography>
 
       {/* Sign in with Google Button */}
       <Button
         className="borderline"
-        startIcon={
-          <img src="https://www.google.com/favicon.ico" alt="Google" />
-        }
+        startIcon={<img src="https://www.google.com/favicon.ico" alt="Google" />}
         sx={{
           border: "4px solid #E0E4F2",
           backgroundColor: "white",
@@ -75,38 +72,31 @@ export default function Page() {
           required
           label="Email"
           name="email"
-          style={{
-            marginBottom: "15px",
-          }}
+          style={{ marginBottom: "15px" }}
           helperText={state.errors?.email}
         />
 
         {/* Password field */}
         <InputField
-          type="password" // Ensure this is password input
+          type="password"
           placeholder="Enter your password"
           required
           label="Password"
           fullWidth
           name="password"
-          style={{
-            marginBottom: "15px",
-          }}
+          style={{ marginBottom: "15px" }}
           helperText={state.errors?.password}
         />
 
         {/* Confirm Password field */}
         <InputField
           fullWidth
-          type="password" // Ensure this is password input
-          // label="Confirm Password"
+          type="password"
           placeholder="Confirm your password"
           required
           label="Confirm Password"
           name="confirmPassword"
-          style={{
-            marginBottom: "15px",
-          }}
+          style={{ marginBottom: "15px" }}
           helperText={state.errors?.confirmPassword}
         />
 

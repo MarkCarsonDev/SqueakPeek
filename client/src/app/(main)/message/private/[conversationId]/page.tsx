@@ -6,6 +6,7 @@ export default function Page({
   params: { conversationId: string };
 }) {
   const { conversationId } = params;
+
   return (
     <div
       style={{

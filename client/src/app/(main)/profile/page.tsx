@@ -9,12 +9,13 @@ import { useRouter } from "next/navigation";
 import { SearchDropdown } from "@/ui/track/SearchDropdown";
 
 export default function Page() {
-  //Router Creation
+  // Router creation
   const router = useRouter();
 
   // Creates Supabase Client
   const supabase = useMemo(() => createSupabaseClient(), []);
-  //Avatar data
+  
+  // Avatar data
   const avatars: {
     profile: string;
     avatarType: "avatar1" | "avatar2" | "avatar3" | "avatar4";
@@ -37,7 +38,7 @@ export default function Page() {
     },
   ];
 
-  //Gets user profile using useProfile function
+  // Gets user profile using useProfile function
   const { profile } = useProfile();
   const [profileData, setProfileData] = useState<
     | {
@@ -49,7 +50,7 @@ export default function Page() {
     | null
   >(null);
 
-  // Creates chosenAvatar, username, school, and Profile ID Constants
+  // Creates chosenAvatar, username, school, and Profile ID constants
   const [chosenAvatar, setAvatar] = useState<
     "avatar1" | "avatar2" | "avatar3" | "avatar4" | undefined
   >(undefined);
@@ -57,14 +58,14 @@ export default function Page() {
   const [profileSchool, setSchool] = useState<string | null>(null);
   const [profileId, setProfileId] = useState<string | null>(null);
 
-  // checks if profile is null then calls fetchUserprofile
+  // Checks if profile is null then calls fetchUserProfile
   useEffect(() => {
     if (profile && profile.profile_id) {
       fetchUserProfile(profile);
     }
   }, [profile?.profile_id]);
 
-  // Checks if data is not null then sets username, school, and avater to values from profile table
+  // Checks if data is not null then sets username, school, and avatar to values from profile table
   useEffect(() => {
     if (profileData && profileData.length > 0) {
       setUsername(profileData[0].username);
@@ -94,7 +95,7 @@ export default function Page() {
     }
   }
 
-  //Update profile table with new data using their profile ID
+  // Update profile table with new data using their profile ID
   const handleSubmit = async () => {
     if (profileUsername !== null && profileId) {
       const { data, error } = await supabase

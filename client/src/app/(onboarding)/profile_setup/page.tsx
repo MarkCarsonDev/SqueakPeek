@@ -6,13 +6,13 @@ import {
   ProfileSetupState,
   createProfile,
 } from "../../../lib/actions/profile_setup";
-import { useFormState } from "react-dom"; // Assuming this is available for form state management
+import { useFormState } from "react-dom";
 import "./profile_setup.css";
 import { SearchDropdown } from "@/ui/track/SearchDropdown";
 
 export default function ProfilePage() {
   const initialState: ProfileSetupState = { message: null, errors: {} };
-  const [state, formAction] = useFormState(createProfile, initialState); // Use form state hook
+  const [state, formAction] = useFormState(createProfile, initialState);
   const [chosenAvatar, setAvatar] = useState("");
   const [profileSchool, setSchool] = useState("");
 
@@ -22,7 +22,6 @@ export default function ProfilePage() {
       profile: "/landingpage/track.svg",
       avatarType: "avatar1",
     },
-
     {
       profile: "/landingpage/insight.svg",
       avatarType: "avatar2",
@@ -83,8 +82,10 @@ export default function ProfilePage() {
         >
           Select an avatar
         </Typography>
+
         {/* Hidden input field for avatar */}
         <input type="hidden" name="avatar" value={chosenAvatar} />
+
         {/* Full Name */}
         <InputField
           fullWidth
@@ -93,7 +94,7 @@ export default function ProfilePage() {
           variant="outlined"
           name="name"
           required
-          helperText={state.errors?.name} // Display first name error
+          helperText={state.errors?.name}
           sx={{ marginBottom: "15px" }}
         />
 
@@ -105,25 +106,24 @@ export default function ProfilePage() {
           variant="outlined"
           name="username"
           required
-          helperText={state.errors?.username} // Display first username error
+          helperText={state.errors?.username}
           sx={{ marginBottom: "15px" }}
         />
 
         {/* School */}
         <SearchDropdown
-            label="School"
-            placeholder="Enter your school"
-            name="school"
-            // apiEndpoint="http://universities.hipolabs.com/search"
-            apiEndpoint="https://raw.githubusercontent.com/Hipo/university-domains-list/master/world_universities_and_domains.json"
-            queryKey="name"
-            value={profileSchool ?? ""}
-            onValueChange={(newValue) => setSchool(newValue ?? "")}
-            helperText={state.errors?.school} // Display first school error
-            fullWidth
-            useApi={true} // Enable API integration
-            style={{ marginBottom: "10px" }}
-          />
+          label="School"
+          placeholder="Enter your school"
+          name="school"
+          apiEndpoint="https://raw.githubusercontent.com/Hipo/university-domains-list/master/world_universities_and_domains.json"
+          queryKey="name"
+          value={profileSchool ?? ""}
+          onValueChange={(newValue) => setSchool(newValue ?? "")}
+          helperText={state.errors?.school}
+          fullWidth
+          useApi={true}
+          style={{ marginBottom: "10px" }}
+        />
 
         {/* Button container */}
         <div className="button-links">

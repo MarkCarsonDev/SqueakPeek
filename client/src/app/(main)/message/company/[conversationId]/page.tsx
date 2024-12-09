@@ -1,12 +1,14 @@
 import React from "react";
 import { OpportunityStats } from "@/ui/message/OpportunityStats";
 import { Conversation } from "@/ui/message/Conversation";
+
 export default function Page({
   params,
 }: {
   params: { conversationId: string };
 }) {
   const { conversationId } = params;
+
   return (
     <div
       style={{
@@ -15,8 +17,7 @@ export default function Page({
       }}
     >
       <Conversation conversationId={conversationId} />
-      {/* Pass a random opportunity_id */}
-      <OpportunityStats conversation_id={conversationId}/>
+      <OpportunityStats conversation_id={conversationId} />
     </div>
   );
 }

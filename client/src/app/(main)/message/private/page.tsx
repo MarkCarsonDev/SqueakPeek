@@ -1,4 +1,3 @@
-"use client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Typography } from "@mui/material";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
@@ -7,6 +6,7 @@ import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
  * Private Message section in the messages page
  */
 export default function Page() {
+
   return (
     <div
       style={{

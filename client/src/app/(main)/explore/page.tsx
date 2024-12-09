@@ -68,6 +68,7 @@ function SearchBar({ resetSearch, onResetComplete }: SearchBarProps) {
     />
   );
 }
+
 const LoadingSpinner: React.FC = () => {
   return (
     <div
@@ -96,6 +97,7 @@ export default function Page() {
   const { fetchApplications } = useTrack();
   const { profile } = useProfile();
   const [applicationsLoaded, setApplicationsLoaded] = useState(false);
+
   useEffect(() => {
     if (profile) {
       console.log("Fetching applications...");
@@ -110,9 +112,9 @@ export default function Page() {
 
   return (
     <div className="page-container">
-       <Typography sx={{ margin: "1rem 1rem", width: "100%", textAlign: "left" }} variant="h5">
-            <span style={{ fontWeight: "bold" }}>Explore</span> Opportunities
-        </Typography>
+      <Typography sx={{ margin: "1rem 1rem", width: "100%", textAlign: "left" }} variant="h5">
+        <span style={{ fontWeight: "bold" }}>Explore</span> Opportunities
+      </Typography>
       <div className="header-search-container">
         <div className="header-text">
           <Typography sx={{ marginLeft: "1rem" }} variant="body1">
