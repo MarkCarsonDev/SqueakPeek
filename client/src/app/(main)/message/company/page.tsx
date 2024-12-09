@@ -1,15 +1,12 @@
-"use client"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Typography, Button } from "@mui/material";
+import { Typography } from "@mui/material";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 /**
  * Company Threads section in the messages page
  */
 export default function Page() {
-  const router = useRouter();
-
   return (
     <div
       style={{
@@ -35,23 +32,28 @@ export default function Page() {
       <Typography variant="h6">
         Chat with other applicants in the pipeline
       </Typography>
-      <Button
-        onClick={() => router.push("/explore")}
-        variant="contained"
+      <Link
+        href={"/explore"}
         color="primary"
-        sx={{
-          mt: 2,
+        style={{
           width: "300px",
           boxShadow: "none",
           backgroundColor: "#496FFF",
-          ":hover": {
-            backgroundColor: "#3B5AC6",
-            boxShadow: "none",
-          },
+          textDecoration: "none",
+          textAlign: "center",
+          marginTop: "15px",
+          padding: "5px",
+          borderRadius: "3px",
         }}
       >
-        Search Company Threads
-      </Button>
+        <Typography
+          style={{
+            color: "white",
+          }}
+        >
+          Search Company Threads
+        </Typography>
+      </Link>
     </div>
   );
 }
