@@ -96,6 +96,16 @@ export function PageHeaders() {
           "Home", "Home"
         );
         break;
+      case "/reset_password":
+        header(
+          "Reset Your Password", "Reset Your Password"
+        );
+        break;
+      case "/forgot_password":
+        header(
+          "Forgot Your Password?", "Forgot Your Password?"
+        );
+        break;
     }
   }, [pathName]);
   return null;
