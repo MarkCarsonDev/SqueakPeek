@@ -126,7 +126,7 @@ export default function Page() {
               <Typography variant="body2">Signing Up?</Typography>
             </Link>
             <Link
-              href="/recovery"
+              href="/forgot_password"
               color="inherit"
               sx={{
                 width: "100%",
