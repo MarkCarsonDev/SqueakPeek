@@ -66,8 +66,8 @@ export function MessageNotificationCard({
             avatar={
               isTabPrivateConversation ? (
                 <ProfileAvatar
-                  width="40px"
-                  height="40px"
+                  width={40}
+                  height={40}
                   avatar={avatar as AvatarTypes}
                 />
               ) : (
