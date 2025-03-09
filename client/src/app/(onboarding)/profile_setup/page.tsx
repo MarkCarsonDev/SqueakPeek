@@ -9,32 +9,13 @@ import {
 import { useFormState } from "react-dom";
 import "./profile_setup.css";
 import { SearchDropdown } from "@/ui/track/SearchDropdown";
+import { avatars } from "../../../lib/data/avatars";
 
 export default function ProfilePage() {
   const initialState: ProfileSetupState = { message: null, errors: {} };
   const [state, formAction] = useFormState(createProfile, initialState);
   const [chosenAvatar, setAvatar] = useState("");
   const [profileSchool, setSchool] = useState("");
-
-  // TODO: Change with the real profile assets
-  const avatars = [
-    {
-      profile: "/landingpage/track.svg",
-      avatarType: "avatar1",
-    },
-    {
-      profile: "/landingpage/insight.svg",
-      avatarType: "avatar2",
-    },
-    {
-      profile: "/landingpage/message.svg",
-      avatarType: "avatar3",
-    },
-    {
-      profile: "/landingpage/track.svg",
-      avatarType: "avatar4",
-    },
-  ];
 
   return (
     <div className="main-container">
