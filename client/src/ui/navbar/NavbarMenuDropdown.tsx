@@ -2,7 +2,7 @@ import * as React from "react";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import IconButton from "@mui/material/IconButton";
-import { Typography } from "@mui/material";
+import { Typography, Tooltip } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faRightFromBracket,
@@ -13,11 +13,13 @@ import {
 import { useRouter } from "next/navigation";
 import { CurrentProfileAvatar } from "./CurrentProfileAvatar";
 import { createSupabaseClient } from "@/lib/supabase/client";
+import { useProfile } from "@/lib/store/profile";
 
 export function NavbarMenuDropdown() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const supabase = createSupabaseClient();
+  const { profile } = useProfile();
 
   //function to open menu
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -39,7 +41,6 @@ export function NavbarMenuDropdown() {
 
   // function to handle login logic
   const handleLogout = async () => {
-    
     try {
       const { error } = await supabase.auth.signOut();
       if (error) {
@@ -62,16 +63,18 @@ export function NavbarMenuDropdown() {
       }}
     >
       {/* IconButton Section Note: Image should be replaced in future with users avatar choice*/}
-      <IconButton
-        id="basic-button"
-        aria-controls={open ? "basic-menu" : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? "true" : undefined}
-        onClick={handleClick}
-        size="small"
-      >
-        <CurrentProfileAvatar />
-      </IconButton>
+      <Tooltip title={profile ? profile.username : ""}>
+        <IconButton
+          id="basic-button"
+          aria-controls={open ? "basic-menu" : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? "true" : undefined}
+          onClick={handleClick}
+          size="small"
+        >
+          <CurrentProfileAvatar />
+        </IconButton>
+      </Tooltip>
 
       {/* Menu open arrow */}
       <FontAwesomeIcon
