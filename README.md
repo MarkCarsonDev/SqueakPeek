@@ -1,4 +1,4 @@
-# SqueakPeek
+# SQUEAKPEEK
 
 ## A Capstone/Senior Design Project at CSULB
 
